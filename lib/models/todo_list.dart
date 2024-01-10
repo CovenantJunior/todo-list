@@ -1,7 +1,7 @@
 import 'package:isar/isar.dart';
 
 // Generate collection file by running `dart run build_runner build`
-part 'note.g.dart';
+part 'todo_list.g.dart';
 
 @Collection()
 class TodoList {
