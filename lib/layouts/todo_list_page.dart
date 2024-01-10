@@ -83,7 +83,7 @@ class _NotePageState extends State<NotePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              "Notes",
+              "My List",
               style: TextStyle(
                 fontFamily: "Quicksand",
                 fontWeight: FontWeight.bold,
