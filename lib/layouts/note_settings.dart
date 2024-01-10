@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:note_app/theme/theme_provider.dart';
+import 'package:todo_list/theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 class NoteSettings extends StatefulWidget {

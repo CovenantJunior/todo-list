@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:note_app/models/note_database.dart';
+import 'package:todo_list/models/note_database.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 

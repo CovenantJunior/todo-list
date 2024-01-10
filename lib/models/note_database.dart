@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
-import 'package:note_app/models/note.dart';
+import 'package:todo_list/models/note.dart';
 import 'package:path_provider/path_provider.dart';
 
 class NoteDatabase extends ChangeNotifier{

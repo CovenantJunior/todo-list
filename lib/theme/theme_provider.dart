@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:note_app/theme/theme.dart';
+import 'package:todo_list/theme/theme.dart';
 
 class ThemeProvider extends ChangeNotifier {
   // Initial Theme
