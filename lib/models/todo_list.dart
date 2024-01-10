@@ -7,6 +7,7 @@ part 'note.g.dart';
 class List {
   Id id = Isar.autoIncrement;
   String? note;
+  bool? completed;
   DateTime? created;
   DateTime? modified;
 }
