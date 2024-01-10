@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/layouts/note_page.dart';
-import 'package:todo_list/layouts/note_settings.dart';
-import 'package:todo_list/models/note_database.dart';
+import 'package:todo_list/layouts/todo_list_page.dart';
+import 'package:todo_list/layouts/todo_list_settings.dart';
+import 'package:todo_list/models/todo_list_database.dart';
 import 'package:todo_list/theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 

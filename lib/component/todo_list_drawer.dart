@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/component/note_drawer_tile.dart';
-import 'package:todo_list/layouts/note_settings.dart';
-import 'package:todo_list/models/note_database.dart';
+import 'package:todo_list/component/todo_list_drawer_tile.dart';
+import 'package:todo_list/layouts/todo_list_settings.dart';
+import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
 
 class NoteDrawer extends StatefulWidget {

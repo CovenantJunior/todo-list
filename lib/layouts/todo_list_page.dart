@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
-import 'package:todo_list/component/note_drawer.dart';
-import 'package:todo_list/component/note_options.dart';
+import 'package:todo_list/component/todo_list_drawer.dart';
+import 'package:todo_list/component/todo_list_options.dart';
 // import 'package:todo_list/component/note_options.dart';
-import 'package:todo_list/models/note_database.dart';
+import 'package:todo_list/models/todo_list_database.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 
