@@ -4,11 +4,11 @@ import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-class NoteOptions extends StatelessWidget {
+class TodoListOptions extends StatelessWidget {
   final int id;
   final String note;
 
-  const NoteOptions({
+  const TodoListOptions({
     super.key,
     required this.id,
     required this.note
@@ -20,7 +20,7 @@ class NoteOptions extends StatelessWidget {
     final textController = TextEditingController();
 
     // Update
-    void editNote(int id, note) {
+    void editTodoList(int id, note) {
       textController.text = note;
       showDialog(
         context: context,
@@ -34,7 +34,7 @@ class NoteOptions extends StatelessWidget {
               onPressed: () {
                 String text = textController.text;
                 if (text.isNotEmpty) {
-                  context.read<NoteDatabase>().updateNote(id, text);
+                  context.read<TodoListDatabase>().updateTodoList(id, text);
                   Navigator.pop(context);
                   textController.clear();
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -54,12 +54,12 @@ class NoteOptions extends StatelessWidget {
     }
 
     // Delete
-    void deleteNote(int id) {
+    void deleteTodoList(int id) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           content: const Text(
-            "Delete Note?",
+            "Delete TodoList?",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,
@@ -69,7 +69,7 @@ class NoteOptions extends StatelessWidget {
           actions: [
             IconButton(
               onPressed: () {
-                context.read<NoteDatabase>().deleteNote(id);
+                context.read<TodoListDatabase>().deleteTodoList(id);
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text(
@@ -99,7 +99,7 @@ class NoteOptions extends StatelessWidget {
 
     // Miscellaneous
 
-    // Share Note
+    // Share TodoList
     void share(String note) {
       Share.share(note);
     }
@@ -124,7 +124,7 @@ class NoteOptions extends StatelessWidget {
         IconButton(
           onPressed: () {
             Navigator.pop(context);
-            editNote(id, note);
+            editTodoList(id, note);
           },
           icon: const Icon(
             Icons.edit,
@@ -154,7 +154,7 @@ class NoteOptions extends StatelessWidget {
         IconButton(
           onPressed: () {
             Navigator.pop(context);
-            deleteNote(id);
+            deleteTodoList(id);
           },
           icon: const Icon(
             Icons.delete,

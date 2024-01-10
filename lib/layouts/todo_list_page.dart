@@ -7,29 +7,29 @@ import 'package:todo_list/models/todo_list_database.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 
-class NotePage extends StatefulWidget {
-  const NotePage({super.key});
+class TodoListPage extends StatefulWidget {
+  const TodoListPage({super.key});
 
   @override
-  State<NotePage> createState() => _NotePageState();
+  State<TodoListPage> createState() => _TodoListPageState();
 }
 
-class _NotePageState extends State<NotePage> {
+class _TodoListPageState extends State<TodoListPage> {
   @override
   void initState() {
     super.initState();
-    readNotes();
+    readTodoLists();
   }
 
   // Access user input
   final textController = TextEditingController();
 
   // Create
-  void createNote() {
+  void createTodoList() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Add a Note Title"),
+        title: const Text("Add a TodoList Title"),
         content: TextField(
           controller: textController,
         ),
@@ -40,12 +40,12 @@ class _NotePageState extends State<NotePage> {
             onPressed: () {
               String text = textController.text;
               if (text.isNotEmpty) {
-                context.read<NoteDatabase>().addNote(text);
+                context.read<TodoListDatabase>().addTodoList(text);
                 Navigator.pop(context);
                 textController.clear();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text(
-                    'Note secured',
+                    'TodoList secured',
                     style: TextStyle(
                       fontFamily: "Quicksand",
                       fontWeight: FontWeight.bold
@@ -69,13 +69,13 @@ class _NotePageState extends State<NotePage> {
   }
 
   // Read
-  Future<void> readNotes() async {
-    context.read<NoteDatabase>().fetchNote();
+  Future<void> readTodoLists() async {
+    context.read<TodoListDatabase>().fetchTodoList();
   }
 
   @override
   Widget build(BuildContext context) {
-    List notes = context.watch<NoteDatabase>().notes;
+    List plans = context.watch<TodoListDatabase>().plans;
 
     return Scaffold(
       appBar: AppBar(
@@ -100,18 +100,18 @@ class _NotePageState extends State<NotePage> {
         centerTitle: true,
       ),
 
-      drawer: const NoteDrawer(),
+      drawer: const TodoListDrawer(),
 
-      body: notes.isNotEmpty  ? LiquidPullToRefresh(
+      body: plans.isNotEmpty  ? LiquidPullToRefresh(
         onRefresh: () async {
-          readNotes();
+          readTodoLists();
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView.builder(
-            itemCount: notes.length,
+            itemCount: plans.length,
             itemBuilder: (context, index) {
-            final note = notes[index];
+            final note = plans[index];
             return Card(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -136,7 +136,7 @@ class _NotePageState extends State<NotePage> {
                             showPopover(
                               width: 270,
                               context: context,
-                              bodyBuilder: (context) => NoteOptions(id: note.id, note: note.note)
+                              bodyBuilder: (context) => TodoListOptions(id: note.id, note: note.note)
                             );
                           },
                           icon: const Icon(
@@ -146,7 +146,7 @@ class _NotePageState extends State<NotePage> {
                         );
                       }
                     ),
-                    /* NoteOptions(
+                    /* TodoListOptions(
                       id: note.id,
                       note: note.note
                     ) */
@@ -164,7 +164,7 @@ class _NotePageState extends State<NotePage> {
             children: [
               const SizedBox(height: 200),
               const Center(child: Text(
-                  "No notes yet, tap the icon below to add",
+                  "No plans yet, tap the icon below to add",
                   style: TextStyle(
                     // color: Colors.blueGrey,
                   ),
@@ -187,7 +187,7 @@ class _NotePageState extends State<NotePage> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: createNote,
+        onPressed: createTodoList,
         backgroundColor: Theme.of(context).colorScheme.onSecondary,
         child: const Icon(
           Icons.add,

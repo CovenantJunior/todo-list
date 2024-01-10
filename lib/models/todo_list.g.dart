@@ -32,9 +32,9 @@ const TodoListSchema = CollectionSchema(
       name: r'modified',
       type: IsarType.dateTime,
     ),
-    r'note': PropertySchema(
+    r'plan': PropertySchema(
       id: 3,
-      name: r'note',
+      name: r'plan',
       type: IsarType.string,
     )
   },
@@ -59,7 +59,7 @@ int _todoListEstimateSize(
 ) {
   var bytesCount = offsets.last;
   {
-    final value = object.note;
+    final value = object.plan;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -76,7 +76,7 @@ void _todoListSerialize(
   writer.writeBool(offsets[0], object.completed);
   writer.writeDateTime(offsets[1], object.created);
   writer.writeDateTime(offsets[2], object.modified);
-  writer.writeString(offsets[3], object.note);
+  writer.writeString(offsets[3], object.plan);
 }
 
 TodoList _todoListDeserialize(
@@ -90,7 +90,7 @@ TodoList _todoListDeserialize(
   object.created = reader.readDateTimeOrNull(offsets[1]);
   object.id = id;
   object.modified = reader.readDateTimeOrNull(offsets[2]);
-  object.note = reader.readStringOrNull(offsets[3]);
+  object.plan = reader.readStringOrNull(offsets[3]);
   return object;
 }
 
@@ -419,36 +419,36 @@ extension TodoListQueryFilter
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> noteIsNull() {
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> planIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'note',
+        property: r'plan',
       ));
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> noteIsNotNull() {
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> planIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'note',
+        property: r'plan',
       ));
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> noteEqualTo(
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> planEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'note',
+        property: r'plan',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> noteGreaterThan(
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> planGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -456,14 +456,14 @@ extension TodoListQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'note',
+        property: r'plan',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> noteLessThan(
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> planLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -471,14 +471,14 @@ extension TodoListQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'note',
+        property: r'plan',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> noteBetween(
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> planBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -487,7 +487,7 @@ extension TodoListQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'note',
+        property: r'plan',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -497,69 +497,69 @@ extension TodoListQueryFilter
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> noteStartsWith(
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> planStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'note',
+        property: r'plan',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> noteEndsWith(
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> planEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'note',
+        property: r'plan',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> noteContains(
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> planContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'note',
+        property: r'plan',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> noteMatches(
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> planMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'note',
+        property: r'plan',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> noteIsEmpty() {
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> planIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'note',
+        property: r'plan',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> noteIsNotEmpty() {
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> planIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'note',
+        property: r'plan',
         value: '',
       ));
     });
@@ -609,15 +609,15 @@ extension TodoListQuerySortBy on QueryBuilder<TodoList, TodoList, QSortBy> {
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByNote() {
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByPlan() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'note', Sort.asc);
+      return query.addSortBy(r'plan', Sort.asc);
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByNoteDesc() {
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByPlanDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'note', Sort.desc);
+      return query.addSortBy(r'plan', Sort.desc);
     });
   }
 }
@@ -672,15 +672,15 @@ extension TodoListQuerySortThenBy
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByNote() {
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByPlan() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'note', Sort.asc);
+      return query.addSortBy(r'plan', Sort.asc);
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByNoteDesc() {
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByPlanDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'note', Sort.desc);
+      return query.addSortBy(r'plan', Sort.desc);
     });
   }
 }
@@ -705,10 +705,10 @@ extension TodoListQueryWhereDistinct
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QDistinct> distinctByNote(
+  QueryBuilder<TodoList, TodoList, QDistinct> distinctByPlan(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'note', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'plan', caseSensitive: caseSensitive);
     });
   }
 }
@@ -739,9 +739,9 @@ extension TodoListQueryProperty
     });
   }
 
-  QueryBuilder<TodoList, String?, QQueryOperations> noteProperty() {
+  QueryBuilder<TodoList, String?, QQueryOperations> planProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'note');
+      return query.addPropertyName(r'plan');
     });
   }
 }

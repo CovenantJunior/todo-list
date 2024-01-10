@@ -4,21 +4,21 @@ import 'package:todo_list/layouts/todo_list_settings.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
 
-class NoteDrawer extends StatefulWidget {
-  const NoteDrawer({super.key});
+class TodoListDrawer extends StatefulWidget {
+  const TodoListDrawer({super.key});
 
   @override
-  State<NoteDrawer> createState() => _NoteDrawerState();
+  State<TodoListDrawer> createState() => _TodoListDrawerState();
 }
 
-class _NoteDrawerState extends State<NoteDrawer> {
-  // Delete All Notes
-    void deleteAllNotes() {
+class _TodoListDrawerState extends State<TodoListDrawer> {
+  // Delete All TodoLists
+    void deleteAllTodoLists() {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           content: const Text(
-            "Delete all Notes?",
+            "Delete all TodoLists?",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,
@@ -28,7 +28,7 @@ class _NoteDrawerState extends State<NoteDrawer> {
           actions: [
             IconButton(
               onPressed: () {
-                context.read<NoteDatabase>().deleteAllNotes();
+                context.read<TodoListDatabase>().deleteAllTodoLists();
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text(
                       'Poof! Gone like the wind',
@@ -59,10 +59,10 @@ class _NoteDrawerState extends State<NoteDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    List notes = context.watch<NoteDatabase>().notes;
+    List plans = context.watch<TodoListDatabase>().plans;
     
     return Drawer(
-      semanticLabel: "Note Drawer Menu",
+      semanticLabel: "TodoList Drawer Menu",
       child: Column(
         children: [
           DrawerHeader(
@@ -71,7 +71,7 @@ class _NoteDrawerState extends State<NoteDrawer> {
                 width: 70,
               ),
           ),
-          NoteDrawerTile(
+          TodoListDrawerTile(
             title: "Home",
             leading: const Icon(Icons.home),
             onTap: () {
@@ -79,21 +79,21 @@ class _NoteDrawerState extends State<NoteDrawer> {
             }
           ),
 
-          NoteDrawerTile(
+          TodoListDrawerTile(
             title: "Settings",
             leading: const Icon(Icons.settings),
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const NoteSettings()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoListSettings()));
             }
           ),
 
-          if (notes.isNotEmpty)
-            NoteDrawerTile(
-              title: "Clean All Notes",
+          if (plans.isNotEmpty)
+            TodoListDrawerTile(
+              title: "Clean All TodoLists",
               leading: const Icon(Icons.delete_forever_rounded),
               onTap: () {
-                deleteAllNotes();
+                deleteAllTodoLists();
               },
             ),
         ],

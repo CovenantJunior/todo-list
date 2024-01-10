@@ -7,14 +7,14 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await NoteDatabase.initialize();
+  await TodoListDatabase.initialize();
   runApp(
     
     MultiProvider(
       providers: [
-        // Note Database Provider
+        // TodoList Database Provider
         ChangeNotifierProvider(
-          create: (context) => NoteDatabase(),
+          create: (context) => TodoListDatabase(),
         ),
 
         // Theme Provider
@@ -36,10 +36,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: Provider.of<ThemeProvider>(context).themeData,
       debugShowCheckedModeBanner: false,
-      home: const NotePage(),
+      home: const TodoListPage(),
       routes: {
-        'notes' : (context) => const NotePage(),
-        'settings' : (context) => const NoteSettings(),
+        'notes' : (context) => const TodoListPage(),
+        'settings' : (context) => const TodoListSettings(),
       },
     );
   }
