@@ -4,7 +4,7 @@ import 'package:isar/isar.dart';
 part 'note.g.dart';
 
 @Collection()
-class List {
+class TodoList {
   Id id = Isar.autoIncrement;
   String? note;
   bool? completed;
