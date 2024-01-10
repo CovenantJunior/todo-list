@@ -59,7 +59,7 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    List plans = context.watch<TodoListDatabase>().plans;
+    List todolists = context.watch<TodoListDatabase>().todolists;
     
     return Drawer(
       semanticLabel: "TodoList Drawer Menu",
@@ -88,7 +88,7 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
             }
           ),
 
-          if (plans.isNotEmpty)
+          if (todolists.isNotEmpty)
             TodoListDrawerTile(
               title: "Clean All TodoLists",
               leading: const Icon(Icons.delete_forever_rounded),

@@ -16,7 +16,7 @@ class TodoListDatabase extends ChangeNotifier{
   }
 
   // List of all TodoLists
-  List<TodoList> plans = [];
+  List<TodoList> todolists = [];
 
   /* Handle CRUD operations */
 
@@ -25,7 +25,7 @@ class TodoListDatabase extends ChangeNotifier{
     final newTodoList = TodoList()..plan = plan..created = DateTime.now();
 
     // Save to DB
-    await isar.writeTxn(() => isar.plans.put(newTodoList));
+    await isar.writeTxn(() => isar.todoLists.put(newTodoList));
     
     // Update TodoList List
     fetchTodoList();
@@ -34,18 +34,18 @@ class TodoListDatabase extends ChangeNotifier{
 
   // READ
   void fetchTodoList() async {
-    final currentTodoLists = isar.plans.where().findAllSync();
-    plans.clear();
-    plans.addAll(currentTodoLists);
+    final currentTodoLists = isar.todoLists.where().findAllSync();
+    todolists.clear();
+    todolists.addAll(currentTodoLists);
     notifyListeners();
   }
 
   // UPDATE
   void updateTodoList(int id, String plan) async {
-    var existingTodoList = await isar.plans.get(id);
+    var existingTodoList = await isar.todoLists.get(id);
     if (existingTodoList != null) {
       existingTodoList.plan = plan;
-      await isar.writeTxn(() => isar.plans.put(existingTodoList));
+      await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
     }
 
     // Update TodoList List
@@ -55,7 +55,7 @@ class TodoListDatabase extends ChangeNotifier{
 
   // DELETE
   void deleteTodoList(int id) async {
-    await isar.writeTxn(() => isar.plans.delete(id));
+    await isar.writeTxn(() => isar.todoLists.delete(id));
 
     // Update TodoList List
     fetchTodoList();
@@ -64,7 +64,7 @@ class TodoListDatabase extends ChangeNotifier{
 
   // DELETE ALL
   void deleteAllTodoLists() async {
-    await isar.writeTxn(() => isar.plans.clear());
+    await isar.writeTxn(() => isar.todoLists.clear());
 
     // Update TodoList List
     fetchTodoList();

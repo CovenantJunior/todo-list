@@ -75,7 +75,7 @@ class _TodoListPageState extends State<TodoListPage> {
 
   @override
   Widget build(BuildContext context) {
-    List plans = context.watch<TodoListDatabase>().plans;
+    List todolists = context.watch<TodoListDatabase>().todolists;
 
     return Scaffold(
       appBar: AppBar(
@@ -102,16 +102,16 @@ class _TodoListPageState extends State<TodoListPage> {
 
       drawer: const TodoListDrawer(),
 
-      body: plans.isNotEmpty  ? LiquidPullToRefresh(
+      body: todolists.isNotEmpty  ? LiquidPullToRefresh(
         onRefresh: () async {
           readTodoLists();
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView.builder(
-            itemCount: plans.length,
+            itemCount: todolists.length,
             itemBuilder: (context, index) {
-            final note = plans[index];
+            final note = todolists[index];
             return Card(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -164,7 +164,7 @@ class _TodoListPageState extends State<TodoListPage> {
             children: [
               const SizedBox(height: 200),
               const Center(child: Text(
-                  "No plans yet, tap the icon below to add",
+                  "No todolists yet, tap the icon below to add",
                   style: TextStyle(
                     // color: Colors.blueGrey,
                   ),
