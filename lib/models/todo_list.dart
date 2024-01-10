@@ -4,7 +4,7 @@ import 'package:isar/isar.dart';
 part 'note.g.dart';
 
 @Collection()
-class Note {
+class List {
   Id id = Isar.autoIncrement;
   String? note;
   DateTime? created;
