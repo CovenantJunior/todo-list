@@ -59,7 +59,7 @@ class TodoListOptions extends StatelessWidget {
         context: context,
         builder: (context) => AlertDialog(
           content: const Text(
-            "Delete TodoList?",
+            "Delete Plan?",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,

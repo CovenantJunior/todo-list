@@ -12,13 +12,13 @@ class TodoListDrawer extends StatefulWidget {
 }
 
 class _TodoListDrawerState extends State<TodoListDrawer> {
-  // Delete All TodoLists
+  // Delete All Plans
     void deleteAllTodoLists() {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           content: const Text(
-            "Delete all TodoLists?",
+            "Delete all plans?",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,
@@ -90,7 +90,7 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
 
           if (todolists.isNotEmpty)
             TodoListDrawerTile(
-              title: "Clear all plans",
+              title: "Delete all plans",
               leading: const Icon(Icons.delete_forever_rounded),
               onTap: () {
                 deleteAllTodoLists();
