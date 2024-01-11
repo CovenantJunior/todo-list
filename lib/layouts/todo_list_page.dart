@@ -82,11 +82,21 @@ class _TodoListPageState extends State<TodoListPage> {
   Widget build(BuildContext context) {
     List todolists = context.watch<TodoListDatabase>().todolists;
 
+    Orientation orientation = MediaQuery.of(context).orientation;
+
     // Get the screen width
     double screenWidth = MediaQuery.of(context).size.width;
+    double leftPadding = 0;
+    double topHeight = 0;
 
     // Calculate the padding based on the screen width
-    double leftPadding = screenWidth * 0.6;
+    if (orientation == Orientation.portrait) {
+      leftPadding = screenWidth * 0.6;
+      topHeight = 200;
+    } else {
+      leftPadding = screenWidth * 0.75;
+      topHeight = 20;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -167,39 +177,41 @@ class _TodoListPageState extends State<TodoListPage> {
             );
           }),
         ),
-      ) : Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 200),
-              const Center(child: Text(
-                  "No plans yet, tap the icon below to add",
-                  style: TextStyle(
-                    // color: Colors.blueGrey,
-                  ),
-                )
-              ),
-              const SizedBox(height: 100),
-              Padding(
-                padding: EdgeInsets.only(left: leftPadding),
-                child: Transform.rotate(
-                  angle: 1.5708,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Image.asset(
-                        'images/pointer.gif',
-                        width: 100,
-                      ),
-                    ],
+      ) : SingleChildScrollView(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: topHeight),
+                const Center(child: Text(
+                    "No plans yet, tap the icon below to add",
+                    style: TextStyle(
+                      // color: Colors.blueGrey,
+                    ),
                   )
                 ),
-              )
-            ],
-          ),
-        ],
+                const SizedBox(height: 100),
+                Padding(
+                  padding: EdgeInsets.only(left: leftPadding),
+                  child: Transform.rotate(
+                    angle: 1.5708,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Image.asset(
+                          'images/pointer.gif',
+                          width: 100,
+                        ),
+                      ],
+                    )
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
 
       floatingActionButton: FloatingActionButton(
