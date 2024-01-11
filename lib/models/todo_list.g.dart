@@ -27,18 +27,13 @@ const TodoListSchema = CollectionSchema(
       name: r'created',
       type: IsarType.dateTime,
     ),
-    r'isDarkMode': PropertySchema(
-      id: 2,
-      name: r'isDarkMode',
-      type: IsarType.bool,
-    ),
     r'modified': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'modified',
       type: IsarType.dateTime,
     ),
     r'plan': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'plan',
       type: IsarType.string,
     )
@@ -80,9 +75,8 @@ void _todoListSerialize(
 ) {
   writer.writeBool(offsets[0], object.completed);
   writer.writeDateTime(offsets[1], object.created);
-  writer.writeBool(offsets[2], object.isDarkMode);
-  writer.writeDateTime(offsets[3], object.modified);
-  writer.writeString(offsets[4], object.plan);
+  writer.writeDateTime(offsets[2], object.modified);
+  writer.writeString(offsets[3], object.plan);
 }
 
 TodoList _todoListDeserialize(
@@ -95,9 +89,8 @@ TodoList _todoListDeserialize(
   object.completed = reader.readBoolOrNull(offsets[0]);
   object.created = reader.readDateTimeOrNull(offsets[1]);
   object.id = id;
-  object.isDarkMode = reader.readBoolOrNull(offsets[2]);
-  object.modified = reader.readDateTimeOrNull(offsets[3]);
-  object.plan = reader.readStringOrNull(offsets[4]);
+  object.modified = reader.readDateTimeOrNull(offsets[2]);
+  object.plan = reader.readStringOrNull(offsets[3]);
   return object;
 }
 
@@ -113,10 +106,8 @@ P _todoListDeserializeProp<P>(
     case 1:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 2:
-      return (reader.readBoolOrNull(offset)) as P;
-    case 3:
       return (reader.readDateTimeOrNull(offset)) as P;
-    case 4:
+    case 3:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -355,33 +346,6 @@ extension TodoListQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> isDarkModeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'isDarkMode',
-      ));
-    });
-  }
-
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition>
-      isDarkModeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'isDarkMode',
-      ));
-    });
-  }
-
-  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> isDarkModeEqualTo(
-      bool? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isDarkMode',
-        value: value,
       ));
     });
   }
@@ -633,18 +597,6 @@ extension TodoListQuerySortBy on QueryBuilder<TodoList, TodoList, QSortBy> {
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByIsDarkMode() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isDarkMode', Sort.asc);
-    });
-  }
-
-  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByIsDarkModeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isDarkMode', Sort.desc);
-    });
-  }
-
   QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByModified() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'modified', Sort.asc);
@@ -708,18 +660,6 @@ extension TodoListQuerySortThenBy
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByIsDarkMode() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isDarkMode', Sort.asc);
-    });
-  }
-
-  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByIsDarkModeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isDarkMode', Sort.desc);
-    });
-  }
-
   QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByModified() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'modified', Sort.asc);
@@ -759,12 +699,6 @@ extension TodoListQueryWhereDistinct
     });
   }
 
-  QueryBuilder<TodoList, TodoList, QDistinct> distinctByIsDarkMode() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'isDarkMode');
-    });
-  }
-
   QueryBuilder<TodoList, TodoList, QDistinct> distinctByModified() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'modified');
@@ -796,12 +730,6 @@ extension TodoListQueryProperty
   QueryBuilder<TodoList, DateTime?, QQueryOperations> createdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'created');
-    });
-  }
-
-  QueryBuilder<TodoList, bool?, QQueryOperations> isDarkModeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isDarkMode');
     });
   }
 
