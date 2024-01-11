@@ -82,6 +82,12 @@ class _TodoListPageState extends State<TodoListPage> {
   Widget build(BuildContext context) {
     List todolists = context.watch<TodoListDatabase>().todolists;
 
+    // Get the screen width
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Calculate the padding based on the screen width
+    double leftPadding = screenWidth * 0.6;
+
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -177,12 +183,17 @@ class _TodoListPageState extends State<TodoListPage> {
               ),
               const SizedBox(height: 100),
               Padding(
-                padding: const EdgeInsets.only(left: 230.0),
+                padding: EdgeInsets.only(left: leftPadding),
                 child: Transform.rotate(
                   angle: 1.5708,
-                  child: Image.asset(
-                    'images/pointer.gif',
-                    width: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Image.asset(
+                        'images/pointer.gif',
+                        width: 100,
+                      ),
+                    ],
                   )
                 ),
               )
