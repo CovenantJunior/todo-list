@@ -28,7 +28,13 @@ class _TodoListPageState extends State<TodoListPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Add a plan"),
+        title: const Text(
+          "Add a plan",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.bold
+          ),
+        ),
         content: TextField(
           controller: textController,
         ),
