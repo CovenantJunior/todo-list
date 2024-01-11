@@ -8,6 +8,7 @@ class TodoList {
   Id id = Isar.autoIncrement;
   String? plan;
   bool? completed;
+  bool? isDarkMode;
   DateTime? created;
   DateTime? modified;
 }
