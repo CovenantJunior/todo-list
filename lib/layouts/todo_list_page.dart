@@ -82,7 +82,7 @@ class _TodoListPageState extends State<TodoListPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              "My Plans",
+              "My To-do List",
               style: TextStyle(
                 fontFamily: "Quicksand",
                 fontWeight: FontWeight.bold,
@@ -169,7 +169,7 @@ class _TodoListPageState extends State<TodoListPage> {
                   ),
                 )
               ),
-              const SizedBox(height: 100,),
+              const SizedBox(height: 100),
               Padding(
                 padding: const EdgeInsets.only(left: 230.0),
                 child: Transform.rotate(
