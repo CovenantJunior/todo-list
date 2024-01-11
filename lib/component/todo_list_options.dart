@@ -6,12 +6,12 @@ import 'package:share_plus/share_plus.dart';
 
 class TodoListOptions extends StatelessWidget {
   final int id;
-  final String note;
+  final String plan;
 
   const TodoListOptions({
     super.key,
     required this.id,
-    required this.note
+    required this.plan
   });
 
   @override
@@ -20,8 +20,8 @@ class TodoListOptions extends StatelessWidget {
     final textController = TextEditingController();
 
     // Update
-    void editTodoList(int id, note) {
-      textController.text = note;
+    void editTodoList(int id, plan) {
+      textController.text = plan;
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -100,14 +100,14 @@ class TodoListOptions extends StatelessWidget {
     // Miscellaneous
 
     // Share TodoList
-    void share(String note) {
-      Share.share(note);
+    void share(String plan) {
+      Share.share(plan);
     }
 
-    void copy(String note) {
+    void copy(String plan) {
       Clipboard.setData (
         ClipboardData(
-          text: note
+          text: plan
           )
       );
       ScaffoldMessenger.of(context).showSnackBar(
@@ -124,7 +124,7 @@ class TodoListOptions extends StatelessWidget {
         IconButton(
           onPressed: () {
             Navigator.pop(context);
-            editTodoList(id, note);
+            editTodoList(id, plan);
           },
           icon: const Icon(
             Icons.edit,
@@ -134,7 +134,7 @@ class TodoListOptions extends StatelessWidget {
         IconButton(
           onPressed: () {
             Navigator.pop(context);
-            copy(note);
+            copy(plan);
           },
           icon: const Icon(
             Icons.copy,
@@ -144,7 +144,7 @@ class TodoListOptions extends StatelessWidget {
         IconButton(
           onPressed: () {
             Navigator.pop(context);
-            share(note);
+            share(plan);
           },
           icon: const Icon(
             Icons.share,

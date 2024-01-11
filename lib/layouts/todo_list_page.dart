@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:todo_list/component/todo_list_drawer.dart';
 import 'package:todo_list/component/todo_list_options.dart';
-// import 'package:todo_list/component/note_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +28,7 @@ class _TodoListPageState extends State<TodoListPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Add a TodoList Title"),
+        title: const Text("Add a plan"),
         content: TextField(
           controller: textController,
         ),
@@ -45,7 +44,7 @@ class _TodoListPageState extends State<TodoListPage> {
                 textController.clear();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text(
-                    'TodoList secured',
+                    'Plan saved',
                     style: TextStyle(
                       fontFamily: "Quicksand",
                       fontWeight: FontWeight.bold
@@ -83,7 +82,7 @@ class _TodoListPageState extends State<TodoListPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              "My List",
+              "My Plans",
               style: TextStyle(
                 fontFamily: "Quicksand",
                 fontWeight: FontWeight.bold,
@@ -111,7 +110,7 @@ class _TodoListPageState extends State<TodoListPage> {
           child: ListView.builder(
             itemCount: todolists.length,
             itemBuilder: (context, index) {
-            final note = todolists[index];
+            final plan = todolists[index];
             return Card(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -120,7 +119,7 @@ class _TodoListPageState extends State<TodoListPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      note.note,
+                      plan.plan,
                       overflow: TextOverflow.clip,
                       maxLines: 20,
                       style: const TextStyle(
@@ -136,7 +135,7 @@ class _TodoListPageState extends State<TodoListPage> {
                             showPopover(
                               width: 270,
                               context: context,
-                              bodyBuilder: (context) => TodoListOptions(id: note.id, note: note.note)
+                              bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
                             );
                           },
                           icon: const Icon(
@@ -147,8 +146,8 @@ class _TodoListPageState extends State<TodoListPage> {
                       }
                     ),
                     /* TodoListOptions(
-                      id: note.id,
-                      note: note.note
+                      id: plan.id,
+                      plan: plan.plan
                     ) */
                   ],
                 ),
@@ -164,7 +163,7 @@ class _TodoListPageState extends State<TodoListPage> {
             children: [
               const SizedBox(height: 200),
               const Center(child: Text(
-                  "No todolists yet, tap the icon below to add",
+                  "No plans yet, tap the icon below to add",
                   style: TextStyle(
                     // color: Colors.blueGrey,
                   ),
