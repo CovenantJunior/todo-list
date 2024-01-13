@@ -49,7 +49,7 @@ class _TodoListPageState extends State<TodoListPage> {
           IconButton(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(
-              Icons.cancel
+              Icons.undo_rounded
             )
           ),
           IconButton(
@@ -147,51 +147,142 @@ class _TodoListPageState extends State<TodoListPage> {
             onConfirm: (values) {
               selectedLists = values;
             },
+            searchable: true,
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(
-              Icons.cancel
-            )
+          Tooltip(
+            message: "Cancel search",
+            child: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(
+                Icons.undo_rounded
+              )
+            ),
           ),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            // color: Colors.blueGrey,
-            onPressed: () {
-              print(selectedLists);
-              if (selectedLists.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text(
-                  'Please select a plan to deal with',
-                  style: TextStyle(
-                    fontFamily: "Quicksand",
-                    fontWeight: FontWeight.bold
-                  )
-                )));
-              } else {
-                if (selectedLists.length > 1) {
+          Tooltip(
+            message: "Mark as incompleted",
+            child: IconButton(
+              icon: const Icon(
+                Icons.unpublished_rounded,
+              ),
+              // color: Colors.blueGrey,
+              onPressed: () {
+                print(selectedLists);
+                if (selectedLists.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
-                      'Deleting selected plans...',
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
-                      )
-                    )));
+                  const SnackBar(content: Text(
+                    'Please select a plan to deal with',
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontWeight: FontWeight.bold
+                    )
+                  )));
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
-                      'Deleting selected plan...',
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
-                      )
-                    )));
+                  if (selectedLists.length > 1) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text(
+                        'Marking as incompleted',
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.bold
+                        )
+                      )));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text(
+                        'Marking as incompleted...',
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.bold
+                        )
+                      )));
+                  }
                 }
               }
-            }
+            ),
+          ),
+          Tooltip(
+            message: "Mark as completed",
+            child: IconButton(
+              icon: const Icon(
+                Icons.done_all_rounded,
+              ),
+              // color: Colors.blueGrey,
+              onPressed: () {
+                print(selectedLists);
+                if (selectedLists.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text(
+                    'Please select a plan to deal with',
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontWeight: FontWeight.bold
+                    )
+                  )));
+                } else {
+                  if (selectedLists.length > 1) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text(
+                        'Marking as completed...',
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.bold
+                        )
+                      )));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text(
+                        'Marking as completed...',
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.bold
+                        )
+                      )));
+                  }
+                }
+              }
+            ),
+          ),
+          Tooltip(
+            message: "Delete selected plan(s)",
+            child: IconButton(
+              icon: const Icon(Icons.delete),
+              // color: Colors.blueGrey,
+              onPressed: () {
+                print(selectedLists);
+                if (selectedLists.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text(
+                    'Please select a plan to deal with',
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontWeight: FontWeight.bold
+                    )
+                  )));
+                } else {
+                  if (selectedLists.length > 1) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text(
+                        'Deleting selected plans...',
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.bold
+                        )
+                      )));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text(
+                        'Deleting selected plan...',
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.bold
+                        )
+                      )));
+                  }
+                }
+              }
+            ),
           )
         ],
       )
