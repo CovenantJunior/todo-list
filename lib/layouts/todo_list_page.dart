@@ -134,6 +134,7 @@ class _TodoListPageState extends State<TodoListPage> {
       drawer: const TodoListDrawer(),
 
       body: todolists.isNotEmpty  ? LiquidPullToRefresh(
+        springAnimationDurationInMilliseconds: 200,
         onRefresh: () async {
           readTodoLists();
         },
