@@ -24,24 +24,46 @@ class _TodoListSettingsState extends State<TodoListSettings> {
         child: Card(
           child: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
               children: [
-                const Text(
-                  'Dark Mode',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Quicksand"
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Dark Mode',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Quicksand"
+                      ),
+                    ),
+                    CupertinoSwitch(
+                      value: isDark,
+                      onChanged: (value) {
+                        Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                        setState(() {
+                          isDark = !isDark;
+                        });
+                      }
+                    )
+                  ],
                 ),
-                CupertinoSwitch(
-                  value: isDark,
-                  onChanged: (value) {
-                    Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
-                    setState(() {
-                      isDark = !isDark;
-                    });
-                  }
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Notification',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Quicksand"
+                      ),
+                    ),
+                    CupertinoSwitch(
+                      value: false,
+                      onChanged: (value) {
+                      }
+                    )
+                  ],
                 )
               ],
             ),
