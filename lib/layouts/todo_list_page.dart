@@ -131,7 +131,7 @@ class _TodoListPageState extends State<TodoListPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              "My Todo List",
+              "Todo List",
               style: TextStyle(
                 fontFamily: "Quicksand",
                 fontWeight: FontWeight.bold,
@@ -140,12 +140,25 @@ class _TodoListPageState extends State<TodoListPage> {
             ),
             SizedBox(width: 3),
             Icon(
-              Icons.bookmark_added_rounded,
-              // color: Colors.blueGrey,
+              Icons.bookmark_added_rounded
             ),
           ],
         ),
         centerTitle: true,
+        actions: const [
+          IconButton(
+            onPressed: null, 
+            icon: Icon(
+              Icons.search
+            )
+          ),
+          IconButton(
+            onPressed: null, 
+            icon: Icon(
+              Icons.sort
+            )
+          )
+        ],
       ),
 
       drawer: const TodoListDrawer(),
