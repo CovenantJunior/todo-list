@@ -119,7 +119,7 @@ class _TodoListPageState extends State<TodoListPage> {
 
     Color? tint(bool completed) {
       if (completed == true) {
-        return Colors.white;
+        return Colors.yellow;
       } else {
         return null;
       }
@@ -209,7 +209,6 @@ class _TodoListPageState extends State<TodoListPage> {
                       Text(
                         plan.plan,
                         overflow: TextOverflow.clip,
-                        maxLines: 20,
                         style: TextStyle(
                           fontFamily: "Quicksand",
                           fontWeight: FontWeight.w600,
