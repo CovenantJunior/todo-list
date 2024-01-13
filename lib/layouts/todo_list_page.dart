@@ -186,7 +186,7 @@ class _TodoListPageState extends State<TodoListPage> {
               children: [
                 SizedBox(height: topHeight),
                 const Center(child: Text(
-                    "Click the + icon below to add"
+                    "Click the + icon below to add a plan"
                   )
                 ),
                 const SizedBox(height: 10),
