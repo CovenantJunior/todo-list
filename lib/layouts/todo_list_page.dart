@@ -128,19 +128,75 @@ class _TodoListPageState extends State<TodoListPage> {
       }
     }
 
-    void search(BuildContext context, List todolists) async {
-      await showDialog(
-        context: context,
-        builder: (ctx) {
-          return MultiSelectDialogField(
+  void search(List todolists) {
+    List selectedLists = [];
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          "Search Plan",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.bold
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: MultiSelectDialogField(
             items: todolists.map((e) => MultiSelectItem(e, e.plan)).toList(),
             listType: MultiSelectListType.CHIP,
             onConfirm: (values) {
-              todolists = values;
+              selectedLists = values;
             },
-          );
-        });
-    }
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.cancel
+            )
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            // color: Colors.blueGrey,
+            onPressed: () {
+              print(selectedLists);
+              if (selectedLists.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text(
+                  'Please select a plan to deal with',
+                  style: TextStyle(
+                    fontFamily: "Quicksand",
+                    fontWeight: FontWeight.bold
+                  )
+                )));
+              } else {
+                if (selectedLists.length > 1) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text(
+                      'Deleting selected plans...',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold
+                      )
+                    )));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text(
+                      'Deleting selected plan...',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold
+                      )
+                    )));
+                }
+              }
+            }
+          )
+        ],
+      )
+    );
+  }
 
     return Scaffold(
       appBar: AppBar(
@@ -165,7 +221,7 @@ class _TodoListPageState extends State<TodoListPage> {
         actions: [
           IconButton(
             onPressed: () {
-              search(context, todolists);
+              search(todolists);
             },
             icon: const Icon(
               Icons.search
