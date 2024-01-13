@@ -36,6 +36,10 @@ class _TodoListPageState extends State<TodoListPage> {
           ),
         ),
         content: TextField(
+          autocorrect: true,
+          autofocus: true,
+          maxLines: 1,
+          maxLength: 35,
           controller: textController,
         ),
         actions: [
