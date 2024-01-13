@@ -45,6 +45,7 @@ class TodoListDatabase extends ChangeNotifier{
     var existingTodoList = await isar.todoLists.get(id);
     if (existingTodoList != null) {
       existingTodoList.plan = plan;
+      existingTodoList.modified = DateTime.now();
       await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
     }
 
