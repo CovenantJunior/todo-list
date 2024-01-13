@@ -108,6 +108,15 @@ class _TodoListPageState extends State<TodoListPage> {
       topHeight = 20;
     }
 
+    // If completed, text decoration will be crossed
+    TextDecoration decorate(bool completed) {
+      if (completed) {
+        return TextDecoration.lineThrough;
+      } else {
+        return TextDecoration.none;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -157,11 +166,11 @@ class _TodoListPageState extends State<TodoListPage> {
                         plan.plan,
                         overflow: TextOverflow.clip,
                         maxLines: 20,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: "Quicksand",
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
-                          decoration: TextDecoration.none,
+                          decoration: decorate(plan.completed),
                         ),
                       ),
                       Builder(
