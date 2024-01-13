@@ -186,12 +186,11 @@ class _TodoListPageState extends State<TodoListPage> {
               children: [
                 SizedBox(height: topHeight),
                 const Center(child: Text(
-                    "No plans yet, tap the + icon below to add",
-                    style: TextStyle(
-                      // color: Colors.blueGrey,
-                    ),
+                    "Click the + icon below to add"
                   )
                 ),
+                const SizedBox(height: 10),
+                const Center(child: Text("Tap on plan to deactivate or flag completed")),
                 const SizedBox(height: 100),
                 Padding(
                   padding: EdgeInsets.only(left: leftPadding),
