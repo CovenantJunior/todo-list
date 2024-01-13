@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:todo_list/component/todo_list_drawer.dart';
 import 'package:todo_list/component/todo_list_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
@@ -22,6 +23,9 @@ class _TodoListPageState extends State<TodoListPage> {
 
   // Access user input
   final textController = TextEditingController();
+
+  // Define a list to hold the selected plans
+  List<String> selectedPlans = [];
 
   // Create
   void createTodoList() {
@@ -51,7 +55,6 @@ class _TodoListPageState extends State<TodoListPage> {
           ),
           IconButton(
             icon: const Icon(Icons.save),
-            // color: Colors.blueGrey,
             onPressed: () {
               String text = textController.text;
               if (text.isNotEmpty) {
@@ -145,19 +148,22 @@ class _TodoListPageState extends State<TodoListPage> {
           ],
         ),
         centerTitle: true,
-        actions: const [
+        actions: [
+          // Show MultiSelect widget when the search icon is clicked
           IconButton(
-            onPressed: null, 
-            icon: Icon(
+            onPressed: () {
+              showMultiSelect(context, todolists);
+            },
+            icon: const Icon(
               Icons.search
             )
           ),
-          IconButton(
+          const IconButton(
             onPressed: null, 
             icon: Icon(
               Icons.sort
             )
-          )
+          ),
         ],
       ),
 
@@ -170,79 +176,81 @@ class _TodoListPageState extends State<TodoListPage> {
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            itemCount: todolists.length,
-            itemBuilder: (context, index) {
-            final plan = todolists[index];
-            return GestureDetector(
-              onDoubleTap: () {
-                if (plan.completed == true) {
-                  context.read<TodoListDatabase>().replan(plan.id);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
-                      'Plan reset for extra brilliance!',
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
-                      )
-                    )));
-                } else {
-                  context.read<TodoListDatabase>().completed(plan.id);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
-                      'Plan accomplished. You inspire!!!',
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
-                      )
-                    )));
-                }
-              },
-              child: Card(
-                surfaceTintColor: tint(plan.completed),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        plan.plan,
-                        overflow: TextOverflow.clip,
-                        style: TextStyle(
-                          fontFamily: "Quicksand",
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          decoration: decorate(plan.completed),
+          child: Column(
+            children: [Expanded(
+                child: ListView.builder(
+                  itemCount: todolists.length,
+                  itemBuilder: (context, index) {
+                    final plan = todolists[index];
+                    return GestureDetector(
+                      onDoubleTap: () {
+                        if (plan.completed == true) {
+                          context.read<TodoListDatabase>().replan(plan.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text(
+                              'Plan reset for extra brilliance!',
+                              style: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.bold
+                              )
+                            )));
+                        } else {
+                          context.read<TodoListDatabase>().completed(plan.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text(
+                              'Plan accomplished. You inspire!!!',
+                              style: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.bold
+                              )
+                            )));
+                        }
+                      },
+                      child: Card(
+                        surfaceTintColor: tint(plan.completed),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                plan.plan,
+                                overflow: TextOverflow.clip,
+                                style: TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  decoration: decorate(plan.completed),
+                                ),
+                              ),
+                              Builder(
+                                builder: (context) {
+                                  return IconButton(
+                                    onPressed: () {
+                                      showPopover(
+                                        width: 270,
+                                        context: context,
+                                        bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.more_vert, 
+                                      color:Colors.blueGrey
+                                    )
+                                  );
+                                }
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      Builder(
-                        builder: (context) {
-                          return IconButton(
-                            onPressed: () {
-                              showPopover(
-                                width: 270,
-                                context: context,
-                                bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.more_vert, 
-                              color:Colors.blueGrey
-                            )
-                          );
-                        }
-                      ),
-                      /* TodoListOptions(
-                        id: plan.id,
-                        plan: plan.plan
-                      ) */
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ),
-            );
-          }),
+            ],
+          ),
         ),
       ) : SingleChildScrollView(
         child: Row(
@@ -288,6 +296,44 @@ class _TodoListPageState extends State<TodoListPage> {
           // color: Colors.blueGrey,
         ),
       ),
+    );
+  }
+
+  // Function to show the MultiSelect widget
+  void showMultiSelect(BuildContext context, todolists) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          "Search",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.bold
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: MultiSelect(
+            autovalidateMode: AutovalidateMode.disabled,
+            titleText: 'Search',
+            validator: (value) {
+              return null;
+            },
+            dataSource: todolists.map((plan) => {'display': plan.plan, 'value': plan.plan}).toList(),
+            textField: 'display',
+            valueField: 'value',
+            filterable: true,
+            required: true,
+            value: selectedPlans,
+            onSaved: null,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          )
+        ],
+      )
     );
   }
 }
