@@ -364,48 +364,61 @@ class _TodoListPageState extends State<TodoListPage> {
                     )));
                 }
               },
-              child: Card(
-                surfaceTintColor: tint(plan.completed),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        plan.plan,
-                        overflow: TextOverflow.clip,
-                        style: TextStyle(
-                          fontFamily: "Quicksand",
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          decoration: decorate(plan.completed),
+              child: Builder(
+                builder: (context) {
+                  return GestureDetector(
+                    onLongPress: () {
+                      showPopover(
+                        width: 270,
+                        context: context,
+                        bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
+                      );
+                    },
+                    child: Card(
+                      surfaceTintColor: tint(plan.completed),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              plan.plan,
+                              overflow: TextOverflow.clip,
+                              style: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                decoration: decorate(plan.completed),
+                              ),
+                            ),
+                            Builder(
+                              builder: (context) {
+                                return IconButton(
+                                  onPressed: () {
+                                    showPopover(
+                                      width: 270,
+                                      context: context,
+                                      bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.more_vert, 
+                                    color:Colors.blueGrey
+                                  )
+                                );
+                              }
+                            ),
+                            /* TodoListOptions(
+                              id: plan.id,
+                              plan: plan.plan
+                            ) */
+                          ],
                         ),
                       ),
-                      Builder(
-                        builder: (context) {
-                          return IconButton(
-                            onPressed: () {
-                              showPopover(
-                                width: 270,
-                                context: context,
-                                bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.more_vert, 
-                              color:Colors.blueGrey
-                            )
-                          );
-                        }
-                      ),
-                      /* TodoListOptions(
-                        id: plan.id,
-                        plan: plan.plan
-                      ) */
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                }
               ),
             );
           }),
