@@ -44,6 +44,12 @@ class _TodoListPageState extends State<TodoListPage> {
         ),
         actions: [
           IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.cancel
+            )
+          ),
+          IconButton(
             icon: const Icon(Icons.save),
             // color: Colors.blueGrey,
             onPressed: () {
