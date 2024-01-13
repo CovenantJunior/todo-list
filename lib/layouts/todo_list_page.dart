@@ -162,7 +162,7 @@ class _TodoListPageState extends State<TodoListPage> {
             itemBuilder: (context, index) {
             final plan = todolists[index];
             return GestureDetector(
-              onTap: () {
+              onDoubleTap: () {
                 if (plan.completed == true) {
                   context.read<TodoListDatabase>().replan(plan.id);
                   ScaffoldMessenger.of(context).showSnackBar(
