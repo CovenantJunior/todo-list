@@ -245,7 +245,7 @@ class _TodoListPageState extends State<TodoListPage> {
                   )
                 ),
                 const SizedBox(height: 10),
-                const Center(child: Text("Tap on plan to deactivate or flag completed")),
+                const Center(child: Text("Double tap on plan to deactivate or flag completed")),
                 const SizedBox(height: 100),
                 Padding(
                   padding: EdgeInsets.only(left: leftPadding),
