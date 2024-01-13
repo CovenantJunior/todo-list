@@ -108,7 +108,7 @@ class _TodoListPageState extends State<TodoListPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              "My To-do List",
+              "My Todo List",
               style: TextStyle(
                 fontFamily: "Quicksand",
                 fontWeight: FontWeight.bold,
