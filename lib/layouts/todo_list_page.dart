@@ -144,45 +144,49 @@ class _TodoListPageState extends State<TodoListPage> {
             itemCount: todolists.length,
             itemBuilder: (context, index) {
             final plan = todolists[index];
-            return Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      plan.plan,
-                      overflow: TextOverflow.clip,
-                      maxLines: 20,
-                      style: const TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16
+            return GestureDetector(
+              onTap: null,
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        plan.plan,
+                        overflow: TextOverflow.clip,
+                        maxLines: 20,
+                        style: const TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          decoration: TextDecoration.none,
+                        ),
                       ),
-                    ),
-                    Builder(
-                      builder: (context) {
-                        return IconButton(
-                          onPressed: () {
-                            showPopover(
-                              width: 270,
-                              context: context,
-                              bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.more_vert, 
-                            color:Colors.blueGrey
-                          )
-                        );
-                      }
-                    ),
-                    /* TodoListOptions(
-                      id: plan.id,
-                      plan: plan.plan
-                    ) */
-                  ],
+                      Builder(
+                        builder: (context) {
+                          return IconButton(
+                            onPressed: () {
+                              showPopover(
+                                width: 270,
+                                context: context,
+                                bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.more_vert, 
+                              color:Colors.blueGrey
+                            )
+                          );
+                        }
+                      ),
+                      /* TodoListOptions(
+                        id: plan.id,
+                        plan: plan.plan
+                      ) */
+                    ],
+                  ),
                 ),
               ),
             );
