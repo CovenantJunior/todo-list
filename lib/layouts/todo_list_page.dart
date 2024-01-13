@@ -110,10 +110,18 @@ class _TodoListPageState extends State<TodoListPage> {
 
     // If completed, text decoration will be crossed
     TextDecoration decorate(bool completed) {
-      if (completed) {
+      if (completed == true) {
         return TextDecoration.lineThrough;
       } else {
         return TextDecoration.none;
+      }
+    }
+
+    Color? tint(bool completed) {
+      if (completed == true) {
+        return Colors.white;
+      } else {
+        return null;
       }
     }
 
@@ -154,8 +162,31 @@ class _TodoListPageState extends State<TodoListPage> {
             itemBuilder: (context, index) {
             final plan = todolists[index];
             return GestureDetector(
-              onTap: null,
+              onTap: () {
+                if (plan.completed == true) {
+                  context.read<TodoListDatabase>().replan(plan.id);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text(
+                      'Plan reset for extra brilliance!',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold
+                      )
+                    )));
+                } else {
+                  context.read<TodoListDatabase>().completed(plan.id);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text(
+                      'Plan accomplished. You inspire!!!',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold
+                      )
+                    )));
+                }
+              },
               child: Card(
+                surfaceTintColor: tint(plan.completed),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Row(
