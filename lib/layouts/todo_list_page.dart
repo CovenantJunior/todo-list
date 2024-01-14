@@ -185,6 +185,10 @@ class _TodoListPageState extends State<TodoListPage> {
           ),
           content: SingleChildScrollView(
             child: MultiSelectDialogField(
+              backgroundColor: Theme.of(context).colorScheme.onSecondary,
+              selectedItemsTextStyle: const TextStyle(
+                color: Colors.white
+              ),
               items: todolists.map((e) => MultiSelectItem(e, e.plan)).toList(),
               listType: MultiSelectListType.CHIP,
               onConfirm: (values) {
