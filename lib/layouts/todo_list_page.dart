@@ -102,10 +102,6 @@ class _TodoListPageState extends State<TodoListPage> {
     
     Widget searchTextField() { //add
     return TextField(
-      cursorColor: Colors.white,
-      style: const TextStyle(
-        color: Colors.white
-      ),
       controller: textController,
       autofocus: true,
       autocorrect: true,
@@ -113,7 +109,6 @@ class _TodoListPageState extends State<TodoListPage> {
         const InputDecoration(
           labelText: 'Search Plans',
           labelStyle: TextStyle(
-            color: Colors.white,
             fontFamily: "Quicksand"
           )
         ),
@@ -339,7 +334,7 @@ class _TodoListPageState extends State<TodoListPage> {
 
     void search () {
       setState(() {
-        isSearch = true;
+        isSearch = !isSearch;
         isOfLength = false;
         searchResults.clear();
       });
@@ -428,203 +423,212 @@ class _TodoListPageState extends State<TodoListPage> {
     );
   }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: isSearch ?
-        searchTextField() :
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              "Todo List",
-              style: TextStyle(
-                fontFamily: "Quicksand",
-                fontWeight: FontWeight.bold,
-                fontSize: 30
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          isSearch = !isSearch;
+          isOfLength = false;
+        });
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: isSearch ?
+          searchTextField() :
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                "Todo List",
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30
+                ),
               ),
-            ),
-            SizedBox(width: 3),
-            Icon(
-              Icons.bookmark_added_rounded
-            ),
+              SizedBox(width: 3),
+              Icon(
+                Icons.bookmark_added_rounded
+              ),
+            ],
+          ),
+          centerTitle: true,
+          actions: [
+            isOfLength ? IconButton(
+              onPressed: () {
+                textController.clear();
+                setState(() {
+                  searchResults.clear();
+                });
+              },
+              icon: const Icon(
+                  Icons.close,
+                ),
+              tooltip: 'Search Plans',
+              style: TextButton.styleFrom(
+                shape: const CircleBorder(),
+              ),
+            ) : const SizedBox(),
+            if(!isSearch)
+              IconButton(
+                onPressed: () {
+                  multiEdit(todolists);
+                },
+                icon: const Icon(
+                  Icons.edit
+                )
+              ),
+            if(!isSearch)
+              IconButton(
+                onPressed: search, 
+                icon: const Icon(
+                  Icons.search
+                )
+              )
           ],
         ),
-        centerTitle: true,
-        actions: [
-          isOfLength ? IconButton(
-            onPressed: () {
-              textController.clear();
-              setState(() {
-                searchResults.clear();
-              });
-            },
-            icon: const Icon(
-                Icons.close,
-                color: Colors.white,
-              ),
-            tooltip: 'Search Plans',
-            style: TextButton.styleFrom(
-              shape: const CircleBorder(),
-            ),
-          ) :
-          IconButton(
-            onPressed: () {
-              multiEdit(todolists);
-            },
-            icon: const Icon(
-              Icons.edit
-            )
-          ),
-          IconButton(
-            onPressed: search, 
-            icon: const Icon(
-              Icons.search
-            )
-          )
-        ],
-      ),
-
-      drawer: const TodoListDrawer(),
-
-      body: todolists.isNotEmpty  ? LiquidPullToRefresh(
-        springAnimationDurationInMilliseconds: 200,
-        onRefresh: () async {
-          readTodoLists();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            itemCount: todolists.length,
-            itemBuilder: (context, index) {
-            final plan = todolists[index];
-            return GestureDetector(
-              onDoubleTap: () {
-                if (plan.completed == true) {
-                  context.read<TodoListDatabase>().replan(plan.id);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
-                      'Plan reset for extra brilliance!',
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
-                      )
-                    )));
-                } else {
-                  context.read<TodoListDatabase>().completed(plan.id);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
-                      'Plan accomplished. You inspire!!!',
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
-                      )
-                    )));
-                }
-              },
-              child: Builder(
-                builder: (context) {
-                  return GestureDetector(
-                    onLongPress: () {
-                      showPopover(
-                        width: 210,
-                        context: context,
-                        bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
-                      );
-                    },
-                    onTap: () {
-                      planDetails(plan);
-                    },
-                    child: Card(
-                      surfaceTintColor: tint(plan.completed),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              plan.plan,
-                              overflow: TextOverflow.clip,
-                              style: TextStyle(
-                                fontFamily: "Quicksand",
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                                decoration: decorate(plan.completed),
+      
+        drawer: const TodoListDrawer(),
+      
+        body: todolists.isNotEmpty  ? LiquidPullToRefresh(
+          springAnimationDurationInMilliseconds: 200,
+          onRefresh: () async {
+            readTodoLists();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView.builder(
+              itemCount: todolists.length,
+              itemBuilder: (context, index) {
+              final plan = todolists[index];
+              return GestureDetector(
+                onDoubleTap: () {
+                  if (plan.completed == true) {
+                    context.read<TodoListDatabase>().replan(plan.id);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text(
+                        'Plan reset for extra brilliance!',
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.bold
+                        )
+                      )));
+                  } else {
+                    context.read<TodoListDatabase>().completed(plan.id);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text(
+                        'Plan accomplished. You inspire!!!',
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.bold
+                        )
+                      )));
+                  }
+                },
+                child: Builder(
+                  builder: (context) {
+                    return GestureDetector(
+                      onLongPress: () {
+                        showPopover(
+                          width: 210,
+                          context: context,
+                          bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
+                        );
+                      },
+                      onTap: () {
+                        planDetails(plan);
+                      },
+                      child: Card(
+                        surfaceTintColor: tint(plan.completed),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                plan.plan,
+                                overflow: TextOverflow.clip,
+                                style: TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  decoration: decorate(plan.completed),
+                                ),
                               ),
-                            ),
-                            Builder(
-                              builder: (context) {
-                                return IconButton(
-                                  onPressed: () {
-                                    showPopover(
-                                      width: 270,
-                                      context: context,
-                                      bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    Icons.more_vert, 
-                                    color:Colors.blueGrey
-                                  )
-                                );
-                              }
-                            ),
-                            /* TodoListOptions(
-                              id: plan.id,
-                              plan: plan.plan
-                            ) */
-                          ],
+                              Builder(
+                                builder: (context) {
+                                  return IconButton(
+                                    onPressed: () {
+                                      showPopover(
+                                        width: 270,
+                                        context: context,
+                                        bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.more_vert, 
+                                      color:Colors.blueGrey
+                                    )
+                                  );
+                                }
+                              ),
+                              /* TodoListOptions(
+                                id: plan.id,
+                                plan: plan.plan
+                              ) */
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }
-              ),
-            );
-          }),
-        ),
-      ) : SingleChildScrollView(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: topHeight),
-                const Center(child: Text(
-                    "Click the + icon below to add a plan"
-                  )
+                    );
+                  }
                 ),
-                const SizedBox(height: 10),
-                const Center(child: Text("Double tap on plan to deactivate or flag completed")),
-                const SizedBox(height: 100),
-                Padding(
-                  padding: EdgeInsets.only(left: leftPadding),
-                  child: Transform.rotate(
-                    angle: 1.5708,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Image.asset(
-                          'images/pointer.gif',
-                          width: 100,
-                        ),
-                      ],
+              );
+            }),
+          ),
+        ) : SingleChildScrollView(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: topHeight),
+                  const Center(child: Text(
+                      "Click the + icon below to add a plan"
                     )
                   ),
-                )
-              ],
-            ),
-          ],
+                  const SizedBox(height: 10),
+                  const Center(child: Text("Double tap on plan to deactivate or flag completed")),
+                  const SizedBox(height: 100),
+                  Padding(
+                    padding: EdgeInsets.only(left: leftPadding),
+                    child: Transform.rotate(
+                      angle: 1.5708,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Image.asset(
+                            'images/pointer.gif',
+                            width: 100,
+                          ),
+                        ],
+                      )
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: createTodoList,
-        backgroundColor: Theme.of(context).colorScheme.onSecondary,
-        child: const Icon(
-          Icons.add,
-          // color: Colors.blueGrey,
+      
+        floatingActionButton: FloatingActionButton(
+          onPressed: createTodoList,
+          backgroundColor: Theme.of(context).colorScheme.onSecondary,
+          child: const Icon(
+            Icons.add,
+            // color: Colors.blueGrey,
+          ),
         ),
       ),
     );
