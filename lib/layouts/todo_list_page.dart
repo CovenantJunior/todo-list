@@ -320,6 +320,13 @@ class _TodoListPageState extends State<TodoListPage> {
                 Text(plan.completed)
               ],
             ),
+            if (plan.modified)
+              Row(
+                children: [
+                  const Text("Modified:"),
+                  Text(plan.modified)
+                ],
+              ),
           ],
         )
       )
