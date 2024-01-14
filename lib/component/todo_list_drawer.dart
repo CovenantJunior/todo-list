@@ -63,40 +63,42 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
     
     return Drawer(
       semanticLabel: "TodoList Drawer Menu",
-      child: Column(
-        children: [
-          DrawerHeader(
-            child: Image.asset(
-                'images/note.png',
-                width: 70,
-              ),
-          ),
-          TodoListDrawerTile(
-            title: "Home",
-            leading: const Icon(Icons.home),
-            onTap: () {
-              Navigator.pop(context);
-            }
-          ),
-
-          TodoListDrawerTile(
-            title: "Settings",
-            leading: const Icon(Icons.settings),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoListSettings()));
-            }
-          ),
-
-          if (todolists.isNotEmpty)
-            TodoListDrawerTile(
-              title: "Delete all plans",
-              leading: const Icon(Icons.delete_forever_rounded),
-              onTap: () {
-                deleteAllTodoLists();
-              },
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            DrawerHeader(
+              child: Image.asset(
+                  'images/note.png',
+                  width: 70,
+                ),
             ),
-        ],
+            TodoListDrawerTile(
+              title: "Home",
+              leading: const Icon(Icons.home),
+              onTap: () {
+                Navigator.pop(context);
+              }
+            ),
+        
+            TodoListDrawerTile(
+              title: "Settings",
+              leading: const Icon(Icons.settings),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoListSettings()));
+              }
+            ),
+        
+            if (todolists.isNotEmpty)
+              TodoListDrawerTile(
+                title: "Delete all plans",
+                leading: const Icon(Icons.delete_forever_rounded),
+                onTap: () {
+                  deleteAllTodoLists();
+                },
+              ),
+          ],
+        ),
       ),
     );
   }
