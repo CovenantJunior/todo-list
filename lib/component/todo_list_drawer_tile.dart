@@ -19,7 +19,13 @@ class TodoListDrawerTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: ListTile(
-        title: Text(title),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.bold
+          ),
+        ),
         leading: leading,
         onTap: onTap,
       ),

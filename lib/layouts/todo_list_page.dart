@@ -27,6 +27,10 @@ class _TodoListPageState extends State<TodoListPage> {
   // Access user input
   final textController = TextEditingController();
 
+  bool isSearch = false;
+  bool isOfLength = false;
+  List searchResults = [];
+
   // Create
   void createTodoList() {
     showDialog(
@@ -95,6 +99,49 @@ class _TodoListPageState extends State<TodoListPage> {
   @override
   Widget build(BuildContext context) {
     List todolists = context.watch<TodoListDatabase>().todolists;
+    
+    Widget searchTextField() { //add
+    return TextField(
+      cursorColor: Colors.white,
+      style: const TextStyle(
+        color: Colors.white
+      ),
+      controller: textController,
+      autofocus: true,
+      autocorrect: true,
+      decoration:
+        const InputDecoration(
+          labelText: 'Search Plans',
+          labelStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: "Quicksand"
+          )
+        ),
+      onChanged: (q) {
+        print(q);
+        if (q.isNotEmpty) {
+          setState(() {
+            isOfLength = true;
+            searchResults = [];
+          });
+        } else {
+          setState(() {
+            isOfLength = false;
+            searchResults = [];
+          });
+        }
+        for (var plans in todolists) {
+          if (plans.plan.toLowerCase().contains(q.toLowerCase())) {
+            searchResults.add(todolists);
+            setState(() {
+              searchResults = searchResults;
+            });
+          }
+        }
+        print(isOfLength);
+      },
+    );
+  }
 
     Orientation orientation = MediaQuery.of(context).orientation;
 
@@ -129,13 +176,13 @@ class _TodoListPageState extends State<TodoListPage> {
       }
     }
 
-    void search(List todolists) {
+    void multiEdit(List todolists) {
       List selectedLists = [];
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text(
-            "Search Plan",
+            "Edit Plans",
             style: TextStyle(
               fontFamily: "Quicksand",
               fontWeight: FontWeight.bold
@@ -290,6 +337,16 @@ class _TodoListPageState extends State<TodoListPage> {
       );
     }
 
+    void search () {
+      setState(() {
+        isSearch = true;
+        isOfLength = false;
+        searchResults.clear();
+      });
+      print(isSearch);
+      print(isOfLength);
+    }
+
     void planDetails(plan) {
     showDialog(
       context: context,
@@ -373,7 +430,9 @@ class _TodoListPageState extends State<TodoListPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Row(
+        title: isSearch ?
+        searchTextField() :
+        const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
@@ -392,18 +451,34 @@ class _TodoListPageState extends State<TodoListPage> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
+          isOfLength ? IconButton(
             onPressed: () {
-              search(todolists);
+              textController.clear();
+              setState(() {
+                searchResults.clear();
+              });
             },
             icon: const Icon(
-              Icons.search
+                Icons.close,
+                color: Colors.white,
+              ),
+            tooltip: 'Search Plans',
+            style: TextButton.styleFrom(
+              shape: const CircleBorder(),
+            ),
+          ) :
+          IconButton(
+            onPressed: () {
+              multiEdit(todolists);
+            },
+            icon: const Icon(
+              Icons.edit
             )
           ),
-          const IconButton(
-            onPressed: null, 
-            icon: Icon(
-              Icons.sort
+          IconButton(
+            onPressed: search, 
+            icon: const Icon(
+              Icons.search
             )
           )
         ],
