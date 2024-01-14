@@ -301,34 +301,71 @@ class _TodoListPageState extends State<TodoListPage> {
             fontWeight: FontWeight.bold
           ),
         ),
-        content: Column(
-          children: [
-            Row(
-              children: [
-                const Text("Title:"),
-                Text(plan.plan)
-              ],
-            ),
-            Row(
-              children: [
-                const Text("Created:"),
-                Text(plan.created)
-              ],
-            ),
-            Row(
-              children: [
-                const Text("Completed:"),
-                Text(plan.completed)
-              ],
-            ),
-            if (plan.modified)
-              Row(
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Modified:"),
-                  Text("${DateFormat('EEE, MMM d yyyy').format(plan.modified)}")
+                  const Text(
+                    "Title",
+                    style: TextStyle(
+                      fontFamily: "Quicksan",
+                      fontSize: 20
+                    ),
+                  ),
+                  Text(plan.plan)
                 ],
               ),
-          ],
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Status",
+                    style: TextStyle(
+                      fontFamily: "Quicksan",
+                      fontSize: 20
+                    ),
+                  ),
+                  if(plan.completed == true)
+                    const Text("You rock. this plan was proudly executed")
+                  else
+                    const Text("We still have to get this plan done")
+                ],
+              ),
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Date Created",
+                    style: TextStyle(
+                      fontFamily: "Quicksan",
+                      fontSize: 20
+                    ),
+                  ),
+                  Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created))
+                ],
+              ),
+              const SizedBox(height: 20),
+              if (plan.modified != null)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Date Modified",
+                      style: TextStyle(
+                        fontFamily: "Quicksan",
+                        fontSize: 20
+                      ),
+                    ),
+                    Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.modified))
+                  ],
+                ),
+            ],
+          ),
         )
       )
     );
