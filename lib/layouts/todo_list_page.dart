@@ -381,90 +381,118 @@ class _TodoListPageState extends State<TodoListPage> {
     }
 
     void planDetails(plan) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text(
-          "Details",
-          style: TextStyle(
-            fontFamily: "Quicksand",
-            fontWeight: FontWeight.bold
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            "Details",
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.bold
+            ),
           ),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Title",
-                    style: TextStyle(
-                      fontFamily: "Quicksan",
-                      fontSize: 20
-                    ),
-                  ),
-                  Text(plan.plan)
-                ],
-              ),
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Status",
-                    style: TextStyle(
-                      fontFamily: "Quicksan",
-                      fontSize: 20
-                    ),
-                  ),
-                  if(plan.completed == true)
-                    const Text("You rock. this plan was proudly executed")
-                  else
-                    const Text("We still have to get this plan done")
-                ],
-              ),
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Date Created",
-                    style: TextStyle(
-                      fontFamily: "Quicksan",
-                      fontSize: 20
-                    ),
-                  ),
-                  Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created))
-                ],
-              ),
-              const SizedBox(height: 20),
-              if (plan.modified != null)
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Date Modified",
+                      "Title",
                       style: TextStyle(
                         fontFamily: "Quicksan",
                         fontSize: 20
                       ),
                     ),
-                    Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.modified))
+                    Text(plan.plan)
                   ],
                 ),
-            ],
-          ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Status",
+                      style: TextStyle(
+                        fontFamily: "Quicksan",
+                        fontSize: 20
+                      ),
+                    ),
+                    if(plan.completed == true)
+                      const Text("You rock. this plan was proudly executed")
+                    else
+                      const Text("We still have to get this plan done")
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Date Created",
+                      style: TextStyle(
+                        fontFamily: "Quicksan",
+                        fontSize: 20
+                      ),
+                    ),
+                    Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created))
+                  ],
+                ),
+                const SizedBox(height: 20),
+                if (plan.modified != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Date Modified",
+                        style: TextStyle(
+                          fontFamily: "Quicksan",
+                          fontSize: 20
+                        ),
+                      ),
+                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.modified))
+                    ],
+                  ),
+              ],
+            ),
+          )
         )
-      )
-    );
-  }
+      );
+    }
+
+    void mark(plan) {
+      if (plan.completed == true) {
+        context.read<TodoListDatabase>().replan(plan.id);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 2),
+            content: Text(
+            'Plan reactivated!',
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.bold
+            )
+          )));
+      } else {
+        context.read<TodoListDatabase>().completed(plan.id);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 2),
+            content: Text(
+            'Plan accomplished. You inspire!!!',
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.bold
+            )
+          )));
+      }
+    }
 
     return GestureDetector(
       onTap: () {
         setState(() {
-          isSearch = !isSearch;
+          isSearch = false;
           isOfLength = false;
         });
       },
@@ -541,40 +569,16 @@ class _TodoListPageState extends State<TodoListPage> {
               final plan = todolists[index];
               return GestureDetector(
                 onDoubleTap: () {
-                  if (plan.completed == true) {
-                    context.read<TodoListDatabase>().replan(plan.id);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        duration: Duration(seconds: 2),
-                        content: Text(
-                        'Plan reactivated!',
-                        style: TextStyle(
-                          fontFamily: "Quicksand",
-                          fontWeight: FontWeight.bold
-                        )
-                      )));
-                  } else {
-                    context.read<TodoListDatabase>().completed(plan.id);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        duration: Duration(seconds: 2),
-                        content: Text(
-                        'Plan accomplished. You inspire!!!',
-                        style: TextStyle(
-                          fontFamily: "Quicksand",
-                          fontWeight: FontWeight.bold
-                        )
-                      )));
-                  }
+                  mark(plan);
                 },
                 child: Builder(
                   builder: (context) {
                     return GestureDetector(
                       onLongPress: () {
                         showPopover(
-                          width: 210,
+                          width: 240,
                           context: context,
-                          bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
+                          bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
                         );
                       },
                       onTap: () {
@@ -603,9 +607,9 @@ class _TodoListPageState extends State<TodoListPage> {
                                   return IconButton(
                                     onPressed: () {
                                       showPopover(
-                                        width: 270,
+                                        width: 370,
                                         context: context,
-                                        bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan)
+                                        bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
                                       );
                                     },
                                     icon: const Icon(

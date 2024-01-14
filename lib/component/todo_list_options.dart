@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:todo_list/models/todo_list.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -7,11 +8,13 @@ import 'package:share_plus/share_plus.dart';
 class TodoListOptions extends StatelessWidget {
   final int id;
   final String plan;
+  final TodoList Plan;
 
   const TodoListOptions({
     super.key,
     required this.id,
-    required this.plan
+    required this.plan,
+    required this.Plan
   });
 
   @override
@@ -104,6 +107,7 @@ class TodoListOptions extends StatelessWidget {
       Share.share(plan);
     }
 
+    // Copy to Clipboard
     void copy(String plan) {
       Clipboard.setData (
         ClipboardData(
@@ -119,6 +123,36 @@ class TodoListOptions extends StatelessWidget {
             )
           )));
     }
+
+    void mark(plan) {
+      if (plan.completed == true) {
+        context.read<TodoListDatabase>().replan(plan.id);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 2),
+            content: Text(
+            'Plan reactivated!',
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.bold
+            )
+          )));
+      } else {
+        context.read<TodoListDatabase>().completed(plan.id);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 2),
+            content: Text(
+            'Plan accomplished. You inspire!!!',
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.bold
+            )
+          )));
+      }
+    }
+
+
     return Row(
       children: [
         IconButton(
@@ -160,6 +194,22 @@ class TodoListOptions extends StatelessWidget {
             Icons.delete,
             color: Colors.blueGrey,
           ),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+            mark(Plan);
+          },
+          icon: 
+          Plan.completed! ?
+          const Icon(
+              Icons.bookmark_remove_rounded,
+              color: Colors.blueGrey,
+            ) :
+            const Icon(
+              Icons.bookmark_added_rounded,
+              color: Colors.blueGrey,
+            ),
         ),
       ],
     );
