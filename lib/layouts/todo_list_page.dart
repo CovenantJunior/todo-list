@@ -185,6 +185,17 @@ class _TodoListPageState extends State<TodoListPage> {
           ),
           content: SingleChildScrollView(
             child: MultiSelectDialogField(
+              buttonText: const Text(
+                "Tap to select plans",
+                style: TextStyle(
+                  fontFamily: "Quicksand"
+                ),
+              ),
+              buttonIcon: const Icon(
+                Icons.waving_hand_rounded
+              ),
+              cancelText: const Text("Leave"),
+              confirmText: const Text("I'm done"),
               backgroundColor: Theme.of(context).colorScheme.onSecondary,
               selectedItemsTextStyle: const TextStyle(
                 color: Colors.white
@@ -462,6 +473,7 @@ class _TodoListPageState extends State<TodoListPage> {
                 textController.clear();
                 setState(() {
                   searchResults.clear();
+                  isOfLength = false;
                 });
               },
               icon: const Icon(
