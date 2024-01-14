@@ -23,7 +23,7 @@ class _TodoListSettingsState extends State<TodoListSettings> {
         padding: const EdgeInsets.all(8.0),
         child: Card(
           child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
                 Row(
