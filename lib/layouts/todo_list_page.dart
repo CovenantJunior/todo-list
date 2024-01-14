@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
@@ -324,7 +325,7 @@ class _TodoListPageState extends State<TodoListPage> {
               Row(
                 children: [
                   const Text("Modified:"),
-                  Text(plan.modified)
+                  Text("${DateFormat('EEE, MMM d yyyy').format(plan.modified)}")
                 ],
               ),
           ],
