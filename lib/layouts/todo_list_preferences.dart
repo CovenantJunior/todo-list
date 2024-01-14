@@ -86,7 +86,30 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       )
                     ],
                   ),
-                  // const Divider(height: 30),
+                  const Divider(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.add_to_drive),
+                          SizedBox(width: 20),
+                          Text(
+                            'Backup to Drive',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Quicksand"
+                            ),
+                          ),
+                        ],
+                      ),
+                      CupertinoSwitch(
+                        value: false,
+                        onChanged: (value) {
+                        }
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),
