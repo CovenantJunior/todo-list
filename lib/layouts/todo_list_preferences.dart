@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:todo_list/theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-class TodoListSettings extends StatefulWidget {
-  const TodoListSettings({super.key});
+class TodoListPreferences extends StatefulWidget {
+  const TodoListPreferences({super.key});
 
   @override
-  State<TodoListSettings> createState() => _TodoListSettingsState();
+  State<TodoListPreferences> createState() => _TodoListPreferencesState();
 }
 
-class _TodoListSettingsState extends State<TodoListSettings> {
+class _TodoListPreferencesState extends State<TodoListPreferences> {
   late bool isDark = Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
   @override
   Widget build(BuildContext context) {

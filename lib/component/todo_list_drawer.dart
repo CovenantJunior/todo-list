@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/component/todo_list_drawer_tile.dart';
-import 'package:todo_list/layouts/todo_list_settings.dart';
+import 'package:todo_list/layouts/todo_list_preferences.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
 
@@ -81,11 +81,11 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
             ),
         
             TodoListDrawerTile(
-              title: "Settings",
+              title: "Preferences",
               leading: const Icon(Icons.settings),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoListSettings()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoListPreferences()));
               }
             ),
         
