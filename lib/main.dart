@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       home: const TodoListPage(),
       routes: {
         'notes' : (context) => const TodoListPage(),
-        'settings' : (context) => const TodoListSettings(),
+        'settings' : (context) => const TodoListPreferences(),
       },
     );
   }

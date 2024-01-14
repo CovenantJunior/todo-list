@@ -17,55 +17,78 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
     return Scaffold(
       appBar: AppBar(
         // Used AppBar just for the back icon
+        title: const Text(
+          "Preferences",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.bold
+          ),
+        ),
+        centerTitle: true,
       ),
 
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Dark Mode',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Quicksand"
+        child: SingleChildScrollView(
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.dark_mode_rounded),
+                          SizedBox(width: 20),
+                          Text(
+                            'Dark Mode',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Quicksand"
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    CupertinoSwitch(
-                      value: isDark,
-                      onChanged: (value) {
-                        Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
-                        setState(() {
-                          isDark = !isDark;
-                        });
-                      }
-                    )
-                  ],
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Notification',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Quicksand"
+                      CupertinoSwitch(
+                        value: isDark,
+                        onChanged: (value) {
+                          Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                          setState(() {
+                            isDark = !isDark;
+                          });
+                        }
+                      )
+                    ],
+                  ),
+                  const Divider(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.notifications),
+                          SizedBox(width: 20),
+                          Text(
+                            'Notification',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Quicksand"
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    CupertinoSwitch(
-                      value: false,
-                      onChanged: (value) {
-                      }
-                    )
-                  ],
-                )
-              ],
+                      CupertinoSwitch(
+                        value: false,
+                        onChanged: (value) {
+                        }
+                      )
+                    ],
+                  ),
+                  // const Divider(height: 30),
+                ],
+              ),
             ),
           ),
         ),
