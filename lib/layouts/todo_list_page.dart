@@ -67,7 +67,9 @@ class _TodoListPageState extends State<TodoListPage> {
                 Navigator.pop(context);
                 textController.clear();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text(
+                  const SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: Text(
                     'Plan saved',
                     style: TextStyle(
                       fontFamily: "Quicksand",
@@ -76,7 +78,9 @@ class _TodoListPageState extends State<TodoListPage> {
                   )));
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text(
+                  const SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: Text(
                     'Oops, blank shot!',
                     style: TextStyle(
                       fontFamily: "Quicksand",
@@ -188,14 +192,15 @@ class _TodoListPageState extends State<TodoListPage> {
               buttonText: const Text(
                 "Tap to select plans",
                 style: TextStyle(
-                  fontFamily: "Quicksand"
+                  fontFamily: "Quicksand",
+                  fontWeight: FontWeight.bold
                 ),
               ),
               buttonIcon: const Icon(
                 Icons.waving_hand_rounded
               ),
               cancelText: const Text("Leave"),
-              confirmText: const Text("I'm done"),
+              confirmText: const Text("Done"),
               backgroundColor: Theme.of(context).colorScheme.onSecondary,
               selectedItemsTextStyle: const TextStyle(
                 color: Colors.white
@@ -229,7 +234,9 @@ class _TodoListPageState extends State<TodoListPage> {
                   print(selectedLists);
                   if (selectedLists.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
+                    const SnackBar(
+                      duration: Duration(seconds: 2),
+                      content: Text(
                       'Please select a plan to deal with',
                       style: TextStyle(
                         fontFamily: "Quicksand",
@@ -239,7 +246,9 @@ class _TodoListPageState extends State<TodoListPage> {
                   } else {
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text(
+                        const SnackBar(
+                          duration: Duration(seconds: 2),
+                          content: Text(
                           'Marking as incompleted',
                           style: TextStyle(
                             fontFamily: "Quicksand",
@@ -248,7 +257,9 @@ class _TodoListPageState extends State<TodoListPage> {
                         )));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text(
+                        const SnackBar(
+                          duration: Duration(seconds: 2),
+                          content: Text(
                           'Marking as incompleted...',
                           style: TextStyle(
                             fontFamily: "Quicksand",
@@ -271,7 +282,9 @@ class _TodoListPageState extends State<TodoListPage> {
                   print(selectedLists);
                   if (selectedLists.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
+                    const SnackBar(
+                      duration: Duration(seconds: 2),
+                      content: Text(
                       'Please select a plan to deal with',
                       style: TextStyle(
                         fontFamily: "Quicksand",
@@ -281,7 +294,9 @@ class _TodoListPageState extends State<TodoListPage> {
                   } else {
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text(
+                        const SnackBar(
+                          duration: Duration(seconds: 2),
+                          content: Text(
                           'Marking as completed...',
                           style: TextStyle(
                             fontFamily: "Quicksand",
@@ -290,7 +305,9 @@ class _TodoListPageState extends State<TodoListPage> {
                         )));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text(
+                        const SnackBar(
+                          duration: Duration(seconds: 2),
+                          content: Text(
                           'Marking as completed...',
                           style: TextStyle(
                             fontFamily: "Quicksand",
@@ -311,7 +328,9 @@ class _TodoListPageState extends State<TodoListPage> {
                   print(selectedLists);
                   if (selectedLists.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
+                    const SnackBar(
+                      duration: Duration(seconds: 2),
+                      content: Text(
                       'Please select a plan to deal with',
                       style: TextStyle(
                         fontFamily: "Quicksand",
@@ -321,7 +340,9 @@ class _TodoListPageState extends State<TodoListPage> {
                   } else {
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text(
+                        const SnackBar(
+                          duration: Duration(seconds: 2),
+                          content: Text(
                           'Deleting selected plans...',
                           style: TextStyle(
                             fontFamily: "Quicksand",
@@ -330,7 +351,9 @@ class _TodoListPageState extends State<TodoListPage> {
                         )));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text(
+                        const SnackBar(
+                          duration: Duration(seconds: 2),
+                          content: Text(
                           'Deleting selected plan...',
                           style: TextStyle(
                             fontFamily: "Quicksand",
@@ -521,8 +544,10 @@ class _TodoListPageState extends State<TodoListPage> {
                   if (plan.completed == true) {
                     context.read<TodoListDatabase>().replan(plan.id);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text(
-                        'Plan reset for extra brilliance!',
+                      const SnackBar(
+                        duration: Duration(seconds: 2),
+                        content: Text(
+                        'Plan reactivated!',
                         style: TextStyle(
                           fontFamily: "Quicksand",
                           fontWeight: FontWeight.bold
@@ -531,7 +556,9 @@ class _TodoListPageState extends State<TodoListPage> {
                   } else {
                     context.read<TodoListDatabase>().completed(plan.id);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text(
+                      const SnackBar(
+                        duration: Duration(seconds: 2),
+                        content: Text(
                         'Plan accomplished. You inspire!!!',
                         style: TextStyle(
                           fontFamily: "Quicksand",
