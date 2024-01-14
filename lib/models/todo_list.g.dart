@@ -17,23 +17,28 @@ const TodoListSchema = CollectionSchema(
   name: r'TodoList',
   id: 7701471819688667286,
   properties: {
-    r'completed': PropertySchema(
+    r'achieved': PropertySchema(
       id: 0,
+      name: r'achieved',
+      type: IsarType.dateTime,
+    ),
+    r'completed': PropertySchema(
+      id: 1,
       name: r'completed',
       type: IsarType.bool,
     ),
     r'created': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'created',
       type: IsarType.dateTime,
     ),
     r'modified': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'modified',
       type: IsarType.dateTime,
     ),
     r'plan': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'plan',
       type: IsarType.string,
     )
@@ -73,10 +78,11 @@ void _todoListSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeBool(offsets[0], object.completed);
-  writer.writeDateTime(offsets[1], object.created);
-  writer.writeDateTime(offsets[2], object.modified);
-  writer.writeString(offsets[3], object.plan);
+  writer.writeDateTime(offsets[0], object.achieved);
+  writer.writeBool(offsets[1], object.completed);
+  writer.writeDateTime(offsets[2], object.created);
+  writer.writeDateTime(offsets[3], object.modified);
+  writer.writeString(offsets[4], object.plan);
 }
 
 TodoList _todoListDeserialize(
@@ -86,11 +92,12 @@ TodoList _todoListDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = TodoList();
-  object.completed = reader.readBoolOrNull(offsets[0]);
-  object.created = reader.readDateTimeOrNull(offsets[1]);
+  object.achieved = reader.readDateTimeOrNull(offsets[0]);
+  object.completed = reader.readBoolOrNull(offsets[1]);
+  object.created = reader.readDateTimeOrNull(offsets[2]);
   object.id = id;
-  object.modified = reader.readDateTimeOrNull(offsets[2]);
-  object.plan = reader.readStringOrNull(offsets[3]);
+  object.modified = reader.readDateTimeOrNull(offsets[3]);
+  object.plan = reader.readStringOrNull(offsets[4]);
   return object;
 }
 
@@ -102,12 +109,14 @@ P _todoListDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readBoolOrNull(offset)) as P;
-    case 1:
       return (reader.readDateTimeOrNull(offset)) as P;
+    case 1:
+      return (reader.readBoolOrNull(offset)) as P;
     case 2:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 3:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 4:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -203,6 +212,75 @@ extension TodoListQueryWhere on QueryBuilder<TodoList, TodoList, QWhereClause> {
 
 extension TodoListQueryFilter
     on QueryBuilder<TodoList, TodoList, QFilterCondition> {
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> achievedIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'achieved',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> achievedIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'achieved',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> achievedEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'achieved',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> achievedGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'achieved',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> achievedLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'achieved',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> achievedBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'achieved',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QAfterFilterCondition> completedIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -573,6 +651,18 @@ extension TodoListQueryLinks
     on QueryBuilder<TodoList, TodoList, QFilterCondition> {}
 
 extension TodoListQuerySortBy on QueryBuilder<TodoList, TodoList, QSortBy> {
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByAchieved() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'achieved', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByAchievedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'achieved', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByCompleted() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'completed', Sort.asc);
@@ -624,6 +714,18 @@ extension TodoListQuerySortBy on QueryBuilder<TodoList, TodoList, QSortBy> {
 
 extension TodoListQuerySortThenBy
     on QueryBuilder<TodoList, TodoList, QSortThenBy> {
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByAchieved() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'achieved', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByAchievedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'achieved', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByCompleted() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'completed', Sort.asc);
@@ -687,6 +789,12 @@ extension TodoListQuerySortThenBy
 
 extension TodoListQueryWhereDistinct
     on QueryBuilder<TodoList, TodoList, QDistinct> {
+  QueryBuilder<TodoList, TodoList, QDistinct> distinctByAchieved() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'achieved');
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QDistinct> distinctByCompleted() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'completed');
@@ -718,6 +826,12 @@ extension TodoListQueryProperty
   QueryBuilder<TodoList, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<TodoList, DateTime?, QQueryOperations> achievedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'achieved');
     });
   }
 

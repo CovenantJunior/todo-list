@@ -10,4 +10,5 @@ class TodoList {
   bool? completed;
   DateTime? created;
   DateTime? modified;
+  DateTime? achieved;
 }
