@@ -40,7 +40,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                     children: [
                       const Row(
                         children: [
-                          Icon(Icons.dark_mode_rounded),
+                          Icon(Icons.dark_mode_outlined),
                           SizedBox(width: 20),
                           Text(
                             'Dark Mode',
@@ -68,7 +68,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                     children: [
                       const Row(
                         children: [
-                          Icon(Icons.notifications),
+                          Icon(Icons.notifications_none_rounded),
                           SizedBox(width: 20),
                           Text(
                             'Notification',
