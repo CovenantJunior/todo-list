@@ -117,7 +117,6 @@ class _TodoListPageState extends State<TodoListPage> {
           )
         ),
       onChanged: (q) {
-        print(q);
         if (q.isNotEmpty) {
           setState(() {
             isOfLength = true;
@@ -137,7 +136,6 @@ class _TodoListPageState extends State<TodoListPage> {
             });
           }
         }
-        print(isOfLength);
       },
     );
   }
@@ -205,6 +203,7 @@ class _TodoListPageState extends State<TodoListPage> {
               selectedItemsTextStyle: const TextStyle(
                 color: Colors.white
               ),
+              selectedColor: Colors.grey,
               items: todolists.map((e) => MultiSelectItem(e, e.plan)).toList(),
               listType: MultiSelectListType.CHIP,
               onConfirm: (values) {
@@ -224,14 +223,13 @@ class _TodoListPageState extends State<TodoListPage> {
               ),
             ),
             Tooltip(
-              message: "Mark as incompleted",
+              message: "Reactivate Plan",
               child: IconButton(
                 icon: const Icon(
                   Icons.bookmark_remove_rounded,
                 ),
                 // color: Colors.blueGrey,
                 onPressed: () {
-                  print(selectedLists);
                   if (selectedLists.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -244,12 +242,15 @@ class _TodoListPageState extends State<TodoListPage> {
                       )
                     )));
                   } else {
+                    for (var selectedList in selectedLists) {
+                      context.read<TodoListDatabase>().replan(selectedList.id);
+                    }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           duration: Duration(seconds: 2),
                           content: Text(
-                          'Marking as incompleted',
+                          'Reactivating plans',
                           style: TextStyle(
                             fontFamily: "Quicksand",
                             fontWeight: FontWeight.bold
@@ -260,13 +261,14 @@ class _TodoListPageState extends State<TodoListPage> {
                         const SnackBar(
                           duration: Duration(seconds: 2),
                           content: Text(
-                          'Marking as incompleted...',
+                          'Reactivating plan',
                           style: TextStyle(
                             fontFamily: "Quicksand",
                             fontWeight: FontWeight.bold
                           )
                         )));
                     }
+                    Navigator.pop(context);
                   }
                 }
               ),
@@ -279,7 +281,6 @@ class _TodoListPageState extends State<TodoListPage> {
                 ),
                 // color: Colors.blueGrey,
                 onPressed: () {
-                  print(selectedLists);
                   if (selectedLists.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -292,12 +293,15 @@ class _TodoListPageState extends State<TodoListPage> {
                       )
                     )));
                   } else {
+                    for (var selectedList in selectedLists) {
+                      context.read<TodoListDatabase>().completed(selectedList.id);
+                    }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           duration: Duration(seconds: 2),
                           content: Text(
-                          'Marking as completed...',
+                          'Marking plans as completed',
                           style: TextStyle(
                             fontFamily: "Quicksand",
                             fontWeight: FontWeight.bold
@@ -308,13 +312,14 @@ class _TodoListPageState extends State<TodoListPage> {
                         const SnackBar(
                           duration: Duration(seconds: 2),
                           content: Text(
-                          'Marking as completed...',
+                          'Marking plan as completed',
                           style: TextStyle(
                             fontFamily: "Quicksand",
                             fontWeight: FontWeight.bold
                           )
                         )));
                     }
+                    Navigator.pop(context);
                   }
                 }
               ),
@@ -325,7 +330,6 @@ class _TodoListPageState extends State<TodoListPage> {
                 icon: const Icon(Icons.delete),
                 // color: Colors.blueGrey,
                 onPressed: () {
-                  print(selectedLists);
                   if (selectedLists.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -338,12 +342,15 @@ class _TodoListPageState extends State<TodoListPage> {
                       )
                     )));
                   } else {
+                    for (var selectedList in selectedLists) {
+                      context.read<TodoListDatabase>().deleteTodoList(selectedList.id);
+                    }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           duration: Duration(seconds: 2),
                           content: Text(
-                          'Deleting selected plans...',
+                          'Deleting selected plans',
                           style: TextStyle(
                             fontFamily: "Quicksand",
                             fontWeight: FontWeight.bold
@@ -354,13 +361,14 @@ class _TodoListPageState extends State<TodoListPage> {
                         const SnackBar(
                           duration: Duration(seconds: 2),
                           content: Text(
-                          'Deleting selected plan...',
+                          'Deleting selected plan',
                           style: TextStyle(
                             fontFamily: "Quicksand",
                             fontWeight: FontWeight.bold
                           )
                         )));
                     }
+                    Navigator.pop(context);
                   }
                 }
               ),
@@ -376,8 +384,6 @@ class _TodoListPageState extends State<TodoListPage> {
         isOfLength = false;
         searchResults.clear();
       });
-      print(isSearch);
-      print(isOfLength);
     }
 
     void planDetails(plan) {

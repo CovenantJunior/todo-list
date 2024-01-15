@@ -75,7 +75,7 @@ class TodoListDatabase extends ChangeNotifier{
   void completed(int id) async {
     var existingTodoList = await isar.todoLists.get(id);
     if (existingTodoList != null) {
-      existingTodoList.completed = !existingTodoList.completed!;
+      existingTodoList.completed = true;
       await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
     }
 
@@ -87,7 +87,7 @@ class TodoListDatabase extends ChangeNotifier{
   void replan(int id) async {
     var existingTodoList = await isar.todoLists.get(id);
     if (existingTodoList != null) {
-      existingTodoList.completed = !existingTodoList.completed!;
+      existingTodoList.completed = false;
       await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
     }
 
