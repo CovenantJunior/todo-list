@@ -33,7 +33,10 @@ class TodoListOptions extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.save),
+              icon: const Tooltip(
+                message: "Save Edit",
+                child: Icon(Icons.save)
+              ),
               onPressed: () {
                 String text = textController.text;
                 if (text.isNotEmpty) {
@@ -160,9 +163,12 @@ class TodoListOptions extends StatelessWidget {
             Navigator.pop(context);
             editTodoList(id, plan);
           },
-          icon: const Icon(
-            Icons.edit,
-            color: Colors.blueGrey,
+          icon: const Tooltip(
+            message: "Edit Plan",
+            child: Icon(
+              Icons.edit,
+              color: Colors.blueGrey,
+            ),
           ),
         ),
         IconButton(
@@ -170,9 +176,12 @@ class TodoListOptions extends StatelessWidget {
             Navigator.pop(context);
             copy(plan);
           },
-          icon: const Icon(
-            Icons.copy,
-            color: Colors.blueGrey,
+          icon: const Tooltip(
+            message: "Copy to Clipboard",
+            child: Icon(
+              Icons.copy,
+              color: Colors.blueGrey,
+            ),
           ),
         ),
         IconButton(
@@ -180,9 +189,12 @@ class TodoListOptions extends StatelessWidget {
             Navigator.pop(context);
             share(plan);
           },
-          icon: const Icon(
-            Icons.share,
-            color: Colors.blueGrey,
+          icon: const Tooltip(
+            message: "Share Plan",
+            child: Icon(
+              Icons.share,
+              color: Colors.blueGrey,
+            ),
           ),
         ),
         IconButton(
@@ -190,9 +202,12 @@ class TodoListOptions extends StatelessWidget {
             Navigator.pop(context);
             deleteTodoList(id);
           },
-          icon: const Icon(
-            Icons.delete,
-            color: Colors.blueGrey,
+          icon: const Tooltip(
+            message: "Delete Plan",
+            child: Icon(
+              Icons.delete,
+              color: Colors.blueGrey,
+            ),
           ),
         ),
         IconButton(
@@ -202,13 +217,19 @@ class TodoListOptions extends StatelessWidget {
           },
           icon: 
           Plan.completed! ?
-          const Icon(
-              Icons.bookmark_remove_rounded,
-              color: Colors.blueGrey,
-            ) :
-            const Icon(
-              Icons.bookmark_added_rounded,
-              color: Colors.blueGrey,
+          const Tooltip(
+            message: "Reactivate Plan",
+            child: Icon(
+                Icons.bookmark_remove_rounded,
+                color: Colors.blueGrey,
+              ),
+          ) :
+            const Tooltip(
+              message: "Mark Plan as Completed",
+              child: Icon(
+                Icons.bookmark_added_rounded,
+                color: Colors.blueGrey,
+              ),
             ),
         ),
       ],

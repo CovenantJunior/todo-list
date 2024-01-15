@@ -536,20 +536,26 @@ class _TodoListPageState extends State<TodoListPage> {
               ),
             ) : const SizedBox(),
             if(!isSearch)
-              IconButton(
-                onPressed: () {
-                  multiEdit(todolists);
-                },
-                icon: const Icon(
-                  Icons.edit
-                )
+              Tooltip(
+                message: "Bulk Edit Plans",
+                child: IconButton(
+                  onPressed: () {
+                    multiEdit(todolists);
+                  },
+                  icon: const Icon(
+                    Icons.edit
+                  )
+                ),
               ),
             if(!isSearch)
-              IconButton(
-                onPressed: search, 
-                icon: const Icon(
-                  Icons.search
-                )
+              Tooltip(
+                message: "Search Plans",
+                child: IconButton(
+                  onPressed: search, 
+                  icon: const Icon(
+                    Icons.search
+                  )
+                ),
               )
           ],
         ),
@@ -669,12 +675,15 @@ class _TodoListPageState extends State<TodoListPage> {
           ),
         ),
       
-        floatingActionButton: FloatingActionButton(
-          onPressed: createTodoList,
-          backgroundColor: Theme.of(context).colorScheme.onSecondary,
-          child: const Icon(
-            Icons.add,
-            // color: Colors.blueGrey,
+        floatingActionButton: Tooltip(
+          message: "Add a Plan",
+          child: FloatingActionButton(
+            onPressed: createTodoList,
+            backgroundColor: Theme.of(context).colorScheme.onSecondary,
+            child: const Icon(
+              Icons.add,
+              // color: Colors.blueGrey,
+            ),
           ),
         ),
       ),
