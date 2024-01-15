@@ -200,19 +200,6 @@ class TodoListOptions extends StatelessWidget {
         IconButton(
           onPressed: () {
             Navigator.pop(context);
-            deleteTodoList(id);
-          },
-          icon: const Tooltip(
-            message: "Delete Plan",
-            child: Icon(
-              Icons.delete,
-              color: Colors.blueGrey,
-            ),
-          ),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigator.pop(context);
             mark(Plan);
           },
           icon: 
@@ -231,6 +218,19 @@ class TodoListOptions extends StatelessWidget {
                 color: Colors.blueGrey,
               ),
             ),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+            deleteTodoList(id);
+          },
+          icon: const Tooltip(
+            message: "Delete Plan",
+            child: Icon(
+              Icons.delete,
+              color: Colors.blueGrey,
+            ),
+          ),
         ),
       ],
     );
