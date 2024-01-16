@@ -94,4 +94,10 @@ class TodoListDatabase extends ChangeNotifier{
     // Update TodoList List
     fetchTodoList();
   }
+
+  
+   // REPLAN
+  void search(q) async {
+    final currentTodoLists = isar.todoLists..where().contentWordsAnyEqualTo(q).findAll();
+  }
 }
