@@ -614,7 +614,7 @@ class _TodoListPageState extends State<TodoListPage> {
                                   decoration: decorate(plan.completed),
                                 ),
                               ),
-                              Builder(
+                              /* Builder(
                                 builder: (context) {
                                   return IconButton(
                                     onPressed: () {
@@ -630,7 +630,7 @@ class _TodoListPageState extends State<TodoListPage> {
                                     )
                                   );
                                 }
-                              ),
+                              ), */
                               /* TodoListOptions(
                                 id: plan.id,
                                 plan: plan.plan
