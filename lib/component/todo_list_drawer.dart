@@ -91,7 +91,7 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
         
             if (todolists.isNotEmpty)
               TodoListDrawerTile(
-                title: "Delete all plans",
+                title: "Delete All",
                 leading: const Icon(Icons.delete_forever_rounded),
                 onTap: () {
                   deleteAllTodoLists();
