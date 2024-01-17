@@ -249,11 +249,11 @@ class _TodoListPageState extends State<TodoListPage> {
                     }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 2),
+                        SnackBar(
+                          duration: const Duration(seconds: 2),
                           content: Text(
-                          'Reactivating plans',
-                          style: TextStyle(
+                          'Reactivating ${selectedLists.length} plans',
+                          style: const TextStyle(
                             fontFamily: "Quicksand",
                             fontWeight: FontWeight.bold
                           )
@@ -300,11 +300,11 @@ class _TodoListPageState extends State<TodoListPage> {
                     }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 2),
+                        SnackBar(
+                          duration: const Duration(seconds: 2),
                           content: Text(
-                          'Marking plans as completed',
-                          style: TextStyle(
+                          'Marking ${selectedLists.length} plans as completed',
+                          style: const TextStyle(
                             fontFamily: "Quicksand",
                             fontWeight: FontWeight.bold
                           )
@@ -349,11 +349,11 @@ class _TodoListPageState extends State<TodoListPage> {
                     }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 2),
+                        SnackBar(
+                          duration: const Duration(seconds: 2),
                           content: Text(
-                          'Deleting selected plans',
-                          style: TextStyle(
+                          'Deleting ${selectedLists.length} selected plans',
+                          style: const TextStyle(
                             fontFamily: "Quicksand",
                             fontWeight: FontWeight.bold
                           )
@@ -576,77 +576,85 @@ class _TodoListPageState extends State<TodoListPage> {
           onRefresh: () async {
             readTodoLists();
           },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListView.builder(
-              itemCount: todolists.length,
-              itemBuilder: (context, index) {
-              final plan = todolists[index];
-              return GestureDetector(
-                onDoubleTap: () {
-                  mark(plan);
-                },
-                child: Builder(
-                  builder: (context) {
-                    return GestureDetector(
-                      onLongPress: () {
-                        showPopover(
-                          width: 240,
-                          context: context,
-                          bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                        );
-                      },
-                      onTap: () {
-                        planDetails(plan);
-                      },
-                      child: Card(
-                        surfaceTintColor: tint(plan.completed),
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                plan.plan,
-                                overflow: TextOverflow.clip,
-                                style: TextStyle(
-                                  fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  decoration: decorate(plan.completed),
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('images/wallpaper.avif'),
+                fit: BoxFit.cover, // Specify the fit as per your design needs
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                itemCount: todolists.length,
+                itemBuilder: (context, index) {
+                final plan = todolists[index];
+                return GestureDetector(
+                  onDoubleTap: () {
+                    mark(plan);
+                  },
+                  child: Builder(
+                    builder: (context) {
+                      return GestureDetector(
+                        onLongPress: () {
+                          showPopover(
+                            width: 240,
+                            context: context,
+                            bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                          );
+                        },
+                        onTap: () {
+                          planDetails(plan);
+                        },
+                        child: Card(
+                          surfaceTintColor: tint(plan.completed),
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  plan.plan,
+                                  overflow: TextOverflow.clip,
+                                  style: TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    decoration: decorate(plan.completed),
+                                  ),
                                 ),
-                              ),
-                              /* Builder(
-                                builder: (context) {
-                                  return IconButton(
-                                    onPressed: () {
-                                      showPopover(
-                                        width: 370,
-                                        context: context,
-                                        bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                                      );
-                                    },
-                                    icon: const Icon(
-                                      Icons.more_vert, 
-                                      color:Colors.blueGrey
-                                    )
-                                  );
-                                }
-                              ), */
-                              /* TodoListOptions(
-                                id: plan.id,
-                                plan: plan.plan
-                              ) */
-                            ],
+                                /* Builder(
+                                  builder: (context) {
+                                    return IconButton(
+                                      onPressed: () {
+                                        showPopover(
+                                          width: 370,
+                                          context: context,
+                                          bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                                        );
+                                      },
+                                      icon: const Icon(
+                                        Icons.more_vert, 
+                                        color:Colors.blueGrey
+                                      )
+                                    );
+                                  }
+                                ), */
+                                /* TodoListOptions(
+                                  id: plan.id,
+                                  plan: plan.plan
+                                ) */
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }
-                ),
-              );
-            }),
+                      );
+                    }
+                  ),
+                );
+              }),
+            ),
           ),
         ) : SingleChildScrollView(
           child: Row(
