@@ -101,6 +101,5 @@ class TodoListDatabase extends ChangeNotifier{
     final currentTodoLists = await isar.todoLists.filter().planContains(q).findAll();
     todolists.clear();
     todolists.addAll(currentTodoLists);
-    print(todolists);
   }
 }
