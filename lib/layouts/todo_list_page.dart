@@ -122,11 +122,13 @@ class _TodoListPageState extends State<TodoListPage> {
             isOfLength = true;
             searchResults = [];
           });
+          context.read<TodoListDatabase>().search(q);
         } else {
           setState(() {
             isOfLength = false;
             searchResults = [];
           });
+          context.read<TodoListDatabase>().fetchTodoList();
         }
         for (var plans in todolists) {
           if (plans.plan.toLowerCase().contains(q.toLowerCase())) {
@@ -501,6 +503,7 @@ class _TodoListPageState extends State<TodoListPage> {
           isSearch = false;
           isOfLength = false;
         });
+        context.read<TodoListDatabase>().fetchTodoList();
       },
       child: Scaffold(
         appBar: AppBar(

@@ -97,7 +97,10 @@ class TodoListDatabase extends ChangeNotifier{
 
   
    // REPLAN
-  void search(q) async {
-    final currentTodoLists = isar.todoLists..where().contentWordsAnyEqualTo(q).findAll();
+  Future<void> search(q) async {
+    final currentTodoLists = await isar.todoLists.filter().planContains(q).findAll();
+    todolists.clear();
+    todolists.addAll(currentTodoLists);
+    print(todolists);
   }
 }
