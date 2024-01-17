@@ -62,7 +62,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       )
                     ],
                   ),
-                  const Divider(height: 30),
+                  const Divider(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -86,7 +86,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       )
                     ],
                   ),
-                  const Divider(height: 30),
+                  const Divider(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
