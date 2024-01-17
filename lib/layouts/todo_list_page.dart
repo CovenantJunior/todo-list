@@ -122,7 +122,7 @@ class _TodoListPageState extends State<TodoListPage> {
             isOfLength = true;
             searchResults = [];
           });
-          context.read<TodoListDatabase>().search(q);
+          context.read<TodoListDatabase>().search(q.toLowerCase());
         } else {
           setState(() {
             isOfLength = false;
