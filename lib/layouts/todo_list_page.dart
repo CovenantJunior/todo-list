@@ -612,7 +612,7 @@ class _TodoListPageState extends State<TodoListPage> {
                       child: Card(
                         surfaceTintColor: tint(plan.completed),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 35.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
