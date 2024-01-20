@@ -35,6 +35,12 @@ class TodoListOptions extends StatelessWidget {
           ),
           actions: [
             IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(
+                Icons.undo_rounded
+              )
+            ),
+            IconButton(
               icon: const Tooltip(
                 message: "Save Edit",
                 child: Icon(Icons.save)
