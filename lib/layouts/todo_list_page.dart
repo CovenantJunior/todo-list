@@ -565,6 +565,16 @@ class _TodoListPageState extends State<TodoListPage> {
                     Icons.search
                   )
                 ),
+              ),
+            if(!isSearch)
+              const Tooltip(
+                message: "Sort Plans",
+                child: IconButton(
+                  onPressed: null, 
+                  icon: Icon(
+                    Icons.sort_rounded
+                  )
+                ),
               )
           ],
         ),
