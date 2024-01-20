@@ -344,33 +344,64 @@ class _TodoListPageState extends State<TodoListPage> {
                       )
                     )));
                   } else {
-                    for (var selectedList in selectedLists) {
-                      context.read<TodoListDatabase>().deleteTodoList(selectedList.id);
-                    }
-                    if (selectedLists.length > 1) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          duration: const Duration(seconds: 2),
-                          content: Text(
-                          'Deleting ${selectedLists.length} selected plans',
-                          style: const TextStyle(
-                            fontFamily: "Quicksand",
-                            fontWeight: FontWeight.bold
-                          )
-                        )));
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 2),
-                          content: Text(
-                          'Deleting selected plan',
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        content: const Text(
+                          "Delete Selected Plan(s)?",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontFamily: "Quicksand",
-                            fontWeight: FontWeight.bold
-                          )
-                        )));
-                    }
-                    Navigator.pop(context);
+                            fontSize: 20,
+                            fontFamily: 'Quicksand',
+                          ),
+                        ),
+                        actions: [
+                          IconButton(
+                            onPressed: () {
+                              for (var selectedList in selectedLists) {
+                                context.read<TodoListDatabase>().deleteTodoList(selectedList.id);
+                              }
+                              if (selectedLists.length > 1) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    duration: const Duration(seconds: 2),
+                                    content: Text(
+                                    'Deleting ${selectedLists.length} selected plans',
+                                    style: const TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.bold
+                                    )
+                                  )));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    duration: Duration(seconds: 2),
+                                    content: Text(
+                                    'Deleting selected plan',
+                                    style: TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.bold
+                                    )
+                                  )));
+                              }
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.done,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.cancel_outlined,
+                            ),
+                          ),
+                        ],
+                      ) 
+                    );
                   }
                 }
               ),
