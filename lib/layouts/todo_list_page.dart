@@ -591,7 +591,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     return GestureDetector(
                       onLongPress: () {
                         showPopover(
-                          width: 240,
+                          width: 250,
                           context: context,
                           bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
                         );
@@ -602,7 +602,7 @@ class _TodoListPageState extends State<TodoListPage> {
                       child: Card(
                         surfaceTintColor: tint(plan.completed),
                         child: Padding(
-                          padding: const EdgeInsets.all(20.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
