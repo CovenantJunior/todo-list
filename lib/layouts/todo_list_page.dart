@@ -121,6 +121,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     }).toList(),
                     isExpanded: true,
                     hint: const Text('Select Category'),
+                    icon: Icon(Icons.edit),
                   ),
                 ),
               ],
