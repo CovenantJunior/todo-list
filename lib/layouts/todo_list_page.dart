@@ -53,7 +53,10 @@ class _TodoListPageState extends State<TodoListPage> {
           children: [
             Row(
               children: [
-                const Icon(Icons.mic),
+                const IconButton(
+                  onPressed: null,
+                  icon: Icon(Icons.mic)
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextFormField(
