@@ -22,28 +22,33 @@ const TodoListSchema = CollectionSchema(
       name: r'achieved',
       type: IsarType.dateTime,
     ),
-    r'completed': PropertySchema(
+    r'category': PropertySchema(
       id: 1,
+      name: r'category',
+      type: IsarType.string,
+    ),
+    r'completed': PropertySchema(
+      id: 2,
       name: r'completed',
       type: IsarType.bool,
     ),
     r'created': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'created',
       type: IsarType.dateTime,
     ),
     r'favorite': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'favorite',
       type: IsarType.bool,
     ),
     r'modified': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'modified',
       type: IsarType.dateTime,
     ),
     r'plan': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'plan',
       type: IsarType.string,
     )
@@ -69,6 +74,12 @@ int _todoListEstimateSize(
 ) {
   var bytesCount = offsets.last;
   {
+    final value = object.category;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.plan;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -84,11 +95,12 @@ void _todoListSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeDateTime(offsets[0], object.achieved);
-  writer.writeBool(offsets[1], object.completed);
-  writer.writeDateTime(offsets[2], object.created);
-  writer.writeBool(offsets[3], object.favorite);
-  writer.writeDateTime(offsets[4], object.modified);
-  writer.writeString(offsets[5], object.plan);
+  writer.writeString(offsets[1], object.category);
+  writer.writeBool(offsets[2], object.completed);
+  writer.writeDateTime(offsets[3], object.created);
+  writer.writeBool(offsets[4], object.favorite);
+  writer.writeDateTime(offsets[5], object.modified);
+  writer.writeString(offsets[6], object.plan);
 }
 
 TodoList _todoListDeserialize(
@@ -99,12 +111,13 @@ TodoList _todoListDeserialize(
 ) {
   final object = TodoList();
   object.achieved = reader.readDateTimeOrNull(offsets[0]);
-  object.completed = reader.readBoolOrNull(offsets[1]);
-  object.created = reader.readDateTimeOrNull(offsets[2]);
-  object.favorite = reader.readBoolOrNull(offsets[3]);
+  object.category = reader.readStringOrNull(offsets[1]);
+  object.completed = reader.readBoolOrNull(offsets[2]);
+  object.created = reader.readDateTimeOrNull(offsets[3]);
+  object.favorite = reader.readBoolOrNull(offsets[4]);
   object.id = id;
-  object.modified = reader.readDateTimeOrNull(offsets[4]);
-  object.plan = reader.readStringOrNull(offsets[5]);
+  object.modified = reader.readDateTimeOrNull(offsets[5]);
+  object.plan = reader.readStringOrNull(offsets[6]);
   return object;
 }
 
@@ -118,14 +131,16 @@ P _todoListDeserializeProp<P>(
     case 0:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 1:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 3:
       return (reader.readBoolOrNull(offset)) as P;
-    case 4:
+    case 3:
       return (reader.readDateTimeOrNull(offset)) as P;
+    case 4:
+      return (reader.readBoolOrNull(offset)) as P;
     case 5:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 6:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -286,6 +301,152 @@ extension TodoListQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> categoryIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'category',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> categoryIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'category',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> categoryEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'category',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> categoryGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'category',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> categoryLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'category',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> categoryBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'category',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> categoryStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'category',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> categoryEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'category',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> categoryContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'category',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> categoryMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'category',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> categoryIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'category',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> categoryIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'category',
+        value: '',
       ));
     });
   }
@@ -698,6 +859,18 @@ extension TodoListQuerySortBy on QueryBuilder<TodoList, TodoList, QSortBy> {
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByCategory() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'category', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByCategoryDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'category', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByCompleted() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'completed', Sort.asc);
@@ -770,6 +943,18 @@ extension TodoListQuerySortThenBy
   QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByAchievedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'achieved', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByCategory() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'category', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByCategoryDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'category', Sort.desc);
     });
   }
 
@@ -854,6 +1039,13 @@ extension TodoListQueryWhereDistinct
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QDistinct> distinctByCategory(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'category', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QDistinct> distinctByCompleted() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'completed');
@@ -897,6 +1089,12 @@ extension TodoListQueryProperty
   QueryBuilder<TodoList, DateTime?, QQueryOperations> achievedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'achieved');
+    });
+  }
+
+  QueryBuilder<TodoList, String?, QQueryOperations> categoryProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'category');
     });
   }
 

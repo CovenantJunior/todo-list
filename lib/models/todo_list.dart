@@ -7,6 +7,7 @@ part 'todo_list.g.dart';
 class TodoList {
   Id id = Isar.autoIncrement;
   String? plan;
+  String? category;
   bool? completed;
   bool? favorite;
   DateTime? created;
