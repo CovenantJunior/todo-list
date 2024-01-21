@@ -53,13 +53,14 @@ class _TodoListPageState extends State<TodoListPage> {
           children: [
             Row(
               children: [
-                IconButton(
-                  onPressed: () {
+                GestureDetector(
+                  onTap: () {
                     _speakText;
                   },
-                  icon: const Icon(Icons.mic)
+                  child: const Icon(
+                    Icons.mic
+                  ),
                 ),
-                const SizedBox(width: 8),
                 Expanded(
                   child: TextFormField(
                     autocorrect: true,
