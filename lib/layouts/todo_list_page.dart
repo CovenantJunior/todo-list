@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
@@ -25,7 +26,11 @@ class _TodoListPageState extends State<TodoListPage> {
   }
 
   // Access user input
-  final textController = TextEditingController();
+  FlutterTts flutterTts = FlutterTts();
+
+  TextEditingController textController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
+  String selectedCategory = 'Personal';
 
   bool isSearch = false;
   bool isOfLength = false;
@@ -36,69 +41,145 @@ class _TodoListPageState extends State<TodoListPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
-          "Add a plan",
-          style: TextStyle(
-            fontFamily: "Quicksand",
-            fontWeight: FontWeight.bold
-          ),
+      title: const Text(
+        "Add a plan",
+        style: TextStyle(
+          fontFamily: "Quicksand",
+          fontWeight: FontWeight.bold,
         ),
-        content: SingleChildScrollView(
-          child: Column(
-            children: [
-              TextField(
-                autocorrect: true,
-                autofocus: true,
-                maxLines: 1,
-                maxLength: 45,
-                controller: textController,
-              ),
-            ],
-          ),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.volume_up),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextFormField(
+                    autocorrect: true,
+                    autofocus: true,
+                    maxLines: 1,
+                    maxLength: 45,
+                    controller: textController,
+                    decoration: const InputDecoration(
+                      hintText: 'Task description',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                const Icon(Icons.calendar_today),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      _selectDate(context);
+                    },
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        labelText: 'Due Date',
+                        hintText: 'Select due date',
+                      ),
+                      child: Text(
+                        DateFormat('yyyy-MM-dd').format(selectedDate),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                const Icon(Icons.category),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: DropdownButton<String>(
+                    value: selectedCategory,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCategory = value!;
+                      });
+                    },
+                    items: ['Personal', 'Work', 'Study', 'Other']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    isExpanded: true,
+                    hint: const Text('Select Category'),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-        actions: [
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(
-              Icons.undo_rounded
-            )
-          ),
-          IconButton(
-            icon: const Icon(Icons.save),
-            // color: Colors.blueGrey,
-            onPressed: () {
-              String text = textController.text;
-              if (text.isNotEmpty) {
-                context.read<TodoListDatabase>().addTodoList(text);
-                Navigator.pop(context);
-                textController.clear();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    duration: Duration(seconds: 2),
-                    content: Text(
+      ),
+      actions: [
+        IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.undo_rounded),
+        ),
+        IconButton(
+          icon: const Icon(Icons.save),
+          onPressed: () {
+            String text = textController.text;
+            if (text.isNotEmpty) {
+              context.read<TodoListDatabase>().addTodoList(text);
+              Navigator.pop(context);
+              textController.clear();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  duration: Duration(seconds: 2),
+                  content: Text(
                     'Plan saved',
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontWeight: FontWeight.bold
-                    )
-                  )));
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    duration: Duration(seconds: 2),
-                    content: Text(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  duration: Duration(seconds: 2),
+                  content: Text(
                     'Oops, blank shot!',
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontWeight: FontWeight.bold
-                    )
-                  )));
-              }
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              );
             }
-          )
-        ],
-      )
+          },
+        ),
+      ],
+    )
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
   }
 
   // Read
