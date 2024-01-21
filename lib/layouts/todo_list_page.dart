@@ -43,12 +43,18 @@ class _TodoListPageState extends State<TodoListPage> {
             fontWeight: FontWeight.bold
           ),
         ),
-        content: TextField(
-          autocorrect: true,
-          autofocus: true,
-          maxLines: 1,
-          maxLength: 35,
-          controller: textController,
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(
+                autocorrect: true,
+                autofocus: true,
+                maxLines: 1,
+                maxLength: 45,
+                controller: textController,
+              ),
+            ],
+          ),
         ),
         actions: [
           IconButton(
