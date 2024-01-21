@@ -61,6 +61,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     Icons.mic
                   ),
                 ),
+                const SizedBox(width: 8),
                 Expanded(
                   child: TextFormField(
                     autocorrect: true,
@@ -75,7 +76,7 @@ class _TodoListPageState extends State<TodoListPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             Row(
               children: [
                 const Icon(Icons.calendar_today),
@@ -98,7 +99,7 @@ class _TodoListPageState extends State<TodoListPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             Row(
               children: [
                 const Icon(Icons.category),
@@ -717,7 +718,7 @@ class _TodoListPageState extends State<TodoListPage> {
             readTodoLists();
           },
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10.0),
             child: ListView.builder(
               itemCount: todolists.length,
               itemBuilder: (context, index) {
