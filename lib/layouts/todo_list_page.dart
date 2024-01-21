@@ -76,7 +76,7 @@ class _TodoListPageState extends State<TodoListPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             Row(
               children: [
                 const Icon(Icons.calendar_today),
@@ -99,20 +99,20 @@ class _TodoListPageState extends State<TodoListPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             Row(
               children: [
                 const Icon(Icons.category),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: DropdownButton<String>(
+                  child: DropdownButtonFormField<String>(
                     value: selectedCategory,
                     onChanged: (value) {
                       setState(() {
                         selectedCategory = value!;
                       });
                     },
-                    items: ['Personal', 'Work', 'Study', 'Other']
+                    items: ['Personal', 'Work', 'Study', 'Shopping', 'Wishlist']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
