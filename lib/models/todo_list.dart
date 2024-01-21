@@ -8,6 +8,7 @@ class TodoList {
   Id id = Isar.autoIncrement;
   String? plan;
   bool? completed;
+  bool? favorite;
   DateTime? created;
   DateTime? modified;
   DateTime? achieved;

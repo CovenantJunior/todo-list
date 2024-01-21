@@ -32,13 +32,18 @@ const TodoListSchema = CollectionSchema(
       name: r'created',
       type: IsarType.dateTime,
     ),
-    r'modified': PropertySchema(
+    r'favorite': PropertySchema(
       id: 3,
+      name: r'favorite',
+      type: IsarType.bool,
+    ),
+    r'modified': PropertySchema(
+      id: 4,
       name: r'modified',
       type: IsarType.dateTime,
     ),
     r'plan': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'plan',
       type: IsarType.string,
     )
@@ -81,8 +86,9 @@ void _todoListSerialize(
   writer.writeDateTime(offsets[0], object.achieved);
   writer.writeBool(offsets[1], object.completed);
   writer.writeDateTime(offsets[2], object.created);
-  writer.writeDateTime(offsets[3], object.modified);
-  writer.writeString(offsets[4], object.plan);
+  writer.writeBool(offsets[3], object.favorite);
+  writer.writeDateTime(offsets[4], object.modified);
+  writer.writeString(offsets[5], object.plan);
 }
 
 TodoList _todoListDeserialize(
@@ -95,9 +101,10 @@ TodoList _todoListDeserialize(
   object.achieved = reader.readDateTimeOrNull(offsets[0]);
   object.completed = reader.readBoolOrNull(offsets[1]);
   object.created = reader.readDateTimeOrNull(offsets[2]);
+  object.favorite = reader.readBoolOrNull(offsets[3]);
   object.id = id;
-  object.modified = reader.readDateTimeOrNull(offsets[3]);
-  object.plan = reader.readStringOrNull(offsets[4]);
+  object.modified = reader.readDateTimeOrNull(offsets[4]);
+  object.plan = reader.readStringOrNull(offsets[5]);
   return object;
 }
 
@@ -115,8 +122,10 @@ P _todoListDeserializeProp<P>(
     case 2:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 3:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset)) as P;
     case 4:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 5:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -372,6 +381,32 @@ extension TodoListQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> favoriteIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'favorite',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> favoriteIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'favorite',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> favoriteEqualTo(
+      bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'favorite',
+        value: value,
       ));
     });
   }
@@ -687,6 +722,18 @@ extension TodoListQuerySortBy on QueryBuilder<TodoList, TodoList, QSortBy> {
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByFavorite() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'favorite', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByFavoriteDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'favorite', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByModified() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'modified', Sort.asc);
@@ -750,6 +797,18 @@ extension TodoListQuerySortThenBy
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByFavorite() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'favorite', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByFavoriteDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'favorite', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -807,6 +866,12 @@ extension TodoListQueryWhereDistinct
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QDistinct> distinctByFavorite() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'favorite');
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QDistinct> distinctByModified() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'modified');
@@ -844,6 +909,12 @@ extension TodoListQueryProperty
   QueryBuilder<TodoList, DateTime?, QQueryOperations> createdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'created');
+    });
+  }
+
+  QueryBuilder<TodoList, bool?, QQueryOperations> favoriteProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'favorite');
     });
   }
 
