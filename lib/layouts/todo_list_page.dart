@@ -53,9 +53,11 @@ class _TodoListPageState extends State<TodoListPage> {
           children: [
             Row(
               children: [
-                const IconButton(
-                  onPressed: null,
-                  icon: Icon(Icons.mic)
+                IconButton(
+                  onPressed: () {
+                    _speakText;
+                  },
+                  icon: const Icon(Icons.mic)
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -183,6 +185,12 @@ class _TodoListPageState extends State<TodoListPage> {
         selectedDate = picked;
       });
     }
+  }
+
+  Future<void> _speakText(String text) async {
+    await flutterTts.setLanguage('en-US');
+    await flutterTts.setPitch(1.0);
+    await flutterTts.speak(text);
   }
 
   // Read
