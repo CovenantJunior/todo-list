@@ -12,5 +12,6 @@ class TodoList {
   bool? favorite;
   DateTime? created;
   DateTime? modified;
+  DateTime? due;
   DateTime? achieved;
 }
