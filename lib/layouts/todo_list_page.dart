@@ -746,15 +746,17 @@ class _TodoListPageState extends State<TodoListPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                plan.plan,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  decoration: decorate(plan.completed),
+                              Expanded(
+                                child: Text(
+                                  plan.plan,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    decoration: decorate(plan.completed),
+                                  ),
                                 ),
                               ),
                               /* Builder(
