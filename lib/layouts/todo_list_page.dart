@@ -750,7 +750,7 @@ class _TodoListPageState extends State<TodoListPage> {
                                 child: Text(
                                   plan.plan,
                                   maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                  overflow: TextOverflow.fade,
                                   style: TextStyle(
                                     fontFamily: "Quicksand",
                                     fontWeight: FontWeight.w600,
