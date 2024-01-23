@@ -557,7 +557,7 @@ class _TodoListPageState extends State<TodoListPage> {
                         fontWeight: FontWeight.bold
                       ),
                     ),
-                    Text(plan.category)
+                    plan.category.isNotEmpty ? Text(plan.category) : const Text('Unset')
                   ],
                 ),
                 const SizedBox(height: 20),
