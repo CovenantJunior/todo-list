@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
@@ -25,8 +24,6 @@ class _TodoListPageState extends State<TodoListPage> {
     readTodoLists();
   }
 
-  // Access user input
-  FlutterTts flutterTts = FlutterTts();
 
   TextEditingController textController = TextEditingController();
   DateTime selectedDate = DateTime.now();
@@ -55,7 +52,7 @@ class _TodoListPageState extends State<TodoListPage> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    _speakText;
+                    null;
                   },
                   child: const Icon(
                     Icons.mic
@@ -188,12 +185,6 @@ class _TodoListPageState extends State<TodoListPage> {
         selectedDate = picked;
       });
     }
-  }
-
-  Future<void> _speakText(String text) async {
-    await flutterTts.setLanguage('en-US');
-    await flutterTts.setPitch(1.0);
-    await flutterTts.speak(text);
   }
 
   // Read
