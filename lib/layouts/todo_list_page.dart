@@ -76,7 +76,7 @@ class _TodoListPageState extends State<TodoListPage> {
             const SizedBox(height: 16),
             Row(
               children: [
-                const Icon(Icons.calendar_today),
+                const Icon(Icons.calendar_month_rounded),
                 const SizedBox(width: 8),
                 Expanded(
                   child: InkWell(
@@ -102,23 +102,28 @@ class _TodoListPageState extends State<TodoListPage> {
                 const Icon(Icons.category),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: DropdownButtonFormField<String>(
-                    value: selectedCategory,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCategory = value!;
-                      });
-                    },
-                    items: ['Personal', 'Work', 'Study', 'Shopping', 'Wishlist']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    isExpanded: true,
-                    hint: const Text('Select Category'),
-                    icon: const Icon(Icons.edit),
+                  child: InputDecorator(
+                    decoration: const InputDecoration(
+                      labelText: 'Category',
+                      border: InputBorder.none
+                    ),
+                    child: DropdownButtonFormField<String>(
+                      value: selectedCategory,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedCategory = value!;
+                        });
+                      },
+                      items: ['Personal', 'Work', 'Study', 'Shopping', 'Wishlist']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      isExpanded: true,
+                      icon: const Icon(Icons.edit),
+                    ),
                   ),
                 ),
               ],
