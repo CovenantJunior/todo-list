@@ -21,8 +21,8 @@ class TodoListDatabase extends ChangeNotifier{
   /* Handle CRUD operations */
 
   // CREATE
-  void addTodoList(String plan) async {
-    final newTodoList = TodoList()..plan = plan..created = DateTime.now()..completed = false;
+  void addTodoList(String plan, due, category) async {
+    final newTodoList = TodoList()..plan = plan.. category = category..completed = false..favorite = false.. created = DateTime.now()..due = due;
 
     // Save to DB
     await isar.writeTxn(() => isar.todoLists.put(newTodoList));

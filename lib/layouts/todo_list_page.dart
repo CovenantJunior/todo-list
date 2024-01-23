@@ -141,7 +141,7 @@ class _TodoListPageState extends State<TodoListPage> {
           onPressed: () {
             String text = textController.text;
             if (text.isNotEmpty) {
-              context.read<TodoListDatabase>().addTodoList(text);
+              context.read<TodoListDatabase>().addTodoList(text, selectedDate, selectedCategory);
               Navigator.pop(context);
               textController.clear();
               ScaffoldMessenger.of(context).showSnackBar(
@@ -182,7 +182,7 @@ class _TodoListPageState extends State<TodoListPage> {
       context: context,
       initialDate: selectedDate,
       firstDate: selectedDate,
-      lastDate: DateTime(2101),
+      lastDate: DateTime(3000),
     );
 
     if (picked != null && picked != selectedDate) {
@@ -573,6 +573,20 @@ class _TodoListPageState extends State<TodoListPage> {
                       ),
                     ),
                     Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created))
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Due Date",
+                      style: TextStyle(
+                        fontFamily: "Quicksan",
+                        fontSize: 20
+                      ),
+                    ),
+                    plan.due ? Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.due)) : const Text('Unset')
                   ],
                 ),
                 const SizedBox(height: 20),
