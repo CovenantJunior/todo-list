@@ -537,8 +537,9 @@ class _TodoListPageState extends State<TodoListPage> {
                     const Text(
                       "Title",
                       style: TextStyle(
-                        fontFamily: "Quicksan",
-                        fontSize: 20
+                        fontFamily: "Quicksand",
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
                       ),
                     ),
                     Text(plan.plan)
@@ -549,10 +550,26 @@ class _TodoListPageState extends State<TodoListPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
+                      "Category",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    Text(plan.category)
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
                       "Status",
                       style: TextStyle(
-                        fontFamily: "Quicksan",
-                        fontSize: 20
+                        fontFamily: "Quicksand",
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
                       ),
                     ),
                     plan.completed == true ? const Text("You rock. this plan was proudly executed") : const Text("We still have to get this plan done")
@@ -565,8 +582,9 @@ class _TodoListPageState extends State<TodoListPage> {
                     const Text(
                       "Date Created",
                       style: TextStyle(
-                        fontFamily: "Quicksan",
-                        fontSize: 20
+                        fontFamily: "Quicksand",
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
                       ),
                     ),
                     Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created))
@@ -579,8 +597,9 @@ class _TodoListPageState extends State<TodoListPage> {
                     const Text(
                       "Due Date",
                       style: TextStyle(
-                        fontFamily: "Quicksan",
-                        fontSize: 20
+                        fontFamily: "Quicksand",
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold
                       ),
                     ),
                     plan.due == true ? Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.due)) : const Text('Unset')
@@ -594,7 +613,7 @@ class _TodoListPageState extends State<TodoListPage> {
                       const Text(
                         "Date Modified",
                         style: TextStyle(
-                          fontFamily: "Quicksan",
+                          fontFamily: "Quicksand",
                           fontSize: 20
                         ),
                       ),
