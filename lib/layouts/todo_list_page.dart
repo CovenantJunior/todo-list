@@ -181,7 +181,7 @@ class _TodoListPageState extends State<TodoListPage> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2000),
+      firstDate: selectedDate,
       lastDate: DateTime(2101),
     );
 
