@@ -64,7 +64,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     autocorrect: true,
                     autofocus: true,
                     maxLines: 1,
-                    maxLength: 45,
+                    maxLength: 100,
                     controller: textController,
                     decoration: const InputDecoration(
                       hintText: 'Task description',
