@@ -730,7 +730,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     return GestureDetector(
                       onLongPress: () {
                         showPopover(
-                          width: 250,
+                          width: 260,
                           context: context,
                           bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
                         );
