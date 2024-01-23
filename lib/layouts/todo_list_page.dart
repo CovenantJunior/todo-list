@@ -555,10 +555,7 @@ class _TodoListPageState extends State<TodoListPage> {
                         fontSize: 20
                       ),
                     ),
-                    if(plan.completed == true)
-                      const Text("You rock. this plan was proudly executed")
-                    else
-                      const Text("We still have to get this plan done")
+                    plan.completed == true ? const Text("You rock. this plan was proudly executed") : const Text("We still have to get this plan done")
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -586,7 +583,7 @@ class _TodoListPageState extends State<TodoListPage> {
                         fontSize: 20
                       ),
                     ),
-                    plan.due ? Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.due)) : const Text('Unset')
+                    plan.due == true ? Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.due)) : const Text('Unset')
                   ],
                 ),
                 const SizedBox(height: 20),
