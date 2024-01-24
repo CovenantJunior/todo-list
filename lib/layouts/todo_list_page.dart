@@ -18,7 +18,7 @@ class TodoListPage extends StatefulWidget {
   State<TodoListPage> createState() => _TodoListPageState();
 }
 
-class _TodoListPageState extends State<TodoListPage> {
+class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderStateMixin{
   late SpeechToText _speech;
 
   @override
@@ -26,11 +26,17 @@ class _TodoListPageState extends State<TodoListPage> {
     super.initState();
     readTodoLists();
     _speech = SpeechToText();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    );
   }
 
 
   TextEditingController textController = TextEditingController();
   TextEditingController dateController = TextEditingController();
+  late AnimationController _animationController;
+
   final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   
   DateTime selectedDate = DateTime.now();
@@ -44,10 +50,6 @@ class _TodoListPageState extends State<TodoListPage> {
 
   // Create
   void createTodoList() {
-    isSearch ? setState(() {
-      isSearch = false;
-      isOfLength = false;
-    }) : 
     dateController.text = date;
     showDialog(
       context: context,
@@ -204,6 +206,14 @@ class _TodoListPageState extends State<TodoListPage> {
       ],
     )
     );
+  }
+
+  void closeSearch() {
+    setState(() {
+      isSearch = false;
+      isOfLength = false;
+    });
+    _animationController.reverse();
   }
 
   void _listen() async {
@@ -612,6 +622,9 @@ class _TodoListPageState extends State<TodoListPage> {
         isOfLength = false;
         searchResults.clear();
       });
+      if (_animationController.isDismissed) {
+        _animationController.forward();
+      }
     }
 
     void planDetails(plan) {
@@ -932,25 +945,25 @@ class _TodoListPageState extends State<TodoListPage> {
       
         floatingActionButton: Tooltip(
           message: "Add a Plan",
-          child: FloatingActionButton(
-            onPressed: createTodoList,
-            backgroundColor: Theme.of(context).colorScheme.onSecondary,
-            child: isSearch
-                ? Transform.rotate(
-                    angle: 45 * (3.141592653589793238 / 180), // Convert degrees to radians
-                    child: const Icon(
-                      Icons.cancel_rounded,
-                      // color: Colors.blueGrey,
-                    ),
-                  )
-                : const Icon(
-                    Icons.add,
-                    // color: Colors.blueGrey,
-                  ),
+          child: RotationTransition(
+            turns: Tween(begin: 0.0, end: isSearch ? 0.25 : 0.0).animate(_animationController),
+            child: FloatingActionButton(
+              onPressed: isSearch ? closeSearch : createTodoList,
+              backgroundColor: Theme.of(context).colorScheme.onSecondary,
+              child: Transform.rotate(
+                angle: isSearch ? 45 * (3.141592653589793238 / 180) : 0.0, // Rotate 45 degrees if isSearch is true
+                child: const Icon(Icons.add),
+              ),
+            ),
           ),
         ),
-
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }
