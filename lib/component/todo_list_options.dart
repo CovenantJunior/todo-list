@@ -108,7 +108,6 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                           child: DropdownButtonFormField<String>(
                             value: selectedCategory,
                             onChanged: (value) {
-                              print(value);
                               selectedCategory = value;
                             },
                             items: ['Personal', 'Work', 'Study', 'Shopping', 'Sport', 'Wishlist']
