@@ -28,7 +28,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     _speech = SpeechToText();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 500),
     );
   }
 
@@ -959,11 +959,5 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
   }
 }
