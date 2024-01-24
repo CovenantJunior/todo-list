@@ -169,9 +169,9 @@ class _TodoListPageState extends State<TodoListPage> {
           onPressed: () {
             String text = textController.text;
             String due = dateController.text;
+            String category = selectedCategory;
             if (text.isNotEmpty) {
-              context.read<TodoListDatabase>().addTodoList(text, selectedCategory, due);
-              print("$text, $selectedCategory, $due");
+              context.read<TodoListDatabase>().addTodoList(text, category, due);
               setState(() {
                 selectedDate = DateTime.now();
                 selectedCategory = 'Personal';
@@ -872,6 +872,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     return GestureDetector(
                       onLongPress: () {
                         showPopover(
+                          direction: PopoverDirection.top,
                           width: 260,
                           context: context,
                           bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)

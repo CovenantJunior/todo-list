@@ -29,6 +29,9 @@ class _TodoListOptionsState extends State<TodoListOptions> {
   Widget build(BuildContext context) {
     // Access user input
     final textController = TextEditingController();
+    final dateController = TextEditingController();
+    final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
     DateTime selectedDate = DateTime.now();
     String? selectedCategory = widget.Plan.category;
 
@@ -40,9 +43,10 @@ class _TodoListOptionsState extends State<TodoListOptions> {
         lastDate: DateTime(3000),
       );
 
-      if (picked != null && picked != selectedDate) {
+      dateController.text = DateFormat('yyyy-MM-dd').format(picked!);
+      if (mounted && picked != selectedDate) {
         setState(() {
-          selectedDate = picked;
+          dateController.text = DateFormat('yyyy-MM-dd').format(picked);
         });
       }
     }
@@ -51,6 +55,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
       // ignore: non_constant_identifier_names
       void editTodoList(int id, Plan) {
         textController.text = Plan.plan;
+        dateController.text = Plan.due != null ? DateFormat('yyyy-MM-dd').format(Plan.due) : date;
         showDialog (
           context: context,
           builder: (context) => AlertDialog(
@@ -103,9 +108,11 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                           child: DropdownButtonFormField<String>(
                             value: selectedCategory,
                             onChanged: (value) {
-                              setState(() {
+                              if (mounted) {
+                                setState(() {
                                 selectedCategory = value!;
                               });
+                              }
                             },
                             items: ['Personal', 'Work', 'Study', 'Shopping', 'Sport', 'Wishlist']
                                 .map<DropdownMenuItem<String>>((String value) {
@@ -135,9 +142,10 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                             decoration: const InputDecoration(
                               labelText: 'Due Date',
                               hintText: 'Select due date',
+                              border: InputBorder.none
                             ),
-                            child: Text(
-                              DateFormat('yyyy-MM-dd').format(selectedDate),
+                            child: TextField(
+                              controller: dateController,
                             ),
                           ),
                         ),
@@ -156,8 +164,10 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                 icon: const Icon(Icons.save),
                 onPressed: () {
                   String text = textController.text;
+                  String due = dateController.text;
+                  String? category = selectedCategory;
                   if (text.isNotEmpty) {
-                    context.read<TodoListDatabase>().updateTodoList(Plan.id, text, selectedDate, selectedCategory);
+                    context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due);
                     Navigator.pop(context);
                     textController.clear();
                     ScaffoldMessenger.of(context).showSnackBar(
