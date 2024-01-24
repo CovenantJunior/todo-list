@@ -64,13 +64,8 @@ class _TodoListPageState extends State<TodoListPage> {
           children: [
             Row(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    null;
-                  },
-                  child: const Icon(
-                    Icons.list_rounded
-                  ),
+                const Icon(
+                  Icons.list_rounded
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -938,14 +933,23 @@ class _TodoListPageState extends State<TodoListPage> {
         floatingActionButton: Tooltip(
           message: "Add a Plan",
           child: FloatingActionButton(
-            onPressed:  createTodoList,
+            onPressed: createTodoList,
             backgroundColor: Theme.of(context).colorScheme.onSecondary,
-            child: Icon(
-              !isSearch ? Icons.add : Icons.cancel_rounded,
-              // color: Colors.blueGrey,
-            ),
+            child: isSearch
+                ? Transform.rotate(
+                    angle: 45 * (3.141592653589793238 / 180), // Convert degrees to radians
+                    child: const Icon(
+                      Icons.cancel_rounded,
+                      // color: Colors.blueGrey,
+                    ),
+                  )
+                : const Icon(
+                    Icons.add,
+                    // color: Colors.blueGrey,
+                  ),
           ),
         ),
+
       ),
     );
   }

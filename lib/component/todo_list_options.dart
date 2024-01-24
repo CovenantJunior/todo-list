@@ -110,7 +110,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                             onChanged: (value) {
                               if (mounted) {
                                 setState(() {
-                                selectedCategory = value!;
+                                selectedCategory = value;
                               });
                               }
                             },
