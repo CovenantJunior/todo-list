@@ -4,6 +4,7 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multi_select_flutter/util/multi_select_list_type.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'package:todo_list/component/todo_list_drawer.dart';
 import 'package:todo_list/component/todo_list_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
@@ -18,14 +19,20 @@ class TodoListPage extends StatefulWidget {
 }
 
 class _TodoListPageState extends State<TodoListPage> {
+  late SpeechToText _speech;
+
   @override
   void initState() {
     super.initState();
     readTodoLists();
+    _speech = SpeechToText();
   }
 
 
   TextEditingController textController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  
   DateTime selectedDate = DateTime.now();
   String selectedCategory = 'Personal';
 
@@ -33,8 +40,15 @@ class _TodoListPageState extends State<TodoListPage> {
   bool isOfLength = false;
   List searchResults = [];
 
+  bool _isListening = false;
+
   // Create
   void createTodoList() {
+    isSearch ? setState(() {
+      isSearch = false;
+      isOfLength = false;
+    }) : 
+    dateController.text = date;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -55,7 +69,7 @@ class _TodoListPageState extends State<TodoListPage> {
                     null;
                   },
                   child: const Icon(
-                    Icons.mic
+                    Icons.list_rounded
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -66,8 +80,45 @@ class _TodoListPageState extends State<TodoListPage> {
                     maxLines: 1,
                     maxLength: 100,
                     controller: textController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'Task description',
+                      suffixIcon: IconButton(
+                        onPressed: _listen,
+                        icon: Icon(_isListening ? Icons.mic_off : Icons.mic),
+                      ),
+
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                const Icon(Icons.category),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: InputDecorator(
+                    decoration: const InputDecoration(
+                      labelText: 'Category',
+                      border: InputBorder.none
+                    ),
+                    child: DropdownButtonFormField<String>(
+                      value: selectedCategory,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedCategory = value!;
+                        });
+                      },
+                      items: ['Personal', 'Work', 'Study', 'Shopping', 'Sport', 'Wishlist']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      isExpanded: true,
+                      icon: const Icon(Icons.edit),
                     ),
                   ),
                 ),
@@ -87,42 +138,12 @@ class _TodoListPageState extends State<TodoListPage> {
                       decoration: const InputDecoration(
                         labelText: 'Due Date',
                         hintText: 'Select due date',
+                        border: InputBorder.none
                       ),
-                      child: Text(
-                        DateFormat('yyyy-MM-dd').format(selectedDate),
+                      child: TextField(
+                        readOnly: true,
+                        controller: dateController
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 40),
-            Row(
-              children: [
-                const Icon(Icons.category),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: InputDecorator(
-                    decoration: const InputDecoration(
-                      labelText: 'Category',
-                      border: InputBorder.none
-                    ),
-                    child: DropdownButtonFormField<String>(
-                      value: selectedCategory,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedCategory = value!;
-                        });
-                      },
-                      items: ['Personal', 'Work', 'Study', 'Shopping', 'Wishlist']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      isExpanded: true,
-                      icon: const Icon(Icons.edit),
                     ),
                   ),
                 ),
@@ -133,15 +154,28 @@ class _TodoListPageState extends State<TodoListPage> {
       ),
       actions: [
         IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pop(context);
+            textController.clear();
+            setState(() {
+              selectedDate = DateTime.now();
+              selectedCategory = 'Personal';
+            });
+          },
           icon: const Icon(Icons.undo_rounded),
         ),
         IconButton(
           icon: const Icon(Icons.save),
           onPressed: () {
             String text = textController.text;
+            String due = dateController.text;
             if (text.isNotEmpty) {
-              context.read<TodoListDatabase>().addTodoList(text, selectedDate, selectedCategory);
+              context.read<TodoListDatabase>().addTodoList(text, selectedCategory, due);
+              print("$text, $selectedCategory, $due");
+              setState(() {
+                selectedDate = DateTime.now();
+                selectedCategory = 'Personal';
+              });
               Navigator.pop(context);
               textController.clear();
               ScaffoldMessenger.of(context).showSnackBar(
@@ -177,6 +211,38 @@ class _TodoListPageState extends State<TodoListPage> {
     );
   }
 
+  void _listen() async {
+  if (!_isListening) {
+    bool available = await _speech.initialize(
+      onStatus: (status) {
+        // print('Speech recognition status: $status');
+      },
+      onError: (errorNotification) {
+        // print('Speech recognition error: $errorNotification');
+      },
+    );
+    if (available) {
+      setState(() {
+        _isListening = true;
+        textController = 'Listening...' as TextEditingController;
+      });
+      _speech.listen(
+        onResult: (result) {
+          setState(() {
+            textController = result.recognizedWords as TextEditingController;
+          });
+        },
+      );
+    }
+  } else {
+    setState(() {
+      _isListening = false;
+      _speech.stop();
+    });
+  }
+}
+
+  
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -184,10 +250,11 @@ class _TodoListPageState extends State<TodoListPage> {
       firstDate: selectedDate,
       lastDate: DateTime(3000),
     );
-
-    if (picked != null && picked != selectedDate) {
+    
+    dateController.text = DateFormat('yyyy-MM-dd').format(picked!);
+    if (mounted && picked != selectedDate) {
       setState(() {
-        selectedDate = picked;
+        dateController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
     }
   }
@@ -202,42 +269,42 @@ class _TodoListPageState extends State<TodoListPage> {
     List todolists = context.watch<TodoListDatabase>().todolists;
     
     Widget searchTextField() { //add
-    return TextField(
-      controller: textController,
-      autofocus: true,
-      autocorrect: true,
-      decoration:
-        const InputDecoration(
-          labelText: 'Search Plans',
-          labelStyle: TextStyle(
-            fontFamily: "Quicksand"
-          )
-        ),
-      onChanged: (q) {
-        if (q.isNotEmpty) {
-          setState(() {
-            isOfLength = true;
-            searchResults = [];
-          });
-          context.read<TodoListDatabase>().search(q.toLowerCase());
-        } else {
-          setState(() {
-            isOfLength = false;
-            searchResults = [];
-          });
-          context.read<TodoListDatabase>().fetchTodoList();
-        }
-        for (var plans in todolists) {
-          if (plans.plan.toLowerCase().contains(q.toLowerCase())) {
-            searchResults.add(todolists);
+      return TextField(
+        controller: textController,
+        autofocus: true,
+        autocorrect: true,
+        decoration:
+          const InputDecoration(
+            labelText: 'Search Plans',
+            labelStyle: TextStyle(
+              fontFamily: "Quicksand"
+            )
+          ),
+        onChanged: (q) {
+          if (q.isNotEmpty) {
             setState(() {
-              searchResults = searchResults;
+              isOfLength = true;
+              searchResults = [];
             });
+            context.read<TodoListDatabase>().search(q.toLowerCase());
+          } else {
+            setState(() {
+              isOfLength = false;
+              searchResults = [];
+            });
+            context.read<TodoListDatabase>().fetchTodoList();
           }
-        }
-      },
-    );
-  }
+          for (var plans in todolists) {
+            if (plans.plan.toLowerCase().contains(q.toLowerCase())) {
+              searchResults.add(todolists);
+              setState(() {
+                searchResults = searchResults;
+              });
+            }
+          }
+        },
+      );
+    }
 
     Orientation orientation = MediaQuery.of(context).orientation;
 
@@ -254,6 +321,42 @@ class _TodoListPageState extends State<TodoListPage> {
       leftPadding = screenWidth * 0.75;
       topHeight = 20;
     }
+
+    Widget pattern = SingleChildScrollView(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: topHeight),
+              const Center(child: Text(
+                  "Click the + icon below to add a plan"
+                )
+              ),
+              const SizedBox(height: 10),
+              const Center(child: Text("Double tap on plan to deactivate or flag completed")),
+              const SizedBox(height: 100),
+              Padding(
+                padding: EdgeInsets.only(left: leftPadding),
+                child: Transform.rotate(
+                  angle: 1.5708,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Image.asset(
+                        'images/pointer.gif',
+                        width: 100,
+                      ),
+                    ],
+                  )
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
 
     // If completed, text decoration will be crossed
     TextDecoration decorate(bool completed) {
@@ -524,7 +627,8 @@ class _TodoListPageState extends State<TodoListPage> {
             "Details",
             style: TextStyle(
               fontFamily: "Quicksand",
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.bold,
+              fontSize: 25
             ),
           ),
           content: SingleChildScrollView(
@@ -538,11 +642,11 @@ class _TodoListPageState extends State<TodoListPage> {
                       "Title",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700
                       ),
                     ),
-                    Text(plan.plan)
+                    Text(plan.plan, style: const TextStyle(fontFamily: "Quicksand"))
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -553,11 +657,11 @@ class _TodoListPageState extends State<TodoListPage> {
                       "Category",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700
                       ),
                     ),
-                    Text(plan.category)
+                    Text(plan.category, style: const TextStyle(fontFamily: "Quicksand"))
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -568,11 +672,11 @@ class _TodoListPageState extends State<TodoListPage> {
                       "Status",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700
                       ),
                     ),
-                    plan.completed == true ? const Text("You rock. this plan was proudly executed") : const Text("We still have to get this plan done")
+                    plan.completed == true ? const Text("Proudly executed", style: TextStyle(fontFamily: "Quicksand")) : const Text("Uncompleted", style: TextStyle(fontFamily: "Quicksand"))
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -583,11 +687,11 @@ class _TodoListPageState extends State<TodoListPage> {
                       "Date Created",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700
                       ),
                     ),
-                    Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created))
+                    Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created), style: const TextStyle(fontFamily: "Quicksand"))
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -598,28 +702,47 @@ class _TodoListPageState extends State<TodoListPage> {
                       "Due Date",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700
                       ),
                     ),
-                    plan.due == true ? Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.due)) : const Text('Unset')
+                    plan.due != null ? Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.due), style: const TextStyle(fontFamily: "Quicksand")) : const Text('Unset', style: TextStyle(fontFamily: "Quicksand"))
                   ],
                 ),
                 const SizedBox(height: 20),
-                if (plan.modified != null)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Date Modified",
-                        style: TextStyle(
-                          fontFamily: "Quicksand",
-                          fontSize: 20
-                        ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Date Modified",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700
                       ),
-                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.modified))
-                    ],
-                  ),
+                    ),
+                    plan.modified != null ?
+                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.modified), style: const TextStyle(fontFamily: "Quicksand"))
+                    : const Text('Not yet modified', style: TextStyle(fontFamily: "Quicksand")),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Date Achieved",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700
+                      ),
+                    ),
+                    if (plan.achieved!= null)
+                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.achieved), style: const TextStyle(fontFamily: "Quicksand"))
+                    else const Text('Not yet achieved', style: TextStyle(fontFamily: "Quicksand")),
+                  ],
+                )
               ],
             ),
           )
@@ -729,7 +852,7 @@ class _TodoListPageState extends State<TodoListPage> {
       
         drawer: const TodoListDrawer(),
       
-        body: todolists.isNotEmpty  ? LiquidPullToRefresh(
+        body: todolists.isNotEmpty || isSearch ? LiquidPullToRefresh(
           springAnimationDurationInMilliseconds: 200,
           onRefresh: () async {
             readTodoLists();
@@ -769,7 +892,7 @@ class _TodoListPageState extends State<TodoListPage> {
                                 child: Text(
                                   plan.plan,
                                   maxLines: 2,
-                                  overflow: TextOverflow.fade,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontFamily: "Quicksand",
                                     fontWeight: FontWeight.w600,
@@ -809,49 +932,15 @@ class _TodoListPageState extends State<TodoListPage> {
               );
             }),
           ),
-        ) : SingleChildScrollView(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: topHeight),
-                  const Center(child: Text(
-                      "Click the + icon below to add a plan"
-                    )
-                  ),
-                  const SizedBox(height: 10),
-                  const Center(child: Text("Double tap on plan to deactivate or flag completed")),
-                  const SizedBox(height: 100),
-                  Padding(
-                    padding: EdgeInsets.only(left: leftPadding),
-                    child: Transform.rotate(
-                      angle: 1.5708,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Image.asset(
-                            'images/pointer.gif',
-                            width: 100,
-                          ),
-                        ],
-                      )
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
+        ) : pattern,
       
         floatingActionButton: Tooltip(
           message: "Add a Plan",
           child: FloatingActionButton(
-            onPressed: createTodoList,
+            onPressed:  createTodoList,
             backgroundColor: Theme.of(context).colorScheme.onSecondary,
-            child: const Icon(
-              Icons.add,
+            child: Icon(
+              !isSearch ? Icons.add : Icons.cancel_rounded,
               // color: Colors.blueGrey,
             ),
           ),

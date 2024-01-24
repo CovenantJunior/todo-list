@@ -37,18 +37,23 @@ const TodoListSchema = CollectionSchema(
       name: r'created',
       type: IsarType.dateTime,
     ),
-    r'favorite': PropertySchema(
+    r'due': PropertySchema(
       id: 4,
+      name: r'due',
+      type: IsarType.dateTime,
+    ),
+    r'favorite': PropertySchema(
+      id: 5,
       name: r'favorite',
       type: IsarType.bool,
     ),
     r'modified': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'modified',
       type: IsarType.dateTime,
     ),
     r'plan': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'plan',
       type: IsarType.string,
     )
@@ -98,9 +103,10 @@ void _todoListSerialize(
   writer.writeString(offsets[1], object.category);
   writer.writeBool(offsets[2], object.completed);
   writer.writeDateTime(offsets[3], object.created);
-  writer.writeBool(offsets[4], object.favorite);
-  writer.writeDateTime(offsets[5], object.modified);
-  writer.writeString(offsets[6], object.plan);
+  writer.writeDateTime(offsets[4], object.due);
+  writer.writeBool(offsets[5], object.favorite);
+  writer.writeDateTime(offsets[6], object.modified);
+  writer.writeString(offsets[7], object.plan);
 }
 
 TodoList _todoListDeserialize(
@@ -114,10 +120,11 @@ TodoList _todoListDeserialize(
   object.category = reader.readStringOrNull(offsets[1]);
   object.completed = reader.readBoolOrNull(offsets[2]);
   object.created = reader.readDateTimeOrNull(offsets[3]);
-  object.favorite = reader.readBoolOrNull(offsets[4]);
+  object.due = reader.readDateTimeOrNull(offsets[4]);
+  object.favorite = reader.readBoolOrNull(offsets[5]);
   object.id = id;
-  object.modified = reader.readDateTimeOrNull(offsets[5]);
-  object.plan = reader.readStringOrNull(offsets[6]);
+  object.modified = reader.readDateTimeOrNull(offsets[6]);
+  object.plan = reader.readStringOrNull(offsets[7]);
   return object;
 }
 
@@ -137,10 +144,12 @@ P _todoListDeserializeProp<P>(
     case 3:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 4:
-      return (reader.readBoolOrNull(offset)) as P;
-    case 5:
       return (reader.readDateTimeOrNull(offset)) as P;
+    case 5:
+      return (reader.readBoolOrNull(offset)) as P;
     case 6:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 7:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -546,6 +555,75 @@ extension TodoListQueryFilter
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> dueIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'due',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> dueIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'due',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> dueEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'due',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> dueGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'due',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> dueLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'due',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> dueBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'due',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QAfterFilterCondition> favoriteIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -895,6 +973,18 @@ extension TodoListQuerySortBy on QueryBuilder<TodoList, TodoList, QSortBy> {
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByDue() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'due', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByDueDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'due', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByFavorite() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'favorite', Sort.asc);
@@ -982,6 +1072,18 @@ extension TodoListQuerySortThenBy
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByDue() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'due', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByDueDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'due', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByFavorite() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'favorite', Sort.asc);
@@ -1058,6 +1160,12 @@ extension TodoListQueryWhereDistinct
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QDistinct> distinctByDue() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'due');
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QDistinct> distinctByFavorite() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'favorite');
@@ -1107,6 +1215,12 @@ extension TodoListQueryProperty
   QueryBuilder<TodoList, DateTime?, QQueryOperations> createdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'created');
+    });
+  }
+
+  QueryBuilder<TodoList, DateTime?, QQueryOperations> dueProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'due');
     });
   }
 

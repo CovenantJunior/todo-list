@@ -21,8 +21,8 @@ class TodoListDatabase extends ChangeNotifier{
   /* Handle CRUD operations */
 
   // CREATE
-  void addTodoList(String plan, due, category) async {
-    final newTodoList = TodoList()..plan = plan.. category = category..completed = false..favorite = false.. created = DateTime.now()..due = due;
+  void addTodoList(plan, category, due) async {
+    final newTodoList = TodoList()..plan = plan..category = category..completed = false..favorite = false..created = DateTime.now()..due = DateTime.parse(due);
 
     // Save to DB
     await isar.writeTxn(() => isar.todoLists.put(newTodoList));
@@ -41,10 +41,12 @@ class TodoListDatabase extends ChangeNotifier{
   }
 
   // UPDATE
-  void updateTodoList(int id, String plan) async {
+  void updateTodoList(int id, plan, category, due) async {
     var existingTodoList = await isar.todoLists.get(id);
     if (existingTodoList != null) {
       existingTodoList.plan = plan;
+      existingTodoList.category = category;
+      existingTodoList.due = due;
       existingTodoList.modified = DateTime.now();
       await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
     }
@@ -76,6 +78,7 @@ class TodoListDatabase extends ChangeNotifier{
     var existingTodoList = await isar.todoLists.get(id);
     if (existingTodoList != null) {
       existingTodoList.completed = true;
+      existingTodoList.achieved = DateTime.now();
       await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
     }
 
@@ -88,6 +91,7 @@ class TodoListDatabase extends ChangeNotifier{
     var existingTodoList = await isar.todoLists.get(id);
     if (existingTodoList != null) {
       existingTodoList.completed = false;
+      existingTodoList.achieved = null;
       await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
     }
 
