@@ -11,123 +11,158 @@ class TodoListPreferences extends StatefulWidget {
 }
 
 class _TodoListPreferencesState extends State<TodoListPreferences> {
-  late bool isDark;
-
-  @override
-  void initState() {
-    super.initState();
-    isDark = Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
-  }
-
+  late bool isDark = Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // Used AppBar just for the back icon
         title: const Text(
           "Preferences",
           style: TextStyle(
             fontFamily: "Quicksand",
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.bold
           ),
         ),
         centerTitle: true,
       ),
+
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildSection('Appearance', [
-                _buildPreferenceItem(
-                  icon: Icons.dark_mode_outlined,
-                  label: 'Dark Mode',
-                  switchValue: isDark,
-                  onSwitchChanged: (value) {
-                    Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
-                    setState(() {
-                      isDark = !isDark;
-                    });
-                  },
-                ),
-              ]),
-              const Divider(height: 20),
-              _buildSection('Notifications', [
-                _buildPreferenceItem(
-                  icon: Icons.notifications_none_rounded,
-                  label: 'Notification',
-                  switchValue: false, // Replace with your notification logic
-                  onSwitchChanged: (value) {},
-                ),
-              ]),
-              const Divider(height: 20),
-              _buildSection('Data Management', [
-                _buildPreferenceItem(
-                  icon: Icons.add_to_drive,
-                  label: 'Backup to Drive',
-                  switchValue: false, // Replace with your backup logic
-                  onSwitchChanged: (value) {},
-                ),
-                const Divider(height: 20),
-                _buildPreferenceItem(
-                  icon: Icons.sync_rounded,
-                  label: 'Auto Sync',
-                  switchValue: false, // Replace with your auto sync logic
-                  onSwitchChanged: (value) {},
-                ),
-              ]),
-              const Divider(height: 20),
-              _buildSection('Task Management', [
-                _buildPreferenceItem(
-                  icon: Icons.auto_delete_outlined,
-                  label: 'Auto Delete Completed Task',
-                  switchValue: false, // Replace with your auto delete logic
-                  onSwitchChanged: (value) {},
-                ),
-              ]),
-            ],
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.dark_mode_outlined),
+                          SizedBox(width: 20),
+                          Text(
+                            'Dark Mode',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Quicksand"
+                            ),
+                          ),
+                        ],
+                      ),
+                      CupertinoSwitch(
+                        value: isDark,
+                        onChanged: (value) {
+                          Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                          setState(() {
+                            isDark = !isDark;
+                          });
+                        }
+                      )
+                    ],
+                  ),
+                  const Divider(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.notifications_none_rounded),
+                          SizedBox(width: 20),
+                          Text(
+                            'Notification',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Quicksand"
+                            ),
+                          ),
+                        ],
+                      ),
+                      CupertinoSwitch(
+                        value: false,
+                        onChanged: (value) {
+                        }
+                      )
+                    ],
+                  ),
+                  const Divider(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.add_to_drive),
+                          SizedBox(width: 20),
+                          Text(
+                            'Backup to Drive',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Quicksand"
+                            ),
+                          ),
+                        ],
+                      ),
+                      CupertinoSwitch(
+                        value: false,
+                        onChanged: (value) {
+                        }
+                      )
+                    ],
+                  ),
+                  const Divider(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.sync_rounded),
+                          SizedBox(width: 20),
+                          Text(
+                            'Auto Sync',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Quicksand"
+                            ),
+                          ),
+                        ],
+                      ),
+                      CupertinoSwitch(
+                        value: false,
+                        onChanged: (value) {
+                        }
+                      )
+                    ],
+                  ),
+                  const Divider(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.auto_delete_outlined),
+                          SizedBox(width: 20),
+                          Text(
+                            'Auto Delete Completed Task',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Quicksand"
+                            ),
+                          ),
+                        ],
+                      ),
+                      CupertinoSwitch(
+                        value: false,
+                        onChanged: (value) {
+                        }
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildSection(String title, List<Widget> children) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Quicksand',
-          ),
-        ),
-        const SizedBox(height: 8),
-        ...children,
-      ],
-    );
-  }
-
-  Widget _buildPreferenceItem({
-    required IconData icon,
-    required String label,
-    required bool switchValue,
-    required ValueChanged<bool> onSwitchChanged,
-  }) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: Icon(icon),
-      title: Text(
-        label,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontFamily: "Quicksand",
-        ),
-      ),
-      trailing: CupertinoSwitch(
-        value: switchValue,
-        onChanged: onSwitchChanged,
       ),
     );
   }
