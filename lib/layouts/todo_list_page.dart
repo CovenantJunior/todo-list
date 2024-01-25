@@ -209,6 +209,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   }
 
   void closeSearch() {
+    readTodoLists();
     setState(() {
       isSearch = false;
       isOfLength = false;
