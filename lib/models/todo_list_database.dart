@@ -18,11 +18,13 @@ class TodoListDatabase extends ChangeNotifier{
   // List of all TodoLists
   List<TodoList> todolists = [];
 
+  List<TodoList> nonTrashedTodolists = [];
+
   /* Handle CRUD operations */
 
   // CREATE
   void addTodoList(plan, category, due) async {
-    final newTodoList = TodoList()..plan = plan..category = category..completed = false..favorite = false..created = DateTime.now()..due = DateTime.parse(due);
+    final newTodoList = TodoList()..plan = plan..category = category..completed = false..favorite = false..created = DateTime.now()..due = DateTime.parse(due)..starred = false..trashed = false;
 
     // Save to DB
     await isar.writeTxn(() => isar.todoLists.put(newTodoList));
@@ -37,6 +39,15 @@ class TodoListDatabase extends ChangeNotifier{
     final currentTodoLists = isar.todoLists.where().findAllSync();
     todolists.clear();
     todolists.addAll(currentTodoLists);
+    notifyListeners();
+  }
+
+
+  // READ LIST NOT TRASHED
+  void fetchNonTrashedTodoList() async {
+    final currentTodoLists = isar.todoLists.filter().trashedEqualTo(false).findAllSync();
+    nonTrashedTodolists.clear();
+    nonTrashedTodolists.addAll(currentTodoLists);
     notifyListeners();
   }
 

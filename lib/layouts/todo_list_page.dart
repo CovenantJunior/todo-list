@@ -268,11 +268,13 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   // Read
   Future<void> readTodoLists() async {
     context.read<TodoListDatabase>().fetchTodoList();
+    context.read<TodoListDatabase>().fetchNonTrashedTodoList();
   }
 
   @override
   Widget build(BuildContext context) {
     List todolists = context.watch<TodoListDatabase>().todolists;
+    List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
     
     Widget searchTextField() { //add
       return TextField(
@@ -412,7 +414,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 color: Colors.white
               ),
               selectedColor: Colors.grey,
-              items: todolists.map((e) => MultiSelectItem(e, e.plan)).toList(),
+              items: todolists.where((e) => e.trashed != true).map((e) => MultiSelectItem(e, e.plan)).toList(),
               listType: MultiSelectListType.CHIP,
               onConfirm: (values) {
                 selectedLists = values;
@@ -861,7 +863,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       
         drawer: const TodoListDrawer(),
       
-        body: todolists.isNotEmpty || isSearch ? LiquidPullToRefresh(
+        body: todolists.isNotEmpty && nonTrashedTodolists.isNotEmpty || isSearch ? LiquidPullToRefresh(
           springAnimationDurationInMilliseconds: 200,
           onRefresh: () async {
             readTodoLists();

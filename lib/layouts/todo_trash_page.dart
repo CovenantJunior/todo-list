@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/component/todo_list_trash_options.dart';
@@ -187,6 +190,192 @@ class _TodoTrashState extends State<TodoTrash> {
     }
   }
 
+  void multiEdit(List todolists) {
+      List selectedLists = [];
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            "Edit Plans",
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.bold
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: MultiSelectDialogField(
+              buttonText: const Text(
+                "Tap to select plans",
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              buttonIcon: const Icon(
+                Icons.waving_hand_rounded
+              ),
+              cancelText: const Text("Leave"),
+              confirmText: const Text("Done"),
+              backgroundColor: Theme.of(context).colorScheme.onSecondary,
+              selectedItemsTextStyle: const TextStyle(
+                color: Colors.white
+              ),
+              selectedColor: Colors.grey,
+              items: todolists.where((e) => e.trashed == true).map((e) => MultiSelectItem(e, e.plan)).toList(),
+              listType: MultiSelectListType.CHIP,
+              onConfirm: (values) {
+                selectedLists = values;
+              },
+              searchable: true,
+            ),
+          ),
+          actions: [
+            Tooltip(
+              message: "Cancel search",
+              child: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(
+                  Icons.undo_rounded
+                )
+              ),
+            ),
+            Tooltip(
+              message: "Restore Plan",
+              child: IconButton(
+                icon: const Icon(
+                  Icons.restore_rounded,
+                ),
+                // color: Colors.blueGrey,
+                onPressed: () {
+                  if (selectedLists.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      duration: Duration(seconds: 2),
+                      content: Text(
+                      'Please select a plan to deal with',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold
+                      )
+                    )));
+                  } else {
+                    for (var selectedList in selectedLists) {
+                      context.read<TodoListDatabase>().restoreTodoLists(selectedList.id);
+                    }
+                    if (selectedLists.length > 1) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          duration: const Duration(seconds: 2),
+                          content: Text(
+                          'Restoring ${selectedLists.length} plans',
+                          style: const TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.bold
+                          )
+                        )));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          duration: Duration(seconds: 2),
+                          content: Text(
+                          'Restoring plan',
+                          style: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.bold
+                          )
+                        )));
+                    }
+                    Navigator.pop(context);
+                  }
+                }
+              ),
+            ),
+             Tooltip(
+              message: "Delete selected plan(s)",
+              child: IconButton(
+                icon: const Icon(Icons.delete),
+                // color: Colors.blueGrey,
+                onPressed: () {
+                  if (selectedLists.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      duration: Duration(seconds: 2),
+                      content: Text(
+                      'Please select a plan to deal with',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold
+                      )
+                    )));
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        content: const Text(
+                          "Delete Selected Plan(s) Forever?",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Quicksand',
+                          ),
+                        ),
+                        actions: [
+                          IconButton(
+                            onPressed: () {
+                              for (var selectedList in selectedLists) {
+                                context.read<TodoListDatabase>().trashTodoList(selectedList.id);
+                              }
+                              if (selectedLists.length > 1) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    duration: const Duration(seconds: 2),
+                                    content: Text(
+                                    'Deleting ${selectedLists.length} selected plans',
+                                    style: const TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.bold
+                                    )
+                                  )));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    duration: Duration(seconds: 2),
+                                    content: Text(
+                                    'Deleting selected plan',
+                                    style: TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.bold
+                                    )
+                                  )));
+                              }
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.done,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.cancel_outlined,
+                            ),
+                          ),
+                        ],
+                      ) 
+                    );
+                  }
+                }
+              ),
+            )
+          ],
+        )
+      );
+    }
+
+
   TextEditingController textController = TextEditingController();
   bool isSearch = false;
   bool isOfLength = false;
@@ -281,6 +470,18 @@ class _TodoTrashState extends State<TodoTrash> {
                   )
                 ),
               ),
+            if(!isSearch)
+              Tooltip(
+                message: "Bulk Edit Plans",
+                child: IconButton(
+                  onPressed: () {
+                    multiEdit(todolists);
+                  },
+                  icon: const Icon(
+                    Icons.edit
+                  )
+                ),
+              ),
           ],
         ),
 
@@ -332,27 +533,6 @@ class _TodoTrashState extends State<TodoTrash> {
                                 ),
                               ),
                             ),
-                            /* Builder(
-                              builder: (context) {
-                                return IconButton(
-                                  onPressed: () {
-                                    showPopover(
-                                      width: 370,
-                                      context: context,
-                                      bodyBuilder: (context) => TodoListTrashOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    Icons.more_vert, 
-                                    color:Colors.blueGrey
-                                  )
-                                );
-                              }
-                            ), */
-                            /* TodoListTrashOptions(
-                              id: plan.id,
-                              plan: plan.plan
-                            ) */
                           ],
                         ),
                       ),
@@ -362,7 +542,19 @@ class _TodoTrashState extends State<TodoTrash> {
               );
             }),
           ),
-        ) : const SizedBox()
+        ) : const SizedBox(),
+
+        floatingActionButton: isSearch ? Tooltip(
+          message: "Close Search",
+          child: FloatingActionButton(
+              onPressed: closeSearch,
+              backgroundColor: Theme.of(context).colorScheme.onSecondary,
+              child: Transform.rotate(
+                angle: 45 * (3.141592653589793238 / 180), // Rotate 45 degrees if isSearch is true
+                child: const Icon(Icons.add),
+              ),
+            ),
+        ) : const SizedBox(),
       ),
     );
   }
