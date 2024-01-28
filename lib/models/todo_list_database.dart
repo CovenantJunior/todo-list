@@ -79,14 +79,11 @@ class TodoListDatabase extends ChangeNotifier{
 
   // TRASH ALL
   void trashAllTodoLists() async {
-    var max = await isar.writeTxn(() => isar.todoLists.count());
-    for (var id = 0; id <= max; id++) {
-      var existingTodoList = await isar.todoLists.get(id);
-      if (existingTodoList != null) {
-        existingTodoList.trashed = true;
-        existingTodoList.trashedDate = DateTime.now();
-        await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
-      }
+    var allexistingTodoList = isar.todoLists.where().findAllSync();
+    for (var existingTodoList in allexistingTodoList) {
+      existingTodoList.trashed = true;
+      existingTodoList.trashedDate = DateTime.now();
+      await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
     }
 
     // Update TodoList List

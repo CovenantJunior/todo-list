@@ -61,6 +61,7 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
   @override
   Widget build(BuildContext context) {
     List todolists = context.watch<TodoListDatabase>().todolists;
+    List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
     
     return Drawer(
       semanticLabel: "TodoList Drawer Menu",
@@ -100,7 +101,7 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
               }
             ),
         
-            if (todolists.isNotEmpty)
+            if (todolists.isNotEmpty && nonTrashedTodolists.isNotEmpty)
               TodoListDrawerTile(
                 title: "Move all to Trash",
                 leading: const Icon(Icons.delete_sweep_outlined),
