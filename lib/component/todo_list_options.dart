@@ -89,6 +89,10 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                           controller: textController,
                           decoration: const InputDecoration(
                             hintText: 'Task description',
+                            hintStyle: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.bold
+                              ),
                           ),
                         ),
                       ),
@@ -103,6 +107,10 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                         child: InputDecorator(
                           decoration: const InputDecoration(
                             labelText: 'Category',
+                            labelStyle: TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.bold
+                            ),
                             border: InputBorder.none
                           ),
                           child: DropdownButtonFormField<String>(
@@ -114,7 +122,13 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
-                                child: Text(value),
+                                child: Text(
+                                  value,
+                                  style: const TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
                               );
                             }).toList(),
                             isExpanded: true,
@@ -137,11 +151,23 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                           child: InputDecorator(
                             decoration: const InputDecoration(
                               labelText: 'Due Date',
+                              labelStyle: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.bold
+                              ),
                               hintText: 'Select due date',
+                              hintStyle: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.bold
+                              ),
                               border: InputBorder.none
                             ),
                             child: TextField(
                               controller: dateController,
+                              style: const TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.bold
+                              ),
                             ),
                           ),
                         ),

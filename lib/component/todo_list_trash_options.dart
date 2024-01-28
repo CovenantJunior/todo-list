@@ -86,37 +86,35 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
             )));
       }
 
-      return Expanded(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Tooltip(
-              message: "Restore",
-              child: IconButton(
-                onPressed: () {
-                  restore(widget.Plan.id);
-                },
-                icon: const Icon(
-                Icons.restore_rounded,
-                color: Colors.blueGrey,
-              )
-              ),
-            ),
-            IconButton(
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Tooltip(
+            message: "Restore",
+            child: IconButton(
               onPressed: () {
-                Navigator.pop(context);
-                deleteTodoList(widget.Plan.id);
+                restore(widget.Plan.id);
               },
-              icon: const Tooltip(
-                message: "Delete Plan Forever",
-                child: Icon(
-                  Icons.delete_forever_rounded,
-                  color: Colors.blueGrey,
-                ),
+              icon: const Icon(
+              Icons.restore_rounded,
+              color: Colors.blueGrey,
+            )
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+              deleteTodoList(widget.Plan.id);
+            },
+            icon: const Tooltip(
+              message: "Delete Plan Forever",
+              child: Icon(
+                Icons.delete_forever_rounded,
+                color: Colors.blueGrey,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
   }
 }

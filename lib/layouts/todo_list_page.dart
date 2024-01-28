@@ -83,7 +83,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         onPressed: _listen,
                         icon: Icon(_isListening ? Icons.mic_off : Icons.mic),
                       ),
-
+                      hintStyle: const TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold
+                      ),
+                      labelStyle: const TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
                 ),
@@ -98,6 +105,10 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   child: InputDecorator(
                     decoration: const InputDecoration(
                       labelText: 'Category',
+                      labelStyle: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold
+                      ),
                       border: InputBorder.none
                     ),
                     child: DropdownButtonFormField<String>(
@@ -111,7 +122,13 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value),
+                          child: Text(
+                            value,
+                              style: const TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.bold
+                              ),
+                          ),
                         );
                       }).toList(),
                       isExpanded: true,
@@ -134,12 +151,20 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     child: InputDecorator(
                       decoration: const InputDecoration(
                         labelText: 'Due Date',
+                        labelStyle: TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.bold
+                        ),
                         hintText: 'Select due date',
                         border: InputBorder.none
                       ),
                       child: TextField(
                         readOnly: true,
-                        controller: dateController
+                        controller: dateController,
+                        style: const TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.bold
+                        ),
                       ),
                     ),
                   ),
