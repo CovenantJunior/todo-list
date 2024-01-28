@@ -14,4 +14,7 @@ class TodoList {
   DateTime? modified;
   DateTime? due;
   DateTime? achieved;
+  bool? starred;
+  bool? trashed;
+  DateTime? trashedDate;
 }

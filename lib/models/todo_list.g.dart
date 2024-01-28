@@ -56,6 +56,16 @@ const TodoListSchema = CollectionSchema(
       id: 7,
       name: r'plan',
       type: IsarType.string,
+    ),
+    r'starred': PropertySchema(
+      id: 8,
+      name: r'starred',
+      type: IsarType.bool,
+    ),
+    r'trashed': PropertySchema(
+      id: 9,
+      name: r'trashed',
+      type: IsarType.bool,
     )
   },
   estimateSize: _todoListEstimateSize,
@@ -107,6 +117,8 @@ void _todoListSerialize(
   writer.writeBool(offsets[5], object.favorite);
   writer.writeDateTime(offsets[6], object.modified);
   writer.writeString(offsets[7], object.plan);
+  writer.writeBool(offsets[8], object.starred);
+  writer.writeBool(offsets[9], object.trashed);
 }
 
 TodoList _todoListDeserialize(
@@ -125,6 +137,8 @@ TodoList _todoListDeserialize(
   object.id = id;
   object.modified = reader.readDateTimeOrNull(offsets[6]);
   object.plan = reader.readStringOrNull(offsets[7]);
+  object.starred = reader.readBoolOrNull(offsets[8]);
+  object.trashed = reader.readBoolOrNull(offsets[9]);
   return object;
 }
 
@@ -151,6 +165,10 @@ P _todoListDeserializeProp<P>(
       return (reader.readDateTimeOrNull(offset)) as P;
     case 7:
       return (reader.readStringOrNull(offset)) as P;
+    case 8:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 9:
+      return (reader.readBoolOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -916,6 +934,58 @@ extension TodoListQueryFilter
       ));
     });
   }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> starredIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'starred',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> starredIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'starred',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> starredEqualTo(
+      bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'starred',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> trashedIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'trashed',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> trashedIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'trashed',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> trashedEqualTo(
+      bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'trashed',
+        value: value,
+      ));
+    });
+  }
 }
 
 extension TodoListQueryObject
@@ -1018,6 +1088,30 @@ extension TodoListQuerySortBy on QueryBuilder<TodoList, TodoList, QSortBy> {
   QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByPlanDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'plan', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByStarred() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'starred', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByStarredDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'starred', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByTrashed() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trashed', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByTrashedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trashed', Sort.desc);
     });
   }
 }
@@ -1131,6 +1225,30 @@ extension TodoListQuerySortThenBy
       return query.addSortBy(r'plan', Sort.desc);
     });
   }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByStarred() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'starred', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByStarredDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'starred', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByTrashed() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trashed', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByTrashedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trashed', Sort.desc);
+    });
+  }
 }
 
 extension TodoListQueryWhereDistinct
@@ -1182,6 +1300,18 @@ extension TodoListQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'plan', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QDistinct> distinctByStarred() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'starred');
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QDistinct> distinctByTrashed() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'trashed');
     });
   }
 }
@@ -1239,6 +1369,18 @@ extension TodoListQueryProperty
   QueryBuilder<TodoList, String?, QQueryOperations> planProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'plan');
+    });
+  }
+
+  QueryBuilder<TodoList, bool?, QQueryOperations> starredProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'starred');
+    });
+  }
+
+  QueryBuilder<TodoList, bool?, QQueryOperations> trashedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'trashed');
     });
   }
 }

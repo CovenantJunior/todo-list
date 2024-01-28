@@ -56,6 +56,37 @@ class TodoListDatabase extends ChangeNotifier{
   }
 
 
+  // TRASH
+  void trashTodoList(int id) async {
+    var existingTodoList = await isar.todoLists.get(id);
+    if (existingTodoList != null) {
+      existingTodoList.trashed = true;
+      existingTodoList.trashedDate = DateTime.now();
+      await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
+    }
+
+    // Update TodoList List
+    fetchTodoList();
+  }
+
+
+  // TRASH ALL
+  void trashAllTodoLists() async {
+    var max = await isar.writeTxn(() => isar.todoLists.count());
+    for (var id = 0; id <= max; id++) {
+      var existingTodoList = await isar.todoLists.get(id);
+      if (existingTodoList != null) {
+        existingTodoList.trashed = true;
+        existingTodoList.trashedDate = DateTime.now();
+        await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
+      }
+    }
+
+    // Update TodoList List
+    fetchTodoList();
+  }
+
+  
   // DELETE
   void deleteTodoList(int id) async {
     await isar.writeTxn(() => isar.todoLists.delete(id));
@@ -63,11 +94,25 @@ class TodoListDatabase extends ChangeNotifier{
     // Update TodoList List
     fetchTodoList();
   }
-
-
+  
+  
   // DELETE ALL
   void deleteAllTodoLists() async {
     await isar.writeTxn(() => isar.todoLists.clear());
+
+    // Update TodoList List
+    fetchTodoList();
+  }
+
+
+  // RESTORE PLAN
+  void restoreTodoLists(id) async {
+    var existingTodoList = await isar.todoLists.get(id);
+    if (existingTodoList != null) {
+      existingTodoList.trashed = false;
+      existingTodoList.trashedDate = null;
+      await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
+    }
 
     // Update TodoList List
     fetchTodoList();

@@ -199,8 +199,8 @@ class _TodoListOptionsState extends State<TodoListOptions> {
         );
       }
 
-      // Delete
-      void deleteTodoList(int id) {
+      // Trash
+      void trashTodoList(int id) {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -215,11 +215,13 @@ class _TodoListOptionsState extends State<TodoListOptions> {
             actions: [
               IconButton(
                 onPressed: () {
-                  context.read<TodoListDatabase>().deleteTodoList(id);
+                  context.read<TodoListDatabase>().trashTodoList(id);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text(
-                        'Poof! Gone like the wind',
+                      const SnackBar(
+                        duration: Duration(seconds: 2),
+                        content: Text(
+                        'Trashed',
                         style: TextStyle(
                           fontFamily: "Quicksand",
                           fontWeight: FontWeight.bold
@@ -260,7 +262,9 @@ class _TodoListOptionsState extends State<TodoListOptions> {
             )
         );
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text(
+            const SnackBar(
+              duration: Duration(seconds: 2),
+              content: Text(
               'Copied and locked! Paste at your leisure!',
               style: TextStyle(
                 fontFamily: "Quicksand",
@@ -300,6 +304,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
 
 
       return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
             onPressed: () {Navigator.pop(context);
@@ -364,7 +369,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
           IconButton(
             onPressed: () {
               Navigator.pop(context);
-              deleteTodoList(widget.Plan.id);
+              trashTodoList(widget.Plan.id);
             },
             icon: const Tooltip(
               message: "Delete Plan",

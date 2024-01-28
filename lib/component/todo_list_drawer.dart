@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/component/todo_list_drawer_tile.dart';
 import 'package:todo_list/layouts/todo_list_preferences.dart';
+import 'package:todo_list/layouts/todo_trash_page.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
 
@@ -13,12 +14,12 @@ class TodoListDrawer extends StatefulWidget {
 
 class _TodoListDrawerState extends State<TodoListDrawer> {
   // Delete All Plans
-    void deleteAllTodoLists() {
+    void trashAllTodoLists() {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           content: const Text(
-            "Delete all plans?",
+            "Move all plans to Trash?",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,
@@ -28,10 +29,10 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
           actions: [
             IconButton(
               onPressed: () {
-                context.read<TodoListDatabase>().deleteAllTodoLists();
+                context.read<TodoListDatabase>().trashAllTodoLists();
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text(
-                      'Poof! Gone like the wind',
+                      'Moved all to Trash',
                       style: TextStyle(
                         fontFamily: "Quicksand",
                         fontWeight: FontWeight.bold
@@ -72,11 +73,21 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
                   width: 70,
                 ),
             ),
+
             TodoListDrawerTile(
               title: "Home",
-              leading: const Icon(Icons.home),
+              leading: const Icon(Icons.home_outlined),
               onTap: () {
                 Navigator.pop(context);
+              }
+            ),
+
+            TodoListDrawerTile(
+              title: "Starred",
+              leading: const Icon(Icons.star_rounded),
+              onTap: () {
+                Navigator.pop(context);
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoListPreferences()));
               }
             ),
         
@@ -91,12 +102,21 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
         
             if (todolists.isNotEmpty)
               TodoListDrawerTile(
-                title: "Delete All",
-                leading: const Icon(Icons.delete_forever_rounded),
+                title: "Move all to Trash",
+                leading: const Icon(Icons.delete_sweep_outlined),
                 onTap: () {
-                  deleteAllTodoLists();
+                  trashAllTodoLists();
                 },
               ),
+
+            TodoListDrawerTile(
+              title: "Trash",
+              leading: const Icon(Icons.delete_outline_rounded),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoTrash()));
+              }
+            ),
           ],
         ),
       ),

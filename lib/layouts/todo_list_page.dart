@@ -565,7 +565,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           IconButton(
                             onPressed: () {
                               for (var selectedList in selectedLists) {
-                                context.read<TodoListDatabase>().deleteTodoList(selectedList.id);
+                                context.read<TodoListDatabase>().trashTodoList(selectedList.id);
                               }
                               if (selectedLists.length > 1) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -878,7 +878,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 },
                 child: Builder(
                   builder: (context) {
-                    return GestureDetector(
+                    return plan.trashed != true ? GestureDetector(
                       onLongPress: () {
                         showPopover(
                           direction: PopoverDirection.top,
@@ -936,7 +936,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           ),
                         ),
                       ),
-                    );
+                    ) : const SizedBox();
                   }
                 ),
               );
