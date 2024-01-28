@@ -231,7 +231,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
           context: context,
           builder: (context) => AlertDialog(
             content: const Text(
-              "Delete Plan?",
+              "Move plan to Trash?",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20,
@@ -398,7 +398,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
               trashTodoList(widget.Plan.id);
             },
             icon: const Tooltip(
-              message: "Delete Plan",
+              message: "Trash Plan",
               child: Icon(
                 Icons.delete,
                 color: Colors.blueGrey,

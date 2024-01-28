@@ -66,6 +66,11 @@ const TodoListSchema = CollectionSchema(
       id: 9,
       name: r'trashed',
       type: IsarType.bool,
+    ),
+    r'trashedDate': PropertySchema(
+      id: 10,
+      name: r'trashedDate',
+      type: IsarType.dateTime,
     )
   },
   estimateSize: _todoListEstimateSize,
@@ -119,6 +124,7 @@ void _todoListSerialize(
   writer.writeString(offsets[7], object.plan);
   writer.writeBool(offsets[8], object.starred);
   writer.writeBool(offsets[9], object.trashed);
+  writer.writeDateTime(offsets[10], object.trashedDate);
 }
 
 TodoList _todoListDeserialize(
@@ -139,6 +145,7 @@ TodoList _todoListDeserialize(
   object.plan = reader.readStringOrNull(offsets[7]);
   object.starred = reader.readBoolOrNull(offsets[8]);
   object.trashed = reader.readBoolOrNull(offsets[9]);
+  object.trashedDate = reader.readDateTimeOrNull(offsets[10]);
   return object;
 }
 
@@ -169,6 +176,8 @@ P _todoListDeserializeProp<P>(
       return (reader.readBoolOrNull(offset)) as P;
     case 9:
       return (reader.readBoolOrNull(offset)) as P;
+    case 10:
+      return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -986,6 +995,77 @@ extension TodoListQueryFilter
       ));
     });
   }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> trashedDateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'trashedDate',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition>
+      trashedDateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'trashedDate',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> trashedDateEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'trashedDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition>
+      trashedDateGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'trashedDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> trashedDateLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'trashedDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> trashedDateBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'trashedDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension TodoListQueryObject
@@ -1112,6 +1192,18 @@ extension TodoListQuerySortBy on QueryBuilder<TodoList, TodoList, QSortBy> {
   QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByTrashedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'trashed', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByTrashedDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trashedDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByTrashedDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trashedDate', Sort.desc);
     });
   }
 }
@@ -1249,6 +1341,18 @@ extension TodoListQuerySortThenBy
       return query.addSortBy(r'trashed', Sort.desc);
     });
   }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByTrashedDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trashedDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByTrashedDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'trashedDate', Sort.desc);
+    });
+  }
 }
 
 extension TodoListQueryWhereDistinct
@@ -1312,6 +1416,12 @@ extension TodoListQueryWhereDistinct
   QueryBuilder<TodoList, TodoList, QDistinct> distinctByTrashed() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'trashed');
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QDistinct> distinctByTrashedDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'trashedDate');
     });
   }
 }
@@ -1381,6 +1491,12 @@ extension TodoListQueryProperty
   QueryBuilder<TodoList, bool?, QQueryOperations> trashedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'trashed');
+    });
+  }
+
+  QueryBuilder<TodoList, DateTime?, QQueryOperations> trashedDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'trashedDate');
     });
   }
 }

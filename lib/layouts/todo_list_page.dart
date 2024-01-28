@@ -559,7 +559,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               ),
             ),
             Tooltip(
-              message: "Delete selected plan(s)",
+              message: "Trash selected plan(s)",
               child: IconButton(
                 icon: const Icon(Icons.delete),
                 // color: Colors.blueGrey,
@@ -580,7 +580,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       context: context,
                       builder: (context) => AlertDialog(
                         content: const Text(
-                          "Delete Selected Plan(s)?",
+                          "Move selected plan(s) to Trash?",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 20,
@@ -773,9 +773,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         fontWeight: FontWeight.w700
                       ),
                     ),
-                    if (plan.achieved!= null)
+                    plan.achieved != null ?
                       Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.achieved), style: const TextStyle(fontFamily: "Quicksand"))
-                    else const Text('Not yet achieved', style: TextStyle(fontFamily: "Quicksand")),
+                    : const Text('Not yet achieved', style: TextStyle(fontFamily: "Quicksand")),
                   ],
                 )
               ],
@@ -919,45 +919,91 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       child: Card(
                         surfaceTintColor: tint(plan.completed),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 35.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: Text(
-                                  plan.plan,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontFamily: "Quicksand",
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                    decoration: decorate(plan.completed),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      plan.plan,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: "Quicksand",
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                        decoration: decorate(plan.completed),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              /* Builder(
-                                builder: (context) {
-                                  return IconButton(
-                                    onPressed: () {
-                                      showPopover(
-                                        width: 370,
-                                        context: context,
-                                        bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                                  /* Builder(
+                                    builder: (context) {
+                                      return IconButton(
+                                        onPressed: () {
+                                          showPopover(
+                                            width: 370,
+                                            context: context,
+                                            bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.more_vert, 
+                                          color:Colors.blueGrey
+                                        )
                                       );
-                                    },
-                                    icon: const Icon(
-                                      Icons.more_vert, 
-                                      color:Colors.blueGrey
-                                    )
-                                  );
-                                }
-                              ), */
-                              /* TodoListOptions(
-                                id: plan.id,
-                                plan: plan.plan
-                              ) */
+                                    }
+                                  ), */
+                                  /* TodoListOptions(
+                                    id: plan.id,
+                                    plan: plan.plan
+                                  ) */
+                                ],
+                              ),
+                              const SizedBox(height: 25),
+                              Row(
+                                children: [
+                                  const Text(
+                                    "Due",
+                                    style: TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    DateFormat('EEE, MMM d yyyy').format(plan.due),
+                                    style: const TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontSize: 10
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 20),
+
+                                  const Text(
+                                    "Category",
+                                    style: TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    plan.category,
+                                    style: const TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontSize: 10
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),

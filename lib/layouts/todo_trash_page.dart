@@ -162,9 +162,26 @@ class _TodoTrashState extends State<TodoTrash> {
                         fontWeight: FontWeight.w700
                       ),
                     ),
-                    if (plan.achieved!= null)
+                    plan.achieved != null ?
                       Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.achieved), style: const TextStyle(fontFamily: "Quicksand"))
-                    else const Text('Not yet achieved', style: TextStyle(fontFamily: "Quicksand")),
+                    : const Text('Not yet achieved', style: TextStyle(fontFamily: "Quicksand")),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Date Trashed",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700
+                      ),
+                    ),
+                    plan.trashedDate!= null ?
+                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.trashedDate), style: const TextStyle(fontFamily: "Quicksand"))
+                    : const Text('Not yet trashed', style: TextStyle(fontFamily: "Quicksand")),
                   ],
                 )
               ],
@@ -323,7 +340,7 @@ class _TodoTrashState extends State<TodoTrash> {
                           IconButton(
                             onPressed: () {
                               for (var selectedList in selectedLists) {
-                                context.read<TodoListDatabase>().trashTodoList(selectedList.id);
+                                context.read<TodoListDatabase>().deleteTodoList(selectedList.id);
                               }
                               if (selectedLists.length > 1) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -492,55 +509,104 @@ class _TodoTrashState extends State<TodoTrash> {
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: ListView.builder(
-              itemCount: todolists.length,
-              itemBuilder: (context, index) {
-              final plan = todolists[index];
-              return Builder(
-                builder: (context) {
-                  return plan.trashed == true ? GestureDetector(
-                    onLongPress: () {
-                      showPopover(
-                        arrowDxOffset: 100,
-                        arrowDyOffset: 100,
-                        direction: PopoverDirection.top,
-                        width: 100,
-                        context: context,
-                        bodyBuilder: (context) => TodoListTrashOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                      );
-                    },
-                    onTap: () {
-                      planDetails(plan);
-                    },
-                    child: Card(
-                      surfaceTintColor: tint(plan.completed),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 35.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                plan.plan,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  decoration: decorate(plan.completed),
-                                ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(3.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.auto_delete_outlined),
+                      SizedBox(width: 5),
+                      Text(
+                        "Items are deleted forever after 30 days.",
+                        style: TextStyle(
+                          fontFamily: "Quicksand"
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: todolists.length,
+                    itemBuilder: (context, index) {
+                    final plan = todolists[index];
+                    return Builder(
+                      builder: (context) {
+                        return plan.trashed == true ? GestureDetector(
+                          onLongPress: () {
+                            showPopover(
+                              arrowDxOffset: 50,
+                              direction: PopoverDirection.top,
+                              width: 100,
+                              context: context,
+                              bodyBuilder: (context) => TodoListTrashOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                            );
+                          },
+                          onTap: () {
+                            planDetails(plan);
+                          },
+                          child: Card(
+                            surfaceTintColor: tint(plan.completed),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          plan.plan,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontFamily: "Quicksand",
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            decoration: decorate(plan.completed),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 25),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        "Trashed",
+                                        style: TextStyle(
+                                          fontFamily: "Quicksand",
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 10
+                                        ),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        plan.trashedDate != null ? DateFormat('EEE, MMM d yyyy').format(plan.due) : "Something went wrong",
+                                        style: const TextStyle(
+                                          fontFamily: "Quicksand",
+                                          fontSize: 10
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ) : const SizedBox();
-                }
-              );
-            }),
+                          ),
+                        ) : const SizedBox();
+                      }
+                    );
+                  }),
+                ),
+              ],
+            ),
           ),
         ) : const SizedBox(),
 

@@ -31,7 +31,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
           context: context,
           builder: (context) => AlertDialog(
             content: const Text(
-              "Delete Plan Completely?",
+              "Delete Plan Forever?",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20,
