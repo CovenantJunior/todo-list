@@ -39,15 +39,11 @@ class TodoListDatabase extends ChangeNotifier{
     final currentTodoLists = isar.todoLists.where().findAllSync();
     todolists.clear();
     todolists.addAll(currentTodoLists);
-    notifyListeners();
-  }
-
-
-  // READ LIST NOT TRASHED
-  void fetchNonTrashedTodoList() async {
-    final currentTodoLists = isar.todoLists.filter().trashedEqualTo(false).findAllSync();
+ 
+    // READ LIST NOT TRASHED
+    final currentNonTrashedTodoLists = isar.todoLists.filter().trashedEqualTo(false).findAllSync();
     nonTrashedTodolists.clear();
-    nonTrashedTodolists.addAll(currentTodoLists);
+    nonTrashedTodolists.addAll(currentNonTrashedTodoLists);
     notifyListeners();
   }
 
