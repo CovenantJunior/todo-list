@@ -74,7 +74,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   child: TextFormField(
                     autocorrect: true,
                     autofocus: true,
-                    maxLines: 1,
+                    minLines: 1,
+                    maxLines: 5,
                     maxLength: 100,
                     controller: textController,
                     decoration: InputDecoration(
@@ -273,6 +274,49 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   }
 }
 
+  void trashAllTodoLists() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: const Text(
+          "Move all plans to Trash?",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+            fontFamily: 'Quicksand',
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.read<TodoListDatabase>().trashAllTodoLists();
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text(
+                    'Moved all to Trash',
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontWeight: FontWeight.bold
+                    )
+                  )));
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.done,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.cancel_outlined,
+            ),
+          ),
+        ],
+      ) 
+    );
+  }
+
   
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -297,7 +341,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    List todolists = context.watch<TodoListDatabase>().todolists;
+    // List todolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
     List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
     
     Widget searchTextField() { //add
@@ -326,9 +370,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             });
             context.read<TodoListDatabase>().fetchTodoList();
           }
-          for (var plans in todolists) {
+          for (var plans in nonTrashedTodolists) {
             if (plans.plan.toLowerCase().contains(q.toLowerCase())) {
-              searchResults.add(todolists);
+              searchResults.add(nonTrashedTodolists);
               setState(() {
                 searchResults = searchResults;
               });
@@ -407,7 +451,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       }
     }
 
-    void multiEdit(List todolists) {
+    void multiEdit(List nonTrashedTodolists) {
       List selectedLists = [];
       showDialog(
         context: context,
@@ -438,7 +482,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 color: Colors.white
               ),
               selectedColor: Colors.grey,
-              items: todolists.where((e) => e.trashed != true).map((e) => MultiSelectItem(e, e.plan)).toList(),
+              items: nonTrashedTodolists.where((e) => e.trashed != true).map((e) => MultiSelectItem(e, e.plan)).toList(),
               listType: MultiSelectListType.CHIP,
               onConfirm: (values) {
                 selectedLists = values;
@@ -860,19 +904,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 shape: const CircleBorder(),
               ),
             ) : const SizedBox(),
-            if(!isSearch)
-              Tooltip(
-                message: "Bulk Edit Plans",
-                child: IconButton(
-                  onPressed: () {
-                    multiEdit(todolists);
-                  },
-                  icon: const Icon(
-                    Icons.edit
-                  )
-                ),
-              ),
-            if(!isSearch)
+            !isSearch && nonTrashedTodolists.isNotEmpty ?
               Tooltip(
                 message: "Search Plans",
                 child: IconButton(
@@ -881,13 +913,25 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     Icons.search
                   )
                 ),
-              ),
+              ) : const SizedBox(),
+            !isSearch && nonTrashedTodolists.isNotEmpty ?
+              Tooltip(
+                message: "Bulk Edit Plans",
+                child: IconButton(
+                  onPressed: () {
+                    multiEdit(nonTrashedTodolists);
+                  },
+                  icon: const Icon(
+                    Icons.edit
+                  )
+                ),
+              ) : const SizedBox(),
           ],
         ),
       
         drawer: const TodoListDrawer(),
       
-        body: todolists.isNotEmpty && nonTrashedTodolists.isNotEmpty || isSearch ? LiquidPullToRefresh(
+        body: nonTrashedTodolists.isNotEmpty && !isSearch ? LiquidPullToRefresh(
           springAnimationDurationInMilliseconds: 200,
           onRefresh: () async {
             readTodoLists();
@@ -895,9 +939,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: ListView.builder(
-              itemCount: todolists.length,
+              itemCount: nonTrashedTodolists.length,
               itemBuilder: (context, index) {
-              final plan = todolists[index];
+              final plan = nonTrashedTodolists[index];
               return GestureDetector(
                 onDoubleTap: () {
                   mark(plan);
@@ -925,8 +969,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Expanded(
                                     child: Text(
@@ -1016,19 +1060,35 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           ),
         ) : pattern,
       
-        floatingActionButton: Tooltip(
-          message: "Add a Plan",
-          child: RotationTransition(
-            turns: Tween(begin: 0.0, end: isSearch ? 0.25 : 0.0).animate(_animationController),
-            child: FloatingActionButton(
-              onPressed: isSearch ? closeSearch : createTodoList,
-              backgroundColor: Theme.of(context).colorScheme.onSecondary,
-              child: Transform.rotate(
-                angle: isSearch ? 45 * (3.141592653589793238 / 180) : 0.0, // Rotate 45 degrees if isSearch is true
-                child: const Icon(Icons.add),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            nonTrashedTodolists.isNotEmpty && !isSearch ? Tooltip(
+              message: "Move plans to trash",
+              child: FloatingActionButton(
+                onPressed: trashAllTodoLists,
+                backgroundColor: Theme.of(context).colorScheme.onSecondary,
+                child: const Icon(Icons.delete_sweep_outlined),
+              ),
+            ) : const SizedBox(),
+        
+            const SizedBox(height: 8),
+        
+            Tooltip(
+              message: "Add a plan",
+              child: RotationTransition(
+                turns: Tween(begin: 0.0, end: isSearch ? 0.25 : 0.0).animate(_animationController),
+                child: FloatingActionButton(
+                  onPressed: isSearch ? closeSearch : createTodoList,
+                  backgroundColor: Theme.of(context).colorScheme.onSecondary,
+                  child: Transform.rotate(
+                    angle: isSearch ? 45 * (3.141592653589793238 / 180) : 0.0, // Rotate 45 degrees if isSearch is true
+                    child: const Icon(Icons.add),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

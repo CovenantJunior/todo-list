@@ -84,7 +84,8 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                         child: TextFormField(
                           autocorrect: true,
                           autofocus: true,
-                          maxLines: 1,
+                          minLines: 1,
+                          maxLines: 5,
                           maxLength: 100,
                           controller: textController,
                           decoration: const InputDecoration(

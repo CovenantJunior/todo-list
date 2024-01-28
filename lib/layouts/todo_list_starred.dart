@@ -6,17 +6,17 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_list/component/todo_list_trash_options.dart';
+import 'package:todo_list/component/todo_list_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 
-class TodoTrash extends StatefulWidget {
-  const TodoTrash({super.key});
+class TodoStarred extends StatefulWidget {
+  const TodoStarred({super.key});
 
   @override
-  State<TodoTrash> createState() => _TodoTrashState();
+  State<TodoStarred> createState() => _TodoStarredState();
 }
 
-class _TodoTrashState extends State<TodoTrash> {
+class _TodoStarredState extends State<TodoStarred> {
   @override
   void initState() {
     super.initState();
@@ -167,23 +167,6 @@ class _TodoTrashState extends State<TodoTrash> {
                     : const Text('Not yet achieved', style: TextStyle(fontFamily: "Quicksand")),
                   ],
                 ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Date Trashed",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700
-                      ),
-                    ),
-                    plan.trashedDate!= null ?
-                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.trashedDate), style: const TextStyle(fontFamily: "Quicksand"))
-                    : const Text('Not yet trashed', style: TextStyle(fontFamily: "Quicksand")),
-                  ],
-                )
               ],
             ),
           )
@@ -207,7 +190,7 @@ class _TodoTrashState extends State<TodoTrash> {
     }
   }
 
-  void multiEdit(List trashedTodoList) {
+  void multiEdit(List starredTodoLists) {
       List selectedLists = [];
       showDialog(
         context: context,
@@ -238,7 +221,7 @@ class _TodoTrashState extends State<TodoTrash> {
                 color: Colors.white
               ),
               selectedColor: Colors.grey,
-              items: trashedTodoList.where((e) => e.trashed == true).map((e) => MultiSelectItem(e, e.plan)).toList(),
+              items: starredTodoLists.where((e) => e.trashed == true).map((e) => MultiSelectItem(e, e.plan)).toList(),
               listType: MultiSelectListType.CHIP,
               onConfirm: (values) {
                 selectedLists = values;
@@ -400,7 +383,7 @@ class _TodoTrashState extends State<TodoTrash> {
 
   @override
   Widget build(BuildContext context) {
-    List trashedTodoList = context.watch<TodoListDatabase>().trashedTodoLists;
+    List starredTodoLists = context.watch<TodoListDatabase>().starredTodoLists;
     
     Widget searchTextField() { //add
       return TextField(
@@ -428,9 +411,9 @@ class _TodoTrashState extends State<TodoTrash> {
             });
             context.read<TodoListDatabase>().fetchTodoList();
           }
-          for (var plans in trashedTodoList) {
+          for (var plans in starredTodoLists) {
             if (plans.plan.toLowerCase().contains(q.toLowerCase())) {
-              searchResults.add(trashedTodoList);
+              searchResults.add(starredTodoLists);
               setState(() {
                 searchResults = searchResults;
               });
@@ -439,6 +422,35 @@ class _TodoTrashState extends State<TodoTrash> {
         },
       );
     }
+
+    void mark(plan) {
+      if (plan.completed == true) {
+        context.read<TodoListDatabase>().replan(plan.id);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 2),
+            content: Text(
+            'Plan reactivated!',
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.bold
+            )
+          )));
+      } else {
+        context.read<TodoListDatabase>().completed(plan.id);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 2),
+            content: Text(
+            'Plan accomplished. You inspire!!!',
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.bold
+            )
+          )));
+      }
+    }
+
 
     return GestureDetector(
       onTap: () {
@@ -453,7 +465,7 @@ class _TodoTrashState extends State<TodoTrash> {
           title: isSearch ?
           searchTextField() :
           const Text(
-            'Trash',
+            'Starred',
             style: TextStyle(
               fontFamily: "Quicksand",
               fontWeight: FontWeight.bold
@@ -477,7 +489,7 @@ class _TodoTrashState extends State<TodoTrash> {
                 shape: const CircleBorder(),
               ),
             ) : const SizedBox(),
-            !isSearch && trashedTodoList.isNotEmpty ?
+            !isSearch && starredTodoLists.isNotEmpty ?
               Tooltip(
                 message: "Search Plans",
                 child: IconButton(
@@ -487,12 +499,12 @@ class _TodoTrashState extends State<TodoTrash> {
                   )
                 ),
               ) : const SizedBox(),
-            !isSearch && trashedTodoList.isNotEmpty ?
+            !isSearch && starredTodoLists.isNotEmpty ?
               Tooltip(
                 message: "Bulk Edit Plans",
                 child: IconButton(
                   onPressed: () {
-                    multiEdit(trashedTodoList);
+                    multiEdit(starredTodoLists);
                   },
                   icon: const Icon(
                     Icons.edit
@@ -502,114 +514,135 @@ class _TodoTrashState extends State<TodoTrash> {
           ],
         ),
 
-        body: trashedTodoList.isNotEmpty || isSearch ? LiquidPullToRefresh(
+        body: starredTodoLists.isNotEmpty || isSearch ? LiquidPullToRefresh(
           springAnimationDurationInMilliseconds: 200,
           onRefresh: () async {
             readTodoLists();
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(3.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.auto_delete_outlined),
-                      SizedBox(width: 5),
-                      Text(
-                        "Items are deleted forever after 30 days.",
-                        style: TextStyle(
-                          fontFamily: "Quicksand"
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: trashedTodoList.length,
-                    itemBuilder: (context, index) {
-                    final plan = trashedTodoList[index];
-                    return Builder(
-                      builder: (context) {
-                        return plan.trashed == true ? GestureDetector(
-                          onLongPress: () {
-                            showPopover(
-                              arrowDxOffset: 50,
-                              direction: PopoverDirection.top,
-                              width: 100,
-                              context: context,
-                              bodyBuilder: (context) => TodoListTrashOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                            );
-                          },
-                          onTap: () {
-                            planDetails(plan);
-                          },
-                          child: Card(
-                            surfaceTintColor: tint(plan.completed),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView.builder(
+              itemCount: starredTodoLists.length,
+              itemBuilder: (context, index) {
+              final plan = starredTodoLists[index];
+              return GestureDetector(
+                onDoubleTap: () {
+                  mark(plan);
+                },
+                child: Builder(
+                  builder: (context) {
+                    return plan.starred == true ? GestureDetector(
+                      onLongPress: () {
+                        showPopover(
+                          direction: PopoverDirection.top,
+                          width: 260,
+                          context: context,
+                          bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                        );
+                      },
+                      onTap: () {
+                        planDetails(plan);
+                      },
+                      child: Card(
+                        surfaceTintColor: tint(plan.completed),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          plan.plan,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontFamily: "Quicksand",
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16,
-                                            decoration: decorate(plan.completed),
-                                          ),
-                                        ),
+                                  Expanded(
+                                    child: Text(
+                                      plan.plan,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: "Quicksand",
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                        decoration: decorate(plan.completed),
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                  const SizedBox(height: 25),
-                                  Row(
-                                    children: [
-                                      const Text(
-                                        "Trashed",
-                                        style: TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 10
-                                        ),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        plan.trashedDate != null ? DateFormat('EEE, MMM d yyyy').format(plan.due) : "Something went wrong",
-                                        style: const TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontSize: 10
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  /* Builder(
+                                    builder: (context) {
+                                      return IconButton(
+                                        onPressed: () {
+                                          showPopover(
+                                            width: 370,
+                                            context: context,
+                                            bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.more_vert, 
+                                          color:Colors.blueGrey
+                                        )
+                                      );
+                                    }
+                                  ), */
+                                  /* TodoListOptions(
+                                    id: plan.id,
+                                    plan: plan.plan
+                                  ) */
                                 ],
                               ),
-                            ),
-                          ),
-                        ) : const SizedBox();
-                      }
-                    );
-                  }),
-                ),
-              ],
-            ),
-          ),
-        ) : const Center(child: Text("You have no trash")),
+                              const SizedBox(height: 25),
+                              Row(
+                                children: [
+                                  const Text(
+                                    "Due",
+                                    style: TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    DateFormat('EEE, MMM d yyyy').format(plan.due),
+                                    style: const TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontSize: 10
+                                    ),
+                                  ),
 
+                                  const SizedBox(width: 20),
+
+                                  const Text(
+                                    "Category",
+                                    style: TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    plan.category,
+                                    style: const TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontSize: 10
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ) : const SizedBox();
+                  }
+                ),
+              );
+            }),
+          ),
+        ) : const Center(child: Text("No starred plan yet")),
+      
         floatingActionButton: isSearch ? Tooltip(
           message: "Close Search",
           child: FloatingActionButton(

@@ -20,6 +20,12 @@ class TodoListDatabase extends ChangeNotifier{
 
   List<TodoList> nonTrashedTodolists = [];
 
+  List<TodoList> nonStarredTodolists = [];
+
+  List<TodoList> trashedTodoLists = [];
+
+  List<TodoList> starredTodoLists = [];
+
   /* Handle CRUD operations */
 
   // CREATE
@@ -44,6 +50,23 @@ class TodoListDatabase extends ChangeNotifier{
     final currentNonTrashedTodoLists = isar.todoLists.filter().trashedEqualTo(false).findAllSync();
     nonTrashedTodolists.clear();
     nonTrashedTodolists.addAll(currentNonTrashedTodoLists);
+    
+    
+    // READ LIST NOT STARRED
+    final currentNonStarredTodoLists = isar.todoLists.filter().starredEqualTo(false).findAllSync();
+    nonStarredTodolists.clear();
+    nonStarredTodolists.addAll(currentNonStarredTodoLists);
+
+    // READ LIST TRASHED
+    final currentTrashedTodoLists = isar.todoLists.filter().trashedEqualTo(true).findAllSync();
+    trashedTodoLists.clear();
+    trashedTodoLists.addAll(currentTrashedTodoLists);
+    
+    
+    // READ LIST STARRED
+    final currentStarredTodoLists = isar.todoLists.filter().starredEqualTo(true).findAllSync();
+    starredTodoLists.clear();
+    starredTodoLists.addAll(currentStarredTodoLists);
     notifyListeners();
   }
 
