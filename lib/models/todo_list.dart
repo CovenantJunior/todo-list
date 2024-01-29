@@ -9,7 +9,6 @@ class TodoList {
   String? plan;
   String? category;
   bool? completed;
-  bool? favorite;
   DateTime? created;
   DateTime? modified;
   DateTime? due;

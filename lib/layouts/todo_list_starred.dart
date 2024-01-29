@@ -221,7 +221,7 @@ class _TodoStarredState extends State<TodoStarred> {
                 color: Colors.white
               ),
               selectedColor: Colors.grey,
-              items: starredTodoLists.where((e) => e.trashed == true).map((e) => MultiSelectItem(e, e.plan)).toList(),
+              items: starredTodoLists.map((e) => MultiSelectItem(e, e.plan)).toList(),
               listType: MultiSelectListType.CHIP,
               onConfirm: (values) {
                 selectedLists = values;
@@ -403,7 +403,7 @@ class _TodoStarredState extends State<TodoStarred> {
               isOfLength = true;
               searchResults = [];
             });
-            context.read<TodoListDatabase>().search(q.toLowerCase());
+            context.read<TodoListDatabase>().searchStarred(q.toLowerCase());
           } else {
             setState(() {
               isOfLength = false;
@@ -589,6 +589,7 @@ class _TodoStarredState extends State<TodoStarred> {
                                     id: plan.id,
                                     plan: plan.plan
                                   ) */
+                                  const Icon(Icons.star_rounded)
                                 ],
                               ),
                               const SizedBox(height: 25),
@@ -641,7 +642,7 @@ class _TodoStarredState extends State<TodoStarred> {
               );
             }),
           ),
-        ) : const Center(child: Text("No starred plan yet")),
+        ) : !isSearch ? const Center(child: Text("No starred plan yet")) : const Center(child: Text("No result")),
       
         floatingActionButton: isSearch ? Tooltip(
           message: "Close Search",

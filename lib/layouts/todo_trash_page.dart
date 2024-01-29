@@ -238,7 +238,7 @@ class _TodoTrashState extends State<TodoTrash> {
                 color: Colors.white
               ),
               selectedColor: Colors.grey,
-              items: trashedTodoList.where((e) => e.trashed == true).map((e) => MultiSelectItem(e, e.plan)).toList(),
+              items: trashedTodoList.map((e) => MultiSelectItem(e, e.plan)).toList(),
               listType: MultiSelectListType.CHIP,
               onConfirm: (values) {
                 selectedLists = values;
@@ -420,7 +420,7 @@ class _TodoTrashState extends State<TodoTrash> {
               isOfLength = true;
               searchResults = [];
             });
-            context.read<TodoListDatabase>().search(q.toLowerCase());
+            context.read<TodoListDatabase>().searchTrash(q.toLowerCase());
           } else {
             setState(() {
               isOfLength = false;
@@ -502,7 +502,7 @@ class _TodoTrashState extends State<TodoTrash> {
           ],
         ),
 
-        body: trashedTodoList.isNotEmpty || isSearch ? LiquidPullToRefresh(
+        body: trashedTodoList.isNotEmpty ? LiquidPullToRefresh(
           springAnimationDurationInMilliseconds: 200,
           onRefresh: () async {
             readTodoLists();
@@ -608,7 +608,7 @@ class _TodoTrashState extends State<TodoTrash> {
               ],
             ),
           ),
-        ) : const Center(child: Text("You have no trash")),
+        ) : !isSearch ? const Center(child: Text("You have no trash")) : const Center(child: Text("No result")),
 
         floatingActionButton: isSearch ? Tooltip(
           message: "Close Search",

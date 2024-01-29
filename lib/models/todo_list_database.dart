@@ -16,7 +16,7 @@ class TodoListDatabase extends ChangeNotifier{
   }
 
   // List of all TodoLists
-  List<TodoList> todolists = [];
+  // List<TodoList> todolists = [];
 
   List<TodoList> nonTrashedTodolists = [];
 
@@ -30,7 +30,7 @@ class TodoListDatabase extends ChangeNotifier{
 
   // CREATE
   void addTodoList(plan, category, due) async {
-    final newTodoList = TodoList()..plan = plan..category = category..completed = false..favorite = false..created = DateTime.now()..due = DateTime.parse(due)..starred = false..trashed = false;
+    final newTodoList = TodoList()..plan = plan..category = category..completed = false..created = DateTime.now()..due = DateTime.parse(due)..starred = false..trashed = false;
 
     // Save to DB
     await isar.writeTxn(() => isar.todoLists.put(newTodoList));
@@ -42,9 +42,6 @@ class TodoListDatabase extends ChangeNotifier{
 
   // READ
   void fetchTodoList() async {
-    final currentTodoLists = isar.todoLists.where().findAllSync();
-    todolists.clear();
-    todolists.addAll(currentTodoLists);
  
     // READ LIST NOT TRASHED
     final currentNonTrashedTodoLists = isar.todoLists.filter().trashedEqualTo(false).findAllSync();
@@ -172,10 +169,36 @@ class TodoListDatabase extends ChangeNotifier{
   }
 
   
-   // REPLAN
+  // MAIN SEARCH
   Future<void> search(q) async {
-    final currentTodoLists = await isar.todoLists.filter().planContains(q, caseSensitive: false).findAll();
-    todolists.clear();
-    todolists.addAll(currentTodoLists);
+    final currentTodoLists = await isar.todoLists.filter().trashedEqualTo(false).planContains(q, caseSensitive: false).findAll();
+    nonTrashedTodolists.clear();
+    nonTrashedTodolists.addAll(currentTodoLists);
+  }
+
+  // TRASH SEARCH
+  Future<void> searchTrash(q) async {
+    final currentTodoLists = await isar.todoLists.filter().trashedEqualTo(true).planContains(q, caseSensitive: false).findAll();
+    trashedTodoLists.clear();
+    trashedTodoLists.addAll(currentTodoLists);
+  }
+
+  // STARRED SEARCH
+  Future<void> searchStarred(q) async {
+    final currentTodoLists = await isar.todoLists.filter().starredEqualTo(true).planContains(q, caseSensitive: false).findAll();
+    nonTrashedTodolists.clear();
+    nonTrashedTodolists.addAll(currentTodoLists);
+  }
+
+  // STAR
+  void star(int id) async {
+    var existingTodoList = await isar.todoLists.get(id);
+    if (existingTodoList != null) {
+      existingTodoList.starred = true;
+      await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
+    }
+
+    // Update TodoList List
+    fetchTodoList();
   }
 }

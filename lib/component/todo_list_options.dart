@@ -374,6 +374,29 @@ class _TodoListOptionsState extends State<TodoListOptions> {
           IconButton(
             onPressed: () {
               Navigator.pop(context);
+              context.read<TodoListDatabase>().star(widget.id);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  duration: Duration(seconds: 2),
+                  content: Text(
+                  'Starred!',
+                  style: TextStyle(
+                    fontFamily: "Quicksand",
+                    fontWeight: FontWeight.bold
+                  )
+              )));
+            },
+            icon: const Tooltip(
+              message: "Star",
+              child: Icon(
+                Icons.star_outlined,
+                color: Colors.blueGrey,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
               mark(widget.Plan);
             },
             icon: 

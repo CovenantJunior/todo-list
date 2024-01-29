@@ -341,7 +341,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    // List todolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
     List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
     
     Widget searchTextField() { //add
@@ -372,7 +371,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           }
           for (var plans in nonTrashedTodolists) {
             if (plans.plan.toLowerCase().contains(q.toLowerCase())) {
-              searchResults.add(nonTrashedTodolists);
+              searchResults.add(plans);
               setState(() {
                 searchResults = searchResults;
               });
@@ -763,6 +762,21 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
+                      "Starred",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700
+                      ),
+                    ),
+                    plan.starred == true ? const Text("Starred", style: TextStyle(fontFamily: "Quicksand")) : const Text("Not starred", style: TextStyle(fontFamily: "Quicksand"))
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
                       "Date Created",
                       style: TextStyle(
                         fontFamily: "Quicksand",
@@ -931,7 +945,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       
         drawer: const TodoListDrawer(),
       
-        body: nonTrashedTodolists.isNotEmpty && !isSearch ? LiquidPullToRefresh(
+        body: nonTrashedTodolists.isNotEmpty ? LiquidPullToRefresh(
           springAnimationDurationInMilliseconds: 200,
           onRefresh: () async {
             readTodoLists();
@@ -948,11 +962,11 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 },
                 child: Builder(
                   builder: (context) {
-                    return plan.trashed != true ? GestureDetector(
+                    return GestureDetector(
                       onLongPress: () {
                         showPopover(
                           direction: PopoverDirection.top,
-                          width: 260,
+                          width: 290,
                           context: context,
                           bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
                         );
@@ -1006,6 +1020,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                     id: plan.id,
                                     plan: plan.plan
                                   ) */
+                                  plan.starred == true ? const Icon(Icons.star_rounded) : const SizedBox()
                                 ],
                               ),
                               const SizedBox(height: 25),
@@ -1052,13 +1067,13 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           ),
                         ),
                       ),
-                    ) : const SizedBox();
+                    );
                   }
                 ),
               );
             }),
           ),
-        ) : pattern,
+        ) : !isSearch ? pattern : const Center(child: Text("No result")),
       
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
