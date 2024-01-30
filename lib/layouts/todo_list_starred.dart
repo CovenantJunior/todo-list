@@ -44,135 +44,150 @@ class _TodoStarredState extends State<TodoStarred> {
   }
 
   void planDetails(plan) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text(
-            "Details",
-            style: TextStyle(
-              fontFamily: "Quicksand",
-              fontWeight: FontWeight.bold,
-              fontSize: 25
-            ),
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          "Details",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.bold,
+            fontSize: 25
           ),
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Title",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700
-                      ),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Title",
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700
                     ),
-                    Text(plan.plan, style: const TextStyle(fontFamily: "Quicksand"))
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Category",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700
-                      ),
+                  ),
+                  Text(plan.plan, style: const TextStyle(fontFamily: "Quicksand"))
+                ],
+              ),
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Category",
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700
                     ),
-                    Text(plan.category, style: const TextStyle(fontFamily: "Quicksand"))
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Status",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700
-                      ),
+                  ),
+                  Text(plan.category, style: const TextStyle(fontFamily: "Quicksand"))
+                ],
+              ),
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Status",
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700
                     ),
-                    plan.completed == true ? const Text("Proudly executed", style: TextStyle(fontFamily: "Quicksand")) : const Text("Uncompleted", style: TextStyle(fontFamily: "Quicksand"))
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Date Created",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700
-                      ),
+                  ),
+                  plan.completed == true ? const Text("Proudly executed", style: TextStyle(fontFamily: "Quicksand")) : const Text("Uncompleted", style: TextStyle(fontFamily: "Quicksand"))
+                ],
+              ),
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Starred",
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700
                     ),
-                    Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created), style: const TextStyle(fontFamily: "Quicksand"))
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Due Date",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700
-                      ),
+                  ),
+                  plan.starred == true ? const Text("Starred", style: TextStyle(fontFamily: "Quicksand")) : const Text("Not starred", style: TextStyle(fontFamily: "Quicksand"))
+                ],
+              ),
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Date Created",
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700
                     ),
-                    plan.due != null ? Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.due), style: const TextStyle(fontFamily: "Quicksand")) : const Text('Unset', style: TextStyle(fontFamily: "Quicksand"))
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Date Modified",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700
-                      ),
+                  ),
+                  Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created), style: const TextStyle(fontFamily: "Quicksand"))
+                ],
+              ),
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Due Date",
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700
                     ),
-                    plan.modified != null ?
-                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.modified), style: const TextStyle(fontFamily: "Quicksand"))
-                    : const Text('Not yet modified', style: TextStyle(fontFamily: "Quicksand")),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Date Achieved",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700
-                      ),
+                  ),
+                  plan.due != null ? Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.due), style: const TextStyle(fontFamily: "Quicksand")) : const Text('Unset', style: TextStyle(fontFamily: "Quicksand"))
+                ],
+              ),
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Date Modified",
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700
                     ),
-                    plan.achieved != null ?
-                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.achieved), style: const TextStyle(fontFamily: "Quicksand"))
-                    : const Text('Not yet achieved', style: TextStyle(fontFamily: "Quicksand")),
-                  ],
-                ),
-              ],
-            ),
-          )
+                  ),
+                  plan.modified != null ?
+                    Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.modified), style: const TextStyle(fontFamily: "Quicksand"))
+                  : const Text('Not yet modified', style: TextStyle(fontFamily: "Quicksand")),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Date Achieved",
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700
+                    ),
+                  ),
+                  plan.achieved != null ?
+                    Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.achieved), style: const TextStyle(fontFamily: "Quicksand"))
+                  : const Text('Not yet achieved', style: TextStyle(fontFamily: "Quicksand")),
+                ],
+              )
+            ],
+          ),
         )
-      );
-    }
+      )
+    );
+  }
 
   TextDecoration decorate(bool completed) {
     if (completed == true) {
@@ -240,10 +255,10 @@ class _TodoStarredState extends State<TodoStarred> {
               ),
             ),
             Tooltip(
-              message: "Restore Plan",
+              message: "Unstar Plan",
               child: IconButton(
                 icon: const Icon(
-                  Icons.restore_rounded,
+                  Icons.star_outline_rounded,
                 ),
                 // color: Colors.blueGrey,
                 onPressed: () {
@@ -260,14 +275,14 @@ class _TodoStarredState extends State<TodoStarred> {
                     )));
                   } else {
                     for (var selectedList in selectedLists) {
-                      context.read<TodoListDatabase>().restoreTodoLists(selectedList.id);
+                      context.read<TodoListDatabase>().star(selectedList.id);
                     }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           duration: const Duration(seconds: 2),
                           content: Text(
-                          'Restoring ${selectedLists.length} plans',
+                          'Unstarring ${selectedLists.length} plans',
                           style: const TextStyle(
                             fontFamily: "Quicksand",
                             fontWeight: FontWeight.bold
@@ -278,7 +293,7 @@ class _TodoStarredState extends State<TodoStarred> {
                         const SnackBar(
                           duration: Duration(seconds: 2),
                           content: Text(
-                          'Restoring plan',
+                          'Unstarring plan',
                           style: TextStyle(
                             fontFamily: "Quicksand",
                             fontWeight: FontWeight.bold
@@ -290,86 +305,6 @@ class _TodoStarredState extends State<TodoStarred> {
                 }
               ),
             ),
-             Tooltip(
-              message: "Delete selected plan(s)",
-              child: IconButton(
-                icon: const Icon(Icons.delete),
-                // color: Colors.blueGrey,
-                onPressed: () {
-                  if (selectedLists.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      duration: Duration(seconds: 2),
-                      content: Text(
-                      'Please select a plan to deal with',
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
-                      )
-                    )));
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        content: const Text(
-                          "Delete Selected Plan(s) Forever?",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: 'Quicksand',
-                          ),
-                        ),
-                        actions: [
-                          IconButton(
-                            onPressed: () {
-                              for (var selectedList in selectedLists) {
-                                context.read<TodoListDatabase>().deleteTodoList(selectedList.id);
-                              }
-                              if (selectedLists.length > 1) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    duration: const Duration(seconds: 2),
-                                    content: Text(
-                                    'Deleting ${selectedLists.length} selected plans',
-                                    style: const TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.bold
-                                    )
-                                  )));
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    duration: Duration(seconds: 2),
-                                    content: Text(
-                                    'Deleting selected plan',
-                                    style: TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.bold
-                                    )
-                                  )));
-                              }
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(
-                              Icons.done,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(
-                              Icons.cancel_outlined,
-                            ),
-                          ),
-                        ],
-                      ) 
-                    );
-                  }
-                }
-              ),
-            )
           ],
         )
       );
@@ -535,7 +470,7 @@ class _TodoStarredState extends State<TodoStarred> {
                       onLongPress: () {
                         showPopover(
                           direction: PopoverDirection.top,
-                          width: 260,
+                          width: 300,
                           context: context,
                           bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
                         );

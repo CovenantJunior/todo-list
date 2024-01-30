@@ -43,6 +43,13 @@ class TodoListDatabase extends ChangeNotifier{
   // READ
   void fetchTodoList() async {
  
+    fetchUntrashedTodoList();
+    fetchTrashedTodoList();
+    fetchStarredTodoList();
+  }
+
+  void fetchUntrashedTodoList() async {
+ 
     // READ LIST NOT TRASHED
     final currentNonTrashedTodoLists = isar.todoLists.filter().trashedEqualTo(false).findAllSync();
     nonTrashedTodolists.clear();
@@ -64,7 +71,7 @@ class TodoListDatabase extends ChangeNotifier{
   // READ STARRED
   void fetchStarredTodoList() async {
     // READ LIST STARRED
-    final currentStarredTodoLists = isar.todoLists.filter().starredEqualTo(true).findAllSync();
+    final currentStarredTodoLists = isar.todoLists.filter().trashedEqualTo(false).starredEqualTo(true).findAllSync();
     starredTodoLists.clear();
     starredTodoLists.addAll(currentStarredTodoLists);
     notifyListeners();
@@ -177,9 +184,6 @@ class TodoListDatabase extends ChangeNotifier{
     final currentTodoLists = await isar.todoLists.filter().trashedEqualTo(false).planContains(q, caseSensitive: false).findAll();
     nonTrashedTodolists.clear();
     nonTrashedTodolists.addAll(currentTodoLists);
-
-    // Update TodoList List
-    fetchTodoList();
   }
 
   // TRASH SEARCH
@@ -187,9 +191,6 @@ class TodoListDatabase extends ChangeNotifier{
     final currentTodoLists = await isar.todoLists.filter().trashedEqualTo(true).planContains(q, caseSensitive: false).findAll();
     trashedTodoLists.clear();
     trashedTodoLists.addAll(currentTodoLists);
-
-    // Update TodoList List
-    fetchTodoList();
   }
 
   // STARRED SEARCH
@@ -197,16 +198,13 @@ class TodoListDatabase extends ChangeNotifier{
     final currentTodoLists = await isar.todoLists.filter().starredEqualTo(true).planContains(q, caseSensitive: false).findAll();
     nonTrashedTodolists.clear();
     nonTrashedTodolists.addAll(currentTodoLists);
-
-    // Update TodoList List
-    fetchTodoList();
   }
 
   // STAR
   void star(int id) async {
     var existingTodoList = await isar.todoLists.get(id);
     if (existingTodoList != null) {
-      existingTodoList.starred = true;
+      existingTodoList.starred == true ? existingTodoList.starred = false : existingTodoList.starred = true;
       await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
     }
 

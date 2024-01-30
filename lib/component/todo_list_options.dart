@@ -376,20 +376,29 @@ class _TodoListOptionsState extends State<TodoListOptions> {
               Navigator.pop(context);
               context.read<TodoListDatabase>().star(widget.id);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  duration: Duration(seconds: 2),
-                  content: Text(
-                  'Starred!',
-                  style: TextStyle(
-                    fontFamily: "Quicksand",
-                    fontWeight: FontWeight.bold
-                  )
-              )));
+                SnackBar(
+                  duration: const Duration(seconds: 2),
+                  content: widget.Plan.starred != true ?
+                  const Text(
+                    'Starred!',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold
+                    )
+                ) : const Text(
+                    'Unstarred!',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold
+                    )
+                )
+              )
+            );
             },
-            icon: const Tooltip(
-              message: "Star",
+            icon: Tooltip(
+              message: widget.Plan.starred != true ? "Star" : "Unstar",
               child: Icon(
-                Icons.star_outlined,
+                widget.Plan.starred != true ? Icons.star_outlined : Icons.star_outline_rounded,
                 color: Colors.blueGrey,
               ),
             ),
