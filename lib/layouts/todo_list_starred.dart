@@ -24,7 +24,7 @@ class _TodoStarredState extends State<TodoStarred> {
   }
 
   Future<void> readTodoLists() async {
-    context.read<TodoListDatabase>().fetchTodoList();
+    context.read<TodoListDatabase>().fetchStarredTodoList();
   }
 
   void search () {
@@ -589,7 +589,7 @@ class _TodoStarredState extends State<TodoStarred> {
                                     id: plan.id,
                                     plan: plan.plan
                                   ) */
-                                  const Icon(Icons.star_rounded)
+                                  const Icon(Icons.star_rounded, color: Colors.orangeAccent,)
                                 ],
                               ),
                               const SizedBox(height: 25),

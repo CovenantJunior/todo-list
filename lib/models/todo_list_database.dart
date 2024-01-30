@@ -48,18 +48,21 @@ class TodoListDatabase extends ChangeNotifier{
     nonTrashedTodolists.clear();
     nonTrashedTodolists.addAll(currentNonTrashedTodoLists);
     
-    
-    // READ LIST NOT STARRED
-    final currentNonStarredTodoLists = isar.todoLists.filter().starredEqualTo(false).findAllSync();
-    nonStarredTodolists.clear();
-    nonStarredTodolists.addAll(currentNonStarredTodoLists);
+    notifyListeners();
+  }
 
-    // READ LIST TRASHED
+  // READ
+  void fetchTrashedTodoList() async {
+     // READ LIST TRASHED
     final currentTrashedTodoLists = isar.todoLists.filter().trashedEqualTo(true).findAllSync();
     trashedTodoLists.clear();
     trashedTodoLists.addAll(currentTrashedTodoLists);
     
-    
+    notifyListeners();
+  }
+  
+  // READ STARRED
+  void fetchStarredTodoList() async {
     // READ LIST STARRED
     final currentStarredTodoLists = isar.todoLists.filter().starredEqualTo(true).findAllSync();
     starredTodoLists.clear();
@@ -174,6 +177,9 @@ class TodoListDatabase extends ChangeNotifier{
     final currentTodoLists = await isar.todoLists.filter().trashedEqualTo(false).planContains(q, caseSensitive: false).findAll();
     nonTrashedTodolists.clear();
     nonTrashedTodolists.addAll(currentTodoLists);
+
+    // Update TodoList List
+    fetchTodoList();
   }
 
   // TRASH SEARCH
@@ -181,6 +187,9 @@ class TodoListDatabase extends ChangeNotifier{
     final currentTodoLists = await isar.todoLists.filter().trashedEqualTo(true).planContains(q, caseSensitive: false).findAll();
     trashedTodoLists.clear();
     trashedTodoLists.addAll(currentTodoLists);
+
+    // Update TodoList List
+    fetchTodoList();
   }
 
   // STARRED SEARCH
@@ -188,6 +197,9 @@ class TodoListDatabase extends ChangeNotifier{
     final currentTodoLists = await isar.todoLists.filter().starredEqualTo(true).planContains(q, caseSensitive: false).findAll();
     nonTrashedTodolists.clear();
     nonTrashedTodolists.addAll(currentTodoLists);
+
+    // Update TodoList List
+    fetchTodoList();
   }
 
   // STAR

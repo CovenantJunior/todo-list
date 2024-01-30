@@ -24,7 +24,7 @@ class _TodoTrashState extends State<TodoTrash> {
   }
 
   Future<void> readTodoLists() async {
-    context.read<TodoListDatabase>().fetchTodoList();
+    context.read<TodoListDatabase>().fetchTrashedTodoList();
   }
 
   void search () {

@@ -503,6 +503,57 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               message: "Reactivate Plan",
               child: IconButton(
                 icon: const Icon(
+                  Icons.star_rounded,
+                ),
+                // color: Colors.blueGrey,
+                onPressed: () {
+                  if (selectedLists.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      duration: Duration(seconds: 2),
+                      content: Text(
+                      'Please select a plan to deal with',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold
+                      )
+                    )));
+                  } else {
+                    for (var selectedList in selectedLists) {
+                      context.read<TodoListDatabase>().star(selectedList.id);
+                    }
+                    if (selectedLists.length > 1) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          duration: const Duration(seconds: 2),
+                          content: Text(
+                          'Starring ${selectedLists.length} plans',
+                          style: const TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.bold
+                          )
+                        )));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          duration: Duration(seconds: 2),
+                          content: Text(
+                          'Starring plan',
+                          style: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.bold
+                          )
+                        )));
+                    }
+                    Navigator.pop(context);
+                  }
+                }
+              ),
+            ),
+            Tooltip(
+              message: "Reactivate Plan",
+              child: IconButton(
+                icon: const Icon(
                   Icons.bookmark_remove_rounded,
                 ),
                 // color: Colors.blueGrey,
@@ -1020,7 +1071,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                     id: plan.id,
                                     plan: plan.plan
                                   ) */
-                                  plan.starred == true ? const Icon(Icons.star_rounded) : const SizedBox()
+                                  plan.starred == true ? const Icon(Icons.star_rounded, color: Colors.orangeAccent,) : const SizedBox()
                                 ],
                               ),
                               const SizedBox(height: 25),
@@ -1039,6 +1090,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                     DateFormat('EEE, MMM d yyyy').format(plan.due),
                                     style: const TextStyle(
                                       fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.w400,
                                       fontSize: 10
                                     ),
                                   ),
@@ -1058,6 +1110,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                     plan.category,
                                     style: const TextStyle(
                                       fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.w400,
                                       fontSize: 10
                                     ),
                                   ),
