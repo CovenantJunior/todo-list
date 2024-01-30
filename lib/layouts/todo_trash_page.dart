@@ -308,7 +308,7 @@ class _TodoTrashState extends State<TodoTrash> {
              Tooltip(
               message: "Delete selected plan(s)",
               child: IconButton(
-                icon: const Icon(Icons.delete),
+                icon: const Icon(Icons.delete_forever_outlined),
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {

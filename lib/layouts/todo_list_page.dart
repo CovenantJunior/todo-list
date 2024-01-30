@@ -45,6 +45,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   bool isSearch = false;
   bool isOfLength = false;
   List searchResults = [];
+  List nonTrashedTodolistsState = [];
 
   bool _isListening = false;
 
@@ -289,7 +290,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         actions: [
           IconButton(
             onPressed: () {
-              context.read<TodoListDatabase>().trashAllTodoLists();
+              context.read<TodoListDatabase>().trashAllTodoLists(nonTrashedTodolistsState);
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text(
                     'Moved all to Trash',
@@ -342,6 +343,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
+    setState(() {
+      nonTrashedTodolistsState = nonTrashedTodolists;
+    });
     
     Widget searchTextField() { //add
       return TextField(
@@ -655,7 +659,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             Tooltip(
               message: "Trash selected plan(s)",
               child: IconButton(
-                icon: const Icon(Icons.delete),
+                icon: const Icon(Icons.delete_sweep_outlined),
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
