@@ -16,7 +16,33 @@ extension GetTodoPreferencesCollection on Isar {
 const TodoPreferencesSchema = CollectionSchema(
   name: r'TodoPreferences',
   id: -1622823223089471975,
-  properties: {},
+  properties: {
+    r'autoDelete': PropertySchema(
+      id: 0,
+      name: r'autoDelete',
+      type: IsarType.bool,
+    ),
+    r'autoSync': PropertySchema(
+      id: 1,
+      name: r'autoSync',
+      type: IsarType.bool,
+    ),
+    r'backup': PropertySchema(
+      id: 2,
+      name: r'backup',
+      type: IsarType.bool,
+    ),
+    r'darkMode': PropertySchema(
+      id: 3,
+      name: r'darkMode',
+      type: IsarType.bool,
+    ),
+    r'notification': PropertySchema(
+      id: 4,
+      name: r'notification',
+      type: IsarType.bool,
+    )
+  },
   estimateSize: _todoPreferencesEstimateSize,
   serialize: _todoPreferencesSerialize,
   deserialize: _todoPreferencesDeserialize,
@@ -45,7 +71,14 @@ void _todoPreferencesSerialize(
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
-) {}
+) {
+  writer.writeBool(offsets[0], object.autoDelete);
+  writer.writeBool(offsets[1], object.autoSync);
+  writer.writeBool(offsets[2], object.backup);
+  writer.writeBool(offsets[3], object.darkMode);
+  writer.writeBool(offsets[4], object.notification);
+}
+
 TodoPreferences _todoPreferencesDeserialize(
   Id id,
   IsarReader reader,
@@ -53,7 +86,12 @@ TodoPreferences _todoPreferencesDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = TodoPreferences();
+  object.autoDelete = reader.readBoolOrNull(offsets[0]);
+  object.autoSync = reader.readBoolOrNull(offsets[1]);
+  object.backup = reader.readBoolOrNull(offsets[2]);
+  object.darkMode = reader.readBoolOrNull(offsets[3]);
   object.id = id;
+  object.notification = reader.readBoolOrNull(offsets[4]);
   return object;
 }
 
@@ -64,6 +102,16 @@ P _todoPreferencesDeserializeProp<P>(
   Map<Type, List<int>> allOffsets,
 ) {
   switch (propertyId) {
+    case 0:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 1:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 2:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 3:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 4:
+      return (reader.readBoolOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -165,6 +213,118 @@ extension TodoPreferencesQueryWhere
 extension TodoPreferencesQueryFilter
     on QueryBuilder<TodoPreferences, TodoPreferences, QFilterCondition> {
   QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      autoDeleteIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'autoDelete',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      autoDeleteIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'autoDelete',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      autoDeleteEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'autoDelete',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      autoSyncIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'autoSync',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      autoSyncIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'autoSync',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      autoSyncEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'autoSync',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      backupIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'backup',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      backupIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'backup',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      backupEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'backup',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      darkModeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'darkMode',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      darkModeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'darkMode',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      darkModeEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'darkMode',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
       idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -219,6 +379,34 @@ extension TodoPreferencesQueryFilter
       ));
     });
   }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      notificationIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'notification',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      notificationIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'notification',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      notificationEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'notification',
+        value: value,
+      ));
+    });
+  }
 }
 
 extension TodoPreferencesQueryObject
@@ -228,10 +416,134 @@ extension TodoPreferencesQueryLinks
     on QueryBuilder<TodoPreferences, TodoPreferences, QFilterCondition> {}
 
 extension TodoPreferencesQuerySortBy
-    on QueryBuilder<TodoPreferences, TodoPreferences, QSortBy> {}
+    on QueryBuilder<TodoPreferences, TodoPreferences, QSortBy> {
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByAutoDelete() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'autoDelete', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByAutoDeleteDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'autoDelete', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByAutoSync() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'autoSync', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByAutoSyncDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'autoSync', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy> sortByBackup() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'backup', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByBackupDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'backup', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByDarkMode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'darkMode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByDarkModeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'darkMode', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByNotification() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'notification', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByNotificationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'notification', Sort.desc);
+    });
+  }
+}
 
 extension TodoPreferencesQuerySortThenBy
     on QueryBuilder<TodoPreferences, TodoPreferences, QSortThenBy> {
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByAutoDelete() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'autoDelete', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByAutoDeleteDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'autoDelete', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByAutoSync() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'autoSync', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByAutoSyncDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'autoSync', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy> thenByBackup() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'backup', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByBackupDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'backup', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByDarkMode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'darkMode', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByDarkModeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'darkMode', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -243,16 +555,95 @@ extension TodoPreferencesQuerySortThenBy
       return query.addSortBy(r'id', Sort.desc);
     });
   }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByNotification() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'notification', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByNotificationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'notification', Sort.desc);
+    });
+  }
 }
 
 extension TodoPreferencesQueryWhereDistinct
-    on QueryBuilder<TodoPreferences, TodoPreferences, QDistinct> {}
+    on QueryBuilder<TodoPreferences, TodoPreferences, QDistinct> {
+  QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
+      distinctByAutoDelete() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'autoDelete');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
+      distinctByAutoSync() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'autoSync');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QDistinct> distinctByBackup() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'backup');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
+      distinctByDarkMode() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'darkMode');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
+      distinctByNotification() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'notification');
+    });
+  }
+}
 
 extension TodoPreferencesQueryProperty
     on QueryBuilder<TodoPreferences, TodoPreferences, QQueryProperty> {
   QueryBuilder<TodoPreferences, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, bool?, QQueryOperations> autoDeleteProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'autoDelete');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, bool?, QQueryOperations> autoSyncProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'autoSync');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, bool?, QQueryOperations> backupProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'backup');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, bool?, QQueryOperations> darkModeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'darkMode');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, bool?, QQueryOperations>
+      notificationProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'notification');
     });
   }
 }

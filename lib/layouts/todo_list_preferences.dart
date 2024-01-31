@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_list/models/todo_preferences_database.dart';
 import 'package:todo_list/theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -12,8 +13,36 @@ class TodoListPreferences extends StatefulWidget {
 
 class _TodoListPreferencesState extends State<TodoListPreferences> {
   late bool isDark = Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
+  late bool notification;
+  late bool backup;
+  late bool autoSync;
+  late bool autoDelete;
+
+  @override
+  void initState() {
+    super.initState();
+    readPreferences();
+  }
+
+  Future<void> readPreferences () async {
+    context.read<TodoPreferencesDatabase>().fetchPreferences();
+  }
+
   @override
   Widget build(BuildContext context) {
+    List preferences = context.watch<TodoPreferencesDatabase>().preferences;
+    print(preferences);
+
+    for (var preference in preferences) {
+      setState(() {
+        notification = preference.notification;
+        backup = preference.backup;
+        autoSync = preference.autoSync;
+        autoDelete = preference.autoDelete;
+      });
+    }
+
+
     return Scaffold(
       appBar: AppBar(
         // Used AppBar just for the back icon
