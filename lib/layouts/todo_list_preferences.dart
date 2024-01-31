@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_list/models/todo_preferences_database.dart';
+import 'package:todo_list/models/todo_list_database.dart';
 import 'package:todo_list/theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -25,12 +25,12 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
   }
 
   Future<void> readPreferences () async {
-    context.read<TodoPreferencesDatabase>().fetchPreferences();
+    context.read<TodoListDatabase>().fetchPreferences();
   }
 
   @override
   Widget build(BuildContext context) {
-    List preferences = context.watch<TodoPreferencesDatabase>().preferences;
+    List preferences = context.watch<TodoListDatabase>().preferences;
     print(preferences);
 
     for (var preference in preferences) {
@@ -109,7 +109,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ],
                       ),
                       CupertinoSwitch(
-                        value: false,
+                        value: notification,
                         onChanged: (value) {
                         }
                       )
