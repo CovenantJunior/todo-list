@@ -29,6 +29,11 @@ class TodoListDatabase extends ChangeNotifier{
 
   List preferences = [];
 
+
+
+
+  /* PREFERENCES METHODS */
+
   void createPreference () async {
     final newPreference = TodoPreferences()..darkMode = true..notification = true..backup = true..autoSync = true..autoDelete = true;
     await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
@@ -48,7 +53,26 @@ class TodoListDatabase extends ChangeNotifier{
     }
   }
 
-  /* Handle CRUD operations */
+  void setDarkMode (id) async {
+    var existingPreference = await isar.todoPreferences.get(id);
+    if (existingPreference != null) {
+      existingPreference.darkMode == false ?  existingPreference.darkMode = true : existingPreference.darkMode = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+    }
+    
+    fetchPreferences();
+  }
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /* TODOLIST METHODS */
 
   // CREATE
   void addTodoList(plan, category, due) async {

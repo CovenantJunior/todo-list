@@ -1,8 +1,14 @@
 
 import 'package:flutter/material.dart';
+import 'package:isar/isar.dart';
+import 'package:todo_list/models/todo_preferences.dart';
 import 'package:todo_list/theme/theme.dart';
 
 class ThemeProvider extends ChangeNotifier {
+  static late Isar isar;
+
+  
+
   // Initial Theme
   ThemeData _themeData = darkMode;
 
@@ -20,10 +26,16 @@ class ThemeProvider extends ChangeNotifier {
 
   // Toggle theme
   void toggleTheme() {
-    if (_themeData == lightMode) {
-      themeData = darkMode;
-    } else {
-      themeData = lightMode;
+    List currentPreferences = isar.todoPreferences.where().findAllSync();
+    List preferences = [];
+    preferences.clear();
+    preferences.addAll(currentPreferences);
+    for (var preference in preferences) {
+      if (preference.darkMode == false) {
+        themeData = darkMode;
+      } else {
+        themeData = lightMode;
+      }
     }
   }
 }

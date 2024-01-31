@@ -22,11 +22,6 @@ void main() async {
         // Theme Provider
         ChangeNotifierProvider(
           create: (context) => ThemeProvider(),
-        ),
-
-        // Theme Provider
-        ChangeNotifierProvider(
-          create: (context) => ThemeProvider(),
         )
       ],
       child: const MyApp()
@@ -34,14 +29,28 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    context.read<TodoListDatabase>().fetchPreferences();
+    List preferences = context.watch<TodoListDatabase>().preferences;
+    bool? darkMode;
+
+    for (var preference in preferences) {
+      setState(() {
+        darkMode = preference.darkMode;
+      });
+    }
+
     return MaterialApp(
-      theme: Provider.of<ThemeProvider>(context).themeData,
+      theme: darkMode == true ? ThemeData.dark() : ThemeData.light(),
       debugShowCheckedModeBanner: false,
       home: const TodoListPage(),
       routes: {

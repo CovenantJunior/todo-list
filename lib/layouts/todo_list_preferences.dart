@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/todo_list_database.dart';
-import 'package:todo_list/theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 class TodoListPreferences extends StatefulWidget {
@@ -12,7 +11,8 @@ class TodoListPreferences extends StatefulWidget {
 }
 
 class _TodoListPreferencesState extends State<TodoListPreferences> {
-  late bool isDark = Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
+  int? id;
+  late bool darkMode;
   late bool notification;
   late bool backup;
   late bool autoSync;
@@ -31,10 +31,11 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
   @override
   Widget build(BuildContext context) {
     List preferences = context.watch<TodoListDatabase>().preferences;
-    print(preferences);
 
     for (var preference in preferences) {
       setState(() {
+        id = preference.id;
+        darkMode = preference.darkMode;
         notification = preference.notification;
         backup = preference.backup;
         autoSync = preference.autoSync;
@@ -81,12 +82,9 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ],
                       ),
                       CupertinoSwitch(
-                        value: isDark,
+                        value: darkMode,
                         onChanged: (value) {
-                          Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
-                          setState(() {
-                            isDark = !isDark;
-                          });
+                          context.read<TodoListDatabase>().setDarkMode(id);
                         }
                       )
                     ],
@@ -133,7 +131,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ],
                       ),
                       CupertinoSwitch(
-                        value: false,
+                        value: backup,
                         onChanged: (value) {
                         }
                       )
@@ -157,7 +155,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ],
                       ),
                       CupertinoSwitch(
-                        value: false,
+                        value: autoSync,
                         onChanged: (value) {
                         }
                       )
@@ -181,7 +179,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ],
                       ),
                       CupertinoSwitch(
-                        value: false,
+                        value: autoDelete,
                         onChanged: (value) {
                         }
                       )
