@@ -511,14 +511,14 @@ class _TodoTrashState extends State<TodoTrash> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Padding(
-                  padding: EdgeInsets.all(3.0),
+                  padding: EdgeInsets.only(bottom: 10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.auto_delete_outlined),
                       SizedBox(width: 5),
                       Text(
-                        "Items are deleted forever after 30 days.",
+                        "Plans here are deleted forever after 30 days.",
                         style: TextStyle(
                           fontFamily: "Quicksand"
                         ),
@@ -549,47 +549,50 @@ class _TodoTrashState extends State<TodoTrash> {
                           child: Card(
                             surfaceTintColor: tint(plan.completed),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
-                                        child: Text(
-                                          plan.plan,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontFamily: "Quicksand",
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16,
-                                            decoration: decorate(plan.completed),
+                                        child: SizedBox(
+                                          height: 40,
+                                          child: Text(
+                                            plan.plan,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontFamily: "Quicksand",
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16,
+                                              decoration: decorate(plan.completed),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                      plan.starred ? const Icon(Icons.star_rounded, color: Colors.orangeAccent) : const SizedBox()
+                                      plan.starred ? const Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child: Icon(Icons.star_rounded, color: Colors.orangeAccent),
+                                  ) : const SizedBox()
                                     ],
                                   ),
-                                  const SizedBox(height: 25),
+                                  const Divider(height: 25),
                                   Row(
                                     children: [
-                                      const Text(
-                                        "Trashed",
-                                        style: TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 10
-                                        ),
+                                      const Icon(
+                                        Icons.delete_sweep_outlined,
+                                        size: 15,
                                       ),
                                       const SizedBox(width: 5),
                                       Text(
                                         plan.trashedDate != null ? DateFormat('EEE, MMM d yyyy').format(plan.due) : "Something went wrong",
                                         style: const TextStyle(
                                           fontFamily: "Quicksand",
+                                          fontWeight: FontWeight.w600,
                                           fontSize: 10
                                         ),
                                       ),

@@ -191,7 +191,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         IconButton(
           icon: const Icon(Icons.save),
           onPressed: () {
-            String text = textController.text;
+            String text = textController.text.trim();
             String due = dateController.text;
             String category = selectedCategory;
             if (text.isNotEmpty) {
@@ -1032,25 +1032,28 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       child: Card(
                         surfaceTintColor: tint(plan.completed),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
-                                    child: Text(
-                                      plan.plan,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontFamily: "Quicksand",
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        decoration: decorate(plan.completed),
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: Text(
+                                        plan.plan,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontFamily: "Quicksand",
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                          decoration: decorate(plan.completed),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -1075,49 +1078,71 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                     id: plan.id,
                                     plan: plan.plan
                                   ) */
-                                  plan.starred == true ? const Icon(Icons.star_rounded, color: Colors.orangeAccent,) : const SizedBox()
+                                  plan.starred == true ? const Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child: Icon(Icons.star_rounded, color: Colors.orangeAccent),
+                                  ) : const SizedBox()
                                 ],
                               ),
-                              const SizedBox(height: 25),
+                              const Divider(height: 25),
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text(
-                                    "Due",
-                                    style: TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 10
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    DateFormat('EEE, MMM d yyyy').format(plan.due),
-                                    style: const TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 10
-                                    ),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.category_rounded,
+                                        size: 15,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        plan.category,
+                                        style: const TextStyle(
+                                          fontFamily: "Quicksand",
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 10
+                                        ),
+                                      ),
+                                    ],
                                   ),
 
-                                  const SizedBox(width: 20),
+                                  
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.calendar_month_rounded,
+                                        size: 15,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        DateFormat('EEE, MMM d yyyy').format(plan.created),
+                                        style: const TextStyle(
+                                          fontFamily: "Quicksand",
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 10
+                                        ),
+                                      ),
+                                    ],
+                                  ),
 
-                                  const Text(
-                                    "Category",
-                                    style: TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 10
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    plan.category,
-                                    style: const TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 10
-                                    ),
-                                  ),
+                                  
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.access_time_rounded,
+                                        size: 15,
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Text(
+                                        DateFormat('EEE, MMM d yyyy').format(plan.due),
+                                        style: const TextStyle(
+                                          fontFamily: "Quicksand",
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 10
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                 ],
                               )
                             ],
