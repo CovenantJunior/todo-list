@@ -568,7 +568,13 @@ class _TodoStarredState extends State<TodoStarred> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset('images/star.gif'),
-              const Text("No starred plan yet"),
+              const Text(
+                "No starred plan yet",
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontWeight: FontWeight.bold
+                ),
+              ),
             ],
           ))
            : Center(
@@ -576,7 +582,13 @@ class _TodoStarredState extends State<TodoStarred> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset('images/star.gif'),
-              const Text("No result"),
+              const Text(
+                "No result",
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontWeight: FontWeight.bold
+                ),
+              ),
             ],
           )),
       

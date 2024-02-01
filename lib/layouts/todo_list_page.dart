@@ -337,7 +337,13 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 
   // Read
   Future<void> readTodoLists() async {
-    context.read<TodoListDatabase>().fetchTodoList();
+    context.read<TodoListDatabase>().fetchUntrashedTodoList();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose(); // Dispose the animation controller
+    super.dispose();
   }
 
   @override

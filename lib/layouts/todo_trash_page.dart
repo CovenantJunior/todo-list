@@ -619,7 +619,13 @@ class _TodoTrashState extends State<TodoTrash> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset('images/trash.gif'),
-              const Text("You have no trash"),
+              const Text(
+                "You have no trash",
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontWeight: FontWeight.bold
+                ),
+              ),
             ],
           ))
           : Center(
@@ -627,7 +633,13 @@ class _TodoTrashState extends State<TodoTrash> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset('images/trash.gif'),
-              const Text("No result"),
+              const Text(
+                "No result",
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontWeight: FontWeight.bold
+                ),
+              ),
             ],
           )),
 

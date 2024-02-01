@@ -29,28 +29,15 @@ void main() async {
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    context.read<TodoListDatabase>().fetchPreferences();
-    List preferences = context.watch<TodoListDatabase>().preferences;
-    bool? darkMode;
-
-    for (var preference in preferences) {
-      setState(() {
-        darkMode = preference.darkMode;
-      });
-    }
-
+    
     return MaterialApp(
-      theme: darkMode == true ? ThemeData.dark() : ThemeData.light(),
+      theme: Provider.of<ThemeProvider>(context).themeData,
       debugShowCheckedModeBanner: false,
       home: const TodoListPage(),
       routes: {
