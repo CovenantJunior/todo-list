@@ -563,7 +563,22 @@ class _TodoStarredState extends State<TodoStarred> {
               );
             }),
           ),
-        ) : !isSearch ? const Center(child: Text("No starred plan yet")) : const Center(child: Text("No result")),
+        ) : !isSearch ? Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('images/star.gif'),
+              const Text("No starred plan yet"),
+            ],
+          ))
+           : Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('images/star.gif'),
+              const Text("No result"),
+            ],
+          )),
       
         floatingActionButton: isSearch ? Tooltip(
           message: "Close Search",

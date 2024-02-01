@@ -613,7 +613,23 @@ class _TodoTrashState extends State<TodoTrash> {
               ],
             ),
           ),
-        ) : !isSearch ? const Center(child: Text("You have no trash")) : const Center(child: Text("No result")),
+        ) : !isSearch ?
+          Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('images/trash.gif'),
+              const Text("You have no trash"),
+            ],
+          ))
+          : Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('images/trash.gif'),
+              const Text("No result"),
+            ],
+          )),
 
         floatingActionButton: isSearch ? Tooltip(
           message: "Close Search",
