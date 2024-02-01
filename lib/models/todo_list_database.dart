@@ -63,11 +63,46 @@ class TodoListDatabase extends ChangeNotifier{
     fetchPreferences();
   }
 
+  void setNotification (id) async {
+    var existingPreference = await isar.todoPreferences.get(id);
+    if (existingPreference != null) {
+      existingPreference.notification == false ?  existingPreference.notification = true : existingPreference.notification = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+    }
+    
+    fetchPreferences();
+  }
+
+  void setBackup (id) async {
+    var existingPreference = await isar.todoPreferences.get(id);
+    if (existingPreference != null) {
+      existingPreference.backup == false ?  existingPreference.backup = true : existingPreference.backup = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+    }
+    
+    fetchPreferences();
+  }
+  
+  void setAutoSync (id) async {
+    var existingPreference = await isar.todoPreferences.get(id);
+    if (existingPreference != null) {
+      existingPreference.autoSync == false ?  existingPreference.autoSync = true : existingPreference.autoSync = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+    }
+    
+    fetchPreferences();
+  }
   
   
-  
-  
-  
+  void setAutoDelete (id) async {
+    var existingPreference = await isar.todoPreferences.get(id);
+    if (existingPreference != null) {
+      existingPreference.autoDelete == false ?  existingPreference.autoDelete = true : existingPreference.autoDelete = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+    }
+    
+    fetchPreferences();
+  }
   
   
   

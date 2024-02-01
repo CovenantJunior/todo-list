@@ -109,6 +109,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       CupertinoSwitch(
                         value: notification,
                         onChanged: (value) {
+                          context.read<TodoListDatabase>().setNotification(id);
                         }
                       )
                     ],
@@ -133,6 +134,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       CupertinoSwitch(
                         value: backup,
                         onChanged: (value) {
+                          context.read<TodoListDatabase>().setBackup(id);
                         }
                       )
                     ],
@@ -157,6 +159,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       CupertinoSwitch(
                         value: autoSync,
                         onChanged: (value) {
+                          context.read<TodoListDatabase>().setAutoSync(id);
                         }
                       )
                     ],
@@ -181,6 +184,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       CupertinoSwitch(
                         value: autoDelete,
                         onChanged: (value) {
+                          context.read<TodoListDatabase>().setAutoDelete(id);
                         }
                       )
                     ],
