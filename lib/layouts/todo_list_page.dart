@@ -1029,123 +1029,83 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       onTap: () {
                         planDetails(plan);
                       },
-                      child: Card(
-                        surfaceTintColor: tint(plan.completed),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: SizedBox(
-                                      height: 40,
-                                      child: Text(
-                                        plan.plan,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
-                                          decoration: decorate(plan.completed),
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        child: Card(
+                          surfaceTintColor: tint(plan.completed),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: SizedBox(
+                                        height: 40,
+                                        child: Text(
+                                          plan.plan,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontFamily: "Quicksand",
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            decoration: decorate(plan.completed),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  /* Builder(
-                                    builder: (context) {
-                                      return IconButton(
-                                        onPressed: () {
-                                          showPopover(
-                                            width: 370,
-                                            context: context,
-                                            bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                                          );
-                                        },
-                                        icon: const Icon(
-                                          Icons.more_vert, 
-                                          color:Colors.blueGrey
-                                        )
-                                      );
-                                    }
-                                  ), */
-                                  /* TodoListOptions(
-                                    id: plan.id,
-                                    plan: plan.plan
-                                  ) */
-                                  plan.starred == true ? const Padding(
-                                    padding: EdgeInsets.only(left: 8.0),
-                                    child: Icon(Icons.star_rounded, color: Colors.orangeAccent),
-                                  ) : const SizedBox()
-                                ],
-                              ),
-                              const Divider(height: 25),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.category_rounded,
-                                        size: 15,
+                                    /* Builder(
+                                      builder: (context) {
+                                        return IconButton(
+                                          onPressed: () {
+                                            showPopover(
+                                              width: 370,
+                                              context: context,
+                                              bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.more_vert, 
+                                            color:Colors.blueGrey
+                                          )
+                                        );
+                                      }
+                                    ), */
+                                    /* TodoListOptions(
+                                      id: plan.id,
+                                      plan: plan.plan
+                                    ) */
+                                    plan.starred == true ? const Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Icon(Icons.star_rounded, color: Colors.orangeAccent),
+                                    ) : const SizedBox()
+                                  ],
+                                ),
+                                const Divider(height: 25),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.rocket_launch_outlined,
+                                      size: 15,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      DateFormat('EEE, MMM d yyyy').format(plan.due),
+                                      style: const TextStyle(
+                                        fontFamily: "Quicksand",
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 10
                                       ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        plan.category,
-                                        style: const TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 10
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-
-                                  
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.calendar_month_rounded,
-                                        size: 15,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        DateFormat('EEE, MMM d yyyy').format(plan.created),
-                                        style: const TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 10
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-
-                                  
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.access_time_rounded,
-                                        size: 15,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        DateFormat('EEE, MMM d yyyy').format(plan.due),
-                                        style: const TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 10
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              )
-                            ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

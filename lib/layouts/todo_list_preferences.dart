@@ -28,6 +28,29 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
     context.read<TodoListDatabase>().fetchPreferences();
   }
 
+  void notifyInfo() {
+    showDialog(
+      context: context,
+      builder: (context) => const AlertDialog(
+        title: Text(
+          "Notification",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.w600,
+            fontSize: 20
+          ),
+        ),
+        content: Text(
+          "Notifications are shown at the best time of the day, just sit back",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.w500,
+          )
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List preferences = context.watch<TodoListDatabase>().preferences;
@@ -93,16 +116,24 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(Icons.notifications_none_rounded),
-                          SizedBox(width: 20),
-                          Text(
-                            'Notification',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Quicksand"
-                            ),
+                          const Icon(Icons.notifications_none_rounded),
+                          const SizedBox(width: 20),
+                          Row(
+                            children: [
+                              const Text(
+                                'Notification',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Quicksand"
+                                ),
+                              ),
+                              const SizedBox(width: 7),
+                              Baseline(baseline: 10.0,
+                              baselineType: TextBaseline.alphabetic,
+                              child: GestureDetector(onTap: notifyInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
+                            ],
                           ),
                         ],
                       ),

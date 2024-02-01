@@ -546,59 +546,62 @@ class _TodoTrashState extends State<TodoTrash> {
                           onTap: () {
                             planDetails(plan);
                           },
-                          child: Card(
-                            surfaceTintColor: tint(plan.completed),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: SizedBox(
-                                          height: 40,
-                                          child: Text(
-                                            plan.plan,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontFamily: "Quicksand",
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16,
-                                              decoration: decorate(plan.completed),
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            child: Card(
+                              surfaceTintColor: tint(plan.completed),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: SizedBox(
+                                            height: 40,
+                                            child: Text(
+                                              plan.plan,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontFamily: "Quicksand",
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16,
+                                                decoration: decorate(plan.completed),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      plan.starred ? const Padding(
-                                    padding: EdgeInsets.only(left: 8.0),
-                                    child: Icon(Icons.star_rounded, color: Colors.orangeAccent),
-                                  ) : const SizedBox()
-                                    ],
-                                  ),
-                                  const Divider(height: 25),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.delete_sweep_outlined,
-                                        size: 15,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        plan.trashedDate != null ? DateFormat('EEE, MMM d yyyy').format(plan.due) : "Something went wrong",
-                                        style: const TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 10
+                                        plan.starred ? const Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Icon(Icons.star_rounded, color: Colors.orangeAccent),
+                                    ) : const SizedBox()
+                                      ],
+                                    ),
+                                    const Divider(height: 25),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.delete_sweep_outlined,
+                                          size: 15,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                        const SizedBox(width: 5),
+                                        Text(
+                                          plan.trashedDate != null ? DateFormat('EEE, MMM d yyyy').format(plan.due) : "Something went wrong",
+                                          style: const TextStyle(
+                                            fontFamily: "Quicksand",
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 10
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
