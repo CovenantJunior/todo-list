@@ -117,6 +117,24 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoTrash()));
               }
             ),
+
+            TodoListDrawerTile(
+              title: "About",
+              leading: const Icon(Icons.info_outline_rounded),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoTrash()));
+              }
+            ),
+
+            TodoListDrawerTile(
+              title: "Rate",
+              leading: const Icon(Icons.rate_review_outlined),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoTrash()));
+              }
+            ),
           ],
         ),
       ),
