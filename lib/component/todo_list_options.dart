@@ -276,8 +276,8 @@ class _TodoListOptionsState extends State<TodoListOptions> {
 
       // Share TodoList
       // ignore: non_constant_identifier_names
-      void share(Plan) {
-        Share.share(Plan.plan);
+      void share(plan) {
+        Share.share(plan);
       }
 
       // Copy to Clipboard
