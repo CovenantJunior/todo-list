@@ -29,23 +29,27 @@ class TodoListDatabase extends ChangeNotifier{
 
   List preferences = [];
 
+  static bool? initTheme;
 
+  bool? refTheme;
 
 
   /* PREFERENCES METHODS */
 
-  void createPreference () async {
-    final newPreference = TodoPreferences()..darkMode = true..notification = true..backup = true..autoSync = true..autoDelete = true;
-    await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
-
-    fetchPreferences();
+  static void initPreference () async {
+    List currentPreferences = isar.todoPreferences.where().findAllSync();
+    if (currentPreferences.isEmpty) {
+      final newPreference = TodoPreferences()..darkMode = false..notification = true..backup = true..autoSync = true..autoDelete = true;
+      await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
+    }
+    
+    final currentPreference = isar.todoPreferences.where().findAllSync();
+    initTheme = currentPreference.first.darkMode!;
   }
 
   void fetchPreferences () async {
     List currentPreferences = isar.todoPreferences.where().findAllSync();
     if (currentPreferences.isEmpty) {
-      // Create user preference is none exists
-      createPreference();
     } else {
       preferences.clear();
       preferences.addAll(currentPreferences);
@@ -58,6 +62,8 @@ class TodoListDatabase extends ChangeNotifier{
     if (existingPreference != null) {
       existingPreference.darkMode == false ?  existingPreference.darkMode = true : existingPreference.darkMode = false;
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+
+      refTheme = existingPreference.darkMode!;
     }
     
     fetchPreferences();

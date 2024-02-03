@@ -282,10 +282,10 @@ class _TodoListOptionsState extends State<TodoListOptions> {
 
       // Copy to Clipboard
       // ignore: non_constant_identifier_names
-      void copy(Plan) {
+      void copy(plan) {
         Clipboard.setData (
           ClipboardData(
-            text: Plan.plan
+            text: plan
             )
         );
         ScaffoldMessenger.of(context).showSnackBar(
