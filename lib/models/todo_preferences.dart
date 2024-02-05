@@ -6,9 +6,11 @@ part 'todo_preferences.g.dart';
 @Collection()
 class TodoPreferences {
   Id id = Isar.autoIncrement;
-  bool? darkMode = true;
-  bool? notification = true;
-  bool? backup = true;
-  bool? autoSync = true;
-  bool? autoDelete = true;
+  bool? darkMode;
+  bool? notification;
+  bool? tts;
+  bool? backup;
+  bool? autoSync;
+  bool? clipboar;
+  bool? autoDelete;
 }

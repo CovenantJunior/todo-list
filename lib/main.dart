@@ -4,7 +4,6 @@ import 'package:todo_list/layouts/todo_list_preferences.dart';
 import 'package:todo_list/layouts/todo_list_starred.dart';
 import 'package:todo_list/layouts/todo_trash_page.dart';
 import 'package:todo_list/models/todo_list_database.dart';
-import 'package:todo_list/theme/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -17,11 +16,6 @@ void main() async {
         // TodoList Database Provider
         ChangeNotifierProvider(
           create: (context) => TodoListDatabase(),
-        ),
-
-        // Theme Provider
-        ChangeNotifierProvider(
-          create: (context) => ThemeProvider(),
         )
       ],
       child: const MyApp()
@@ -35,12 +29,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    TodoListDatabase.initPreference();
-    if (Provider.of<TodoListDatabase>(context).refTheme == null) {
-      Provider.of<TodoListDatabase>(context).refTheme = TodoListDatabase.initTheme;
-    }
+    Provider.of<TodoListDatabase>(context).themePreference();
     return MaterialApp(
-      theme: Provider.of<TodoListDatabase>(context).refTheme == true ? ThemeData.dark() : ThemeData.light(),
+      theme: Provider.of<TodoListDatabase>(context).isDark == true ? ThemeData.dark() : ThemeData.light(),
       debugShowCheckedModeBanner: false,
       home: const TodoListPage(),
       routes: {

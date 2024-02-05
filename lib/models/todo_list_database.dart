@@ -29,30 +29,38 @@ class TodoListDatabase extends ChangeNotifier{
 
   List preferences = [];
 
-  static bool? initTheme;
-
-  bool? refTheme;
+  bool? isDark;
 
 
   /* PREFERENCES METHODS */
 
-  static void initPreference () async {
-    List currentPreferences = isar.todoPreferences.where().findAllSync();
-    if (currentPreferences.isEmpty) {
-      final newPreference = TodoPreferences()..darkMode = false..notification = true..backup = true..autoSync = true..autoDelete = true;
-      await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
-    }
-    
+  void initPreference () async {
+    final newPreference = TodoPreferences()..darkMode = false..notification = false..backup = false..autoSync = false..autoDelete = false;
+    await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
+    preferences = isar.todoPreferences.where().findAllSync();
+
+    notifyListeners();
+  }
+
+  void themePreference () async {    
     final currentPreference = isar.todoPreferences.where().findAllSync();
-    initTheme = currentPreference.first.darkMode!;
+    if (currentPreference.isEmpty) {
+      isDark = false;
+      initPreference();
+    } else {
+      // print("Preference length is ${currentPreference.length}");
+      isDark = currentPreference.first.darkMode!;
+    }
   }
 
   void fetchPreferences () async {
     List currentPreferences = isar.todoPreferences.where().findAllSync();
     if (currentPreferences.isEmpty) {
+      initPreference();
     } else {
       preferences.clear();
       preferences.addAll(currentPreferences);
+      isDark = preferences.first.darkMode;
       notifyListeners();
     }
   }
@@ -62,11 +70,10 @@ class TodoListDatabase extends ChangeNotifier{
     if (existingPreference != null) {
       existingPreference.darkMode == false ?  existingPreference.darkMode = true : existingPreference.darkMode = false;
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
-
-      refTheme = existingPreference.darkMode!;
+      preferences.first.darkMode = existingPreference.darkMode;
+      isDark = existingPreference.darkMode;
+      notifyListeners();
     }
-    
-    fetchPreferences();
   }
 
   void setNotification (id) async {

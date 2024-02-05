@@ -51,6 +51,29 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
     );
   }
 
+  void clipBoardInfo() {
+    showDialog(
+      context: context,
+      builder: (context) => const AlertDialog(
+        title: Text(
+          "Clipboard",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.w600,
+            fontSize: 20
+          ),
+        ),
+        content: Text(
+          "Read immediate Clipboard data for a quick task creation",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.w500,
+          )
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List preferences = context.watch<TodoListDatabase>().preferences;
@@ -149,6 +172,39 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.notifications_none_rounded),
+                          const SizedBox(width: 20),
+                          Row(
+                            children: [
+                              const Text(
+                                'Text to Speech',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Quicksand"
+                                ),
+                              ),
+                              const SizedBox(width: 7),
+                              Baseline(baseline: 10.0,
+                              baselineType: TextBaseline.alphabetic,
+                              child: GestureDetector(onTap: voiceInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
+                            ],
+                          ),
+                        ],
+                      ),
+                      CupertinoSwitch(
+                        value: notification,
+                        onChanged: (value) {
+                          context.read<TodoListDatabase>().setNotification(id);
+                        }
+                      )
+                    ],
+                  ),
+                  const Divider(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       const Row(
                         children: [
                           Icon(Icons.add_to_drive),
@@ -180,6 +236,31 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           SizedBox(width: 20),
                           Text(
                             'Auto Sync',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Quicksand"
+                            ),
+                          ),
+                        ],
+                      ),
+                      CupertinoSwitch(
+                        value: autoSync,
+                        onChanged: (value) {
+                          context.read<TodoListDatabase>().setAutoSync(id);
+                        }
+                      )
+                    ],
+                  ),
+                  const Divider(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.copy_outlined),
+                          SizedBox(width: 20),
+                          Text(
+                            'Access Clipboard',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontFamily: "Quicksand"
