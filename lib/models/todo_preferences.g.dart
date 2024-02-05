@@ -17,29 +17,49 @@ const TodoPreferencesSchema = CollectionSchema(
   name: r'TodoPreferences',
   id: -1622823223089471975,
   properties: {
-    r'autoDelete': PropertySchema(
+    r'accessClipboard': PropertySchema(
       id: 0,
+      name: r'accessClipboard',
+      type: IsarType.bool,
+    ),
+    r'autoDelete': PropertySchema(
+      id: 1,
       name: r'autoDelete',
       type: IsarType.bool,
     ),
     r'autoSync': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'autoSync',
       type: IsarType.bool,
     ),
     r'backup': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'backup',
       type: IsarType.bool,
     ),
     r'darkMode': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'darkMode',
       type: IsarType.bool,
     ),
     r'notification': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'notification',
+      type: IsarType.bool,
+    ),
+    r'readPlan': PropertySchema(
+      id: 6,
+      name: r'readPlan',
+      type: IsarType.bool,
+    ),
+    r'stt': PropertySchema(
+      id: 7,
+      name: r'stt',
+      type: IsarType.bool,
+    ),
+    r'vibration': PropertySchema(
+      id: 8,
+      name: r'vibration',
       type: IsarType.bool,
     )
   },
@@ -72,11 +92,15 @@ void _todoPreferencesSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeBool(offsets[0], object.autoDelete);
-  writer.writeBool(offsets[1], object.autoSync);
-  writer.writeBool(offsets[2], object.backup);
-  writer.writeBool(offsets[3], object.darkMode);
-  writer.writeBool(offsets[4], object.notification);
+  writer.writeBool(offsets[0], object.accessClipboard);
+  writer.writeBool(offsets[1], object.autoDelete);
+  writer.writeBool(offsets[2], object.autoSync);
+  writer.writeBool(offsets[3], object.backup);
+  writer.writeBool(offsets[4], object.darkMode);
+  writer.writeBool(offsets[5], object.notification);
+  writer.writeBool(offsets[6], object.readPlan);
+  writer.writeBool(offsets[7], object.stt);
+  writer.writeBool(offsets[8], object.vibration);
 }
 
 TodoPreferences _todoPreferencesDeserialize(
@@ -86,12 +110,16 @@ TodoPreferences _todoPreferencesDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = TodoPreferences();
-  object.autoDelete = reader.readBoolOrNull(offsets[0]);
-  object.autoSync = reader.readBoolOrNull(offsets[1]);
-  object.backup = reader.readBoolOrNull(offsets[2]);
-  object.darkMode = reader.readBoolOrNull(offsets[3]);
+  object.accessClipboard = reader.readBoolOrNull(offsets[0]);
+  object.autoDelete = reader.readBoolOrNull(offsets[1]);
+  object.autoSync = reader.readBoolOrNull(offsets[2]);
+  object.backup = reader.readBoolOrNull(offsets[3]);
+  object.darkMode = reader.readBoolOrNull(offsets[4]);
   object.id = id;
-  object.notification = reader.readBoolOrNull(offsets[4]);
+  object.notification = reader.readBoolOrNull(offsets[5]);
+  object.readPlan = reader.readBoolOrNull(offsets[6]);
+  object.stt = reader.readBoolOrNull(offsets[7]);
+  object.vibration = reader.readBoolOrNull(offsets[8]);
   return object;
 }
 
@@ -111,6 +139,14 @@ P _todoPreferencesDeserializeProp<P>(
     case 3:
       return (reader.readBoolOrNull(offset)) as P;
     case 4:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 5:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 6:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 7:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 8:
       return (reader.readBoolOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -212,6 +248,34 @@ extension TodoPreferencesQueryWhere
 
 extension TodoPreferencesQueryFilter
     on QueryBuilder<TodoPreferences, TodoPreferences, QFilterCondition> {
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      accessClipboardIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'accessClipboard',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      accessClipboardIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'accessClipboard',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      accessClipboardEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'accessClipboard',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
       autoDeleteIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -407,6 +471,90 @@ extension TodoPreferencesQueryFilter
       ));
     });
   }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      readPlanIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'readPlan',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      readPlanIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'readPlan',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      readPlanEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'readPlan',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      sttIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'stt',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      sttIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'stt',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      sttEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'stt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      vibrationIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'vibration',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      vibrationIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'vibration',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      vibrationEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'vibration',
+        value: value,
+      ));
+    });
+  }
 }
 
 extension TodoPreferencesQueryObject
@@ -417,6 +565,20 @@ extension TodoPreferencesQueryLinks
 
 extension TodoPreferencesQuerySortBy
     on QueryBuilder<TodoPreferences, TodoPreferences, QSortBy> {
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByAccessClipboard() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'accessClipboard', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByAccessClipboardDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'accessClipboard', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
       sortByAutoDelete() {
     return QueryBuilder.apply(this, (query) {
@@ -485,10 +647,64 @@ extension TodoPreferencesQuerySortBy
       return query.addSortBy(r'notification', Sort.desc);
     });
   }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByReadPlan() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readPlan', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByReadPlanDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readPlan', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy> sortByStt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'stt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy> sortBySttDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'stt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByVibration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'vibration', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByVibrationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'vibration', Sort.desc);
+    });
+  }
 }
 
 extension TodoPreferencesQuerySortThenBy
     on QueryBuilder<TodoPreferences, TodoPreferences, QSortThenBy> {
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByAccessClipboard() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'accessClipboard', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByAccessClipboardDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'accessClipboard', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
       thenByAutoDelete() {
     return QueryBuilder.apply(this, (query) {
@@ -569,10 +785,57 @@ extension TodoPreferencesQuerySortThenBy
       return query.addSortBy(r'notification', Sort.desc);
     });
   }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByReadPlan() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readPlan', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByReadPlanDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readPlan', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy> thenByStt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'stt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy> thenBySttDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'stt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByVibration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'vibration', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByVibrationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'vibration', Sort.desc);
+    });
+  }
 }
 
 extension TodoPreferencesQueryWhereDistinct
     on QueryBuilder<TodoPreferences, TodoPreferences, QDistinct> {
+  QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
+      distinctByAccessClipboard() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'accessClipboard');
+    });
+  }
+
   QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
       distinctByAutoDelete() {
     return QueryBuilder.apply(this, (query) {
@@ -606,6 +869,26 @@ extension TodoPreferencesQueryWhereDistinct
       return query.addDistinctBy(r'notification');
     });
   }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
+      distinctByReadPlan() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'readPlan');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QDistinct> distinctByStt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'stt');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
+      distinctByVibration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'vibration');
+    });
+  }
 }
 
 extension TodoPreferencesQueryProperty
@@ -613,6 +896,13 @@ extension TodoPreferencesQueryProperty
   QueryBuilder<TodoPreferences, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, bool?, QQueryOperations>
+      accessClipboardProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'accessClipboard');
     });
   }
 
@@ -644,6 +934,24 @@ extension TodoPreferencesQueryProperty
       notificationProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'notification');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, bool?, QQueryOperations> readPlanProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'readPlan');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, bool?, QQueryOperations> sttProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'stt');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, bool?, QQueryOperations> vibrationProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'vibration');
     });
   }
 }

@@ -35,7 +35,7 @@ class TodoListDatabase extends ChangeNotifier{
   /* PREFERENCES METHODS */
 
   void initPreference () async {
-    final newPreference = TodoPreferences()..darkMode = false..notification = false..backup = false..autoSync = false..autoDelete = false;
+    final newPreference = TodoPreferences()..darkMode = false..notification = false..vibration = false..stt = false..readPlan = false..backup = false..autoSync = false..accessClipboard = false..autoDelete = false;
     await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
     preferences = isar.todoPreferences.where().findAllSync();
 

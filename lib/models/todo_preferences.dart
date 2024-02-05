@@ -8,9 +8,11 @@ class TodoPreferences {
   Id id = Isar.autoIncrement;
   bool? darkMode;
   bool? notification;
-  bool? tts;
+  bool? vibration;
+  bool? stt;
+  bool? readPlan;
   bool? backup;
   bool? autoSync;
-  bool? clipboar;
+  bool? accessClipboard;
   bool? autoDelete;
 }

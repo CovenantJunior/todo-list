@@ -14,8 +14,12 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
   int? id;
   late bool darkMode;
   late bool notification;
+  late bool vibration;
+  late bool stt;
+  late bool readPlan;
   late bool backup;
   late bool autoSync;
+  late bool accessClipboard;
   late bool autoDelete;
 
   @override
@@ -74,6 +78,29 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
     );
   }
 
+  void ttsInfo() {
+    showDialog(
+      context: context,
+      builder: (context) => const AlertDialog(
+        title: Text(
+          "Text to Speech",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.w600,
+            fontSize: 20
+          ),
+        ),
+        content: Text(
+          "Fill in task description with your voice",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.w500,
+          )
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List preferences = context.watch<TodoListDatabase>().preferences;
@@ -83,8 +110,12 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
         id = preference.id;
         darkMode = preference.darkMode;
         notification = preference.notification;
+        vibration = preference.vibration;
+        stt = preference.stt;
+        readPlan = preference.readPlan;
         backup = preference.backup;
         autoSync = preference.autoSync;
+        accessClipboard = preference.accessClipboard;
         autoDelete = preference.autoDelete;
       });
     }
@@ -172,23 +203,19 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
+                      const Row(
                         children: [
-                          const Icon(Icons.notifications_none_rounded),
-                          const SizedBox(width: 20),
+                          Icon(Icons.vibration_rounded),
+                          SizedBox(width: 20),
                           Row(
                             children: [
-                              const Text(
-                                'Text to Speech',
+                              Text(
+                                'Vibration',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontFamily: "Quicksand"
                                 ),
                               ),
-                              const SizedBox(width: 7),
-                              Baseline(baseline: 10.0,
-                              baselineType: TextBaseline.alphabetic,
-                              child: GestureDetector(onTap: voiceInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
                             ],
                           ),
                         ],
@@ -197,6 +224,64 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         value: notification,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setNotification(id);
+                        }
+                      )
+                    ],
+                  ),
+                  const Divider(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.notifications_none_rounded),
+                          const SizedBox(width: 20),
+                          Row(
+                            children: [
+                              const Text(
+                                'Speech to Text',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Quicksand"
+                                ),
+                              ),
+                              const SizedBox(width: 7),
+                              Baseline(baseline: 10.0,
+                              baselineType: TextBaseline.alphabetic,
+                              child: GestureDetector(onTap: ttsInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
+                            ],
+                          ),
+                        ],
+                      ),
+                      CupertinoSwitch(
+                        value: notification,
+                        onChanged: (value) {
+                          context.read<TodoListDatabase>().setNotification(id);
+                        }
+                      )
+                    ],
+                  ),
+                  const Divider(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.volume_up_sharp),
+                          SizedBox(width: 20),
+                          Text(
+                            'Read out Plan Notifications',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Quicksand"
+                            ),
+                          ),
+                        ],
+                      ),
+                      CupertinoSwitch(
+                        value: backup,
+                        onChanged: (value) {
+                          context.read<TodoListDatabase>().setBackup(id);
                         }
                       )
                     ],
@@ -255,17 +340,25 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(Icons.copy_outlined),
-                          SizedBox(width: 20),
-                          Text(
-                            'Access Clipboard',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Quicksand"
-                            ),
-                          ),
+                          const Icon(Icons.copy_outlined),
+                          const SizedBox(width: 20),
+                          Row(
+                            children: [
+                              const Text(
+                                'Access Clipboard',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "Quicksand"
+                                ),
+                              ),
+                              const SizedBox(width: 7),
+                              Baseline(baseline: 10.0,
+                              baselineType: TextBaseline.alphabetic,
+                              child: GestureDetector(onTap: clipBoardInfo, child: const Icon(Icons.help_outline_rounded, size: 15))),
+                            ],
+                          )
                         ],
                       ),
                       CupertinoSwitch(
