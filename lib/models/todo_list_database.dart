@@ -86,6 +86,36 @@ class TodoListDatabase extends ChangeNotifier{
     fetchPreferences();
   }
 
+  void setVibration (id) async {
+    var existingPreference = await isar.todoPreferences.get(id);
+    if (existingPreference != null) {
+      existingPreference.vibration == false ?  existingPreference.vibration = true : existingPreference.vibration = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+    }
+    
+    fetchPreferences();
+  }
+
+  void setSTT (id) async {
+    var existingPreference = await isar.todoPreferences.get(id);
+    if (existingPreference != null) {
+      existingPreference.stt == false ?  existingPreference.stt = true : existingPreference.stt = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+    }
+    
+    fetchPreferences();
+  }
+
+  void setReadPlan (id) async {
+    var existingPreference = await isar.todoPreferences.get(id);
+    if (existingPreference != null) {
+      existingPreference.readPlan == false ?  existingPreference.readPlan = true : existingPreference.readPlan = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+    }
+    
+    fetchPreferences();
+  }
+
   void setBackup (id) async {
     var existingPreference = await isar.todoPreferences.get(id);
     if (existingPreference != null) {
@@ -106,6 +136,15 @@ class TodoListDatabase extends ChangeNotifier{
     fetchPreferences();
   }
   
+  void setAccessClipboard(id) async {
+    var existingPreference = await isar.todoPreferences.get(id);
+    if (existingPreference != null) {
+      existingPreference.accessClipboard == false ?  existingPreference.accessClipboard = true : existingPreference.accessClipboard = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+    }
+    
+    fetchPreferences();
+  }
   
   void setAutoDelete (id) async {
     var existingPreference = await isar.todoPreferences.get(id);

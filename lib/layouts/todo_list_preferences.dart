@@ -221,9 +221,9 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ],
                       ),
                       CupertinoSwitch(
-                        value: notification,
+                        value: vibration,
                         onChanged: (value) {
-                          context.read<TodoListDatabase>().setNotification(id);
+                          context.read<TodoListDatabase>().setVibration(id);
                         }
                       )
                     ],
@@ -254,9 +254,9 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ],
                       ),
                       CupertinoSwitch(
-                        value: notification,
+                        value: stt,
                         onChanged: (value) {
-                          context.read<TodoListDatabase>().setNotification(id);
+                          context.read<TodoListDatabase>().setSTT(id);
                         }
                       )
                     ],
@@ -279,9 +279,9 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ],
                       ),
                       CupertinoSwitch(
-                        value: backup,
+                        value: readPlan,
                         onChanged: (value) {
-                          context.read<TodoListDatabase>().setBackup(id);
+                          context.read<TodoListDatabase>().setReadPlan(id);
                         }
                       )
                     ],
@@ -362,9 +362,9 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ],
                       ),
                       CupertinoSwitch(
-                        value: autoSync,
+                        value: accessClipboard,
                         onChanged: (value) {
-                          context.read<TodoListDatabase>().setAutoSync(id);
+                          context.read<TodoListDatabase>().setAccessClipboard(id);
                         }
                       )
                     ],
