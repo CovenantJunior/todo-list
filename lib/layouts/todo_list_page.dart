@@ -189,7 +189,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           icon: const Icon(Icons.undo_rounded),
         ),
         IconButton(
-          icon: const Icon(Icons.save),
+          icon: const Icon(Icons.add_task_rounded),
           onPressed: () {
             String text = textController.text.trim();
             String due = dateController.text;
@@ -932,215 +932,224 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       }
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: isSearch ?
-        searchTextField() :
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              "Todo List",
-              style: TextStyle(
-                fontFamily: "Quicksand",
-                fontWeight: FontWeight.bold,
-                fontSize: 30
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          isSearch = false;
+          isOfLength = false;
+        });
+        context.read<TodoListDatabase>().fetchTodoList();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: isSearch ?
+          searchTextField() :
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                "Todo List",
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30
+                ),
               ),
-            ),
-            SizedBox(width: 3),
-            Icon(
-              Icons.bookmark_added_rounded
-            ),
+              SizedBox(width: 3),
+              Icon(
+                Icons.bookmark_added_rounded
+              ),
+            ],
+          ),
+          centerTitle: true,
+          actions: [
+            isOfLength ? IconButton(
+              onPressed: () {
+                textController.clear();
+                setState(() {
+                  searchResults.clear();
+                  isOfLength = false;
+                });
+              },
+              icon: const Icon(
+                  Icons.close,
+                ),
+              tooltip: 'Search Plans',
+              style: TextButton.styleFrom(
+                shape: const CircleBorder(),
+              ),
+            ) : const SizedBox(),
+            !isSearch && nonTrashedTodolists.isNotEmpty ?
+              Tooltip(
+                message: "Search Plans",
+                child: IconButton(
+                  onPressed: search, 
+                  icon: const Icon(
+                    Icons.search
+                  )
+                ),
+              ) : const SizedBox(),
+            !isSearch && nonTrashedTodolists.isNotEmpty ?
+              Tooltip(
+                message: "Bulk Edit Plans",
+                child: IconButton(
+                  onPressed: () {
+                    multiEdit(nonTrashedTodolists);
+                  },
+                  icon: const Icon(
+                    Icons.edit
+                  )
+                ),
+              ) : const SizedBox(),
           ],
         ),
-        centerTitle: true,
-        actions: [
-          isOfLength ? IconButton(
-            onPressed: () {
-              textController.clear();
-              setState(() {
-                searchResults.clear();
-                isOfLength = false;
-              });
-            },
-            icon: const Icon(
-                Icons.close,
-              ),
-            tooltip: 'Search Plans',
-            style: TextButton.styleFrom(
-              shape: const CircleBorder(),
-            ),
-          ) : const SizedBox(),
-          !isSearch && nonTrashedTodolists.isNotEmpty ?
-            Tooltip(
-              message: "Search Plans",
-              child: IconButton(
-                onPressed: search, 
-                icon: const Icon(
-                  Icons.search
-                )
-              ),
-            ) : const SizedBox(),
-          !isSearch && nonTrashedTodolists.isNotEmpty ?
-            Tooltip(
-              message: "Bulk Edit Plans",
-              child: IconButton(
-                onPressed: () {
-                  multiEdit(nonTrashedTodolists);
+      
+        drawer: const TodoListDrawer(),
+      
+        body: nonTrashedTodolists.isNotEmpty ? LiquidPullToRefresh(
+          springAnimationDurationInMilliseconds: 200,
+          onRefresh: () async {
+            readTodoLists();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: ListView.builder(
+              itemCount: nonTrashedTodolists.length,
+              itemBuilder: (context, index) {
+              final plan = nonTrashedTodolists[index];
+              return GestureDetector(
+                onDoubleTap: () {
+                  mark(plan);
                 },
-                icon: const Icon(
-                  Icons.edit
-                )
-              ),
-            ) : const SizedBox(),
-        ],
-      ),
-    
-      drawer: const TodoListDrawer(),
-    
-      body: nonTrashedTodolists.isNotEmpty ? LiquidPullToRefresh(
-        springAnimationDurationInMilliseconds: 200,
-        onRefresh: () async {
-          readTodoLists();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: ListView.builder(
-            itemCount: nonTrashedTodolists.length,
-            itemBuilder: (context, index) {
-            final plan = nonTrashedTodolists[index];
-            return GestureDetector(
-              onDoubleTap: () {
-                mark(plan);
-              },
-              child: Builder(
-                builder: (context) {
-                  return GestureDetector(
-                    onLongPress: () {
-                      showPopover(
-                        direction: PopoverDirection.top,
-                        width: 290,
-                        context: context,
-                        bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                      );
-                    },
-                    onTap: () {
-                      planDetails(plan);
-                    },
-                    child: Card(
-                      surfaceTintColor: tint(plan.completed),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: SizedBox(
-                                    height: 40,
-                                    child: Text(
-                                      plan.plan,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontFamily: "Quicksand",
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        decoration: decorate(plan.completed),
+                child: Builder(
+                  builder: (context) {
+                    return GestureDetector(
+                      onLongPress: () {
+                        showPopover(
+                          direction: PopoverDirection.top,
+                          width: 290,
+                          context: context,
+                          bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                        );
+                      },
+                      onTap: () {
+                        planDetails(plan);
+                      },
+                      child: Card(
+                        surfaceTintColor: tint(plan.completed),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: Text(
+                                        plan.plan,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontFamily: "Quicksand",
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16,
+                                          decoration: decorate(plan.completed),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                /* Builder(
-                                  builder: (context) {
-                                    return IconButton(
-                                      onPressed: () {
-                                        showPopover(
-                                          width: 370,
-                                          context: context,
-                                          bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                                        );
-                                      },
-                                      icon: const Icon(
-                                        Icons.more_vert, 
-                                        color:Colors.blueGrey
-                                      )
-                                    );
-                                  }
-                                ), */
-                                /* TodoListOptions(
-                                  id: plan.id,
-                                  plan: plan.plan
-                                ) */
-                                plan.starred == true ? const Padding(
-                                  padding: EdgeInsets.only(left: 8.0),
-                                  child: Icon(Icons.star_rounded, color: Colors.orangeAccent),
-                                ) : const SizedBox()
-                              ],
-                            ),
-                            const Divider(height: 25),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.rocket_launch_outlined,
-                                  size: 15,
-                                ),
-                                const SizedBox(width: 5),
-                                Text(
-                                  DateFormat('EEE, MMM d yyyy').format(plan.due),
-                                  style: const TextStyle(
-                                    fontFamily: "Quicksand",
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 10
+                                  /* Builder(
+                                    builder: (context) {
+                                      return IconButton(
+                                        onPressed: () {
+                                          showPopover(
+                                            width: 370,
+                                            context: context,
+                                            bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.more_vert, 
+                                          color:Colors.blueGrey
+                                        )
+                                      );
+                                    }
+                                  ), */
+                                  /* TodoListOptions(
+                                    id: plan.id,
+                                    plan: plan.plan
+                                  ) */
+                                  plan.starred == true ? const Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child: Icon(Icons.star_rounded, color: Colors.orangeAccent),
+                                  ) : const SizedBox()
+                                ],
+                              ),
+                              const Divider(height: 25),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.rocket_launch_outlined,
+                                    size: 15,
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    DateFormat('EEE, MMM d yyyy').format(plan.due),
+                                    style: const TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 10
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }
-              ),
-            );
-          }),
-        ),
-      ) : !isSearch ? pattern : const Center(child: Text("No result")),
-    
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          nonTrashedTodolists.isNotEmpty && !isSearch ? Tooltip(
-            message: "Move plans to trash",
-            child: FloatingActionButton(
-              onPressed: trashAllTodoLists,
-              backgroundColor: Theme.of(context).colorScheme.onSecondary,
-              child: const Icon(Icons.delete_sweep_outlined),
-            ),
-          ) : const SizedBox(),
+                    );
+                  }
+                ),
+              );
+            }),
+          ),
+        ) : !isSearch ? pattern : const Center(child: Text("No result")),
       
-          const SizedBox(height: 8),
-      
-          Tooltip(
-            message: "Add a plan",
-            child: RotationTransition(
-              turns: Tween(begin: 0.0, end: isSearch ? 0.25 : 0.0).animate(_animationController),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            nonTrashedTodolists.isNotEmpty && !isSearch ? Tooltip(
+              message: "Move plans to trash",
               child: FloatingActionButton(
-                onPressed: isSearch ? closeSearch : createTodoList,
+                onPressed: trashAllTodoLists,
                 backgroundColor: Theme.of(context).colorScheme.onSecondary,
-                child: Transform.rotate(
-                  angle: isSearch ? 45 * (3.141592653589793238 / 180) : 0.0, // Rotate 45 degrees if isSearch is true
-                  child: const Icon(Icons.add),
+                child: const Icon(Icons.delete_sweep_outlined),
+              ),
+            ) : const SizedBox(),
+        
+            const SizedBox(height: 8),
+        
+            Tooltip(
+              message: "Add a plan",
+              child: RotationTransition(
+                turns: Tween(begin: 0.0, end: isSearch ? 0.25 : 0.0).animate(_animationController),
+                child: FloatingActionButton(
+                  onPressed: isSearch ? closeSearch : createTodoList,
+                  backgroundColor: Theme.of(context).colorScheme.onSecondary,
+                  child: Transform.rotate(
+                    angle: isSearch ? 45 * (3.141592653589793238 / 180) : 0.0, // Rotate 45 degrees if isSearch is true
+                    child: const Icon(Icons.add),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

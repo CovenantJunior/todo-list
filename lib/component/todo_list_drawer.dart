@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:todo_list/component/todo_list_drawer_tile.dart';
 import 'package:todo_list/layouts/todo_list_preferences.dart';
 import 'package:todo_list/layouts/todo_list_starred.dart';
 import 'package:todo_list/layouts/todo_trash_page.dart';
+import 'package:todo_list/models/todo_list_database.dart';
 
 class TodoListDrawer extends StatefulWidget {
   const TodoListDrawer({super.key});
@@ -118,12 +121,21 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
               }
             ),
 
+            Provider.of<TodoListDatabase>(context).preferences.first.autoSync == false ? TodoListDrawerTile(
+              title: "Backup",
+              leading: const Icon(Icons.backup_outlined),
+              onTap: () {
+                Navigator.pop(context);
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoTrash()));
+              }
+            ) : const SizedBox(),
+            
             TodoListDrawerTile(
               title: "About",
               leading: const Icon(Icons.info_outline_rounded),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoTrash()));
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoTrash()));
               }
             ),
 
@@ -132,7 +144,25 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
               leading: const Icon(Icons.rate_review_outlined),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoTrash()));
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoTrash()));
+              }
+            ),
+
+            TodoListDrawerTile(
+              title: "Invite Friends",
+              leading: const Icon(Icons.people_outline_rounded),
+              onTap: () {
+                Navigator.pop(context);
+                Share.share("Checkout this cool app:");
+              }
+            ),
+
+            TodoListDrawerTile(
+              title: "Privacy Policy",
+              leading: const Icon(Icons.privacy_tip_outlined),
+              onTap: () {
+                Navigator.pop(context);
+                Share.share("Checkout this cool app:");
               }
             ),
           ],
