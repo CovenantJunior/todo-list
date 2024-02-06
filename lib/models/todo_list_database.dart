@@ -61,7 +61,6 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.clear();
       preferences.addAll(currentPreferences);
       isDark = preferences.first.darkMode;
-      notifyListeners();
     }
   }
 
@@ -81,9 +80,10 @@ class TodoListDatabase extends ChangeNotifier{
     if (existingPreference != null) {
       existingPreference.notification == false ?  existingPreference.notification = true : existingPreference.notification = false;
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+      preferences.first.notification = existingPreference.notification;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
 
   void setVibration (id) async {
@@ -91,9 +91,10 @@ class TodoListDatabase extends ChangeNotifier{
     if (existingPreference != null) {
       existingPreference.vibration == false ?  existingPreference.vibration = true : existingPreference.vibration = false;
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+      preferences.first.vibration = existingPreference.vibration;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
 
   void setSTT (id) async {
@@ -101,9 +102,10 @@ class TodoListDatabase extends ChangeNotifier{
     if (existingPreference != null) {
       existingPreference.stt == false ?  existingPreference.stt = true : existingPreference.stt = false;
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+      preferences.first.stt = existingPreference.stt;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
 
   void setReadPlan (id) async {
@@ -111,9 +113,10 @@ class TodoListDatabase extends ChangeNotifier{
     if (existingPreference != null) {
       existingPreference.readPlan == false ?  existingPreference.readPlan = true : existingPreference.readPlan = false;
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+      preferences.first.readPlan = existingPreference.readPlan;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
 
   void setBackup (id) async {
@@ -121,9 +124,10 @@ class TodoListDatabase extends ChangeNotifier{
     if (existingPreference != null) {
       existingPreference.backup == false ?  existingPreference.backup = true : existingPreference.backup = false;
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+      preferences.first.backup = existingPreference.backup;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
   
   void setAutoSync (id) async {
@@ -131,9 +135,10 @@ class TodoListDatabase extends ChangeNotifier{
     if (existingPreference != null) {
       existingPreference.autoSync == false ?  existingPreference.autoSync = true : existingPreference.autoSync = false;
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+      preferences.first.autoSync = existingPreference.autoSync;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
   
   void setAccessClipboard(id) async {
@@ -141,9 +146,10 @@ class TodoListDatabase extends ChangeNotifier{
     if (existingPreference != null) {
       existingPreference.accessClipboard == false ?  existingPreference.accessClipboard = true : existingPreference.accessClipboard = false;
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+      preferences.first.accessClipboard = existingPreference.accessClipboard;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
   
   void setAutoDelete (id) async {
@@ -151,9 +157,10 @@ class TodoListDatabase extends ChangeNotifier{
     if (existingPreference != null) {
       existingPreference.autoDelete == false ?  existingPreference.autoDelete = true : existingPreference.autoDelete = false;
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+      preferences.first.autoDelete = existingPreference.autoDelete;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
   
   
@@ -188,7 +195,7 @@ class TodoListDatabase extends ChangeNotifier{
     final currentNonTrashedTodoLists = isar.todoLists.filter().trashedEqualTo(false).findAllSync();
     nonTrashedTodolists.clear();
     nonTrashedTodolists.addAll(currentNonTrashedTodoLists);
-    
+
     notifyListeners();
   }
 
@@ -198,7 +205,7 @@ class TodoListDatabase extends ChangeNotifier{
     final currentTrashedTodoLists = isar.todoLists.filter().trashedEqualTo(true).findAllSync();
     trashedTodoLists.clear();
     trashedTodoLists.addAll(currentTrashedTodoLists);
-    
+
     notifyListeners();
   }
   
@@ -208,6 +215,7 @@ class TodoListDatabase extends ChangeNotifier{
     final currentStarredTodoLists = isar.todoLists.filter().trashedEqualTo(false).starredEqualTo(true).findAllSync();
     starredTodoLists.clear();
     starredTodoLists.addAll(currentStarredTodoLists);
+
     notifyListeners();
   }
 

@@ -377,7 +377,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               isOfLength = false;
               searchResults = [];
             });
-            context.read<TodoListDatabase>().fetchTodoList();
+            readTodoLists();
           }
           for (var plans in nonTrashedTodolists) {
             if (plans.plan.toLowerCase().contains(q.toLowerCase())) {
@@ -938,7 +938,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           isSearch = false;
           isOfLength = false;
         });
-        context.read<TodoListDatabase>().fetchTodoList();
+        readTodoLists();
       },
       child: Scaffold(
         appBar: AppBar(

@@ -184,7 +184,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                 icon: const Icon(Icons.undo_rounded),
               ),
               IconButton(
-                icon: const Icon(Icons.save),
+                icon: const Icon(Icons.add_task_rounded),
                 onPressed: () {
                   String text = textController.text;
                   String due = dateController.text;
