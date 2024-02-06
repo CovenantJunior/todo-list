@@ -34,6 +34,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 
 
   TextEditingController textController = TextEditingController();
+  String hint = 'Task description';
   TextEditingController dateController = TextEditingController();
   late AnimationController _animationController;
 
@@ -81,11 +82,11 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     maxLength: 100,
                     controller: textController,
                     decoration: InputDecoration(
-                      hintText: 'Task description',
-                      suffixIcon: IconButton(
+                      hintText: hint,
+                      suffixIcon: preference.first.stt == true ? (IconButton(
                         onPressed: _listen,
-                        icon: preference.first.stt == true ? (Icon(_isListening ? Icons.mic_off : Icons.mic)) : const SizedBox()
-                      ),
+                        icon: Icon(_isListening == true ? Icons.mic_off : Icons.mic))
+                      ) : const SizedBox(),
                       hintStyle: const TextStyle(
                         fontFamily: "Quicksand",
                         fontWeight: FontWeight.bold
@@ -249,21 +250,38 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   if (!_isListening) {
     bool available = await _speech.initialize(
       onStatus: (status) {
-        // print('Speech recognition status: $status');
+        print('Speech recognition status: $status');
+        if (status == 'listening') {
+          setState(() {
+            _isListening = true;
+            hint = 'Listening...';
+          });
+        } else {
+         setState(() {
+            _isListening = false;
+            hint = 'Task description';
+          });
+        }
       },
       onError: (errorNotification) {
-        // print('Speech recognition error: $errorNotification');
+        print('Speech recognition error: $errorNotification');
+        setState(() {
+          _isListening = false;
+          _speech.stop();
+          hint = 'Task description';
+        });
       },
     );
     if (available) {
       setState(() {
         _isListening = true;
-        textController = 'Listening...' as TextEditingController;
+        hint = 'Listening...';
       });
       _speech.listen(
         onResult: (result) {
           setState(() {
-            textController = result.recognizedWords as TextEditingController;
+            hint = 'Task description';
+            textController.text = result.recognizedWords;
           });
         },
       );
@@ -272,6 +290,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     setState(() {
       _isListening = false;
       _speech.stop();
+      hint = 'Task description';
+      textController.text = '';
     });
   }
 }
