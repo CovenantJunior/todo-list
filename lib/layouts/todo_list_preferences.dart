@@ -161,7 +161,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       CupertinoSwitch(
                         value: darkMode,
                         onChanged: (value) {
-                          context.read<TodoListDatabase>().setDarkMode(id);
+                          Provider.of<TodoListDatabase>(context, listen: false).setDarkMode(id);
                         }
                       )
                     ],

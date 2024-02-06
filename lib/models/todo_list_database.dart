@@ -84,8 +84,6 @@ class TodoListDatabase extends ChangeNotifier{
       existingPreference.darkMode == false ?  existingPreference.darkMode = true : existingPreference.darkMode = false;
 
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
-      preferences.first.darkMode = existingPreference.darkMode;
-      isDark = existingPreference.darkMode;
 
       // print("$isDark + ${preferences.first.darkMode}");
       fetchPreferences();

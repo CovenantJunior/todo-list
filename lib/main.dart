@@ -29,12 +29,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final todoListDatabase = Provider.of<TodoListDatabase>(context);
+    final todoListDatabase = Provider.of<TodoListDatabase>(context, listen: true);
     // Initialize theme preference
-    todoListDatabase.themePreference();
-    
+    todoListDatabase.fetchPreferences();
     return MaterialApp(
-      theme: todoListDatabase.isDark == true ? ThemeData.dark() : ThemeData.light(),
+      theme: todoListDatabase.preferences.first.darkMode == true ? ThemeData.dark() : ThemeData.light(),
       debugShowCheckedModeBanner: false,
       home: const TodoListPage(),
       routes: {
