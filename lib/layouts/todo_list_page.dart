@@ -46,6 +46,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   bool isOfLength = false;
   List searchResults = [];
   List nonTrashedTodolistsState = [];
+  List preference = [];
 
   bool _isListening = false;
 
@@ -83,7 +84,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       hintText: 'Task description',
                       suffixIcon: IconButton(
                         onPressed: _listen,
-                        icon: Icon(_isListening ? Icons.mic_off : Icons.mic),
+                        icon: preference.first.stt == true ? (Icon(_isListening ? Icons.mic_off : Icons.mic)) : const SizedBox()
                       ),
                       hintStyle: const TextStyle(
                         fontFamily: "Quicksand",
@@ -338,6 +339,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   // Read
   Future<void> readTodoLists() async {
     context.read<TodoListDatabase>().fetchUntrashedTodoList();
+    context.read<TodoListDatabase>().fetchPreferences();
   }
 
   @override
@@ -350,6 +352,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
     setState(() {
+      preference = context.watch<TodoListDatabase>().preferences;
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
     
