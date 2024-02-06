@@ -35,18 +35,29 @@ class TodoListDatabase extends ChangeNotifier{
   /* PREFERENCES METHODS */
 
   void initPreference () async {
-    final newPreference = TodoPreferences()..darkMode = false..notification = false..vibration = false..stt = false..readPlan = false..backup = false..autoSync = false..accessClipboard = false..autoDelete = false;
-    await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
-    preferences = isar.todoPreferences.where().findAllSync();
-
-    notifyListeners();
+    List currentPreferences = isar.todoPreferences.where().findAllSync();
+    if (currentPreferences.isEmpty) {
+      final newPreference = TodoPreferences()
+        ..darkMode = false
+        ..notification = false
+        ..vibration = false
+        ..stt = false
+        ..readPlan = false
+        ..backup = false
+        ..autoSync = false
+        ..accessClipboard = false
+        ..autoDelete = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
+      preferences = isar.todoPreferences.where().findAllSync();
+      notifyListeners();
+    }
   }
 
   void themePreference () async {    
     final currentPreference = isar.todoPreferences.where().findAllSync();
     if (currentPreference.isEmpty) {
-      isDark = false;
       initPreference();
+      isDark = currentPreference.first.darkMode!;
     } else {
       // print("Preference length is ${currentPreference.length}");
       isDark = currentPreference.first.darkMode!;
@@ -61,17 +72,23 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.clear();
       preferences.addAll(currentPreferences);
       isDark = preferences.first.darkMode;
+      // print(currentPreferences.length);
+      notifyListeners();
     }
   }
 
   void setDarkMode (id) async {
     var existingPreference = await isar.todoPreferences.get(id);
+    // print(existingPreference?.darkMode);
     if (existingPreference != null) {
       existingPreference.darkMode == false ?  existingPreference.darkMode = true : existingPreference.darkMode = false;
+
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
       preferences.first.darkMode = existingPreference.darkMode;
       isDark = existingPreference.darkMode;
-      notifyListeners();
+
+      // print("$isDark + ${preferences.first.darkMode}");
+      fetchPreferences();
     }
   }
 
@@ -83,7 +100,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.notification = existingPreference.notification;
     }
     
-    notifyListeners();
+    fetchPreferences();
   }
 
   void setVibration (id) async {
@@ -94,7 +111,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.vibration = existingPreference.vibration;
     }
     
-    notifyListeners();
+    fetchPreferences();
   }
 
   void setSTT (id) async {
@@ -105,7 +122,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.stt = existingPreference.stt;
     }
     
-    notifyListeners();
+    fetchPreferences();
   }
 
   void setReadPlan (id) async {
@@ -116,7 +133,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.readPlan = existingPreference.readPlan;
     }
     
-    notifyListeners();
+    fetchPreferences();
   }
 
   void setBackup (id) async {
@@ -127,7 +144,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.backup = existingPreference.backup;
     }
     
-    notifyListeners();
+    fetchPreferences();
   }
   
   void setAutoSync (id) async {
@@ -138,7 +155,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.autoSync = existingPreference.autoSync;
     }
     
-    notifyListeners();
+    fetchPreferences();
   }
   
   void setAccessClipboard(id) async {
@@ -149,7 +166,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.accessClipboard = existingPreference.accessClipboard;
     }
     
-    notifyListeners();
+    fetchPreferences();
   }
   
   void setAutoDelete (id) async {
@@ -160,7 +177,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.autoDelete = existingPreference.autoDelete;
     }
     
-    notifyListeners();
+    fetchPreferences();
   }
   
   

@@ -416,11 +416,19 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             children: [
               SizedBox(height: topHeight),
               const Center(child: Text(
-                  "Click the + icon below to add a plan"
+                  "Click the + icon below to add a plan",
+                  style: TextStyle(
+                    fontFamily: "Quicksand"
+                  ),
                 )
               ),
               const SizedBox(height: 10),
-              const Center(child: Text("Double tap on plan to deactivate or flag completed")),
+              const Center(child: Text(
+                "Double tap on plan to deactivate or flag completed",
+                style: TextStyle(
+                  fontFamily: "Quicksand"
+                ),
+              )),
               const SizedBox(height: 100),
               Padding(
                 padding: EdgeInsets.only(left: leftPadding),
