@@ -321,6 +321,10 @@ class TodoListDatabase extends ChangeNotifier{
       existingTodoList.completed = true;
       existingTodoList.achieved = DateTime.now();
       await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
+
+      if (preferences.first.autoDelete == true) {
+        trashTodoList(id);
+      }
     }
 
     // Update TodoList List
