@@ -267,7 +267,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                     children: [
                       Row(
                         children: [
-                          readPlan == true ? const Icon(Icons.volume_up_sharp) : const Icon(Icons.volume_off_outlined),
+                          readPlan == true ? const Icon(Icons.volume_up_outlined) : const Icon(Icons.volume_off_outlined),
                           const SizedBox(width: 20),
                           const Text(
                             'Read out Plan Notifications',
