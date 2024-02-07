@@ -41,7 +41,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
           style: TextStyle(
             fontFamily: "Quicksand",
             fontWeight: FontWeight.w600,
-            fontSize: 20
+            // fontSize: 20
           ),
         ),
         content: Text(
@@ -64,7 +64,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
           style: TextStyle(
             fontFamily: "Quicksand",
             fontWeight: FontWeight.w600,
-            fontSize: 20
+            // fontSize: 20
           ),
         ),
         content: Text(
@@ -87,7 +87,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
           style: TextStyle(
             fontFamily: "Quicksand",
             fontWeight: FontWeight.w600,
-            fontSize: 20
+            // fontSize: 20
           ),
         ),
         content: Text(

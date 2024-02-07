@@ -52,7 +52,7 @@ class _TodoStarredState extends State<TodoStarred> {
           style: TextStyle(
             fontFamily: "Quicksand",
             fontWeight: FontWeight.bold,
-            fontSize: 25
+            // fontSize: 25
           ),
         ),
         content: SingleChildScrollView(
@@ -66,7 +66,7 @@ class _TodoStarredState extends State<TodoStarred> {
                     "Title",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -81,7 +81,7 @@ class _TodoStarredState extends State<TodoStarred> {
                     "Category",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -96,7 +96,7 @@ class _TodoStarredState extends State<TodoStarred> {
                     "Status",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -111,7 +111,7 @@ class _TodoStarredState extends State<TodoStarred> {
                     "Starred",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -126,7 +126,7 @@ class _TodoStarredState extends State<TodoStarred> {
                     "Date Created",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -141,7 +141,7 @@ class _TodoStarredState extends State<TodoStarred> {
                     "Due Date",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -156,7 +156,7 @@ class _TodoStarredState extends State<TodoStarred> {
                     "Date Modified",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -173,7 +173,7 @@ class _TodoStarredState extends State<TodoStarred> {
                     "Date Achieved",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -502,7 +502,7 @@ class _TodoStarredState extends State<TodoStarred> {
                                           style: TextStyle(
                                             fontFamily: "Quicksand",
                                             fontWeight: FontWeight.w600,
-                                            fontSize: 16,
+                                            // fontSize: 16,
                                             decoration: decorate(plan.completed),
                                           ),
                                         ),
@@ -548,7 +548,7 @@ class _TodoStarredState extends State<TodoStarred> {
                                       style: const TextStyle(
                                         fontFamily: "Quicksand",
                                         fontWeight: FontWeight.w600,
-                                        fontSize: 10
+                                        // fontSize: 10
                                       ),
                                     ),
                                   ],

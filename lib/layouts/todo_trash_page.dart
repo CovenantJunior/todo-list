@@ -52,7 +52,7 @@ class _TodoTrashState extends State<TodoTrash> {
           style: TextStyle(
             fontFamily: "Quicksand",
             fontWeight: FontWeight.bold,
-            fontSize: 25
+            // fontSize: 25
           ),
         ),
         content: SingleChildScrollView(
@@ -66,7 +66,7 @@ class _TodoTrashState extends State<TodoTrash> {
                     "Title",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -81,7 +81,7 @@ class _TodoTrashState extends State<TodoTrash> {
                     "Category",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -96,7 +96,7 @@ class _TodoTrashState extends State<TodoTrash> {
                     "Status",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -111,7 +111,7 @@ class _TodoTrashState extends State<TodoTrash> {
                     "Starred",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -126,7 +126,7 @@ class _TodoTrashState extends State<TodoTrash> {
                     "Date Created",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -141,7 +141,7 @@ class _TodoTrashState extends State<TodoTrash> {
                     "Due Date",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -156,7 +156,7 @@ class _TodoTrashState extends State<TodoTrash> {
                     "Date Modified",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -173,7 +173,7 @@ class _TodoTrashState extends State<TodoTrash> {
                     "Date Achieved",
                     style: TextStyle(
                       fontFamily: "Quicksand",
-                      fontSize: 15,
+                      // fontSize: 15,
                       fontWeight: FontWeight.w700
                     ),
                   ),
@@ -330,7 +330,7 @@ class _TodoTrashState extends State<TodoTrash> {
                           "Delete Selected Plan(s) Forever?",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 20,
+                            // fontSize: 20,
                             fontFamily: 'Quicksand',
                           ),
                         ),
@@ -570,7 +570,7 @@ class _TodoTrashState extends State<TodoTrash> {
                                               style: TextStyle(
                                                 fontFamily: "Quicksand",
                                                 fontWeight: FontWeight.w600,
-                                                fontSize: 16,
+                                                // fontSize: 16,
                                                 decoration: decorate(plan.completed),
                                               ),
                                             ),
@@ -595,7 +595,7 @@ class _TodoTrashState extends State<TodoTrash> {
                                           style: const TextStyle(
                                             fontFamily: "Quicksand",
                                             fontWeight: FontWeight.w600,
-                                            fontSize: 10
+                                            // fontSize: 10
                                           ),
                                         ),
                                       ],

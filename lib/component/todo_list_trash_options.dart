@@ -34,7 +34,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
               "Delete Plan Forever?",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 20,
+                // fontSize: 20,
                 fontFamily: 'Quicksand',
               ),
             ),

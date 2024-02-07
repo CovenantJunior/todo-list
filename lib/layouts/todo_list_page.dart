@@ -304,7 +304,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           "Move all plans to Trash?",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 20,
+            // fontSize: 20,
             fontFamily: 'Quicksand',
           ),
         ),
@@ -718,7 +718,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           "Move selected plan(s) to Trash?",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 20,
+                            // fontSize: 20,
                             fontFamily: 'Quicksand',
                           ),
                         ),
@@ -798,7 +798,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             style: TextStyle(
               fontFamily: "Quicksand",
               fontWeight: FontWeight.bold,
-              fontSize: 25
+              // fontSize: 25
             ),
           ),
           content: SingleChildScrollView(
@@ -812,7 +812,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       "Title",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 15,
+                        // fontSize: 15,
                         fontWeight: FontWeight.w700
                       ),
                     ),
@@ -827,7 +827,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       "Category",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 15,
+                        // fontSize: 15,
                         fontWeight: FontWeight.w700
                       ),
                     ),
@@ -842,7 +842,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       "Status",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 15,
+                        // fontSize: 15,
                         fontWeight: FontWeight.w700
                       ),
                     ),
@@ -857,7 +857,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       "Starred",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 15,
+                        // fontSize: 15,
                         fontWeight: FontWeight.w700
                       ),
                     ),
@@ -872,7 +872,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       "Date Created",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 15,
+                        // fontSize: 15,
                         fontWeight: FontWeight.w700
                       ),
                     ),
@@ -887,7 +887,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       "Due Date",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 15,
+                        // fontSize: 15,
                         fontWeight: FontWeight.w700
                       ),
                     ),
@@ -902,7 +902,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       "Date Modified",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 15,
+                        // fontSize: 15,
                         fontWeight: FontWeight.w700
                       ),
                     ),
@@ -919,7 +919,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       "Date Achieved",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontSize: 15,
+                        // fontSize: 15,
                         fontWeight: FontWeight.w700
                       ),
                     ),
@@ -983,7 +983,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 style: TextStyle(
                   fontFamily: "Quicksand",
                   fontWeight: FontWeight.bold,
-                  fontSize: 30
+                  // fontSize: 30
                 ),
               ),
               SizedBox(width: 3),
@@ -1088,7 +1088,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                         style: TextStyle(
                                           fontFamily: "Quicksand",
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 16,
+                                          // fontSize: 16,
                                           decoration: decorate(plan.completed),
                                         ),
                                       ),
@@ -1134,7 +1134,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                     style: const TextStyle(
                                       fontFamily: "Quicksand",
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 10
+                                      // fontSize: 10
                                     ),
                                   ),
                                 ],

@@ -235,7 +235,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
               "Move plan to Trash?",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 20,
+                // fontSize: 20,
                 fontFamily: 'Quicksand',
               ),
             ),
