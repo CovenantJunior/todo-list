@@ -5,6 +5,7 @@ import 'package:todo_list/models/todo_list.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:vibration/vibration.dart';
 
 class TodoListOptions extends StatefulWidget {
   final int id;
@@ -228,6 +229,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
 
       // Trash
       void trashTodoList(int id) {
+        Vibration.vibrate(duration: 50);
         showDialog(
           context: context,
           builder: (context) => AlertDialog(

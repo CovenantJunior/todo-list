@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -33,14 +35,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    hasVibrate.then((hasVibrator) {
-      print(hasVibrator);
-      if (hasVibrator != null) {
-        Vibration.vibrate();
-      } else {
-        print("Failed to determine if device has vibrator");
-      }
-    });
   }
 
 
@@ -228,6 +222,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 ),
               );
             } else {
+              preference.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   duration: Duration(seconds: 2),
@@ -308,6 +303,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 }
 
   void trashAllTodoLists() {
+    Vibration.vibrate(duration: 50);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -560,6 +556,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
+                    Vibration.vibrate(duration: 50);
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       duration: Duration(seconds: 2),
@@ -611,6 +608,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
+                    Vibration.vibrate(duration: 50);
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       duration: Duration(seconds: 2),
@@ -662,6 +660,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
+                    Vibration.vibrate(duration: 50);
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       duration: Duration(seconds: 2),
@@ -711,6 +710,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
+                    Vibration.vibrate(duration: 50);
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       duration: Duration(seconds: 2),
@@ -722,6 +722,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       )
                     )));
                   } else {
+                    Vibration.vibrate(duration: 50);
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(

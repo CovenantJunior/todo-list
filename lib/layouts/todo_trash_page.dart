@@ -8,6 +8,7 @@ import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/component/todo_list_trash_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
+import 'package:vibration/vibration.dart';
 
 class TodoTrash extends StatefulWidget {
   const TodoTrash({super.key});
@@ -17,6 +18,7 @@ class TodoTrash extends StatefulWidget {
 }
 
 class _TodoTrashState extends State<TodoTrash> {
+  
   @override
   void initState() {
     super.initState();
@@ -263,6 +265,7 @@ class _TodoTrashState extends State<TodoTrash> {
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
+                    Vibration.vibrate(duration: 50);
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       duration: Duration(seconds: 2),
@@ -323,6 +326,7 @@ class _TodoTrashState extends State<TodoTrash> {
                       )
                     )));
                   } else {
+                    Vibration.vibrate(duration: 50);
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(

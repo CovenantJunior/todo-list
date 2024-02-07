@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_list/models/todo_list.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
 
 class TodoListTrashOptions extends StatefulWidget {
   final int id;
@@ -27,6 +28,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
 
       // Delete Forever
       void deleteTodoList(int id) {
+        Vibration.vibrate(duration: 50);
         showDialog(
           context: context,
           builder: (context) => AlertDialog(

@@ -8,6 +8,7 @@ import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/component/todo_list_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
+import 'package:vibration/vibration.dart';
 
 class TodoStarred extends StatefulWidget {
   const TodoStarred({super.key});
@@ -17,6 +18,8 @@ class TodoStarred extends StatefulWidget {
 }
 
 class _TodoStarredState extends State<TodoStarred> {
+  Future<bool?> hasVibrate = Vibration.hasVibrator();
+
   @override
   void initState() {
     super.initState();
@@ -263,6 +266,7 @@ class _TodoStarredState extends State<TodoStarred> {
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
+                    Vibration.vibrate(duration: 50);
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       duration: Duration(seconds: 2),
