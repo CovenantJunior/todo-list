@@ -145,13 +145,13 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(Icons.dark_mode_outlined),
-                          SizedBox(width: 20),
+                          darkMode == true ? const Icon(Icons.dark_mode_outlined) : const Icon(Icons.light_mode_outlined),
+                          const SizedBox(width: 20),
                           Text(
-                            'Dark Mode',
-                            style: TextStyle(
+                            darkMode == true ? 'Dark Mode' : 'Light Mode',
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontFamily: "Quicksand"
                             ),
@@ -172,7 +172,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.notifications_none_rounded),
+                          notification == true ? const Icon(Icons.notifications_none_rounded) : const Icon(Icons.notifications_off_outlined),
                           const SizedBox(width: 20),
                           Row(
                             children: [
@@ -234,7 +234,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.notifications_none_rounded),
+                          stt == true ? const Icon(Icons.mic_none_rounded) : const Icon(Icons.mic_off_outlined),
                           const SizedBox(width: 20),
                           Row(
                             children: [
@@ -265,11 +265,11 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(Icons.volume_up_sharp),
-                          SizedBox(width: 20),
-                          Text(
+                          readPlan == true ? const Icon(Icons.volume_up_sharp) : const Icon(Icons.volume_off_outlined),
+                          const SizedBox(width: 20),
+                          const Text(
                             'Read out Plan Notifications',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -315,11 +315,11 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(Icons.sync_rounded),
-                          SizedBox(width: 20),
-                          Text(
+                          autoSync == true ? const Icon(Icons.sync_rounded) : const Icon(Icons.sync_disabled_rounded),
+                          const SizedBox(width: 20),
+                          const Text(
                             'Auto Sync',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
