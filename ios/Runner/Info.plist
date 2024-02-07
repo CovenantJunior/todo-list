@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Note App</string>
+	<string>Todo List</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -45,5 +45,15 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This permission is required for microphone access.</string>
+	<key>NSAllowsArbitraryLoads</key>
+	<string>This permission is required because speech recognition may use remote services.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This permission is required because speech recognition can use Bluetooth headsets when connected.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>This permission is required because speech recognition can use Bluetooth headsets when connected.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app uses the microphone to enable speech-to-text functionality.</string>
 </dict>
 </plist>

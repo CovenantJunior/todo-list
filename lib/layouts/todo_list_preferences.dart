@@ -83,7 +83,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
       context: context,
       builder: (context) => const AlertDialog(
         title: Text(
-          "Text to Speech",
+          "Speech to Text",
           style: TextStyle(
             fontFamily: "Quicksand",
             fontWeight: FontWeight.w600,

@@ -250,7 +250,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   if (!_isListening) {
     bool available = await _speech.initialize(
       onStatus: (status) {
-        print('Speech recognition status: $status');
+        // print('Speech recognition status: $status');
         if (status == 'listening') {
           setState(() {
             _isListening = true;
@@ -264,7 +264,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         }
       },
       onError: (errorNotification) {
-        print('Speech recognition error: $errorNotification');
+        // print('Speech recognition error: $errorNotification');
         setState(() {
           _isListening = false;
           _speech.stop();
