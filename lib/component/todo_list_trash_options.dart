@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/todo_list.dart';
 import 'package:todo_list/models/todo_list_database.dart';
@@ -28,7 +30,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
 
       // Delete Forever
       void deleteTodoList(int id) {
-        Vibration.vibrate(duration: 50);
+        context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
         showDialog(
           context: context,
           builder: (context) => AlertDialog(

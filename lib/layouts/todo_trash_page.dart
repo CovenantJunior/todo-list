@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -265,7 +267,7 @@ class _TodoTrashState extends State<TodoTrash> {
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
-                    Vibration.vibrate(duration: 50);
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       duration: Duration(seconds: 2),
@@ -314,7 +316,7 @@ class _TodoTrashState extends State<TodoTrash> {
                 icon: const Icon(Icons.delete_forever_outlined),
                 // color: Colors.blueGrey,
                 onPressed: () {
-                  Vibration.vibrate(duration: 50);
+                  context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                   if (selectedLists.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -327,7 +329,7 @@ class _TodoTrashState extends State<TodoTrash> {
                       )
                     )));
                   } else {
-                    Vibration.vibrate(duration: 50);
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(

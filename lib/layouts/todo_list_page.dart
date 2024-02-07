@@ -88,7 +88,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     controller: textController,
                     decoration: InputDecoration(
                       hintText: hint,
-                      suffixIcon: preference.first.stt == true ? (IconButton(
+                      suffixIcon: context.watch<TodoListDatabase>().preferences.first.stt == true ? (IconButton(
                         onPressed: _listen,
                         icon: Icon(_isListening == true ? Icons.mic_off : Icons.mic))
                       ) : const SizedBox(),
@@ -222,7 +222,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 ),
               );
             } else {
-              preference.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+              context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   duration: Duration(seconds: 2),
@@ -303,7 +303,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 }
 
   void trashAllTodoLists() {
-    Vibration.vibrate(duration: 50);
+    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -379,7 +379,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
     setState(() {
-      preference = context.watch<TodoListDatabase>().preferences;
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
     
@@ -556,7 +555,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
-                    Vibration.vibrate(duration: 50);
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       duration: Duration(seconds: 2),
@@ -608,7 +607,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
-                    Vibration.vibrate(duration: 50);
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       duration: Duration(seconds: 2),
@@ -660,7 +659,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
-                    Vibration.vibrate(duration: 50);
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       duration: Duration(seconds: 2),
@@ -710,7 +709,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
-                    Vibration.vibrate(duration: 50);
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       duration: Duration(seconds: 2),
@@ -722,7 +721,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       )
                     )));
                   } else {
-                    Vibration.vibrate(duration: 50);
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -266,7 +268,7 @@ class _TodoStarredState extends State<TodoStarred> {
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
-                    Vibration.vibrate(duration: 50);
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       duration: Duration(seconds: 2),
