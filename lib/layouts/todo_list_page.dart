@@ -10,6 +10,7 @@ import 'package:todo_list/component/todo_list_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
 
 class TodoListPage extends StatefulWidget {
   const TodoListPage({super.key});
@@ -21,6 +22,8 @@ class TodoListPage extends StatefulWidget {
 class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderStateMixin{
   late SpeechToText _speech;
 
+  Future<bool?> hasVibrate = Vibration.hasVibrator();
+  
   @override
   void initState() {
     super.initState();
@@ -30,6 +33,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
+    hasVibrate.then((hasVibrator) {
+      print(hasVibrator);
+      if (hasVibrator != null) {
+        Vibration.vibrate();
+      } else {
+        print("Failed to determine if device has vibrator");
+      }
+    });
   }
 
 
