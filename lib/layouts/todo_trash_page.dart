@@ -314,6 +314,7 @@ class _TodoTrashState extends State<TodoTrash> {
                 icon: const Icon(Icons.delete_forever_outlined),
                 // color: Colors.blueGrey,
                 onPressed: () {
+                  Vibration.vibrate(duration: 50);
                   if (selectedLists.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

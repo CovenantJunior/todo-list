@@ -61,7 +61,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
           context: context,
           builder: (context) => AlertDialog(
             title: const Text(
-              "Add a plan",
+              "Edit plan",
               style: TextStyle(
                 fontFamily: "Quicksand",
                 fontWeight: FontWeight.bold,
@@ -207,6 +207,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                       ),
                     );
                   } else {
+                    Vibration.vibrate(duration: 50);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         duration: Duration(seconds: 2),
