@@ -210,7 +210,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           Row(
                             children: [
                               Text(
-                                'Vibration',
+                                'In-app Vibration',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontFamily: "Quicksand"

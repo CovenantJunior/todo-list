@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -12,6 +11,7 @@ import 'package:todo_list/component/todo_list_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
 
 class TodoListPage extends StatefulWidget {
@@ -25,7 +25,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   late SpeechToText _speech;
 
   Future<bool?> hasVibrate = Vibration.hasVibrator();
-  
+ 
   @override
   void initState() {
     super.initState();
@@ -109,7 +109,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             Row(
               children: [
                 const Icon(Icons.category),
-                const SizedBox(width: 8),
+                const SizedBox(width: 8),   
                 Expanded(
                   child: InputDecorator(
                     decoration: const InputDecoration(
@@ -159,7 +159,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     },
                     child: InputDecorator(
                       decoration: const InputDecoration(
-                        labelText: 'Due Date',
+                        labelText: 'Tap here to choose due date',
                         labelStyle: TextStyle(
                           fontFamily: "Quicksand",
                           fontWeight: FontWeight.bold
@@ -167,12 +167,17 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         hintText: 'Select due date',
                         border: InputBorder.none
                       ),
-                      child: TextField(
-                        readOnly: true,
-                        controller: dateController,
-                        style: const TextStyle(
-                          fontFamily: "Quicksand",
-                          fontWeight: FontWeight.bold
+                      child: GestureDetector(
+                      onTap: () {
+                        _selectDate(context);
+                      },
+                        child: TextField(
+                          readOnly: true,
+                          controller: dateController,
+                          style: const TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.bold
+                          ),
                         ),
                       ),
                     ),
@@ -221,6 +226,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   ),
                 ),
               );
+              NotificationService().showNotification(id: DateTime.now().millisecond, title: "New Plan Recorded", body: text, payload: "Due by $due");
             } else {
               context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
               ScaffoldMessenger.of(context).showSnackBar(
