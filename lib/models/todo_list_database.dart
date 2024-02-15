@@ -46,7 +46,8 @@ class TodoListDatabase extends ChangeNotifier{
         ..backup = false
         ..autoSync = false
         ..accessClipboard = false
-        ..autoDelete = false;
+        ..autoDelete = false
+        ..autoDeleteOnDismiss = false;
       await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
       preferences = isar.todoPreferences.where().findAllSync();
       notifyListeners();
@@ -56,7 +57,7 @@ class TodoListDatabase extends ChangeNotifier{
     }
   }
 
-  void themePreference () async {    
+  void themePreference () async {
     final currentPreference = isar.todoPreferences.where().findAllSync();
     if (currentPreference.isEmpty) {
       initPreference();
@@ -81,6 +82,10 @@ class TodoListDatabase extends ChangeNotifier{
       // print(currentPreferences.length);
       notifyListeners();
     }
+  }
+
+  void reserPreferences() async {
+    await isar.writeTxn(() => isar.todoPreferences.clear());
   }
 
   void setDarkMode (id) async {
@@ -183,6 +188,19 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.autoDelete = existingPreference.autoDelete;
     }
     
+    fetchPreferences();
+  }
+
+  void setAutoDeleteonDismiss(id) async {
+    var existingPreference = await isar.todoPreferences.get(id);
+    if (existingPreference != null) {
+      existingPreference.autoDeleteOnDismiss == false
+          ? existingPreference.autoDeleteOnDismiss = true
+          : existingPreference.autoDeleteOnDismiss = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+      preferences.first.autoDeleteOnDismiss = existingPreference.autoDeleteOnDismiss;
+    }
+
     fetchPreferences();
   }
   

@@ -387,6 +387,57 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     setState(() {
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
+
+    // Trash
+    void trashTodoList(int id) {
+      context.read<TodoListDatabase>().preferences.first.vibration == true
+          ? Vibration.vibrate(duration: 50)
+          : Void;
+      context.read<TodoListDatabase>().preferences.first.autoDeleteOnDismiss ==
+        false ? showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: const Text(
+            "Move plan to Trash?",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              // fontSize: 20,
+              fontFamily: 'Quicksand',
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                context.read<TodoListDatabase>().trashTodoList(id);
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: Text('Trashed',
+                        style: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.bold))));
+              },
+              icon: const Icon(
+                Icons.done,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.cancel_outlined,
+              ),
+            ),
+          ],
+        )
+      ) : context.read<TodoListDatabase>().trashTodoList(id);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          duration: Duration(seconds: 2),
+          content: Text('Trashed',
+              style: TextStyle(
+                  fontFamily: "Quicksand", fontWeight: FontWeight.bold))));
+    }
     
     Widget searchTextField() { //add
       return TextField(
@@ -1085,78 +1136,102 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       },
                       child: Card(
                         surfaceTintColor: tint(plan.completed),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: SizedBox(
-                                      height: 40,
-                                      child: Text(
-                                        plan.plan,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontWeight: FontWeight.w600,
-                                          // fontSize: 16,
-                                          decoration: decorate(plan.completed),
+                        child: Dismissible(
+                          key: Key("${plan.id}"),
+                          direction: DismissDirection.horizontal,
+                          confirmDismiss: (direction) async {
+                            trashTodoList(plan.id);
+                            return null;
+                          },
+                          background: Container(
+                            color: Colors.redAccent,
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Icon(Icons.delete, color: Colors.white),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Icon(Icons.delete, color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: SizedBox(
+                                        height: 40,
+                                        child: Text(
+                                          plan.plan,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontFamily: "Quicksand",
+                                            fontWeight: FontWeight.w600,
+                                            // fontSize: 16,
+                                            decoration: decorate(plan.completed),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  /* Builder(
-                                    builder: (context) {
-                                      return IconButton(
-                                        onPressed: () {
-                                          showPopover(
-                                            width: 370,
-                                            context: context,
-                                            bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                                          );
-                                        },
-                                        icon: const Icon(
-                                          Icons.more_vert, 
-                                          color:Colors.blueGrey
-                                        )
-                                      );
-                                    }
-                                  ), */
-                                  /* TodoListOptions(
-                                    id: plan.id,
-                                    plan: plan.plan
-                                  ) */
-                                  plan.starred == true ? const Padding(
-                                    padding: EdgeInsets.only(left: 8.0),
-                                    child: Icon(Icons.star_rounded, color: Colors.orangeAccent),
-                                  ) : const SizedBox()
-                                ],
-                              ),
-                              const Divider(height: 25),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.rocket_launch_outlined,
-                                    size: 15,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    DateFormat('EEE, MMM d yyyy').format(plan.due),
-                                    style: const TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.w600,
-                                      // fontSize: 10
+                                    /* Builder(
+                                      builder: (context) {
+                                        return IconButton(
+                                          onPressed: () {
+                                            showPopover(
+                                              width: 370,
+                                              context: context,
+                                              bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                                            );
+                                          },
+                                          icon: const Icon(
+                                            Icons.more_vert, 
+                                            color:Colors.blueGrey
+                                          )
+                                        );
+                                      }
+                                    ), */
+                                    /* TodoListOptions(
+                                      id: plan.id,
+                                      plan: plan.plan
+                                    ) */
+                                    plan.starred == true ? const Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Icon(Icons.star_rounded, color: Colors.orangeAccent),
+                                    ) : const SizedBox()
+                                  ],
+                                ),
+                                /* const Divider(height: 25),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.rocket_launch_outlined,
+                                      size: 15,
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      DateFormat('EEE, MMM d yyyy').format(plan.due),
+                                      style: const TextStyle(
+                                        fontFamily: "Quicksand",
+                                        fontWeight: FontWeight.w600,
+                                        // fontSize: 10
+                                      ),
+                                    ),
+                                  ],
+                                ), */
+                              ],
+                            ),
                           ),
                         ),
                       ),

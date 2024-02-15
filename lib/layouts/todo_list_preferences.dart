@@ -21,6 +21,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
   late bool autoSync;
   late bool accessClipboard;
   late bool autoDelete;
+  late bool autoDeleteOnDismiss;
 
   @override
   void initState() {
@@ -117,6 +118,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
         autoSync = preference.autoSync;
         accessClipboard = preference.accessClipboard;
         autoDelete = preference.autoDelete;
+        autoDeleteOnDismiss = preference.autoDeleteOnDismiss;
       });
     }
 
@@ -392,6 +394,29 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           context.read<TodoListDatabase>().setAutoDelete(id);
                         }
                       )
+                    ],
+                  ),
+                  const Divider(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.swipe_outlined),
+                          SizedBox(width: 20),
+                          Text(
+                            'Auto Delete Plan on Dismiss',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontFamily: "Quicksand"),
+                          ),
+                        ],
+                      ),
+                      CupertinoSwitch(
+                          value: autoDeleteOnDismiss,
+                          onChanged: (value) {
+                            context.read<TodoListDatabase>().setAutoDeleteonDismiss(id);
+                          })
                     ],
                   ),
                 ],

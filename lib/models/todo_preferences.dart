@@ -15,4 +15,5 @@ class TodoPreferences {
   bool? autoSync;
   bool? accessClipboard;
   bool? autoDelete;
+  bool? autoDeleteOnDismiss;
 }

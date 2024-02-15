@@ -27,38 +27,43 @@ const TodoPreferencesSchema = CollectionSchema(
       name: r'autoDelete',
       type: IsarType.bool,
     ),
-    r'autoSync': PropertySchema(
+    r'autoDeleteOnDismiss': PropertySchema(
       id: 2,
+      name: r'autoDeleteOnDismiss',
+      type: IsarType.bool,
+    ),
+    r'autoSync': PropertySchema(
+      id: 3,
       name: r'autoSync',
       type: IsarType.bool,
     ),
     r'backup': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'backup',
       type: IsarType.bool,
     ),
     r'darkMode': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'darkMode',
       type: IsarType.bool,
     ),
     r'notification': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'notification',
       type: IsarType.bool,
     ),
     r'readPlan': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'readPlan',
       type: IsarType.bool,
     ),
     r'stt': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'stt',
       type: IsarType.bool,
     ),
     r'vibration': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'vibration',
       type: IsarType.bool,
     )
@@ -94,13 +99,14 @@ void _todoPreferencesSerialize(
 ) {
   writer.writeBool(offsets[0], object.accessClipboard);
   writer.writeBool(offsets[1], object.autoDelete);
-  writer.writeBool(offsets[2], object.autoSync);
-  writer.writeBool(offsets[3], object.backup);
-  writer.writeBool(offsets[4], object.darkMode);
-  writer.writeBool(offsets[5], object.notification);
-  writer.writeBool(offsets[6], object.readPlan);
-  writer.writeBool(offsets[7], object.stt);
-  writer.writeBool(offsets[8], object.vibration);
+  writer.writeBool(offsets[2], object.autoDeleteOnDismiss);
+  writer.writeBool(offsets[3], object.autoSync);
+  writer.writeBool(offsets[4], object.backup);
+  writer.writeBool(offsets[5], object.darkMode);
+  writer.writeBool(offsets[6], object.notification);
+  writer.writeBool(offsets[7], object.readPlan);
+  writer.writeBool(offsets[8], object.stt);
+  writer.writeBool(offsets[9], object.vibration);
 }
 
 TodoPreferences _todoPreferencesDeserialize(
@@ -112,14 +118,15 @@ TodoPreferences _todoPreferencesDeserialize(
   final object = TodoPreferences();
   object.accessClipboard = reader.readBoolOrNull(offsets[0]);
   object.autoDelete = reader.readBoolOrNull(offsets[1]);
-  object.autoSync = reader.readBoolOrNull(offsets[2]);
-  object.backup = reader.readBoolOrNull(offsets[3]);
-  object.darkMode = reader.readBoolOrNull(offsets[4]);
+  object.autoDeleteOnDismiss = reader.readBoolOrNull(offsets[2]);
+  object.autoSync = reader.readBoolOrNull(offsets[3]);
+  object.backup = reader.readBoolOrNull(offsets[4]);
+  object.darkMode = reader.readBoolOrNull(offsets[5]);
   object.id = id;
-  object.notification = reader.readBoolOrNull(offsets[5]);
-  object.readPlan = reader.readBoolOrNull(offsets[6]);
-  object.stt = reader.readBoolOrNull(offsets[7]);
-  object.vibration = reader.readBoolOrNull(offsets[8]);
+  object.notification = reader.readBoolOrNull(offsets[6]);
+  object.readPlan = reader.readBoolOrNull(offsets[7]);
+  object.stt = reader.readBoolOrNull(offsets[8]);
+  object.vibration = reader.readBoolOrNull(offsets[9]);
   return object;
 }
 
@@ -147,6 +154,8 @@ P _todoPreferencesDeserializeProp<P>(
     case 7:
       return (reader.readBoolOrNull(offset)) as P;
     case 8:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 9:
       return (reader.readBoolOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -299,6 +308,34 @@ extension TodoPreferencesQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'autoDelete',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      autoDeleteOnDismissIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'autoDeleteOnDismiss',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      autoDeleteOnDismissIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'autoDeleteOnDismiss',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      autoDeleteOnDismissEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'autoDeleteOnDismiss',
         value: value,
       ));
     });
@@ -594,6 +631,20 @@ extension TodoPreferencesQuerySortBy
   }
 
   QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByAutoDeleteOnDismiss() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'autoDeleteOnDismiss', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByAutoDeleteOnDismissDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'autoDeleteOnDismiss', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
       sortByAutoSync() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'autoSync', Sort.asc);
@@ -716,6 +767,20 @@ extension TodoPreferencesQuerySortThenBy
       thenByAutoDeleteDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'autoDelete', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByAutoDeleteOnDismiss() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'autoDeleteOnDismiss', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByAutoDeleteOnDismissDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'autoDeleteOnDismiss', Sort.desc);
     });
   }
 
@@ -844,6 +909,13 @@ extension TodoPreferencesQueryWhereDistinct
   }
 
   QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
+      distinctByAutoDeleteOnDismiss() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'autoDeleteOnDismiss');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
       distinctByAutoSync() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'autoSync');
@@ -909,6 +981,13 @@ extension TodoPreferencesQueryProperty
   QueryBuilder<TodoPreferences, bool?, QQueryOperations> autoDeleteProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'autoDelete');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, bool?, QQueryOperations>
+      autoDeleteOnDismissProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'autoDeleteOnDismiss');
     });
   }
 
