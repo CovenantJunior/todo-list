@@ -56,6 +56,22 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 
   bool _isListening = false;
 
+  Future<void> selectDate(BuildContext context, due) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: due,
+      firstDate: selectedDate,
+      lastDate: DateTime(3000),
+    );
+
+    dateController.text = DateFormat('yyyy-MM-dd').format(picked!);
+    if (mounted && picked != selectedDate) {
+      setState(() {
+        dateController.text = DateFormat('yyyy-MM-dd').format(picked);
+      });
+    }
+  }
+
   // Create
   void createTodoList() {
     dateController.text = date;
@@ -83,9 +99,10 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     autocorrect: true,
                     autofocus: true,
                     minLines: 1,
-                    maxLines: 5,
-                    maxLength: 100,
+                    maxLines: 20,
+                    maxLength: 500,
                     controller: textController,
+                    textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
                       hintText: hint,
                       suffixIcon: context.watch<TodoListDatabase>().preferences.first.stt == true ? (IconButton(
@@ -249,6 +266,185 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     );
   }
 
+  // ignore: non_constant_identifier_names
+  void editTodoList(int id, Plan) {
+    Navigator.pop(context);
+    textController.text = Plan.plan;
+    dateController.text = Plan.due != null ? DateFormat('yyyy-MM-dd').format(Plan.due) : date;
+    showDialog (
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          "Edit plan",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        null;
+                      },
+                      child: const Icon(
+                        Icons.mic
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextFormField(
+                        autocorrect: true,
+                        autofocus: true,
+                        minLines: 1,
+                        maxLines: 5,
+                        maxLength: 100,
+                        controller: textController,
+                        decoration: const InputDecoration(
+                          hintText: 'Task description',
+                          hintStyle: TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.bold
+                            ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Icon(Icons.category),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          labelText: 'Category',
+                          labelStyle: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.bold
+                          ),
+                          border: InputBorder.none
+                        ),
+                        child: DropdownButtonFormField<String>(
+                          value: selectedCategory,
+                          onChanged: (value) {
+                            selectedCategory = value!;
+                          },
+                          items: ['Personal', 'Work', 'Study', 'Shopping', 'Sport', 'Wishlist']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: const TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          isExpanded: true,
+                          icon: const Icon(Icons.edit),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Icon(Icons.calendar_month_rounded),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          selectDate(context, Plan.due);
+                        },
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            labelText: 'Due Date',
+                            labelStyle: TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.bold
+                            ),
+                            hintText: 'Select due date',
+                            hintStyle: TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.bold
+                            ),
+                            border: InputBorder.none
+                          ),
+                          child: TextField(
+                            controller: dateController,
+                            style: const TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.undo_rounded),
+          ),
+          IconButton(
+            icon: const Icon(Icons.add_task_rounded),
+            onPressed: () {
+              String text = textController.text;
+              String due = dateController.text;
+              String? category = selectedCategory;
+              if (text.isNotEmpty) {
+                context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due);
+                Navigator.pop(context);
+                textController.clear();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: Text(
+                      'Plan saved',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: Text(
+                      'Oops, blank shot!',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      )
+    );
+  }
+
   void closeSearch() {
     readTodoLists();
     setState(() {
@@ -388,8 +584,19 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
 
-    // Trash
-    void trashTodoList(int id) {
+    void dismissAction (id) {
+      context.read<TodoListDatabase>().completed(id);
+      context.read<TodoListDatabase>().trashTodoList(id);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          duration: Duration(seconds: 2),
+          content: Text('Trashed',
+              style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontWeight: FontWeight.bold))));
+    }
+
+    // Swipe Trash
+    void swiptTrashTodoList(int id) {
       context.read<TodoListDatabase>().preferences.first.vibration == true
           ? Vibration.vibrate(duration: 50)
           : Void;
@@ -408,14 +615,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           actions: [
             IconButton(
               onPressed: () {
-                context.read<TodoListDatabase>().trashTodoList(id);
+                dismissAction(id);
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    duration: Duration(seconds: 2),
-                    content: Text('Trashed',
-                        style: TextStyle(
-                            fontFamily: "Quicksand",
-                            fontWeight: FontWeight.bold))));
               },
               icon: const Icon(
                 Icons.done,
@@ -431,12 +632,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             ),
           ],
         )
-      ) : context.read<TodoListDatabase>().trashTodoList(id);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          duration: Duration(seconds: 2),
-          content: Text('Trashed',
-              style: TextStyle(
-                  fontFamily: "Quicksand", fontWeight: FontWeight.bold))));
+      ) : dismissAction(id);
     }
     
     Widget searchTextField() { //add
@@ -869,137 +1065,148 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               // fontSize: 25
             ),
           ),
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Title",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        // fontSize: 15,
-                        fontWeight: FontWeight.w700
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Title",
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          // fontSize: 15,
+                          fontWeight: FontWeight.w700
+                        ),
                       ),
-                    ),
-                    Text(plan.plan, style: const TextStyle(fontFamily: "Quicksand"))
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Category",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        // fontSize: 15,
-                        fontWeight: FontWeight.w700
+                      Text(plan.plan, style: const TextStyle(fontFamily: "Quicksand"))
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Category",
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          // fontSize: 15,
+                          fontWeight: FontWeight.w700
+                        ),
                       ),
-                    ),
-                    Text(plan.category, style: const TextStyle(fontFamily: "Quicksand"))
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Status",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        // fontSize: 15,
-                        fontWeight: FontWeight.w700
+                      Text(plan.category, style: const TextStyle(fontFamily: "Quicksand"))
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Status",
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          // fontSize: 15,
+                          fontWeight: FontWeight.w700
+                        ),
                       ),
-                    ),
-                    plan.completed == true ? const Text("Proudly executed", style: TextStyle(fontFamily: "Quicksand")) : const Text("Uncompleted", style: TextStyle(fontFamily: "Quicksand"))
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Starred",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        // fontSize: 15,
-                        fontWeight: FontWeight.w700
+                      plan.completed == true ? const Text("Proudly executed", style: TextStyle(fontFamily: "Quicksand")) : const Text("Uncompleted", style: TextStyle(fontFamily: "Quicksand"))
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Starred",
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          // fontSize: 15,
+                          fontWeight: FontWeight.w700
+                        ),
                       ),
-                    ),
-                    plan.starred == true ? const Text("Starred", style: TextStyle(fontFamily: "Quicksand")) : const Text("Not starred", style: TextStyle(fontFamily: "Quicksand"))
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Date Created",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        // fontSize: 15,
-                        fontWeight: FontWeight.w700
+                      plan.starred == true ? const Text("Starred", style: TextStyle(fontFamily: "Quicksand")) : const Text("Not starred", style: TextStyle(fontFamily: "Quicksand"))
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Date Created",
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          // fontSize: 15,
+                          fontWeight: FontWeight.w700
+                        ),
                       ),
-                    ),
-                    Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created), style: const TextStyle(fontFamily: "Quicksand"))
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Due Date",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        // fontSize: 15,
-                        fontWeight: FontWeight.w700
+                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created), style: const TextStyle(fontFamily: "Quicksand"))
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Due Date",
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          // fontSize: 15,
+                          fontWeight: FontWeight.w700
+                        ),
                       ),
-                    ),
-                    plan.due != null ? Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.due), style: const TextStyle(fontFamily: "Quicksand")) : const Text('Unset', style: TextStyle(fontFamily: "Quicksand"))
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Date Modified",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        // fontSize: 15,
-                        fontWeight: FontWeight.w700
+                      plan.due != null ? Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.due), style: const TextStyle(fontFamily: "Quicksand")) : const Text('Unset', style: TextStyle(fontFamily: "Quicksand"))
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Date Modified",
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          // fontSize: 15,
+                          fontWeight: FontWeight.w700
+                        ),
                       ),
-                    ),
-                    plan.modified != null ?
-                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.modified), style: const TextStyle(fontFamily: "Quicksand"))
-                    : const Text('Not yet modified', style: TextStyle(fontFamily: "Quicksand")),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Date Achieved",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        // fontSize: 15,
-                        fontWeight: FontWeight.w700
+                      plan.modified != null ?
+                        Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.modified), style: const TextStyle(fontFamily: "Quicksand"))
+                      : const Text('Not yet modified', style: TextStyle(fontFamily: "Quicksand")),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Date Achieved",
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          // fontSize: 15,
+                          fontWeight: FontWeight.w700
+                        ),
                       ),
-                    ),
-                    plan.achieved != null ?
-                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.achieved), style: const TextStyle(fontFamily: "Quicksand"))
-                    : const Text('Not yet achieved', style: TextStyle(fontFamily: "Quicksand")),
-                  ],
-                )
-              ],
+                      plan.achieved != null ?
+                        Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.achieved), style: const TextStyle(fontFamily: "Quicksand"))
+                      : const Text('Not yet achieved', style: TextStyle(fontFamily: "Quicksand")),
+                    ],
+                  )
+                ],
+              ),
             ),
-          )
-        )
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                editTodoList(plan.id, plan);
+              },
+              icon: const Icon(Icons.edit)
+            )
+          ],
+        ),
       );
     }
 
@@ -1140,11 +1347,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           key: Key("${plan.id}"),
                           direction: DismissDirection.horizontal,
                           confirmDismiss: (direction) async {
-                            trashTodoList(plan.id);
+                            swiptTrashTodoList(plan.id);
                             return null;
                           },
                           background: Container(
-                            color: Colors.redAccent,
+                            decoration: const BoxDecoration(
+                              color: Colors.redAccent,
+                              borderRadius: BorderRadius.all(Radius.circular(15))
+                            ),
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

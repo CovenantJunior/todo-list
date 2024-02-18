@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
 
 class TodoListPreferences extends StatefulWidget {
   const TodoListPreferences({super.key});
@@ -98,6 +101,28 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
             fontWeight: FontWeight.w500,
           )
         ),
+      ),
+    );
+  }
+
+  void dismissInfo() {
+    showDialog(
+      context: context,
+      builder: (context) => const AlertDialog(
+        title: Text(
+          "Swipe Dismiss",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.w600,
+            // fontSize: 20
+          ),
+        ),
+        content: Text(
+            "When you swipe to dismiss, plans are flagged as completed and are then trashed",
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.w500,
+            )),
       ),
     );
   }
@@ -226,6 +251,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         value: vibration,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setVibration(id);
+                          vibration == true ? Vibration.vibrate(duration: 50) : Void;
                         }
                       )
                     ],
@@ -400,15 +426,23 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(Icons.swipe_outlined),
-                          SizedBox(width: 20),
-                          Text(
-                            'Auto Delete Plan on Dismiss',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Quicksand"),
+                          const Icon(Icons.swipe_outlined),
+                          const SizedBox(width: 20),
+                          Row(
+                            children: [
+                              const Text(
+                                'Delete Plan on Dismiss',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Quicksand"),
+                              ),
+                              const SizedBox(width: 7),
+                              Baseline(baseline: 10.0,
+                              baselineType: TextBaseline.alphabetic,
+                              child: GestureDetector(onTap: dismissInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
+                            ],
                           ),
                         ],
                       ),

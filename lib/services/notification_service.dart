@@ -7,6 +7,11 @@ class NotificationService {
   // Initilaize Notification
   AndroidInitializationSettings initializationSettingsAndroid =  const AndroidInitializationSettings('@mipmap/ic_launcher');
 
+  @pragma('vm:entry-point')
+  void notificationTapBackground(NotificationResponse notificationResponse) {
+    // print(notificationResponse);
+  }
+
   Future<void> initNotifications() async {
     final initializationSettingsDarwin =  DarwinInitializationSettings(
           requestAlertPermission: true,
@@ -15,7 +20,7 @@ class NotificationService {
           requestProvisionalPermission: true,
           requestSoundPermission: true,
           onDidReceiveLocalNotification: (int id, String? title, String? body, String? payload) async {
-            print(payload);
+            // print(payload);
           },
     );
     
@@ -31,9 +36,8 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) async {
-        print(response);
-      },
+      onDidReceiveNotificationResponse: notificationTapBackground,
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground
     );
   }
 
@@ -48,8 +52,45 @@ class NotificationService {
   LinuxNotificationAction linuxDelete = const LinuxNotificationAction(key: 'ACTION_DELETE', label: 'Delete');
 
   
-
   androidDetails() {
+    return const AndroidNotificationDetails(
+      'todo_notifications',
+      'Todo List Notifications',
+      channelDescription: 'Get reminders for your tasks and stay organized with notifications from the Todo List App',
+      importance: Importance.max,
+      priority: Priority.max,
+      playSound: true,
+      visibility: NotificationVisibility.public,
+      enableVibration: true,
+      fullScreenIntent: false,
+      enableLights: true
+    );
+  }
+
+  darwinDetails() {
+    return const DarwinNotificationDetails(
+      subtitle: 'Get reminders for your tasks and stay organized with notifications from the Todo List App',
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+      interruptionLevel: InterruptionLevel.critical
+    );
+  }
+
+  linuxDetails() {
+    return LinuxNotificationDetails(
+      sound: ThemeLinuxSound('message'),
+      category: LinuxNotificationCategory.imReceived,
+      urgency: LinuxNotificationUrgency.critical,
+      timeout: const LinuxNotificationTimeout.systemDefault(),
+      resident: false,
+      defaultActionName: null,
+      customHints: null
+    );
+  }
+  
+  
+  scheduledAndroidDetails() {
     return AndroidNotificationDetails(
       'todo_notifications',
       'Todo List Notifications',
@@ -69,7 +110,7 @@ class NotificationService {
     );
   }
 
-  darwinDetails() {
+  scheduledDarwinDetails() {
     return const DarwinNotificationDetails(
       subtitle: 'Get reminders for your tasks and stay organized with notifications from the Todo List App',
       presentAlert: true,
@@ -79,7 +120,7 @@ class NotificationService {
     );
   }
 
-  linuxDetails() {
+ scheduledLinuxDetails() {
     return LinuxNotificationDetails(
       sound: ThemeLinuxSound('message'),
       category: LinuxNotificationCategory.imReceived,
@@ -104,13 +145,21 @@ class NotificationService {
       linux: linuxDetails()
     );
   }
+
+  scheduledNotificationDetails() {
+    return NotificationDetails(
+        android: scheduledAndroidDetails(),
+        iOS: scheduledDarwinDetails(),
+        macOS: scheduledDarwinDetails(),
+        linux: scheduledLinuxDetails());
+  }
   
 
   // Build and Send Notification
   showNotification(
     {int id = 0, String? title, String? body, String? payload}
   ) {
-    return flutterLocalNotificationsPlugin.show(id, title, body, notificationDetails());
+    return flutterLocalNotificationsPlugin.show(id, title, body, notificationDetails(), payload: payload);
   }
 
   // Schedule and Send Notification
