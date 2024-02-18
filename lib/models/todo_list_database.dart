@@ -233,7 +233,7 @@ class TodoListDatabase extends ChangeNotifier{
   void fetchUntrashedTodoList() async {
  
     // READ LIST NOT TRASHED
-    final currentNonTrashedTodoLists = isar.todoLists.filter().trashedEqualTo(false).findAllSync();
+    final currentNonTrashedTodoLists = isar.todoLists.filter().trashedEqualTo(false).sortByCreatedDesc().findAllSync();
     nonTrashedTodolists.clear();
     nonTrashedTodolists.addAll(currentNonTrashedTodoLists);
 
@@ -243,7 +243,7 @@ class TodoListDatabase extends ChangeNotifier{
   // READ
   void fetchTrashedTodoList() async {
      // READ LIST TRASHED
-    final currentTrashedTodoLists = isar.todoLists.filter().trashedEqualTo(true).findAllSync();
+    final currentTrashedTodoLists = isar.todoLists.filter().trashedEqualTo(true).sortByTrashedDateDesc().findAllSync();
     trashedTodoLists.clear();
     trashedTodoLists.addAll(currentTrashedTodoLists);
 
@@ -253,7 +253,7 @@ class TodoListDatabase extends ChangeNotifier{
   // READ STARRED
   void fetchStarredTodoList() async {
     // READ LIST STARRED
-    final currentStarredTodoLists = isar.todoLists.filter().trashedEqualTo(false).starredEqualTo(true).findAllSync();
+    final currentStarredTodoLists = isar.todoLists.filter().trashedEqualTo(false).starredEqualTo(true).sortByStarredDesc().findAllSync();
     starredTodoLists.clear();
     starredTodoLists.addAll(currentStarredTodoLists);
 

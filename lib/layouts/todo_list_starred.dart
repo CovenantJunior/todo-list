@@ -541,7 +541,7 @@ class _TodoStarredState extends State<TodoStarred> {
                                     )
                                   ],
                                 ),
-                                const Divider(height: 25),
+                                /* const Divider(height: 25),
                                 Row(
                                   children: [
                                     const Icon(
@@ -558,7 +558,8 @@ class _TodoStarredState extends State<TodoStarred> {
                                       ),
                                     ),
                                   ],
-                                )],
+                                ) */
+                              ],
                             ),
                           ),
                         ),
