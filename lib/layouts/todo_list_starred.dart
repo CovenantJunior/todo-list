@@ -48,6 +48,209 @@ class _TodoStarredState extends State<TodoStarred> {
     });
   }
 
+  TextEditingController dateController = TextEditingController();
+
+  final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+  DateTime selectedDate = DateTime.now();
+  String selectedCategory = 'Personal';
+
+  Future<void> selectDate(BuildContext context, due) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: due,
+      firstDate: selectedDate,
+      lastDate: DateTime(3000),
+    );
+
+    dateController.text = DateFormat('yyyy-MM-dd').format(picked!);
+    if (mounted && picked != selectedDate) {
+      setState(() {
+        dateController.text = DateFormat('yyyy-MM-dd').format(picked);
+      });
+    }
+  }
+
+  // ignore: non_constant_identifier_names
+  void editTodoList(int id, Plan) {
+    Navigator.pop(context);
+    textController.text = Plan.plan;
+    dateController.text = Plan.due != null ? DateFormat('yyyy-MM-dd').format(Plan.due) : date;
+    showDialog (
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          "Edit plan",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        null;
+                      },
+                      child: const Icon(
+                        Icons.mic
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextFormField(
+                        autocorrect: true,
+                        autofocus: true,
+                        minLines: 1,
+                        maxLines: 20,
+                        maxLength: 500,
+                        controller: textController,
+                        decoration: const InputDecoration(
+                          hintText: 'Task description',
+                          hintStyle: TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.bold
+                            ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Icon(Icons.category),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          labelText: 'Category',
+                          labelStyle: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.bold
+                          ),
+                          border: InputBorder.none
+                        ),
+                        child: DropdownButtonFormField<String>(
+                          value: selectedCategory,
+                          onChanged: (value) {
+                            selectedCategory = value!;
+                          },
+                          items: ['Personal', 'Work', 'Study', 'Shopping', 'Sport', 'Wishlist']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: const TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          isExpanded: true,
+                          icon: const Icon(Icons.edit),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Icon(Icons.calendar_month_rounded),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          selectDate(context, Plan.due);
+                        },
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            labelText: 'Due Date',
+                            labelStyle: TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.bold
+                            ),
+                            hintText: 'Select due date',
+                            hintStyle: TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.bold
+                            ),
+                            border: InputBorder.none
+                          ),
+                          child: TextField(
+                            controller: dateController,
+                            style: const TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.undo_rounded),
+          ),
+          IconButton(
+            icon: const Icon(Icons.add_task_rounded),
+            onPressed: () {
+              String text = textController.text;
+              String due = dateController.text;
+              String? category = selectedCategory;
+              if (text.isNotEmpty) {
+                context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due);
+                Navigator.pop(context);
+                textController.clear();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: Text(
+                      'Plan saved',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    duration: Duration(seconds: 2),
+                    content: Text(
+                      'Oops, blank shot!',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      )
+    );
+  }
+
+
   void planDetails(plan) {
     showDialog(
       context: context,
@@ -189,7 +392,15 @@ class _TodoStarredState extends State<TodoStarred> {
               )
             ],
           ),
-        )
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              editTodoList(plan.id, plan);
+            },
+            icon: const Icon(Icons.edit)
+          )
+        ],
       )
     );
   }

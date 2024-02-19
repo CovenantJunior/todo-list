@@ -90,8 +90,8 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                             autocorrect: true,
                             autofocus: true,
                             minLines: 1,
-                            maxLines: 5,
-                            maxLength: 100,
+                            maxLines: 20,
+                            maxLength: 500,
                             controller: textController,
                             decoration: const InputDecoration(
                               hintText: 'Task description',
@@ -253,15 +253,23 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                   context.read<TodoListDatabase>().trashTodoList(id);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        duration: Duration(seconds: 2),
-                        content: Text(
+                      SnackBar(
+                        duration: const Duration(seconds: 2),
+                        content: const Text(
                         'Trashed',
                         style: TextStyle(
                           fontFamily: "Quicksand",
                           fontWeight: FontWeight.bold
                         )
-                      )));
+                      ),
+                      action: SnackBarAction(
+                        label: 'UNDO',
+                        onPressed: () {
+                          
+                        }
+                      ),
+                    )
+                  );
                 },
                 icon: const Icon(
                   Icons.done,
