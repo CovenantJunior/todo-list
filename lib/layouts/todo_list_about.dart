@@ -11,7 +11,7 @@ class TodoAbout extends StatelessWidget {
           "About",
           style: TextStyle(
             fontFamily: "Quicksand",
-            fontWeight: FontWeight.bold
+            fontWeight: FontWeight.w500
           ),
         ),
         centerTitle: true,

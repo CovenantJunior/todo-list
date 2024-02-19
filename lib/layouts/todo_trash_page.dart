@@ -55,7 +55,7 @@ class _TodoTrashState extends State<TodoTrash> {
           "Details",
           style: TextStyle(
             fontFamily: "Quicksand",
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w500,
             // fontSize: 25
           ),
         ),
@@ -218,7 +218,7 @@ class _TodoTrashState extends State<TodoTrash> {
             "Edit Plans",
             style: TextStyle(
               fontFamily: "Quicksand",
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.w500
             ),
           ),
           content: SingleChildScrollView(
@@ -227,7 +227,7 @@ class _TodoTrashState extends State<TodoTrash> {
                 "Tap to select plans",
                 style: TextStyle(
                   fontFamily: "Quicksand",
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.w500
                 ),
               ),
               buttonIcon: const Icon(
@@ -275,7 +275,7 @@ class _TodoTrashState extends State<TodoTrash> {
                       'Please select a plan to deal with',
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.w500
                       )
                     )));
                   } else {
@@ -290,7 +290,7 @@ class _TodoTrashState extends State<TodoTrash> {
                           'Restoring ${selectedLists.length} plans',
                           style: const TextStyle(
                             fontFamily: "Quicksand",
-                            fontWeight: FontWeight.bold
+                            fontWeight: FontWeight.w500
                           )
                         )));
                     } else {
@@ -301,7 +301,7 @@ class _TodoTrashState extends State<TodoTrash> {
                           'Restoring plan',
                           style: TextStyle(
                             fontFamily: "Quicksand",
-                            fontWeight: FontWeight.bold
+                            fontWeight: FontWeight.w500
                           )
                         )));
                     }
@@ -325,7 +325,7 @@ class _TodoTrashState extends State<TodoTrash> {
                       'Please select a plan to deal with',
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.w500
                       )
                     )));
                   } else {
@@ -355,7 +355,7 @@ class _TodoTrashState extends State<TodoTrash> {
                                     'Deleting ${selectedLists.length} selected plans',
                                     style: const TextStyle(
                                       fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.bold
+                                      fontWeight: FontWeight.w500
                                     )
                                   )));
                               } else {
@@ -366,7 +366,7 @@ class _TodoTrashState extends State<TodoTrash> {
                                     'Deleting selected plan',
                                     style: TextStyle(
                                       fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.bold
+                                      fontWeight: FontWeight.w500
                                     )
                                   )));
                               }
@@ -461,7 +461,7 @@ class _TodoTrashState extends State<TodoTrash> {
             'Trash',
             style: TextStyle(
               fontFamily: "Quicksand",
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.w500
             ),
           ),
           centerTitle: true,
@@ -576,8 +576,8 @@ class _TodoTrashState extends State<TodoTrash> {
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontFamily: "Quicksand",
-                                                fontWeight: FontWeight.w600,
-                                                // fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 13,
                                                 decoration: decorate(plan.completed),
                                               ),
                                             ),
@@ -601,8 +601,8 @@ class _TodoTrashState extends State<TodoTrash> {
                                           plan.trashedDate != null ? DateFormat('EEE, MMM d yyyy').format(plan.due) : "Something went wrong",
                                           style: const TextStyle(
                                             fontFamily: "Quicksand",
-                                            fontWeight: FontWeight.w600,
-                                            // fontSize: 10
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 10
                                           ),
                                         ),
                                       ],
@@ -630,7 +630,7 @@ class _TodoTrashState extends State<TodoTrash> {
                 "You have no trash",
                 style: TextStyle(
                   fontFamily: "Quicksand",
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.w500
                 ),
               ),
             ],
@@ -644,7 +644,7 @@ class _TodoTrashState extends State<TodoTrash> {
                 "No result",
                 style: TextStyle(
                   fontFamily: "Quicksand",
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.w500
                 ),
               ),
             ],

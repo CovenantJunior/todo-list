@@ -44,8 +44,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
           "Notification",
           style: TextStyle(
             fontFamily: "Quicksand",
-            fontWeight: FontWeight.w600,
-            // fontSize: 20
+            fontWeight: FontWeight.w500,
+            fontSize: 20
           ),
         ),
         content: Text(
@@ -67,8 +67,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
           "Clipboard",
           style: TextStyle(
             fontFamily: "Quicksand",
-            fontWeight: FontWeight.w600,
-            // fontSize: 20
+            fontWeight: FontWeight.w500,
+            fontSize: 20
           ),
         ),
         content: Text(
@@ -90,8 +90,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
           "Speech to Text",
           style: TextStyle(
             fontFamily: "Quicksand",
-            fontWeight: FontWeight.w600,
-            // fontSize: 20
+            fontWeight: FontWeight.w500,
+            fontSize: 20
           ),
         ),
         content: Text(
@@ -113,8 +113,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
           "Swipe Dismiss",
           style: TextStyle(
             fontFamily: "Quicksand",
-            fontWeight: FontWeight.w600,
-            // fontSize: 20
+            fontWeight: FontWeight.w500,
+            fontSize: 20
           ),
         ),
         content: Text(
@@ -155,7 +155,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
           "Preferences",
           style: TextStyle(
             fontFamily: "Quicksand",
-            fontWeight: FontWeight.bold
+            fontWeight: FontWeight.w500
           ),
         ),
         centerTitle: true,
@@ -179,7 +179,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           Text(
                             darkMode == true ? 'Dark Mode' : 'Light Mode',
                             style: const TextStyle(
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
                               fontFamily: "Quicksand"
                             ),
                           ),
@@ -206,7 +207,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                               const Text(
                                 'Notification',
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13,
                                   fontFamily: "Quicksand"
                                 ),
                               ),
@@ -239,7 +241,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                               Text(
                                 'In-app Vibration',
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13,
                                   fontFamily: "Quicksand"
                                 ),
                               ),
@@ -269,7 +272,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                               const Text(
                                 'Speech to Text',
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13,
                                   fontFamily: "Quicksand"
                                 ),
                               ),
@@ -300,7 +304,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           const Text(
                             'Read out Plan Notifications',
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
                               fontFamily: "Quicksand"
                             ),
                           ),
@@ -325,7 +330,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           Text(
                             'Backup to Drive',
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
                               fontFamily: "Quicksand"
                             ),
                           ),
@@ -350,7 +356,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           const Text(
                             'Auto Sync',
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
                               fontFamily: "Quicksand"
                             ),
                           ),
@@ -377,7 +384,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                               const Text(
                                 'Access Clipboard',
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13,
                                   fontFamily: "Quicksand"
                                 ),
                               ),
@@ -408,7 +416,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           Text(
                             'Auto Delete Completed Task',
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
                               fontFamily: "Quicksand"
                             ),
                           ),
@@ -435,7 +444,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                               const Text(
                                 'Delete Plan on Dismiss',
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13,
                                     fontFamily: "Quicksand"),
                               ),
                               const SizedBox(width: 7),

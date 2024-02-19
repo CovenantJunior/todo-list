@@ -83,7 +83,7 @@ class _TodoStarredState extends State<TodoStarred> {
           "Edit plan",
           style: TextStyle(
             fontFamily: "Quicksand",
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w500,
           ),
         ),
         content: SizedBox(
@@ -114,7 +114,7 @@ class _TodoStarredState extends State<TodoStarred> {
                           hintText: 'Task description',
                           hintStyle: TextStyle(
                               fontFamily: "Quicksand",
-                              fontWeight: FontWeight.bold
+                              fontWeight: FontWeight.w500
                             ),
                         ),
                       ),
@@ -132,7 +132,7 @@ class _TodoStarredState extends State<TodoStarred> {
                           labelText: 'Category',
                           labelStyle: TextStyle(
                             fontFamily: "Quicksand",
-                            fontWeight: FontWeight.bold
+                            fontWeight: FontWeight.w500
                           ),
                           border: InputBorder.none
                         ),
@@ -149,7 +149,7 @@ class _TodoStarredState extends State<TodoStarred> {
                                 value,
                                 style: const TextStyle(
                                   fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.bold
+                                  fontWeight: FontWeight.w500
                                 ),
                               ),
                             );
@@ -176,12 +176,12 @@ class _TodoStarredState extends State<TodoStarred> {
                             labelText: 'Due Date',
                             labelStyle: TextStyle(
                               fontFamily: "Quicksand",
-                              fontWeight: FontWeight.bold
+                              fontWeight: FontWeight.w500
                             ),
                             hintText: 'Select due date',
                             hintStyle: TextStyle(
                               fontFamily: "Quicksand",
-                              fontWeight: FontWeight.bold
+                              fontWeight: FontWeight.w500
                             ),
                             border: InputBorder.none
                           ),
@@ -189,7 +189,7 @@ class _TodoStarredState extends State<TodoStarred> {
                             controller: dateController,
                             style: const TextStyle(
                               fontFamily: "Quicksand",
-                              fontWeight: FontWeight.bold
+                              fontWeight: FontWeight.w500
                             ),
                           ),
                         ),
@@ -223,7 +223,7 @@ class _TodoStarredState extends State<TodoStarred> {
                       'Plan saved',
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -237,7 +237,7 @@ class _TodoStarredState extends State<TodoStarred> {
                       'Oops, blank shot!',
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -259,7 +259,7 @@ class _TodoStarredState extends State<TodoStarred> {
           "Details",
           style: TextStyle(
             fontFamily: "Quicksand",
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w500,
             // fontSize: 25
           ),
         ),
@@ -430,7 +430,7 @@ class _TodoStarredState extends State<TodoStarred> {
             "Edit Plans",
             style: TextStyle(
               fontFamily: "Quicksand",
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.w500
             ),
           ),
           content: SingleChildScrollView(
@@ -439,7 +439,7 @@ class _TodoStarredState extends State<TodoStarred> {
                 "Tap to select plans",
                 style: TextStyle(
                   fontFamily: "Quicksand",
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.w500
                 ),
               ),
               buttonIcon: const Icon(
@@ -487,7 +487,7 @@ class _TodoStarredState extends State<TodoStarred> {
                       'Please select a plan to deal with',
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.w500
                       )
                     )));
                   } else {
@@ -502,7 +502,7 @@ class _TodoStarredState extends State<TodoStarred> {
                           'Unstarring ${selectedLists.length} plans',
                           style: const TextStyle(
                             fontFamily: "Quicksand",
-                            fontWeight: FontWeight.bold
+                            fontWeight: FontWeight.w500
                           )
                         )));
                     } else {
@@ -513,7 +513,7 @@ class _TodoStarredState extends State<TodoStarred> {
                           'Unstarring plan',
                           style: TextStyle(
                             fontFamily: "Quicksand",
-                            fontWeight: FontWeight.bold
+                            fontWeight: FontWeight.w500
                           )
                         )));
                     }
@@ -585,7 +585,7 @@ class _TodoStarredState extends State<TodoStarred> {
             'Plan reactivated!',
             style: TextStyle(
               fontFamily: "Quicksand",
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.w500
             )
           )));
       } else {
@@ -597,7 +597,7 @@ class _TodoStarredState extends State<TodoStarred> {
             'Plan accomplished. You inspire!!!',
             style: TextStyle(
               fontFamily: "Quicksand",
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.w500
             )
           )));
       }
@@ -620,7 +620,7 @@ class _TodoStarredState extends State<TodoStarred> {
             'Starred',
             style: TextStyle(
               fontFamily: "Quicksand",
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.w500
             ),
           ),
           centerTitle: true,
@@ -718,8 +718,8 @@ class _TodoStarredState extends State<TodoStarred> {
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                             fontFamily: "Quicksand",
-                                            fontWeight: FontWeight.w600,
-                                            // fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
                                             decoration: decorate(plan.completed),
                                           ),
                                         ),
@@ -764,7 +764,7 @@ class _TodoStarredState extends State<TodoStarred> {
                                       DateFormat('EEE, MMM d yyyy').format(plan.due),
                                       style: const TextStyle(
                                         fontFamily: "Quicksand",
-                                        fontWeight: FontWeight.w600,
+                                        fontWeight: FontWeight.w500,
                                         // fontSize: 10
                                       ),
                                     ),
@@ -790,7 +790,7 @@ class _TodoStarredState extends State<TodoStarred> {
                 "No starred plan yet",
                 style: TextStyle(
                   fontFamily: "Quicksand",
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.w500
                 ),
               ),
             ],
@@ -804,7 +804,7 @@ class _TodoStarredState extends State<TodoStarred> {
                 "No result",
                 style: TextStyle(
                   fontFamily: "Quicksand",
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.w500
                 ),
               ),
             ],

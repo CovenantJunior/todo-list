@@ -54,7 +54,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
                         'Poof! Gone like the wind',
                         style: TextStyle(
                           fontFamily: "Quicksand",
-                          fontWeight: FontWeight.bold
+                          fontWeight: FontWeight.w500
                         )
                       )));
                 },
@@ -85,7 +85,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
               'Restored back on track',
               style: TextStyle(
                 fontFamily: "Quicksand",
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.w500
               )
             )));
       }

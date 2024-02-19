@@ -15,51 +15,6 @@ class TodoListDrawer extends StatefulWidget {
 }
 
 class _TodoListDrawerState extends State<TodoListDrawer> {
-  // Delete All Plans
-    /* void trashAllTodoLists() {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: const Text(
-            "Move all plans to Trash?",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              // fontSize: 20,
-              fontFamily: 'Quicksand',
-            ),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                context.read<TodoListDatabase>().trashAllTodoLists();
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text(
-                      'Moved all to Trash',
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
-                      )
-                    )));
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.done,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.cancel_outlined,
-              ),
-            ),
-          ],
-        ) 
-      );
-    } */
-
   @override
   Widget build(BuildContext context) {
     // List todolists = context.watch<TodoListDatabase>().todolists;
@@ -87,7 +42,7 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
 
             TodoListDrawerTile(
               title: "Starred",
-              leading: const Icon(Icons.star_rounded),
+              leading: const Icon(Icons.star_border_rounded),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoStarred()));

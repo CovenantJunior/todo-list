@@ -66,7 +66,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
               "Edit plan",
               style: TextStyle(
                 fontFamily: "Quicksand",
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w500,
               ),
             ),
             content: SizedBox(
@@ -97,7 +97,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                               hintText: 'Task description',
                               hintStyle: TextStyle(
                                   fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.bold
+                                  fontWeight: FontWeight.w500
                                 ),
                             ),
                           ),
@@ -115,7 +115,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                               labelText: 'Category',
                               labelStyle: TextStyle(
                                 fontFamily: "Quicksand",
-                                fontWeight: FontWeight.bold
+                                fontWeight: FontWeight.w500
                               ),
                               border: InputBorder.none
                             ),
@@ -132,7 +132,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                                     value,
                                     style: const TextStyle(
                                       fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.bold
+                                      fontWeight: FontWeight.w500
                                     ),
                                   ),
                                 );
@@ -159,12 +159,12 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                                 labelText: 'Due Date',
                                 labelStyle: TextStyle(
                                   fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.bold
+                                  fontWeight: FontWeight.w500
                                 ),
                                 hintText: 'Select due date',
                                 hintStyle: TextStyle(
                                   fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.bold
+                                  fontWeight: FontWeight.w500
                                 ),
                                 border: InputBorder.none
                               ),
@@ -172,7 +172,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                                 controller: dateController,
                                 style: const TextStyle(
                                   fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.bold
+                                  fontWeight: FontWeight.w500
                                 ),
                               ),
                             ),
@@ -206,7 +206,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                           'Plan saved',
                           style: TextStyle(
                             fontFamily: "Quicksand",
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
@@ -220,7 +220,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                           'Oops, blank shot!',
                           style: TextStyle(
                             fontFamily: "Quicksand",
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
@@ -235,7 +235,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
 
       // Trash
       void trashTodoList(int id) {
-        context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+        // context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -259,11 +259,11 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                         'Trashed',
                         style: TextStyle(
                           fontFamily: "Quicksand",
-                          fontWeight: FontWeight.bold
+                          fontWeight: FontWeight.w500
                         )
                       ),
                       action: SnackBarAction(
-                        label: 'UNDO',
+                        label: 'Undo',
                         onPressed: () {
                           
                         }
@@ -311,7 +311,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
               'Copied and locked! Paste at your leisure!',
               style: TextStyle(
                 fontFamily: "Quicksand",
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.w500
               )
             )));
       }
@@ -327,7 +327,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
               'Plan reactivated!',
               style: TextStyle(
                 fontFamily: "Quicksand",
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.w500
               )
             )));
         } else {
@@ -339,7 +339,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
               'Plan accomplished. You inspire!!!',
               style: TextStyle(
                 fontFamily: "Quicksand",
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.w500
               )
             )));
         }
@@ -399,13 +399,13 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                     'Starred!',
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.w500
                     )
                 ) : const Text(
                     'Unstarred!',
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.w500
                     )
                 )
               )

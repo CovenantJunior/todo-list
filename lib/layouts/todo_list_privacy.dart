@@ -11,7 +11,7 @@ class TodoPrivacy extends StatelessWidget {
           "Privacy Policy",
           style: TextStyle(
             fontFamily: "Quicksand",
-            fontWeight: FontWeight.bold
+            fontWeight: FontWeight.w500
           ),
         ),
         centerTitle: true,
