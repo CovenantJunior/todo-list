@@ -118,7 +118,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
           ),
         ),
         content: Text(
-            "When you swipe to dismiss, plans are flagged as completed and are then trashed",
+            "Swiping to dismiss results in plans being discarded.",
             style: TextStyle(
               fontFamily: "Quicksand",
               fontWeight: FontWeight.w500,

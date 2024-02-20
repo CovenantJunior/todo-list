@@ -592,7 +592,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       });
       Future.delayed(const Duration(seconds: 5), () {
         if (undo == true) {
-          context.read<TodoListDatabase>().completed(id);
           context.read<TodoListDatabase>().trashTodoList(id);
           setState(() {
             undo = true;
