@@ -49,6 +49,7 @@ dependencies:
   vibration: ^1.8.4
   flutter_local_notifications: ^16.3.2
   permission_handler: ^11.2.0
+  toast: ^0.3.0
 
 dev_dependencies:
   flutter_test:

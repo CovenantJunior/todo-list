@@ -660,7 +660,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     }
 
     void trashAllTodoLists() {
-      // context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+      context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
       showDialog(
         context: context,
         builder: (context) => AlertDialog(

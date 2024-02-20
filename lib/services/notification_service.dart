@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:toast/toast.dart';
 
 class NotificationService {
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -16,9 +19,9 @@ class NotificationService {
       requestProvisionalPermission: true,
       requestSoundPermission: true,
       onDidReceiveLocalNotification:
-          (int id, String? title, String? body, String? payload) async {
-        print(payload);
-      },
+        (int id, String? title, String? body, String? payload) async {
+          
+        },
     );
 
     const LinuxInitializationSettings initializationSettingsLinux =
@@ -32,23 +35,31 @@ class NotificationService {
             iOS: initializationSettingsDarwin,
             macOS: initializationSettingsDarwin,
             linux: initializationSettingsLinux);
+    
+    @pragma('vm:entry-point')
+    void notificationResponse(NotificationResponse notificationResponse) {
+      if (notificationResponse.actionId == 'ACTION_COMPLETED') {
+          return Toast.show('Marking plan as Completed', duration: 1, gravity: 0);
+      } else {
+          return Toast.show('Deleting Plan',  duration: 1, gravity: 0);
+      }
+    }
 
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) async {
-        print(response);
-      },
+      onDidReceiveNotificationResponse: notificationResponse,
+      onDidReceiveBackgroundNotificationResponse: notificationResponse
     );
   }
 
   AndroidNotificationAction ok =
-      const AndroidNotificationAction('ACTION_OK', 'Ok');
+      const AndroidNotificationAction('ACTION_OK', 'Ok', showsUserInterface: true);
   AndroidNotificationAction completed =
-      const AndroidNotificationAction('ACTION_COMPLETED', 'Mark as Completed');
+      const AndroidNotificationAction('ACTION_COMPLETED', 'Mark as Completed', showsUserInterface: true);
   AndroidNotificationAction reschedule =
-      const AndroidNotificationAction('ACTION_RESCHEDULE', 'Reschedule');
+      const AndroidNotificationAction('ACTION_RESCHEDULE', 'Reschedule', showsUserInterface: true);
   AndroidNotificationAction delete =
-      const AndroidNotificationAction('ACTION_DELETE', 'Delete');
+      const AndroidNotificationAction('ACTION_DELETE', 'Delete', showsUserInterface: true);
 
   LinuxNotificationAction linuxOk =
       const LinuxNotificationAction(key: 'ACTION_OK', label: 'Ok');
@@ -116,7 +127,8 @@ class NotificationService {
   // Build and Send Notification
   showNotification({int id = 0, String? title, String? body, String? payload}) {
     return flutterLocalNotificationsPlugin.show(
-        id, title, body, notificationDetails());
+      id, title, body, notificationDetails(), payload: payload
+    );
   }
 
   // Schedule and Send Notification
