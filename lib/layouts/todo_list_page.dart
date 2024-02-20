@@ -549,7 +549,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       Future.delayed(const Duration(seconds: 5), () {
         if (undo == true) {
           context.read<TodoListDatabase>().trashTodoList(id);
-          cardToRemove.clear();
+          Future.delayed(const Duration(seconds: 2), () {
+            cardToRemove.clear();
+          });
           setState(() {
             undo = true;
           });
@@ -587,7 +589,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       Future.delayed(const Duration(seconds: 5), () {
         if (undo == true) {
           context.read<TodoListDatabase>().trashAllTodoLists(nonTrashedTodolistsState);
-          cardToRemove.clear();
+          Future.delayed(const Duration(seconds: 2), () {
+            cardToRemove.clear();
+          });
           setState(() {
             undo = true;
           });

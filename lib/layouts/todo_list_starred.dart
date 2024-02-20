@@ -260,7 +260,9 @@ class _TodoStarredState extends State<TodoStarred> {
       Future.delayed(const Duration(seconds: 5), () {
         if (undo == true) {
           context.read<TodoListDatabase>().trashTodoList(id);
-          cardToRemove.clear();
+          Future.delayed(const Duration(seconds: 2), () {
+            cardToRemove.clear();
+          });
           setState(() {
             undo = true;
           });
