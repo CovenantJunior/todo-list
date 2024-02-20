@@ -505,50 +505,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   }
 }
 
-  void trashAllTodoLists() {
-    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: const Text(
-          "Move all plans to Trash?",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            // fontSize: 20,
-            fontFamily: 'Quicksand',
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.read<TodoListDatabase>().trashAllTodoLists(nonTrashedTodolistsState);
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text(
-                    'Moved all to Trash',
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      fontWeight: FontWeight.w500
-                    )
-                  )));
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.done,
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.cancel_outlined,
-            ),
-          ),
-        ],
-      ) 
-    );
-  }
-
   
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -585,7 +541,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
 
-    void dismissAction (id) {
+    void deleteAction (id) {
       bool undo = true;
       setState(() {
         cardToRemove.add(id);
@@ -593,6 +549,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       Future.delayed(const Duration(seconds: 5), () {
         if (undo == true) {
           context.read<TodoListDatabase>().trashTodoList(id);
+          cardToRemove.clear();
           setState(() {
             undo = true;
           });
@@ -602,6 +559,44 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         SnackBar(
           duration: const Duration(seconds: 4),
           content: const Text('Trashed',
+              style: TextStyle(
+                fontFamily: "Quicksand",
+                fontWeight: FontWeight.w500
+              )
+            ),
+            action: SnackBarAction(
+              label: 'UNDO',
+              onPressed: () {
+                setState(() {
+                  undo = false;
+                });
+                cardToRemove.clear();
+              }
+          )
+        ),
+      );
+    }
+
+    void deleteAllAction (nonTrashedTodolistsState) {
+      bool undo = true;
+      for (var list in nonTrashedTodolistsState) {
+        setState(() {
+          cardToRemove.add(list.id);
+        });
+      }
+      Future.delayed(const Duration(seconds: 5), () {
+        if (undo == true) {
+          context.read<TodoListDatabase>().trashAllTodoLists(nonTrashedTodolistsState);
+          cardToRemove.clear();
+          setState(() {
+            undo = true;
+          });
+        }
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: const Duration(seconds: 4),
+          content: const Text('Moved all to Trash',
               style: TextStyle(
                 fontFamily: "Quicksand",
                 fontWeight: FontWeight.w500
@@ -640,7 +635,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           actions: [
             IconButton(
               onPressed: () {
-                dismissAction(id);
+                deleteAction(id);
                 Navigator.pop(context);
               },
               icon: const Icon(
@@ -657,7 +652,43 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             ),
           ],
         )
-      ) : dismissAction(id);
+      ) : deleteAction(id);
+    }
+
+    void trashAllTodoLists() {
+      // context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: const Text(
+            "Move all plans to Trash?",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              // fontSize: 20,
+              fontFamily: 'Quicksand',
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+                deleteAllAction(nonTrashedTodolistsState);
+              },
+              icon: const Icon(
+                Icons.done,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.cancel_outlined,
+              ),
+            ),
+          ],
+        ) 
+      );
     }
     
     Widget searchTextField() { //add
@@ -1364,7 +1395,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                             id: plan.id,
                             plan: plan.plan,
                             Plan: plan,
-                            deleteAction: dismissAction,
+                            deleteAction: deleteAction,
                           )
                         );
                       },
