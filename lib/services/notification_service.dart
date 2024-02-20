@@ -1,7 +1,60 @@
 import 'dart:async';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:toast/toast.dart';
+import 'package:isar/isar.dart';
+import 'package:todo_list/models/todo_list.dart';
+import 'package:todo_list/models/todo_preferences.dart';
+
+List preferences = [];
+
+void fetchPreferences() async {
+  late Isar isar;
+  isar = Isar.getInstance()!;
+  List currentPreferences = isar.todoPreferences.where().findAllSync();
+  preferences.clear();
+  preferences.addAll(currentPreferences);
+}
+
+void completed(int id) async {
+  late Isar isar;
+  isar = Isar.getInstance()!;
+  var existingTodoList = await isar.todoLists.get(id);
+  if (existingTodoList != null) {
+    existingTodoList.completed = true;
+    existingTodoList.achieved = DateTime.now();
+    await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
+
+    fetchPreferences();
+
+    if (preferences.first.autoDelete == true) {
+      trashTodoList(id);
+    }
+  }
+}
+
+void trashTodoList(int id) async {
+  late Isar isar;
+  isar = Isar.getInstance()!;
+  var existingTodoList = await isar.todoLists.get(id);
+  if (existingTodoList != null) {
+    existingTodoList.trashed = true;
+    existingTodoList.trashedDate = DateTime.now();
+    await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
+  }
+}
+
+@pragma('vm:entry-point')
+Future<void> notificationResponse(NotificationResponse notificationResponse) async {
+  if (notificationResponse.actionId != null) {
+    if (notificationResponse.actionId == 'ACTION_COMPLETED') {
+      print('Marking plan as Completed');
+      completed(notificationResponse.id!);
+    } else if (notificationResponse.actionId == 'ACTION_DELETE') {
+      print('Deleting Plan');
+      trashTodoList(notificationResponse.id!);
+    }
+  }
+}
 
 class NotificationService {
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -36,14 +89,6 @@ class NotificationService {
             macOS: initializationSettingsDarwin,
             linux: initializationSettingsLinux);
     
-    @pragma('vm:entry-point')
-    void notificationResponse(NotificationResponse notificationResponse) {
-      if (notificationResponse.actionId == 'ACTION_COMPLETED') {
-          return Toast.show('Marking plan as Completed', duration: 1, gravity: 0);
-      } else {
-          return Toast.show('Deleting Plan',  duration: 1, gravity: 0);
-      }
-    }
 
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,

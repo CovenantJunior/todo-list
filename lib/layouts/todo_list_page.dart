@@ -244,7 +244,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   ),
                 ),
               );
-              NotificationService().showNotification(id: DateTime.now().millisecond, title: "New Plan Recorded", body: text, payload: "Due by $due");
+              NotificationService().showNotification(id: nonTrashedTodolistsState.last.id+1, title: "New Plan Recorded", body: text, payload: "Due by $due");
             } else {
               context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
               ScaffoldMessenger.of(context).showSnackBar(
