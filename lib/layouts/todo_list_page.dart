@@ -244,7 +244,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   ),
                 ),
               );
-              NotificationService().showNotification(id: nonTrashedTodolistsState.last.id+1, title: "New Plan Recorded", body: text, payload: "Due by $due");
+              print(nonTrashedTodolistsState.first.id + 1);
+              NotificationService().showNotification(id: nonTrashedTodolistsState.first.id + 1, title: "New Plan Recorded", body: text, payload: "Due by $due");
             } else {
               context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
               ScaffoldMessenger.of(context).showSnackBar(
@@ -1540,7 +1541,16 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               child: RotationTransition(
                 turns: Tween(begin: 0.0, end: isSearch ? 0.25 : 0.0).animate(_animationController),
                 child: FloatingActionButton(
-                  onPressed: isSearch ? closeSearch : createTodoList,
+                  onPressed: () {
+                    if (isSearch == true) {
+                      closeSearch();
+                    } else {
+                      setState(() {
+                        nonTrashedTodolistsState = nonTrashedTodolists;
+                      });
+                      createTodoList();
+                    }
+                  },
                   backgroundColor: Theme.of(context).colorScheme.onSecondary,
                   child: Transform.rotate(
                     angle: isSearch ? 45 * (3.141592653589793238 / 180) : 0.0, // Rotate 45 degrees if isSearch is true
