@@ -47,6 +47,54 @@ class _TodoTrashState extends State<TodoTrash> {
     });
   }
 
+  void restoreAll() {
+      // context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: const Text(
+            "Restore all plans?",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              // fontSize: 20,
+              fontFamily: 'Quicksand',
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+                context.read<TodoListDatabase>().restoreAllTodoLists(trashedTodoListState);
+                String message = trashedTodoListState.length > 1 ? 'Restoring ${trashedTodoListState.length} plans' : 'Restoring plan';
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    duration: const Duration(seconds: 4),
+                    content: Text(message,
+                      style: const TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.w500
+                      )
+                    ),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.done,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.cancel_outlined,
+              ),
+            ),
+          ],
+        ) 
+      );
+    }
+
   void planDetails(plan) {
     showDialog(
       context: context,
@@ -262,7 +310,7 @@ class _TodoTrashState extends State<TodoTrash> {
               message: "Restore Plan",
               child: IconButton(
                 icon: const Icon(
-                  Icons.restore_rounded,
+                  Icons.restart_alt_rounded,
                 ),
                 // color: Colors.blueGrey,
                 onPressed: () {
@@ -402,10 +450,14 @@ class _TodoTrashState extends State<TodoTrash> {
   bool isSearch = false;
   bool isOfLength = false;
   List searchResults = [];
+  List trashedTodoListState = [];
 
   @override
   Widget build(BuildContext context) {
     List trashedTodoList = context.watch<TodoListDatabase>().trashedTodoLists;
+    setState(() {
+      trashedTodoListState = trashedTodoList;
+    });
     
     Widget searchTextField() { //add
       return TextField(
@@ -659,6 +711,13 @@ class _TodoTrashState extends State<TodoTrash> {
                 angle: 45 * (3.141592653589793238 / 180), // Rotate 45 degrees if isSearch is true
                 child: const Icon(Icons.add),
               ),
+            ),
+        ) : trashedTodoListState.isNotEmpty ? Tooltip(
+          message: "Restore all Plans",
+          child: FloatingActionButton(
+              onPressed: restoreAll,
+              backgroundColor: Theme.of(context).colorScheme.onSecondary,
+              child: const Icon(Icons.restart_alt_rounded),
             ),
         ) : const SizedBox(),
       ),

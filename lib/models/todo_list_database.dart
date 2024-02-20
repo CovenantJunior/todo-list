@@ -292,8 +292,8 @@ class TodoListDatabase extends ChangeNotifier{
 
   // TRASH ALL
   void trashAllTodoLists(plans) async {
-    for (var existingTodoList in plans) {
-      trashTodoList(existingTodoList.id);
+    for (var plan in plans) {
+      trashTodoList(plan.id);
     }
 
     // Update TodoList List
@@ -326,6 +326,16 @@ class TodoListDatabase extends ChangeNotifier{
       existingTodoList.trashed = false;
       existingTodoList.trashedDate = null;
       await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
+    }
+
+    // Update TodoList List
+    fetchTodoList();
+  }
+
+  // RESTORE ALL PLANS
+  void restoreAllTodoLists(plans) async {
+    for (var plan in plans) {
+      restoreTodoLists(plan.id);
     }
 
     // Update TodoList List

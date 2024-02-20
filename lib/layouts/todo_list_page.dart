@@ -589,7 +589,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       Future.delayed(const Duration(seconds: 5), () {
         if (undo == true) {
           context.read<TodoListDatabase>().trashAllTodoLists(nonTrashedTodolistsState);
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 3), () {
             cardToRemove.clear();
           });
           setState(() {
