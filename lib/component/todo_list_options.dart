@@ -14,13 +14,15 @@ class TodoListOptions extends StatefulWidget {
   final String plan;
   // ignore: non_constant_identifier_names
   final TodoList Plan;
+  final Function(int) deleteAction;
 
   const TodoListOptions({
     super.key,
     required this.id,
     required this.plan,
     // ignore: non_constant_identifier_names
-    required this.Plan
+    required this.Plan,
+    required this.deleteAction
   });
 
   @override
@@ -54,407 +56,391 @@ class _TodoListOptionsState extends State<TodoListOptions> {
       }
     }
 
-      // Update
-      // ignore: non_constant_identifier_names
-      void editTodoList(int id, Plan) {
-        textController.text = Plan.plan;
-        dateController.text = Plan.due != null ? DateFormat('yyyy-MM-dd').format(Plan.due) : date;
-        showDialog (
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text(
-              "Edit plan",
-              style: TextStyle(
-                fontFamily: "Quicksand",
-                fontWeight: FontWeight.w500,
-              ),
+
+
+    // Update
+    // ignore: non_constant_identifier_names
+    void editTodoList(int id, Plan) {
+      textController.text = Plan.plan;
+      dateController.text = Plan.due != null ? DateFormat('yyyy-MM-dd').format(Plan.due) : date;
+      showDialog (
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text(
+            "Edit plan",
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.w500,
             ),
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            null;
-                          },
-                          child: const Icon(
-                            Icons.mic
+          ),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          null;
+                        },
+                        child: const Icon(
+                          Icons.mic
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextFormField(
+                          autocorrect: true,
+                          autofocus: true,
+                          minLines: 1,
+                          maxLines: 20,
+                          maxLength: 500,
+                          controller: textController,
+                          decoration: const InputDecoration(
+                            hintText: 'Task description',
+                            hintStyle: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.w500
+                              ),
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: TextFormField(
-                            autocorrect: true,
-                            autofocus: true,
-                            minLines: 1,
-                            maxLines: 20,
-                            maxLength: 500,
-                            controller: textController,
-                            decoration: const InputDecoration(
-                              hintText: 'Task description',
-                              hintStyle: TextStyle(
-                                  fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.w500
-                                ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      const Icon(Icons.category),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            labelText: 'Category',
+                            labelStyle: TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.w500
                             ),
+                            border: InputBorder.none
+                          ),
+                          child: DropdownButtonFormField<String>(
+                            value: selectedCategory,
+                            onChanged: (value) {
+                              selectedCategory = value;
+                            },
+                            items: ['Personal', 'Work', 'Study', 'Shopping', 'Sport', 'Wishlist']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: const TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            isExpanded: true,
+                            icon: const Icon(Icons.edit),
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        const Icon(Icons.category),
-                        const SizedBox(width: 8),
-                        Expanded(
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      const Icon(Icons.calendar_month_rounded),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            selectDate(context, Plan.due);
+                          },
                           child: InputDecorator(
                             decoration: const InputDecoration(
-                              labelText: 'Category',
+                              labelText: 'Due Date',
                               labelStyle: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.w500
+                              ),
+                              hintText: 'Select due date',
+                              hintStyle: TextStyle(
                                 fontFamily: "Quicksand",
                                 fontWeight: FontWeight.w500
                               ),
                               border: InputBorder.none
                             ),
-                            child: DropdownButtonFormField<String>(
-                              value: selectedCategory,
-                              onChanged: (value) {
-                                selectedCategory = value;
-                              },
-                              items: ['Personal', 'Work', 'Study', 'Shopping', 'Sport', 'Wishlist']
-                                  .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: const TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.w500
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                              isExpanded: true,
-                              icon: const Icon(Icons.edit),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        const Icon(Icons.calendar_month_rounded),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              selectDate(context, Plan.due);
-                            },
-                            child: InputDecorator(
-                              decoration: const InputDecoration(
-                                labelText: 'Due Date',
-                                labelStyle: TextStyle(
-                                  fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.w500
-                                ),
-                                hintText: 'Select due date',
-                                hintStyle: TextStyle(
-                                  fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.w500
-                                ),
-                                border: InputBorder.none
-                              ),
-                              child: TextField(
-                                controller: dateController,
-                                style: const TextStyle(
-                                  fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.w500
-                                ),
+                            child: TextField(
+                              controller: dateController,
+                              style: const TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.w500
                               ),
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            actions: [
-              IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.undo_rounded),
-              ),
-              IconButton(
-                icon: const Icon(Icons.add_task_rounded),
-                onPressed: () {
-                  String text = textController.text;
-                  String due = dateController.text;
-                  String? category = selectedCategory;
-                  if (text.isNotEmpty) {
-                    context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due);
-                    Navigator.pop(context);
-                    textController.clear();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        duration: Duration(seconds: 2),
-                        content: Text(
-                          'Plan saved',
-                          style: TextStyle(
-                            fontFamily: "Quicksand",
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    );
-                  } else {
-                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        duration: Duration(seconds: 2),
-                        content: Text(
-                          'Oops, blank shot!',
-                          style: TextStyle(
-                            fontFamily: "Quicksand",
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
-          )
-        );
-      }
-
-      // Trash
-      void trashTodoList(int id) {
-        // context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            content: const Text(
-              "Move plan to Trash?",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                // fontSize: 20,
-                fontFamily: 'Quicksand',
-              ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.undo_rounded),
             ),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  context.read<TodoListDatabase>().trashTodoList(id);
+            IconButton(
+              icon: const Icon(Icons.add_task_rounded),
+              onPressed: () {
+                String text = textController.text;
+                String due = dateController.text;
+                String? category = selectedCategory;
+                if (text.isNotEmpty) {
+                  context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due);
                   Navigator.pop(context);
+                  textController.clear();
                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        duration: const Duration(seconds: 2),
-                        content: const Text(
-                        'Trashed',
+                    const SnackBar(
+                      duration: Duration(seconds: 2),
+                      content: Text(
+                        'Plan saved',
                         style: TextStyle(
                           fontFamily: "Quicksand",
-                          fontWeight: FontWeight.w500
-                        )
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                      action: SnackBarAction(
-                        label: 'Undo',
-                        onPressed: () {
-                          
-                        }
-                      ),
-                    )
+                    ),
                   );
-                },
-                icon: const Icon(
-                  Icons.done,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.cancel_outlined,
-                ),
-              ),
-            ],
-          ) 
-        );
-      }
-
-      // Miscellaneous
-
-      // Share TodoList
-      // ignore: non_constant_identifier_names
-      void share(plan) {
-        Share.share(plan);
-      }
-
-      // Copy to Clipboard
-      // ignore: non_constant_identifier_names
-      void copy(plan) {
-        Clipboard.setData (
-          ClipboardData(
-            text: plan
-            )
-        );
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              duration: Duration(seconds: 2),
-              content: Text(
-              'Copied and locked! Paste at your leisure!',
-              style: TextStyle(
-                fontFamily: "Quicksand",
-                fontWeight: FontWeight.w500
-              )
-            )));
-      }
-
-      // ignore: non_constant_identifier_names
-      void mark(Plan) {
-        if (Plan.completed == true) {
-          context.read<TodoListDatabase>().replan(Plan.id);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              duration: Duration(seconds: 2),
-              content: Text(
-              'Plan reactivated!',
-              style: TextStyle(
-                fontFamily: "Quicksand",
-                fontWeight: FontWeight.w500
-              )
-            )));
-        } else {
-          context.read<TodoListDatabase>().completed(Plan.id);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              duration: Duration(seconds: 2),
-              content: Text(
-              'Plan accomplished. You inspire!!!',
-              style: TextStyle(
-                fontFamily: "Quicksand",
-                fontWeight: FontWeight.w500
-              )
-            )));
-        }
-      }
-
-
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IconButton(
-            onPressed: () {Navigator.pop(context);
-              editTodoList(widget.Plan.id, widget.Plan);
-            },
-            icon: const Tooltip(
-              message: "Edit Plan",
-              child: Icon(
-                Icons.edit,
-                color: Colors.blueGrey,
-              ),
+                } else {
+                  context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      duration: Duration(seconds: 2),
+                      content: Text(
+                        'Oops, blank shot!',
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-              copy(widget.plan);
-            },
-            icon: const Tooltip(
-              message: "Copy to Clipboard",
-              child: Icon(
-                Icons.copy,
-                color: Colors.blueGrey,
-              ),
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-              share(widget.plan);
-            },
-            icon: const Tooltip(
-              message: "Share Plan",
-              child: Icon(
-                Icons.share,
-                color: Colors.blueGrey,
-              ),
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-              context.read<TodoListDatabase>().star(widget.id);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  duration: const Duration(seconds: 2),
-                  content: widget.Plan.starred != true ?
-                  const Text(
-                    'Starred!',
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.w500
-                    )
-                ) : const Text(
-                    'Unstarred!',
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.w500
-                    )
-                )
-              )
-            );
-            },
-            icon: Tooltip(
-              message: widget.Plan.starred != true ? "Star" : "Unstar",
-              child: Icon(
-                widget.Plan.starred != true ? Icons.star_outlined : Icons.star_outline_rounded,
-                color: Colors.blueGrey,
-              ),
-            ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-              mark(widget.Plan);
-            },
-            icon: 
-            widget.Plan.completed! ?
-            const Tooltip(
-              message: "Reactivate Plan",
-              child: Icon(
-                  Icons.bookmark_remove_rounded,
-                  color: Colors.blueGrey,
-                ),
-            ) :
-              const Tooltip(
-                message: "Mark Plan as Completed",
-                child: Icon(
-                  Icons.bookmark_added_rounded,
-                  color: Colors.blueGrey,
-                ),
-              ),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-              trashTodoList(widget.Plan.id);
-            },
-            icon: const Tooltip(
-              message: "Trash Plan",
-              child: Icon(
-                Icons.delete,
-                color: Colors.blueGrey,
-              ),
-            ),
-          ),
-        ],
+          ],
+        )
       );
+    }
+    
+    // Trash
+    void trashTodoList(int id) {
+      // context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: const Text(
+            "Move plan to Trash?",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              // fontSize: 20,
+              fontFamily: 'Quicksand',
+            ),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+                widget.deleteAction(id);
+              },
+              icon: const Icon(
+                Icons.done,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.cancel_outlined,
+              ),
+            ),
+          ],
+        ) 
+      );
+    }
+
+    // Miscellaneous
+
+    // Share TodoList
+    // ignore: non_constant_identifier_names
+    void share(plan) {
+      Share.share(plan);
+    }
+
+    // Copy to Clipboard
+    // ignore: non_constant_identifier_names
+    void copy(plan) {
+      Clipboard.setData (
+        ClipboardData(
+          text: plan
+          )
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 2),
+            content: Text(
+            'Copied and locked! Paste at your leisure!',
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.w500
+            )
+          )));
+    }
+
+    // ignore: non_constant_identifier_names
+    void mark(Plan) {
+      if (Plan.completed == true) {
+        context.read<TodoListDatabase>().replan(Plan.id);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 2),
+            content: Text(
+            'Plan reactivated!',
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.w500
+            )
+          )));
+      } else {
+        context.read<TodoListDatabase>().completed(Plan.id);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 2),
+            content: Text(
+            'Plan accomplished. You inspire!!!',
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.w500
+            )
+          )));
+      }
+    }
+
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          onPressed: () {Navigator.pop(context);
+            editTodoList(widget.Plan.id, widget.Plan);
+          },
+          icon: const Tooltip(
+            message: "Edit Plan",
+            child: Icon(
+              Icons.edit,
+              color: Colors.blueGrey,
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+            copy(widget.plan);
+          },
+          icon: const Tooltip(
+            message: "Copy to Clipboard",
+            child: Icon(
+              Icons.copy,
+              color: Colors.blueGrey,
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+            share(widget.plan);
+          },
+          icon: const Tooltip(
+            message: "Share Plan",
+            child: Icon(
+              Icons.share,
+              color: Colors.blueGrey,
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+            context.read<TodoListDatabase>().star(widget.id);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                duration: const Duration(seconds: 2),
+                content: widget.Plan.starred != true ?
+                const Text(
+                  'Starred!',
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontWeight: FontWeight.w500
+                  )
+              ) : const Text(
+                  'Unstarred!',
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontWeight: FontWeight.w500
+                  )
+              )
+            )
+          );
+          },
+          icon: Tooltip(
+            message: widget.Plan.starred != true ? "Star" : "Unstar",
+            child: Icon(
+              widget.Plan.starred != true ? Icons.star_outlined : Icons.star_outline_rounded,
+              color: Colors.blueGrey,
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+            mark(widget.Plan);
+          },
+          icon: 
+          widget.Plan.completed! ?
+          const Tooltip(
+            message: "Reactivate Plan",
+            child: Icon(
+                Icons.bookmark_remove_rounded,
+                color: Colors.blueGrey,
+              ),
+          ) :
+            const Tooltip(
+              message: "Mark Plan as Completed",
+              child: Icon(
+                Icons.bookmark_added_rounded,
+                color: Colors.blueGrey,
+              ),
+            ),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+            trashTodoList(widget.Plan.id);
+          },
+          icon: const Tooltip(
+            message: "Trash Plan",
+            child: Icon(
+              Icons.delete,
+              color: Colors.blueGrey,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

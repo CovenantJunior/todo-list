@@ -1361,7 +1361,12 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           direction: PopoverDirection.top,
                           width: 290,
                           context: context,
-                          bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                          bodyBuilder: (context) => TodoListOptions(
+                            id: plan.id,
+                            plan: plan.plan,
+                            Plan: plan,
+                            deleteAction: dismissAction,
+                          )
                         );
                       },
                       onTap: () {
