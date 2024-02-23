@@ -1,57 +1,47 @@
 import 'dart:async';
 
+// ignore: implementation_imports
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:isar/isar.dart';
-import 'package:todo_list/models/todo_list.dart';
-import 'package:todo_list/models/todo_preferences.dart';
+import 'package:todo_list/layouts/todo_list_page.dart';
+import 'package:todo_list/models/todo_list_database.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey(debugLabel: "Main Navigator");
 
 List preferences = [];
+TodoListDatabase db = TodoListDatabase();
+
+void fetchUntrashedTodoList() async {
+  db.fetchUntrashedTodoList();
+}
 
 void fetchPreferences() async {
-  late Isar isar;
-  isar = Isar.getInstance()!;
-  List currentPreferences = isar.todoPreferences.where().findAllSync();
-  preferences.clear();
-  preferences.addAll(currentPreferences);
+  db.fetchPreferences();
 }
 
 void completed(int id) async {
-  late Isar isar;
-  isar = Isar.getInstance()!;
-  var existingTodoList = await isar.todoLists.get(id);
-  if (existingTodoList != null) {
-    existingTodoList.completed = true;
-    existingTodoList.achieved = DateTime.now();
-    await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
-
-    fetchPreferences();
-
-    if (preferences.first.autoDelete == true) {
-      trashTodoList(id);
-    }
-  }
+  db.completed(id);
 }
 
 void trashTodoList(int id) async {
-  late Isar isar;
-  isar = Isar.getInstance()!;
-  var existingTodoList = await isar.todoLists.get(id);
-  if (existingTodoList != null) {
-    existingTodoList.trashed = true;
-    existingTodoList.trashedDate = DateTime.now();
-    await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
-  }
+  db.trashTodoList(id);
 }
 
 @pragma('vm:entry-point')
 Future<void> notificationResponse(NotificationResponse notificationResponse) async {
   if (notificationResponse.actionId != null) {
     if (notificationResponse.actionId == 'ACTION_COMPLETED') {
-      print('Marking plan as Completed');
       completed(notificationResponse.id!);
+      fetchUntrashedTodoList();
+      MaterialPageRoute(
+        builder: (_) => const TodoListPage(),
+      );
     } else if (notificationResponse.actionId == 'ACTION_DELETE') {
-      print('Deleting Plan');
       trashTodoList(notificationResponse.id!);
+      fetchUntrashedTodoList();
+      MaterialPageRoute(
+        builder: (_) => const TodoListPage(),
+      );
     }
   }
 }
@@ -92,8 +82,7 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: notificationResponse,
-      onDidReceiveBackgroundNotificationResponse: notificationResponse
+      onDidReceiveNotificationResponse: notificationResponse
     );
   }
 

@@ -244,7 +244,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   ),
                 ),
               );
-              print(nonTrashedTodolistsState.first.id + 1);
               NotificationService().showNotification(id: nonTrashedTodolistsState.first.id + 1, title: "New Plan Recorded", body: text, payload: "Due by $due");
             } else {
               context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
@@ -1545,9 +1544,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     if (isSearch == true) {
                       closeSearch();
                     } else {
-                      setState(() {
-                        nonTrashedTodolistsState = nonTrashedTodolists;
-                      });
                       createTodoList();
                     }
                   },
