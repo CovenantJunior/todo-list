@@ -17,7 +17,7 @@ class TodoListDatabase extends ChangeNotifier{
   }
 
   // List of all TodoLists
-  // List<TodoList> todolists = [];
+  List<TodoList> todolists = [];
 
   List<TodoList> nonTrashedTodolists = [];
 
@@ -223,13 +223,23 @@ class TodoListDatabase extends ChangeNotifier{
 
   // READ
   void fetchTodoList() async {
- 
+    // fetchAllTodoList();
     fetchUntrashedTodoList();
     fetchTrashedTodoList();
     fetchStarredTodoList();
     fetchPreferences();
   }
 
+  void fetchAllTodoList() async {
+ 
+    // READ LIST NOT TRASHED
+    final currentTodoLists = isar.todoLists.where().findAllSync();
+    todolists.clear();
+    todolists.addAll(currentTodoLists);
+
+    notifyListeners();
+  }
+  
   void fetchUntrashedTodoList() async {
  
     // READ LIST NOT TRASHED

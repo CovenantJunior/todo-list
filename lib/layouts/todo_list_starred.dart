@@ -303,7 +303,7 @@ class _TodoStarredState extends State<TodoStarred> {
             "Move plan to Trash?",
             textAlign: TextAlign.center,
             style: TextStyle(
-              // fontSize: 20,
+              fontSize: 20,
               fontFamily: 'Quicksand',
             ),
           ),
@@ -827,7 +827,7 @@ class _TodoStarredState extends State<TodoStarred> {
                                             height: 40,
                                             child: Text(
                                               plan.plan,
-                                              maxLines: 2,
+                                              maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontFamily: "Quicksand",

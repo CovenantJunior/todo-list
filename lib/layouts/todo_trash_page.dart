@@ -56,7 +56,7 @@ class _TodoTrashState extends State<TodoTrash> {
             "Restore all plans?",
             textAlign: TextAlign.center,
             style: TextStyle(
-              // fontSize: 20,
+              fontSize: 20,
               fontFamily: 'Quicksand',
             ),
           ),
@@ -385,7 +385,7 @@ class _TodoTrashState extends State<TodoTrash> {
                           "Delete Selected Plan(s) Forever?",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            // fontSize: 20,
+                            fontSize: 20,
                             fontFamily: 'Quicksand',
                           ),
                         ),
@@ -624,7 +624,7 @@ class _TodoTrashState extends State<TodoTrash> {
                                             height: 40,
                                             child: Text(
                                               plan.plan,
-                                              maxLines: 2,
+                                              maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontFamily: "Quicksand",

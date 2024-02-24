@@ -1,12 +1,9 @@
 import 'dart:async';
 
 // ignore: implementation_imports
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:todo_list/layouts/todo_list_page.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:todo_list/models/todo_list_database.dart';
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey(debugLabel: "Main Navigator");
 
 List preferences = [];
 TodoListDatabase db = TodoListDatabase();
@@ -31,17 +28,13 @@ void trashTodoList(int id) async {
 Future<void> notificationResponse(NotificationResponse notificationResponse) async {
   if (notificationResponse.actionId != null) {
     if (notificationResponse.actionId == 'ACTION_COMPLETED') {
-      completed(notificationResponse.id!);
-      fetchUntrashedTodoList();
-      MaterialPageRoute(
-        builder: (_) => const TodoListPage(),
-      );
+      db.completed(notificationResponse.id!);
+      db.fetchUntrashedTodoList();
+      Restart.restartApp(webOrigin: '/home');
     } else if (notificationResponse.actionId == 'ACTION_DELETE') {
-      trashTodoList(notificationResponse.id!);
-      fetchUntrashedTodoList();
-      MaterialPageRoute(
-        builder: (_) => const TodoListPage(),
-      );
+      db.trashTodoList(notificationResponse.id!);
+      db.fetchUntrashedTodoList();
+      Restart.restartApp(webOrigin: '/home');
     }
   }
 }

@@ -51,6 +51,7 @@ dependencies:
   permission_handler: ^11.2.0
   toast: ^0.3.0
   app_minimizer: ^1.0.0+2
+  restart_app: ^1.2.1
 
 dev_dependencies:
   flutter_test:

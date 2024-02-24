@@ -1,5 +1,6 @@
 import 'dart:ffi';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
@@ -16,6 +17,7 @@ import 'package:vibration/vibration.dart';
 
 class TodoListPage extends StatefulWidget {
   const TodoListPage({super.key});
+  
 
   @override
   State<TodoListPage> createState() => _TodoListPageState();
@@ -25,6 +27,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   late SpeechToText _speech;
 
   Future<bool?> hasVibrate = Vibration.hasVibrator();
+  late String clipboard;
+  bool requestedClipboard = false;
  
   @override
   void initState() {
@@ -74,7 +78,10 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   }
 
   // Create
-  void createTodoList() {
+  void createTodoList(String data) {
+    if (data != '') {
+      textController.text = data;
+    }
     dateController.text = date;
     showDialog(
       context: context,
@@ -303,7 +310,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         autocorrect: true,
                         autofocus: true,
                         minLines: 1,
-                        maxLines: 5,
+                        maxLines: 10,
                         maxLength: 100,
                         controller: textController,
                         decoration: const InputDecoration(
@@ -528,11 +535,18 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     context.read<TodoListDatabase>().fetchPreferences();
   }
 
+  Future<String?> getClipBoardData() async {
+    ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+    String? clipboard = data?.text;
+    return clipboard;
+  }
+
   @override
   void dispose() {
     _animationController.dispose(); // Dispose the animation controller
     super.dispose();
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -540,6 +554,41 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     setState(() {
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
+
+
+    Future<void> fetchClipboard() async {
+      clipboard = (await getClipBoardData())!;
+      if (clipboard != '') {
+        for (var list in nonTrashedTodolists) {
+          if (list.plan == clipboard) {
+            setState(() {
+              requestedClipboard = true;
+            });
+          } else {
+            // ignore: use_build_context_synchronously
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                duration: const Duration(days: 1),
+                content: Text(clipboard,
+                  style: const TextStyle(
+                      fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+                action: SnackBarAction(
+                  label: 'ADD',
+                  onPressed: () {
+                    createTodoList(clipboard);
+                  }),
+                showCloseIcon: true,
+              ),
+            );
+            setState(() {
+              requestedClipboard = true;
+            });
+          }
+        }
+      }
+    }
+
+    requestedClipboard == false ? context.read<TodoListDatabase>().preferences.first.accessClipboard == true ? fetchClipboard() : Void : Void; 
 
     void deleteAction (id) {
       bool undo = true;
@@ -632,7 +681,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             "Move plan to Trash?",
             textAlign: TextAlign.center,
             style: TextStyle(
-              // fontSize: 20,
+              fontSize: 20,
               fontFamily: 'Quicksand',
             ),
           ),
@@ -668,7 +717,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             "Move all plans to Trash?",
             textAlign: TextAlign.center,
             style: TextStyle(
-              // fontSize: 20,
+              fontSize: 20,
               fontFamily: 'Quicksand',
             ),
           ),
@@ -1042,7 +1091,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           "Move selected plan(s) to Trash?",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            // fontSize: 20,
+                            fontSize: 20,
                             fontFamily: 'Quicksand',
                           ),
                         ),
@@ -1451,7 +1500,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                           height: 40,
                                           child: Text(
                                             plan.plan,
-                                            maxLines: 2,
+                                            maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                               fontFamily: "Quicksand",
@@ -1544,7 +1593,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     if (isSearch == true) {
                       closeSearch();
                     } else {
-                      createTodoList();
+                      createTodoList('');
                     }
                   },
                   backgroundColor: Theme.of(context).colorScheme.onSecondary,
