@@ -108,7 +108,6 @@ class _TodoStarredState extends State<TodoStarred> {
                         autofocus: true,
                         minLines: 1,
                         maxLines: 20,
-                        maxLength: 500,
                         controller: textController,
                         decoration: const InputDecoration(
                           hintText: 'Task description',

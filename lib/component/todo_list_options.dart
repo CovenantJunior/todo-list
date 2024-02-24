@@ -95,7 +95,6 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                           autofocus: true,
                           minLines: 1,
                           maxLines: 20,
-                          maxLength: 500,
                           controller: textController,
                           decoration: const InputDecoration(
                             hintText: 'Task description',

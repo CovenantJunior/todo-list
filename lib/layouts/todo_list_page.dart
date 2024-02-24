@@ -27,7 +27,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   late SpeechToText _speech;
 
   Future<bool?> hasVibrate = Vibration.hasVibrator();
-  late String clipboard;
+  String clipboard = '';
   bool requestedClipboard = false;
  
   @override
@@ -108,7 +108,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     autofocus: true,
                     minLines: 1,
                     maxLines: 20,
-                    maxLength: 500,
                     controller: textController,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
@@ -541,6 +540,30 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     return clipboard;
   }
 
+  Future<void> fetchClipboard(context, nonTrashedTodolists) async {
+    clipboard = (await getClipBoardData())!;
+    if (clipboard != '') {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: const Duration(days: 1),
+          content: Text(clipboard.characters.take(200).string,
+              style: const TextStyle(
+                  fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+          action: SnackBarAction(
+              label: 'ADD',
+              onPressed: () {
+                createTodoList(clipboard);
+              }),
+          showCloseIcon: true,
+        ),
+      );
+      setState(() {
+        requestedClipboard = true;
+      });
+    }
+  }
+
   @override
   void dispose() {
     _animationController.dispose(); // Dispose the animation controller
@@ -555,40 +578,25 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
 
-
-    Future<void> fetchClipboard() async {
-      clipboard = (await getClipBoardData())!;
-      if (clipboard != '') {
-        for (var list in nonTrashedTodolists) {
-          if (list.plan == clipboard) {
-            setState(() {
-              requestedClipboard = true;
-            });
-          } else {
-            // ignore: use_build_context_synchronously
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                duration: const Duration(days: 1),
-                content: Text(clipboard,
-                  style: const TextStyle(
-                      fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
-                action: SnackBarAction(
-                  label: 'ADD',
-                  onPressed: () {
-                    createTodoList(clipboard);
-                  }),
-                showCloseIcon: true,
-              ),
-            );
-            setState(() {
-              requestedClipboard = true;
-            });
-          }
-        }
+    
+    for (var list in nonTrashedTodolists) {
+      if (list.plan == clipboard) {
+        setState(() {
+          requestedClipboard = true;
+        });
       }
     }
 
-    requestedClipboard == false ? context.read<TodoListDatabase>().preferences.first.accessClipboard == true ? fetchClipboard() : Void : Void; 
+    if (requestedClipboard == false) {
+      if (context.read<TodoListDatabase>().preferences.first.accessClipboard == true) {
+        fetchClipboard(context, nonTrashedTodolists);
+      } else {
+        // Do nothing
+      }
+    } else {
+      // Do nothing
+    }
+
 
     void deleteAction (id) {
       bool undo = true;
