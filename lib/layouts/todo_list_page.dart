@@ -220,6 +220,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             setState(() {
               selectedDate = DateTime.now();
               selectedCategory = 'Personal';
+              requestedClipboard = true;
             });
           },
           icon: const Icon(Icons.undo_rounded),
@@ -547,7 +548,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(days: 1),
-          content: Text(clipboard.characters.take(200).string,
+          content: Text(clipboard.characters.take(100).string,
               style: const TextStyle(
                   fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
           action: SnackBarAction(
@@ -577,18 +578,24 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     setState(() {
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
-
     
-    for (var list in nonTrashedTodolists) {
-      if (list.plan == clipboard) {
-        setState(() {
-          requestedClipboard = true;
-        });
-      }
-    }
 
     if (requestedClipboard == false) {
-      if (context.read<TodoListDatabase>().preferences.first.accessClipboard == true) {
+      for (var list in nonTrashedTodolists) {
+        String plan  = list.plan;
+        if (plan == clipboard) {
+          
+          setState(() {
+            requestedClipboard = true;
+          });
+        } else {
+          
+          setState(() {
+            requestedClipboard = false;
+          });
+        }
+      }
+      if ((context.read<TodoListDatabase>().preferences.first.accessClipboard == true) && (requestedClipboard == false)) {
         fetchClipboard(context, nonTrashedTodolists);
       } else {
         // Do nothing
