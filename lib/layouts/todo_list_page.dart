@@ -547,6 +547,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     Future.delayed(const Duration(seconds: 3), () {
       if (requestedClipboard == false) {
         print(clipboard);
+        // Prevent pasting in similar plans
         for (var list in nonTrashedTodolistsState) {
           if (list.plan == clipboard) {
             setState(() {
