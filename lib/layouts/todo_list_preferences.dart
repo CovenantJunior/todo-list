@@ -254,7 +254,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         value: vibration,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setVibration(id);
-                          vibration == true ? Vibration.vibrate(duration: 50) : Void;
+                          vibration == false ? Vibration.vibrate(duration: 50) : Void;
                         }
                       )
                     ],
