@@ -959,7 +959,7 @@ class _TodoListPageState extends State<TodoListPage>
     });
     initClipboard();
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         appBar: AppBar(
           title: isSearch
@@ -1018,26 +1018,48 @@ class _TodoListPageState extends State<TodoListPage>
           ],
           bottom: const TabBar(
             tabs: [
-              Tab(
-                icon: Icon(Icons.home_outlined),
+              Tooltip(
+                message: 'All',
+                child: Tab(
+                  icon: Icon(Icons.home_outlined),
+                ),
               ),
-              Tab(
-                icon: Icon(Icons.work_outline_rounded),
+              Tooltip(
+                message: 'Personal',
+                child: Tab(
+                  icon: Icon(Icons.person_2_outlined),
+                ),
               ),
-              Tab(
-                icon: Icon(Icons.school_outlined),
+              Tooltip(
+                message: 'Work',
+                child: Tab(
+                  icon: Icon(Icons.work_outline_rounded),
+                ),
               ),
-              Tab(
-                icon: Icon(Icons.shopping_basket_outlined),
+              Tooltip(
+                message: 'School',
+                child: Tab(
+                  icon: Icon(Icons.school_outlined),
+                ),
               ),
-              Tab(
-                icon: Icon(Icons.more_horiz),
+              Tooltip(
+                message: 'Shopping',
+                child: Tab(
+                  icon: Icon(Icons.shopping_basket_outlined),
+                ),
+              ),
+              Tooltip(
+                message: 'Whistlist',
+                child: Tab(
+                  icon: Icon(Icons.card_giftcard),
+                ),
               ),
             ],
           ),
         ),
         drawer: const TodoListDrawer(),
         body: const TabBarView(children: [
+          TodoAll(),
           TodoAll(),
           TodoAll(),
           TodoAll(),
