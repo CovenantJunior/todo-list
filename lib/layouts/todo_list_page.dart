@@ -546,7 +546,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     getClipBoardData();
     Future.delayed(const Duration(seconds: 3), () {
       if (requestedClipboard == false) {
-        print(clipboard);
         // Prevent pasting in similar plans
         for (var list in nonTrashedTodolistsState) {
           if (list.plan == clipboard) {
@@ -556,7 +555,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           }
         }
         if ((context.read<TodoListDatabase>().preferences.first.accessClipboard == true) && (requestedClipboard == false)) {
-          print("Fire");
           fetchClipboard(context, nonTrashedTodolistsState);
         }
       }
