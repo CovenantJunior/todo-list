@@ -535,14 +535,34 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     context.read<TodoListDatabase>().fetchPreferences();
   }
 
-  Future<String?> getClipBoardData() async {
+  void getClipBoardData() async {
     ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-    String? clipboard = data?.text;
-    return clipboard;
+    setState(() {
+      clipboard = data!.text!;
+    });
+  }
+
+  void initClipboard() {
+    getClipBoardData();
+    Future.delayed(const Duration(seconds: 3), () {
+      if (requestedClipboard == false) {
+        print(clipboard);
+        for (var list in nonTrashedTodolistsState) {
+          if (list.plan == clipboard) {
+            setState(() {
+              requestedClipboard = true;
+            });
+          }
+        }
+        if ((context.read<TodoListDatabase>().preferences.first.accessClipboard == true) && (requestedClipboard == false)) {
+          print("Fire");
+          fetchClipboard(context, nonTrashedTodolistsState);
+        }
+      }
+    });
   }
 
   Future<void> fetchClipboard(context, nonTrashedTodolists) async {
-    clipboard = (await getClipBoardData())!;
     if (clipboard != '') {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
@@ -579,32 +599,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
     
-
-    if (requestedClipboard == false) {
-      for (var list in nonTrashedTodolists) {
-        String plan  = list.plan;
-        if (plan == clipboard) {
-          
-          setState(() {
-            requestedClipboard = true;
-          });
-        } else {
-          
-          setState(() {
-            requestedClipboard = false;
-          });
-        }
-      }
-      if ((context.read<TodoListDatabase>().preferences.first.accessClipboard == true) && (requestedClipboard == false)) {
-        fetchClipboard(context, nonTrashedTodolists);
-      } else {
-        // Do nothing
-      }
-    } else {
-      // Do nothing
-    }
-
-
+    initClipboard();
+    
     void deleteAction (id) {
       bool undo = true;
       setState(() {
