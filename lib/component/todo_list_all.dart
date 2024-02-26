@@ -16,7 +16,7 @@ class TodoAll extends StatefulWidget {
   State<TodoAll> createState() => _TodoAllState();
 }
 
-class _TodoAllState extends State<TodoAll> with SingleTickerProviderStateMixin {
+class _TodoAllState extends State<TodoAll> {
   late SpeechToText _speech;
   Future<bool?> hasVibrate = Vibration.hasVibrator();
   bool requestedClipboard = false;
@@ -25,10 +25,6 @@ class _TodoAllState extends State<TodoAll> with SingleTickerProviderStateMixin {
     super.initState();
     readTodoLists();
     _speech = SpeechToText();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
   }
 
   TextEditingController textController = TextEditingController();
@@ -61,7 +57,7 @@ class _TodoAllState extends State<TodoAll> with SingleTickerProviderStateMixin {
   }
 
   // Create
-  void createTodoList(String data) {
+  void createTodoList(String data, context) {
     if (data != '') {
       textController.text = data;
     }
@@ -222,11 +218,33 @@ class _TodoAllState extends State<TodoAll> with SingleTickerProviderStateMixin {
                       context
                           .read<TodoListDatabase>()
                           .addTodoList(text, category, due);
+                      Navigator.pop(context);
+                      int? id;
+                      switch (selectedCategory) {
+                        case 'Personal':
+                          id = 1;
+                          break;
+                        case 'Work':
+                          id = 2;
+                          break;
+                        case 'Study':
+                          id = 3;
+                          break;
+                        case 'Shopping':
+                          id = 4;
+                          break;
+                        case 'Wishlist':
+                          id = 5;
+                          break;
+                        default:
+                          id = 0; // Default to the first tab if the category is not recognized
+                          break;
+                      }
+                      DefaultTabController.of(context).animateTo(id);
                       setState(() {
                         selectedDate = DateTime.now();
                         selectedCategory = 'Personal';
                       });
-                      Navigator.pop(context);
                       textController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -583,7 +601,7 @@ class _TodoAllState extends State<TodoAll> with SingleTickerProviderStateMixin {
       );
     }
 
-    void deleteAllAction(nonTrashedTodolistsState) {
+    /* void deleteAllAction(nonTrashedTodolistsState) {
       bool undo = true;
       for (var list in nonTrashedTodolistsState) {
         setState(() {
@@ -619,7 +637,7 @@ class _TodoAllState extends State<TodoAll> with SingleTickerProviderStateMixin {
                 })),
       );
     }
-
+ */
     // Swipe Trash
     void swiptTrashTodoList(int id) {
       context.read<TodoListDatabase>().preferences.first.vibration == true
@@ -661,7 +679,7 @@ class _TodoAllState extends State<TodoAll> with SingleTickerProviderStateMixin {
           : deleteAction(id);
     }
 
-    void trashAllTodoLists() {
+    /* void trashAllTodoLists() {
       context.watch<TodoListDatabase>().preferences.first.vibration == true
           ? Vibration.vibrate(duration: 50)
           : Void;
@@ -697,7 +715,7 @@ class _TodoAllState extends State<TodoAll> with SingleTickerProviderStateMixin {
                 ],
               ));
     }
-
+ */
     Orientation orientation = MediaQuery.of(context).orientation;
     // Get the screen width
     double screenWidth = MediaQuery.of(context).size.width;
@@ -1134,47 +1152,7 @@ class _TodoAllState extends State<TodoAll> with SingleTickerProviderStateMixin {
             : !isSearch
                 ? pattern
                 : const Center(child: Text("No result")),
-        floatingActionButton: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            nonTrashedTodolists.isNotEmpty && !isSearch
-                ? Tooltip(
-                    message: "Move plans to trash",
-                    child: FloatingActionButton(
-                      onPressed: trashAllTodoLists,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.onSecondary,
-                      child: const Icon(Icons.delete_sweep_outlined),
-                    ),
-                  )
-                : const SizedBox(),
-            const SizedBox(height: 8),
-            Tooltip(
-              message: "Add a plan",
-              child: RotationTransition(
-                turns: Tween(begin: 0.0, end: isSearch ? 0.25 : 0.0)
-                    .animate(_animationController),
-                child: FloatingActionButton(
-                  onPressed: () {
-                    if (isSearch == true) {
-                      closeSearch();
-                    } else {
-                      createTodoList('');
-                    }
-                  },
-                  backgroundColor: Theme.of(context).colorScheme.onSecondary,
-                  child: Transform.rotate(
-                    angle: isSearch
-                        ? 45 * (3.141592653589793238 / 180)
-                        : 0.0, // Rotate 45 degrees if isSearch is true
-                    child: const Icon(Icons.add),
-                  ),
-                ),
-              ),
-            ),
-          ],
         ),
-      ),
     );
   }
 }

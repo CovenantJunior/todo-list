@@ -19,8 +19,8 @@ class TodoListPage extends StatefulWidget {
   State<TodoListPage> createState() => _TodoListPageState();
 }
 
-class _TodoListPageState extends State<TodoListPage>
-    with SingleTickerProviderStateMixin {
+class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderStateMixin {
+  
   late SpeechToText _speech;
   Future<bool?> hasVibrate = Vibration.hasVibrator();
   String clipboard = '';
@@ -412,8 +412,82 @@ class _TodoListPageState extends State<TodoListPage>
     }
   }
 
+  void deleteAllAction(nonTrashedTodolistsState) {
+    bool undo = true;
+    for (var list in nonTrashedTodolistsState) {
+      setState(() {
+        cardToRemove.add(list.id);
+      });
+    }
+    Future.delayed(const Duration(seconds: 5), () {
+      if (undo == true) {
+        context
+            .read<TodoListDatabase>()
+            .trashAllTodoLists(nonTrashedTodolistsState);
+        Future.delayed(const Duration(seconds: 3), () {
+          cardToRemove.clear();
+        });
+        setState(() {
+          undo = true;
+        });
+      }
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          duration: const Duration(seconds: 4),
+          content: const Text('Moved all to Trash',
+              style: TextStyle(
+                  fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+          action: SnackBarAction(
+              label: 'UNDO',
+              onPressed: () {
+                setState(() {
+                  undo = false;
+                });
+                cardToRemove.clear();
+              })),
+    );
+  }
+
+  void trashAllTodoLists() {
+    context.watch<TodoListDatabase>().preferences.first.vibration == true
+        ? Vibration.vibrate(duration: 50)
+        : Void;
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              content: const Text(
+                "Move all plans to Trash?",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    deleteAllAction(nonTrashedTodolistsState);
+                  },
+                  icon: const Icon(
+                    Icons.done,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.cancel_outlined,
+                  ),
+                ),
+              ],
+            ));
+  }
+
   // Create
-  void createTodoList(String data) {
+  void createTodoList(String data, BuildContext context) {
     if (data != '') {
       textController.text = data;
     }
@@ -494,7 +568,6 @@ class _TodoListPageState extends State<TodoListPage>
                                 'Study',
                                 'Shopping',
                                 'Sport',
-                                'Wishlist'
                               ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
@@ -555,6 +628,30 @@ class _TodoListPageState extends State<TodoListPage>
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
+                    int? id;
+                    switch (selectedCategory) {
+                      case 'Personal':
+                        id = 1;
+                        break;
+                      case 'Work':
+                        id = 2;
+                        break;
+                      case 'Study':
+                        id = 3;
+                        break;
+                      case 'Shopping':
+                        id = 4;
+                        break;
+                      case 'Sport':
+                        id = 5;
+                        break;
+                      default:
+                        id = 0; // Default to the first tab if the category is not recognized
+                        break;
+                    }
+                    print(id);
+                    print(selectedCategory);
+                    DefaultTabController.of(context).animateTo(id);
                     textController.clear();
                     setState(() {
                       selectedDate = DateTime.now();
@@ -933,7 +1030,7 @@ class _TodoListPageState extends State<TodoListPage>
           action: SnackBarAction(
               label: 'ADD',
               onPressed: () {
-                createTodoList(clipboard);
+                createTodoList(clipboard, context);
               }),
           showCloseIcon: true,
         ),
@@ -1049,9 +1146,9 @@ class _TodoListPageState extends State<TodoListPage>
                 ),
               ),
               Tooltip(
-                message: 'Whistlist',
+                message: 'Sport',
                 child: Tab(
-                  icon: Icon(Icons.card_giftcard),
+                  icon: Icon(Icons.sports_soccer_rounded),
                 ),
               ),
             ],
@@ -1066,6 +1163,48 @@ class _TodoListPageState extends State<TodoListPage>
           TodoAll(),
           TodoAll(),
         ]),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            nonTrashedTodolists.isNotEmpty && !isSearch
+                ? Tooltip(
+                    message: "Move plans to trash",
+                    child: FloatingActionButton(
+                      onPressed: trashAllTodoLists,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.onSecondary,
+                      child: const Icon(Icons.delete_sweep_outlined),
+                    ),
+                  )
+                : const SizedBox(),
+            const SizedBox(height: 8),
+            Tooltip(
+              message: "Add a plan",
+              child: RotationTransition(
+                turns: Tween(begin: 0.0, end: isSearch ? 0.25 : 0.0)
+                    .animate(_animationController),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    if (isSearch == true) {
+                      closeSearch();
+                    } else {
+                      createTodoList('', context);
+                      DefaultTabController.of(context).animateTo(4);
+                    }
+                  },
+                  backgroundColor: Theme.of(context).colorScheme.onSecondary,
+                  child: Transform.rotate(
+                    angle: isSearch
+                        ? 45 * (3.141592653589793238 / 180)
+                        : 0.0, // Rotate 45 degrees if isSearch is true
+                    child: const Icon(Icons.add),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      
       ),
     );
   }
