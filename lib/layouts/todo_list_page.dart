@@ -25,6 +25,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   Future<bool?> hasVibrate = Vibration.hasVibrator();
   String clipboard = '';
   bool requestedClipboard = false;
+  bool preState = false;
+  int? count;
+
   @override
   void initState() {
     super.initState();
@@ -628,32 +631,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    int? id;
-                    switch (selectedCategory) {
-                      case 'Personal':
-                        id = 1;
-                        break;
-                      case 'Work':
-                        id = 2;
-                        break;
-                      case 'Study':
-                        id = 3;
-                        break;
-                      case 'Shopping':
-                        id = 4;
-                        break;
-                      case 'Sport':
-                        id = 5;
-                        break;
-                      default:
-                        id = 0; // Default to the first tab if the category is not recognized
-                        break;
-                    }
-                    DefaultTabController.of(context).animateTo(id);
                     textController.clear();
                     setState(() {
                       selectedDate = DateTime.now();
-                      selectedCategory = 'Personal';
                       requestedClipboard = true;
                     });
                   },
@@ -671,7 +651,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           .addTodoList(text, category, due);
                       setState(() {
                         selectedDate = DateTime.now();
-                        selectedCategory = 'Personal';
                       });
                       Navigator.pop(context);
                       textController.clear();
@@ -687,11 +666,11 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           ),
                         ),
                       );
-                      NotificationService().showNotification(
+                      context.read<TodoListDatabase>().preferences.first.notification == true ? NotificationService().showNotification(
                           id: nonTrashedTodolistsState.first.id + 1,
                           title: "New Plan Recorded",
                           body: text,
-                          payload: "Due by $due");
+                          payload: "Due by $due") : Void;
                     } else {
                       context
                                   .watch<TodoListDatabase>()
@@ -998,16 +977,17 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         // Prevent pasting in similar plans
         for (var list in nonTrashedTodolistsState) {
           if (list.plan == clipboard) {
-            setState(() {
-              requestedClipboard = true;
-            });
+            preState = true;
           }
         }
+        setState(() {
+          requestedClipboard = preState;
+        });
         if ((context
-                    .read<TodoListDatabase>()
-                    .preferences
-                    .first
-                    .accessClipboard ==
+              .read<TodoListDatabase>()
+              .preferences
+              .first
+              .accessClipboard ==
                 true) &&
             (requestedClipboard == false)) {
           fetchClipboard(context, nonTrashedTodolistsState);
@@ -1047,11 +1027,11 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    List nonTrashedTodolists =
-        context.watch<TodoListDatabase>().nonTrashedTodolists;
+    List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
     setState(() {
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
+
     initClipboard();
     return DefaultTabController(
       length: 6,
@@ -1111,8 +1091,49 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   )
                 : const SizedBox(),
           ],
-          bottom: const TabBar(
-            tabs: [
+          bottom: TabBar(
+            onTap: (value) {
+              switch (value) {
+                case 0:
+                  setState(() {
+                    selectedCategory = 'Personal';
+                    count = nonTrashedTodolists.length;
+                  });
+                  break;
+                case 1:
+                  setState(() {
+                    selectedCategory = 'Personal';
+                    count = nonTrashedTodolists.where((e) => e.category == selectedCategory).length;
+                  });
+                  break;
+                case 2:
+                  setState(() {
+                    selectedCategory = 'Work';
+                    count = nonTrashedTodolists.where((e) => e.category == selectedCategory).length;
+                  });
+                  break;
+                case 3:
+                  setState(() {
+                    selectedCategory = 'Study';
+                    count = nonTrashedTodolists.where((e) => e.category == selectedCategory).length;
+                  });
+                  break;
+                case 4:
+                  setState(() {
+                    selectedCategory = 'Shopping';
+                    count = nonTrashedTodolists.where((e) => e.category == selectedCategory).length;
+                  });
+                  break;
+                case 5:
+                  setState(() {
+                    selectedCategory = 'Sport';
+                    count = nonTrashedTodolists.where((e) => e.category == selectedCategory).length;
+                  });
+                  break;
+                default:
+              }
+            },
+            tabs: const [
               Tooltip(
                 message: 'All',
                 child: Tab(
@@ -1132,9 +1153,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 ),
               ),
               Tooltip(
-                message: 'School',
+                message: 'Study',
                 child: Tab(
-                  icon: Icon(Icons.school_outlined),
+                  icon: Icon(Icons.book_outlined),
                 ),
               ),
               Tooltip(
@@ -1157,14 +1178,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           Todo(category: 'All'),
           Todo(category: 'Personal'),
           Todo(category: 'Work'),
-          Todo(category: 'School'),
+          Todo(category: 'Study'),
           Todo(category: 'Shopping'),
           Todo(category: 'Sport'),
         ]),
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            nonTrashedTodolists.isNotEmpty && !isSearch
+            nonTrashedTodolists.isNotEmpty && !isSearch && (count! > 0)
                 ? Tooltip(
                     message: "Move plans to trash",
                     child: FloatingActionButton(
@@ -1187,7 +1208,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       closeSearch();
                     } else {
                       createTodoList('', context);
-                      DefaultTabController.of(context).animateTo(4);
                     }
                   },
                   backgroundColor: Theme.of(context).colorScheme.onSecondary,

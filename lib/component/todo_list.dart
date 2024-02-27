@@ -568,6 +568,16 @@ class _TodoState extends State<Todo> {
     setState(() {
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
+
+    int? count;
+
+    if (widget.category != 'All') {
+      count = nonTrashedTodolists.where((e) => e.category == widget.category).length;
+    } else {
+      count = nonTrashedTodolists.length;
+    }
+
+
     void deleteAction(id) {
       bool undo = true;
       setState(() {
@@ -986,7 +996,7 @@ class _TodoState extends State<Todo> {
         readTodoLists();
       },
       child: Scaffold(
-        body: nonTrashedTodolists.isNotEmpty
+        body: count > 0
             ? LiquidPullToRefresh(
                 springAnimationDurationInMilliseconds: 200,
                 onRefresh: () async {
