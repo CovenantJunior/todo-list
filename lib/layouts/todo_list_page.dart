@@ -26,7 +26,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   String clipboard = '';
   bool requestedClipboard = false;
   bool preState = false;
-  int? count;
+  int count = 0;
 
   @override
   void initState() {
@@ -1185,7 +1185,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            nonTrashedTodolists.isNotEmpty && !isSearch && (count! > 0)
+            nonTrashedTodolists.isNotEmpty && !isSearch && (count > 0)
                 ? Tooltip(
                     message: "Move plans to trash",
                     child: FloatingActionButton(
