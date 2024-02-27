@@ -7,7 +7,7 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:todo_list/component/todo_list_all.dart';
+import 'package:todo_list/component/todo_list.dart';
 import 'package:todo_list/component/todo_list_drawer.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:todo_list/services/notification_service.dart';
@@ -649,8 +649,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         id = 0; // Default to the first tab if the category is not recognized
                         break;
                     }
-                    print(id);
-                    print(selectedCategory);
                     DefaultTabController.of(context).animateTo(id);
                     textController.clear();
                     setState(() {
@@ -1156,12 +1154,12 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         ),
         drawer: const TodoListDrawer(),
         body: const TabBarView(children: [
-          TodoAll(),
-          TodoAll(),
-          TodoAll(),
-          TodoAll(),
-          TodoAll(),
-          TodoAll(),
+          Todo(category: 'All'),
+          Todo(category: 'Personal'),
+          Todo(category: 'Work'),
+          Todo(category: 'School'),
+          Todo(category: 'Shopping'),
+          Todo(category: 'Sport'),
         ]),
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,

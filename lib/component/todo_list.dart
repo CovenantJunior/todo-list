@@ -10,16 +10,24 @@ import 'package:provider/provider.dart';
 import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
 
-class TodoAll extends StatefulWidget {
-  const TodoAll({super.key});
+class Todo extends StatefulWidget {
+
+  final String category;
+  const Todo({
+    super.key,
+    required this.category
+  });
+
   @override
-  State<TodoAll> createState() => _TodoAllState();
+  State<Todo> createState() => _TodoState();
 }
 
-class _TodoAllState extends State<TodoAll> {
+class _TodoState extends State<Todo> {
+
   late SpeechToText _speech;
   Future<bool?> hasVibrate = Vibration.hasVibrator();
   bool requestedClipboard = false;
+  
   @override
   void initState() {
     super.initState();
@@ -30,7 +38,6 @@ class _TodoAllState extends State<TodoAll> {
   TextEditingController textController = TextEditingController();
   String hint = 'Task description';
   TextEditingController dateController = TextEditingController();
-  late AnimationController _animationController;
   final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   DateTime selectedDate = DateTime.now();
   String selectedCategory = 'Personal';
@@ -481,7 +488,6 @@ class _TodoAllState extends State<TodoAll> {
       isSearch = false;
       isOfLength = false;
     });
-    _animationController.reverse();
   }
 
   void _listen() async {
@@ -553,12 +559,6 @@ class _TodoAllState extends State<TodoAll> {
   Future<void> readTodoLists() async {
     context.read<TodoListDatabase>().fetchUntrashedTodoList();
     context.read<TodoListDatabase>().fetchPreferences();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose(); // Dispose the animation controller
-    super.dispose();
   }
 
   @override
@@ -998,7 +998,7 @@ class _TodoAllState extends State<TodoAll> {
                       itemCount: nonTrashedTodolists.length,
                       itemBuilder: (context, index) {
                         final plan = nonTrashedTodolists[index];
-                        return GestureDetector(
+                        return plan.category == widget.category || widget.category == 'All' ? GestureDetector(
                           onDoubleTap: () {
                             mark(plan);
                           },
@@ -1145,7 +1145,7 @@ class _TodoAllState extends State<TodoAll> {
                               ),
                             );
                           }),
-                        );
+                        ) : const SizedBox();
                       }),
                 ),
               )
