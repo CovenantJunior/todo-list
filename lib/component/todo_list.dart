@@ -12,9 +12,12 @@ import 'package:vibration/vibration.dart';
 
 class Todo extends StatefulWidget {
 
+  final List list;
   final String category;
+
   const Todo({
     super.key,
+    required this.list,
     required this.category
   });
 
@@ -43,7 +46,6 @@ class _TodoState extends State<Todo> {
   String selectedCategory = 'Personal';
   bool isSearch = false;
   bool isOfLength = false;
-  List searchResults = [];
   List nonTrashedTodolistsState = [];
   List preference = [];
   List cardToRemove = [];

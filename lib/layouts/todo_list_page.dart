@@ -56,15 +56,16 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   List preference = [];
   List cardToRemove = [];
   bool _isListening = false;
+  
   Widget searchTextField() {
     //add
     return TextField(
       controller: textController,
       autofocus: true,
       autocorrect: true,
-      decoration: const InputDecoration(
-          labelText: 'Search Plans',
-          labelStyle: TextStyle(fontFamily: "Quicksand")),
+      decoration: InputDecoration(
+          labelText: 'Search Plans / $selectedCategory',
+          labelStyle: const TextStyle(fontFamily: "Quicksand")),
       onChanged: (q) {
         if (q.isNotEmpty) {
           setState(() {
@@ -1058,7 +1059,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 ),
           centerTitle: true,
           actions: [
-            Builder(
+            !isSearch ? Builder(
               builder: (context) {
                 return IconButton(
                   onPressed: () {
@@ -1073,15 +1074,20 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       direction: PopoverDirection.bottom,
                       context: context,
                       bodyBuilder: (context) => TodoActions(
+                        isSearch: () {
+                          setState(() {
+                            isSearch = true;
+                          });
+                        },
                         category: selectedCategory,
                         nonTrashedTodolists: nonTrashedTodolists
-                      )
+                      ),
                     );
                   },
                   icon: const Icon(Icons.more_vert)
                 );
               }
-            )
+            ) : const SizedBox()
           ],
           bottom: TabBar(
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
@@ -1169,13 +1175,31 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           ),
         ),
         drawer: const TodoListDrawer(),
-        body: const TabBarView(children: [
-          Todo(category: 'All'),
-          Todo(category: 'Personal'),
-          Todo(category: 'Work'),
-          Todo(category: 'Study'),
-          Todo(category: 'Shopping'),
-          Todo(category: 'Sport'),
+        body: TabBarView(children: [
+          Todo(
+            list: nonTrashedTodolists,
+            category: 'All'
+          ),
+          Todo(
+            list: nonTrashedTodolists,
+            category: 'Personal'
+          ),
+          Todo(
+            list: nonTrashedTodolists,
+            category: 'Work'
+          ),
+          Todo(
+            list: nonTrashedTodolists,
+            category: 'Study'
+          ),
+          Todo(
+            list: nonTrashedTodolists,
+            category: 'Shopping'
+          ),
+          Todo(
+            list: nonTrashedTodolists,
+            category: 'Sport'
+          ),
         ]),
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,

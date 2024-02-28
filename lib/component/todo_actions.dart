@@ -12,11 +12,13 @@ import 'package:vibration/vibration.dart';
 class TodoActions extends StatefulWidget {
   final String category;
   final List nonTrashedTodolists;
+  final Function() isSearch;
 
   const TodoActions({
     super.key,
     required this.category,
-    required this.nonTrashedTodolists
+    required this.nonTrashedTodolists, 
+    required this.isSearch 
   });
 
   @override
@@ -26,8 +28,6 @@ class TodoActions extends StatefulWidget {
 class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin {
 
   List nonTrashedTodolists = [];
-  bool isSearch = false;
-  List searchResults = [];
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +36,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
     });
 
     void search() {
-      setState(() {
-        isSearch = !isSearch;
-        searchResults.clear();
-      });
+      widget.isSearch();
     }
 
     void multiEdit(List nonTrashedTodolists) {
