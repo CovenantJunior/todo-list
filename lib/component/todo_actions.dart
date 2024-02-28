@@ -352,7 +352,10 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
             Tooltip(
                 message: "Search Plans",
                 child: GestureDetector(
-                  onTap: search,
+                  onTap: () {
+                    Navigator.pop(context);
+                    search();
+                  },
                   child: const Text(
                     'Search',
                     style: TextStyle(
@@ -367,6 +370,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                 message: "Edit Plans",
                 child: GestureDetector(
                   onTap: () {
+                    Navigator.pop(context);
                     multiEdit(nonTrashedTodolists);
                   },
                   child: const Text(
