@@ -1049,8 +1049,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     Text(
                       "Todo List",
                       style: TextStyle(
-                        fontFamily: "DM serif Display",
-                        fontWeight: FontWeight.w500,
+                        fontFamily: "DM serif Display",fontWeight: FontWeight.w500,
                         fontSize: 30
                       ),
                     ),
