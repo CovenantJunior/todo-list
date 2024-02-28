@@ -331,115 +331,117 @@ class _TodoListOptionsState extends State<TodoListOptions> {
     }
 
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        IconButton(
-          onPressed: () {Navigator.pop(context);
-            editTodoList(widget.Plan.id, widget.Plan);
-          },
-          icon: const Tooltip(
-            message: "Edit Plan",
-            child: Icon(
-              Icons.edit,
-              color: Colors.blueGrey,
-            ),
-          ),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-            copy(widget.plan);
-          },
-          icon: const Tooltip(
-            message: "Copy to Clipboard",
-            child: Icon(
-              Icons.copy,
-              color: Colors.blueGrey,
-            ),
-          ),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-            share(widget.plan);
-          },
-          icon: const Tooltip(
-            message: "Share Plan",
-            child: Icon(
-              Icons.share,
-              color: Colors.blueGrey,
-            ),
-          ),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-            context.read<TodoListDatabase>().star(widget.id);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                duration: const Duration(seconds: 2),
-                content: widget.Plan.starred != true ?
-                const Text(
-                  'Starred!',
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      fontWeight: FontWeight.w500
-                  )
-              ) : const Text(
-                  'Unstarred!',
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      fontWeight: FontWeight.w500
-                  )
-              )
-            )
-          );
-          },
-          icon: Tooltip(
-            message: widget.Plan.starred != true ? "Star" : "Unstar",
-            child: Icon(
-              widget.Plan.starred != true ? Icons.star_outlined : Icons.star_outline_rounded,
-              color: Colors.blueGrey,
-            ),
-          ),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-            mark(widget.Plan);
-          },
-          icon: 
-          widget.Plan.completed! ?
-          const Tooltip(
-            message: "Reactivate Plan",
-            child: Icon(
-                Icons.bookmark_remove_rounded,
-                color: Colors.blueGrey,
-              ),
-          ) :
-            const Tooltip(
-              message: "Mark Plan as Completed",
+    return Scaffold(
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: () {Navigator.pop(context);
+              editTodoList(widget.Plan.id, widget.Plan);
+            },
+            icon: const Tooltip(
+              message: "Edit Plan",
               child: Icon(
-                Icons.bookmark_added_rounded,
+                Icons.edit,
                 color: Colors.blueGrey,
               ),
             ),
-        ),
-        IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-            trashTodoList(widget.Plan.id);
-          },
-          icon: const Tooltip(
-            message: "Trash Plan",
-            child: Icon(
-              Icons.delete,
-              color: Colors.blueGrey,
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+              copy(widget.plan);
+            },
+            icon: const Tooltip(
+              message: "Copy to Clipboard",
+              child: Icon(
+                Icons.copy,
+                color: Colors.blueGrey,
+              ),
             ),
           ),
-        ),
-      ],
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+              share(widget.plan);
+            },
+            icon: const Tooltip(
+              message: "Share Plan",
+              child: Icon(
+                Icons.share,
+                color: Colors.blueGrey,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+              context.read<TodoListDatabase>().star(widget.id);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  duration: const Duration(seconds: 2),
+                  content: widget.Plan.starred != true ?
+                  const Text(
+                    'Starred!',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.w500
+                    )
+                ) : const Text(
+                    'Unstarred!',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.w500
+                    )
+                )
+              )
+            );
+            },
+            icon: Tooltip(
+              message: widget.Plan.starred != true ? "Star" : "Unstar",
+              child: Icon(
+                widget.Plan.starred != true ? Icons.star_outlined : Icons.star_outline_rounded,
+                color: Colors.blueGrey,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+              mark(widget.Plan);
+            },
+            icon: 
+            widget.Plan.completed! ?
+            const Tooltip(
+              message: "Reactivate Plan",
+              child: Icon(
+                  Icons.bookmark_remove_rounded,
+                  color: Colors.blueGrey,
+                ),
+            ) :
+              const Tooltip(
+                message: "Mark Plan as Completed",
+                child: Icon(
+                  Icons.bookmark_added_rounded,
+                  color: Colors.blueGrey,
+                ),
+              ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+              trashTodoList(widget.Plan.id);
+            },
+            icon: const Tooltip(
+              message: "Trash Plan",
+              child: Icon(
+                Icons.delete,
+                color: Colors.blueGrey,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

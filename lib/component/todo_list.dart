@@ -1016,15 +1016,19 @@ class _TodoState extends State<Todo> {
                             return GestureDetector(
                               onLongPress: () {
                                 showPopover(
-                                    direction: PopoverDirection.top,
-                                    width: 290,
-                                    context: context,
-                                    bodyBuilder: (context) => TodoListOptions(
-                                          id: plan.id,
-                                          plan: plan.plan,
-                                          Plan: plan,
-                                          deleteAction: deleteAction,
-                                        ));
+                                  shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
+                                  arrowHeight: 0,
+                                  arrowWidth: 0,
+                                  direction: PopoverDirection.top,
+                                  width: 290,
+                                  height: 50,
+                                  context: context,
+                                  bodyBuilder: (context) => TodoListOptions(
+                                        id: plan.id,
+                                        plan: plan.plan,
+                                        Plan: plan,
+                                        deleteAction: deleteAction,
+                                      ));
                               },
                               onTap: () {
                                 planDetails(plan);
@@ -1079,7 +1083,7 @@ class _TodoState extends State<Todo> {
                                             children: [
                                               Expanded(
                                                 child: SizedBox(
-                                                  height: 40,
+                                                  height: 20,
                                                   child: Text(
                                                     plan.plan,
                                                     maxLines: 1,

@@ -5,8 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multi_select_flutter/util/multi_select_list_type.dart';
+import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:todo_list/component/todo_actions.dart';
 import 'package:todo_list/component/todo_list.dart';
 import 'package:todo_list/component/todo_list_drawer.dart';
 import 'package:todo_list/models/todo_list_database.dart';
@@ -1033,6 +1035,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     });
 
     initClipboard();
+
     return DefaultTabController(
       length: 6,
       child: Scaffold(
@@ -1055,43 +1058,35 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 ),
           centerTitle: true,
           actions: [
-            isOfLength
-                ? IconButton(
-                    onPressed: () {
-                      textController.clear();
-                      setState(() {
-                        searchResults.clear();
-                        isOfLength = false;
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.close,
-                    ),
-                    tooltip: 'Search Plans',
-                    style: TextButton.styleFrom(
-                      shape: const CircleBorder(),
-                    ),
-                  )
-                : const SizedBox(),
-            !isSearch && nonTrashedTodolists.isNotEmpty
-                ? Tooltip(
-                    message: "Search Plans",
-                    child: IconButton(
-                        onPressed: search, icon: const Icon(Icons.search)),
-                  )
-                : const SizedBox(),
-            !isSearch && nonTrashedTodolists.isNotEmpty
-                ? Tooltip(
-                    message: "Bulk Edit Plans",
-                    child: IconButton(
-                        onPressed: () {
-                          multiEdit(nonTrashedTodolists);
-                        },
-                        icon: const Icon(Icons.edit)),
-                  )
-                : const SizedBox(),
+            Builder(
+              builder: (context) {
+                return IconButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    showPopover(
+                      shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
+                      arrowHeight: 0,
+                      arrowWidth: 0,
+                      contentDxOffset: -80,
+                      width: 110,
+                      height: 100,
+                      direction: PopoverDirection.bottom,
+                      context: context,
+                      bodyBuilder: (context) => TodoActions(
+                        category: selectedCategory,
+                        nonTrashedTodolists: nonTrashedTodolists
+                      )
+                    );
+                  },
+                  icon: const Icon(Icons.more_vert)
+                );
+              }
+            )
           ],
           bottom: TabBar(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+            indicatorWeight: 1,
+            indicatorSize: TabBarIndicatorSize.tab,
             onTap: (value) {
               switch (value) {
                 case 0:
