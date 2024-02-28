@@ -116,6 +116,10 @@ flutter:
           - asset: fonts/Quicksand/static/Quicksand-Medium.ttf
           - asset: fonts/Quicksand/static/Quicksand-Regular.ttf
           - asset: fonts/Quicksand/static/Quicksand-SEmiBold.ttf
+      
+      - family: DM serif Display
+        fonts:
+          - asset: fonts/DM_Serif_Display/DMSerifDisplay-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
