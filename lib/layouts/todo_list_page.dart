@@ -1089,7 +1089,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               }
             ) : const SizedBox()
           ],
-          bottom: TabBar(
+        ),
+        persistentFooterButtons: [
+          TabBar(
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
             indicatorWeight: 1,
             indicatorSize: TabBarIndicatorSize.tab,
@@ -1104,31 +1106,41 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 case 1:
                   setState(() {
                     selectedCategory = 'Personal';
-                    count = nonTrashedTodolists.where((e) => e.category == selectedCategory).length;
+                    count = nonTrashedTodolists
+                        .where((e) => e.category == selectedCategory)
+                        .length;
                   });
                   break;
                 case 2:
                   setState(() {
                     selectedCategory = 'Work';
-                    count = nonTrashedTodolists.where((e) => e.category == selectedCategory).length;
+                    count = nonTrashedTodolists
+                        .where((e) => e.category == selectedCategory)
+                        .length;
                   });
                   break;
                 case 3:
                   setState(() {
                     selectedCategory = 'Study';
-                    count = nonTrashedTodolists.where((e) => e.category == selectedCategory).length;
+                    count = nonTrashedTodolists
+                        .where((e) => e.category == selectedCategory)
+                        .length;
                   });
                   break;
                 case 4:
                   setState(() {
                     selectedCategory = 'Shopping';
-                    count = nonTrashedTodolists.where((e) => e.category == selectedCategory).length;
+                    count = nonTrashedTodolists
+                        .where((e) => e.category == selectedCategory)
+                        .length;
                   });
                   break;
                 case 5:
                   setState(() {
                     selectedCategory = 'Sport';
-                    count = nonTrashedTodolists.where((e) => e.category == selectedCategory).length;
+                    count = nonTrashedTodolists
+                        .where((e) => e.category == selectedCategory)
+                        .length;
                   });
                   break;
                 default:
@@ -1173,7 +1185,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               ),
             ],
           ),
-        ),
+        ],
         drawer: const TodoListDrawer(),
         body: TabBarView(children: [
           Todo(
