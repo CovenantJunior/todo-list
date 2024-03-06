@@ -736,7 +736,7 @@ class _TodoState extends State<Todo> {
     // Calculate the padding based on the screen width
     if (orientation == Orientation.portrait) {
       leftPadding = screenWidth * 0.6;
-      topHeight = 200;
+      topHeight = 150;
     } else {
       leftPadding = screenWidth * 0.75;
       topHeight = 20;
