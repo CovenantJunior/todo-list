@@ -753,6 +753,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       length: 6,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
           title: isSearch
               ? searchTextField()
               : const SizedBox(),
@@ -805,7 +806,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         drawer: const TodoListDrawer(),
         body: Column(
           children: [
-            const Padding(
+            count > 0 ? const Padding(
               padding: EdgeInsets.only(left: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -822,7 +823,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   Icon(Icons.bookmark_added_rounded),
                 ],
               ),
-            ),
+            ) : const SizedBox(),
             Expanded(
               child: TabBarView(children: [
                 Todo(
@@ -903,7 +904,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               switch (value) {
                 case 0:
                   setState(() {
-                    selectedCategory = 'Personal';
+                    selectedCategory = 'All';
                     count = nonTrashedTodolists.length;
                   });
                   break;

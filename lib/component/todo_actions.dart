@@ -31,9 +31,13 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      nonTrashedTodolists = widget.nonTrashedTodolists.where((e) => e.category == widget.category).toList();
-    });
+    if (widget.category == 'All') {
+      nonTrashedTodolists = widget.nonTrashedTodolists;
+    } else {
+      setState(() {
+        nonTrashedTodolists = widget.nonTrashedTodolists.where((e) => e.category == widget.category).toList();
+      });
+    }
 
     void search() {
       widget.isSearch();
