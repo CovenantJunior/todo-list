@@ -418,6 +418,22 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     }
   }
 
+  Future<void> actionSelectDate(BuildContext context, due) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: due,
+      firstDate: selectedDate,
+      lastDate: DateTime(3000),
+    );
+    dateController.text = DateFormat('yyyy-MM-dd').format(picked!);
+    if (mounted && picked != selectedDate) {
+      setState(() {
+        dateController.text = DateFormat('yyyy-MM-dd').format(picked);
+      });
+      createTodoList('', context);
+    }
+  }
+
   void deleteAllAction(nonTrashedTodolistsState) {
     bool undo = true;
     for (var list in nonTrashedTodolistsState) {
@@ -497,7 +513,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     if (data != '') {
       textController.text = data;
     }
-    dateController.text = date;
+    dateController.text == '' ? dateController.text = date : dateController.text= dateController.text;
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -1043,22 +1059,19 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         appBar: AppBar(
           title: isSearch
               ? searchTextField()
-              : const Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Todo List",
-                      style: TextStyle(
-                        fontFamily: "DM serif Display",fontWeight: FontWeight.w500,
-                        fontSize: 30
-                      ),
-                    ),
-                    SizedBox(width: 3),
-                    Icon(Icons.bookmark_added_rounded),
-                  ],
-                ),
+              : const SizedBox(),
           centerTitle: true,
           actions: [
+            !isSearch ? Tooltip(
+              message: "Add a Date",
+              child: IconButton(
+                onPressed: () { 
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  actionSelectDate(context, selectedDate);
+                },
+                icon: const Icon(Icons.calendar_month_outlined),
+                ),
+            ) : const SizedBox(),
             !isSearch ? Builder(
               builder: (context) {
                 return IconButton(
@@ -1087,13 +1100,104 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   icon: const Icon(Icons.more_vert)
                 );
               }
-            ) : const SizedBox()
+            ) : const SizedBox(),
+          ],
+        ),
+        drawer: const TodoListDrawer(),
+        body: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Todo List",
+                    style: TextStyle(
+                      fontFamily: "DM serif Display",fontWeight: FontWeight.w500,
+                      fontSize: 30
+                    ),
+                  ),
+                  SizedBox(width: 3),
+                  Icon(Icons.bookmark_added_rounded),
+                ],
+              ),
+            ),
+            Expanded(
+              child: TabBarView(children: [
+                Todo(
+                  list: nonTrashedTodolists,
+                  category: 'All'
+                ),
+                Todo(
+                  list: nonTrashedTodolists,
+                  category: 'Personal'
+                ),
+                Todo(
+                  list: nonTrashedTodolists,
+                  category: 'Work'
+                ),
+                Todo(
+                  list: nonTrashedTodolists,
+                  category: 'Study'
+                ),
+                Todo(
+                  list: nonTrashedTodolists,
+                  category: 'Shopping'
+                ),
+                Todo(
+                  list: nonTrashedTodolists,
+                  category: 'Sport'
+                ),
+              ]),
+            ),
+          ],
+        ),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            nonTrashedTodolists.isNotEmpty && !isSearch && (count > 0)
+                ? Tooltip(
+                    message: "Move plans to trash",
+                    child: FloatingActionButton(
+                      onPressed: trashAllTodoLists,
+                      backgroundColor:
+                          Theme.of(context).colorScheme.onSecondary,
+                      child: const Icon(Icons.delete_sweep_outlined),
+                    ),
+                  )
+                : const SizedBox(),
+            const SizedBox(height: 8),
+            Tooltip(
+              message: "Add a plan",
+              child: RotationTransition(
+                turns: Tween(begin: 0.0, end: isSearch ? 0.25 : 0.0)
+                    .animate(_animationController),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    if (isSearch == true) {
+                      closeSearch();
+                    } else {
+                      createTodoList('', context);
+                    }
+                  },
+                  backgroundColor: Theme.of(context).colorScheme.onSecondary,
+                  child: Transform.rotate(
+                    angle: isSearch
+                        ? 45 * (3.141592653589793238 / 180)
+                        : 0.0, // Rotate 45 degrees if isSearch is true
+                    child: const Icon(Icons.add),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
         persistentFooterButtons: [
           TabBar(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+            // padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
             indicatorWeight: 1,
+            indicatorPadding: EdgeInsets.zero,
             indicatorSize: TabBarIndicatorSize.tab,
             onTap: (value) {
               switch (value) {
@@ -1186,74 +1290,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             ],
           ),
         ],
-        drawer: const TodoListDrawer(),
-        body: TabBarView(children: [
-          Todo(
-            list: nonTrashedTodolists,
-            category: 'All'
-          ),
-          Todo(
-            list: nonTrashedTodolists,
-            category: 'Personal'
-          ),
-          Todo(
-            list: nonTrashedTodolists,
-            category: 'Work'
-          ),
-          Todo(
-            list: nonTrashedTodolists,
-            category: 'Study'
-          ),
-          Todo(
-            list: nonTrashedTodolists,
-            category: 'Shopping'
-          ),
-          Todo(
-            list: nonTrashedTodolists,
-            category: 'Sport'
-          ),
-        ]),
-        floatingActionButton: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            nonTrashedTodolists.isNotEmpty && !isSearch && (count > 0)
-                ? Tooltip(
-                    message: "Move plans to trash",
-                    child: FloatingActionButton(
-                      onPressed: trashAllTodoLists,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.onSecondary,
-                      child: const Icon(Icons.delete_sweep_outlined),
-                    ),
-                  )
-                : const SizedBox(),
-            const SizedBox(height: 8),
-            Tooltip(
-              message: "Add a plan",
-              child: RotationTransition(
-                turns: Tween(begin: 0.0, end: isSearch ? 0.25 : 0.0)
-                    .animate(_animationController),
-                child: FloatingActionButton(
-                  onPressed: () {
-                    if (isSearch == true) {
-                      closeSearch();
-                    } else {
-                      createTodoList('', context);
-                    }
-                  },
-                  backgroundColor: Theme.of(context).colorScheme.onSecondary,
-                  child: Transform.rotate(
-                    angle: isSearch
-                        ? 45 * (3.141592653589793238 / 180)
-                        : 0.0, // Rotate 45 degrees if isSearch is true
-                    child: const Icon(Icons.add),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      
       ),
     );
   }
