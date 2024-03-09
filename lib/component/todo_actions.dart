@@ -6,6 +6,7 @@ import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
 
 // ignore: must_be_immutable
@@ -85,7 +86,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                 icon: const Icon(Icons.undo_rounded)),
           ),
           Tooltip(
-            message: "Reactivate Plan",
+            message: "Star Plan",
             child: IconButton(
                 icon: const Icon(
                   Icons.star_rounded,
@@ -111,9 +112,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                     fontWeight: FontWeight.w500))));
                   } else {
                     for (var selectedList in selectedLists) {
-                      context
-                          .read<TodoListDatabase>()
-                          .star(selectedList.id);
+                      context.read<TodoListDatabase>().star(selectedList.id);
                     }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -163,9 +162,13 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                     fontWeight: FontWeight.w500))));
                   } else {
                     for (var selectedList in selectedLists) {
-                      context
-                          .read<TodoListDatabase>()
-                          .replan(selectedList.id);
+                      context.read<TodoListDatabase>().replan(selectedList.id);
+                      NotificationService().scheduleNotification(
+                        id: selectedList.id,
+                        title: "Reminder",
+                        body: "TODO: ${selectedList.plan}",
+                        payload: "Due by ${selectedList.due}"
+                      );
                     }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -218,6 +221,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                       context
                           .read<TodoListDatabase>()
                           .completed(selectedList.id);
+                      NotificationService().cancelNotification(selectedList.id);
                     }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -286,11 +290,9 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                               actions: [
                                 IconButton(
                                   onPressed: () {
-                                    for (var selectedList
-                                        in selectedLists) {
-                                      context
-                                          .read<TodoListDatabase>()
-                                          .trashTodoList(selectedList.id);
+                                    for (var selectedList in selectedLists) {
+                                      context.read<TodoListDatabase>().trashTodoList(selectedList.id);
+                                      NotificationService().cancelNotification(selectedList.id);
                                     }
                                     if (selectedLists.length > 1) {
                                       ScaffoldMessenger.of(context)

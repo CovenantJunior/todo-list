@@ -16,4 +16,5 @@ class TodoList {
   bool? starred;
   bool? trashed;
   DateTime? trashedDate;
+  String? interval;
 }

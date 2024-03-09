@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:ffi';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
-import 'package:speech_to_text/speech_to_text.dart';
 import 'package:todo_list/component/todo_list_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:popover/popover.dart';
@@ -29,7 +28,6 @@ class Todo extends StatefulWidget {
 
 class _TodoState extends State<Todo> {
 
-  late SpeechToText _speech;
   Future<bool?> hasVibrate = Vibration.hasVibrator();
   bool requestedClipboard = false;
   
@@ -37,7 +35,7 @@ class _TodoState extends State<Todo> {
   void initState() {
     super.initState();
     readTodoLists();
-    _speech = SpeechToText();
+    
   }
 
   TextEditingController textController = TextEditingController();
@@ -51,7 +49,6 @@ class _TodoState extends State<Todo> {
   List nonTrashedTodolistsState = [];
   List preference = [];
   List cardToRemove = [];
-  bool _isListening = false;
   Future<void> selectDate(BuildContext context, due) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -65,241 +62,6 @@ class _TodoState extends State<Todo> {
         dateController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
     }
-  }
-
-  // Create
-  void createTodoList(String data, context) {
-    if (data != '') {
-      textController.text = data;
-    }
-    dateController.text = date;
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: const Text(
-                "Add a plan",
-                style: TextStyle(
-                  fontFamily: "Quicksand",
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              content: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.list_rounded),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: TextFormField(
-                            autocorrect: true,
-                            autofocus: true,
-                            minLines: 1,
-                            maxLines: 20,
-                            controller: textController,
-                            textCapitalization: TextCapitalization.sentences,
-                            decoration: InputDecoration(
-                              hintText: hint,
-                              suffixIcon: context
-                                          .watch<TodoListDatabase>()
-                                          .preferences
-                                          .first
-                                          .stt ==
-                                      true
-                                  ? (IconButton(
-                                      onPressed: _listen,
-                                      icon: Icon(_isListening == true
-                                          ? Icons.mic_off
-                                          : Icons.mic)))
-                                  : const SizedBox(),
-                              hintStyle: const TextStyle(
-                                  fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.w500),
-                              labelStyle: const TextStyle(
-                                  fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        const Icon(Icons.category),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: InputDecorator(
-                            decoration: const InputDecoration(
-                                labelText: 'Category',
-                                labelStyle: TextStyle(
-                                    fontFamily: "Quicksand",
-                                    fontWeight: FontWeight.w500),
-                                border: InputBorder.none),
-                            child: DropdownButtonFormField<String>(
-                              value: selectedCategory,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedCategory = value!;
-                                });
-                              },
-                              items: [
-                                'Personal',
-                                'Work',
-                                'Study',
-                                'Shopping',
-                                'Sport',
-                                'Wishlist'
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: const TextStyle(
-                                        fontFamily: "Quicksand",
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                );
-                              }).toList(),
-                              isExpanded: true,
-                              icon: const Icon(Icons.edit),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        const Icon(Icons.calendar_month_rounded),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              _selectDate(context);
-                            },
-                            child: InputDecorator(
-                              decoration: const InputDecoration(
-                                  labelText: 'Tap here to choose due date',
-                                  labelStyle: TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.w500),
-                                  hintText: 'Select due date',
-                                  border: InputBorder.none),
-                              child: GestureDetector(
-                                onTap: () {
-                                  _selectDate(context);
-                                },
-                                child: TextField(
-                                  readOnly: true,
-                                  controller: dateController,
-                                  style: const TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    textController.clear();
-                    setState(() {
-                      selectedDate = DateTime.now();
-                      selectedCategory = 'Personal';
-                      requestedClipboard = true;
-                    });
-                  },
-                  icon: const Icon(Icons.undo_rounded),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add_task_rounded),
-                  onPressed: () {
-                    String text = textController.text.trim();
-                    String due = dateController.text;
-                    String category = selectedCategory;
-                    if (text.isNotEmpty) {
-                      context
-                          .read<TodoListDatabase>()
-                          .addTodoList(text, category, due);
-                      Navigator.pop(context);
-                      int? id;
-                      switch (selectedCategory) {
-                        case 'Personal':
-                          id = 1;
-                          break;
-                        case 'Work':
-                          id = 2;
-                          break;
-                        case 'Study':
-                          id = 3;
-                          break;
-                        case 'Shopping':
-                          id = 4;
-                          break;
-                        case 'Wishlist':
-                          id = 5;
-                          break;
-                        default:
-                          id = 0; // Default to the first tab if the category is not recognized
-                          break;
-                      }
-                      DefaultTabController.of(context).animateTo(id);
-                      setState(() {
-                        selectedDate = DateTime.now();
-                        selectedCategory = 'Personal';
-                      });
-                      textController.clear();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 2),
-                          content: Text(
-                            'Plan saved',
-                            style: TextStyle(
-                              fontFamily: "Quicksand",
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      );
-                      NotificationService().showNotification(
-                          id: nonTrashedTodolistsState.first.id + 1,
-                          title: "New Plan Recorded",
-                          body: text,
-                          payload: "Due by $due");
-                    } else {
-                      context
-                                  .watch<TodoListDatabase>()
-                                  .preferences
-                                  .first
-                                  .vibration ==
-                              true
-                          ? Vibration.vibrate(duration: 50)
-                          : Void;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 2),
-                          content: Text(
-                            'Oops, blank shot!',
-                            style: TextStyle(
-                              fontFamily: "Quicksand",
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ));
   }
 
   // ignore: non_constant_identifier_names
@@ -493,72 +255,7 @@ class _TodoState extends State<Todo> {
       isOfLength = false;
     });
   }
-
-  void _listen() async {
-    if (!_isListening) {
-      bool available = await _speech.initialize(
-        onStatus: (status) {
-          // print('Speech recognition status: $status');
-          if (status == 'listening') {
-            setState(() {
-              _isListening = true;
-              hint = 'Listening...';
-            });
-          } else {
-            setState(() {
-              _isListening = false;
-              hint = 'Task description';
-            });
-          }
-        },
-        onError: (errorNotification) {
-          // print('Speech recognition error: $errorNotification');
-          setState(() {
-            _isListening = false;
-            _speech.stop();
-            hint = 'Task description';
-          });
-        },
-      );
-      if (available) {
-        setState(() {
-          _isListening = true;
-          hint = 'Listening...';
-        });
-        _speech.listen(
-          onResult: (result) {
-            setState(() {
-              hint = 'Task description';
-              textController.text = result.recognizedWords;
-            });
-          },
-        );
-      }
-    } else {
-      setState(() {
-        _isListening = false;
-        _speech.stop();
-        hint = 'Task description';
-        textController.text = '';
-      });
-    }
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: selectedDate,
-      lastDate: DateTime(3000),
-    );
-    dateController.text = DateFormat('yyyy-MM-dd').format(picked!);
-    if (mounted && picked != selectedDate) {
-      setState(() {
-        dateController.text = DateFormat('yyyy-MM-dd').format(picked);
-      });
-    }
-  }
-
+  
   // Read
   Future<void> readTodoLists() async {
     context.read<TodoListDatabase>().fetchUntrashedTodoList();
@@ -596,6 +293,7 @@ class _TodoState extends State<Todo> {
           setState(() {
             undo = true;
           });
+          NotificationService().cancelNotification(id);
         }
       });
       ScaffoldMessenger.of(context).showSnackBar(
@@ -957,6 +655,26 @@ class _TodoState extends State<Todo> {
                           : const Text('Not yet achieved',
                               style: TextStyle(fontFamily: "Quicksand")),
                     ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Reminder Interval",
+                        style: TextStyle(
+                            fontFamily: "Quicksand",
+                            // fontSize: 15,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      plan.interval != null
+                          ? Text(
+                              DateFormat('EEE, MMM d yyyy HH:mm:ss')
+                                  .format(plan.interval),
+                              style: const TextStyle(fontFamily: "Quicksand"))
+                          : const Text('Not yet set',
+                              style: TextStyle(fontFamily: "Quicksand")),
+                    ],
                   )
                 ],
               ),
@@ -981,13 +699,20 @@ class _TodoState extends State<Todo> {
             content: Text('Plan reactivated!',
                 style: TextStyle(
                     fontFamily: "Quicksand", fontWeight: FontWeight.w500))));
+        NotificationService().scheduleNotification(
+          id: plan.id,
+          title: "Reminder",
+          body: "TODO: ${plan.plan}",
+          payload: "Due by ${plan.due}"
+        );
       } else {
         context.read<TodoListDatabase>().completed(plan.id);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             duration: Duration(seconds: 2),
-            content: Text('Plan accomplished. You inspire!!!',
+            content: Text('Plan accomplished. You inspire!',
                 style: TextStyle(
                     fontFamily: "Quicksand", fontWeight: FontWeight.w500))));
+        NotificationService().cancelNotification(plan.id);
       }
     }
 
@@ -1069,9 +794,11 @@ class _TodoState extends State<Todo> {
                                     ),
                                     child: Row(
                                       children: [
-                                        Checkbox(value: plan.completed != true ? false : true, onChanged: (value){
-                                          mark(plan);
-                                        }),
+                                        Checkbox(value: plan.completed != true ? false : true,
+                                          onChanged: (value){
+                                            mark(plan);
+                                          }
+                                        ),
                                         Expanded(
                                           child: GestureDetector(
                                             onTap: () {

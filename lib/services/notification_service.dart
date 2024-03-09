@@ -166,7 +166,6 @@ class NotificationService {
       String? body,
       String? interval,
       scheduledDate,
-      notificationDetails,
       String? payload
     }
   ) {
@@ -189,7 +188,11 @@ class NotificationService {
         break;
       }
       return flutterLocalNotificationsPlugin.periodicallyShow(
-        id!, title, body, notificationInterval, notificationDetails, androidScheduleMode: AndroidScheduleMode.alarmClock
+        id!, title, body, notificationInterval, notificationDetails(), payload: payload, androidScheduleMode: AndroidScheduleMode.alarmClock
       );
+  }
+
+  cancelNotification(id) async {
+    await flutterLocalNotificationsPlugin.cancel(id);
   }
 }
