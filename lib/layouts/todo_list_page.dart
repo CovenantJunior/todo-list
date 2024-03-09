@@ -210,6 +210,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       textController.text = data;
     }
     dateController.text == '' ? dateController.text = date : dateController.text= dateController.text;
+    selectedCategory == 'All' ? selectedCategory = 'Personal' : selectedCategory = selectedCategory;
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -220,126 +221,129 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              content: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.list_rounded),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: TextFormField(
-                            autocorrect: true,
-                            autofocus: true,
-                            minLines: 1,
-                            maxLines: 20,
-                            controller: textController,
-                            textCapitalization: TextCapitalization.sentences,
-                            decoration: InputDecoration(
-                              hintText: hint,
-                              suffixIcon: context
-                                          .watch<TodoListDatabase>()
-                                          .preferences
-                                          .first
-                                          .stt ==
-                                      true
-                                  ? (IconButton(
-                                      onPressed: _listen,
-                                      icon: Icon(_isListening == true
-                                          ? Icons.mic_off
-                                          : Icons.mic)))
-                                  : const SizedBox(),
-                              hintStyle: const TextStyle(
-                                  fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.w500),
-                              labelStyle: const TextStyle(
-                                  fontFamily: "Quicksand",
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        const Icon(Icons.category),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: InputDecorator(
-                            decoration: const InputDecoration(
-                                labelText: 'Category',
-                                labelStyle: TextStyle(
+              content: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.list_rounded),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextFormField(
+                              autocorrect: true,
+                              autofocus: true,
+                              minLines: 1,
+                              maxLines: 20,
+                              controller: textController,
+                              textCapitalization: TextCapitalization.sentences,
+                              decoration: InputDecoration(
+                                hintText: hint,
+                                suffixIcon: context
+                                            .watch<TodoListDatabase>()
+                                            .preferences
+                                            .first
+                                            .stt ==
+                                        true
+                                    ? (IconButton(
+                                        onPressed: _listen,
+                                        icon: Icon(_isListening == true
+                                            ? Icons.mic_off
+                                            : Icons.mic)))
+                                    : const SizedBox(),
+                                hintStyle: const TextStyle(
                                     fontFamily: "Quicksand",
                                     fontWeight: FontWeight.w500),
-                                border: InputBorder.none),
-                            child: DropdownButtonFormField<String>(
-                              value: selectedCategory,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedCategory = value!;
-                                });
+                                labelStyle: const TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          const Icon(Icons.category),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: InputDecorator(
+                              decoration: const InputDecoration(
+                                  labelText: 'Category',
+                                  labelStyle: TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.w500),
+                                  border: InputBorder.none),
+                              child: DropdownButtonFormField<String>(
+                                value: selectedCategory,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedCategory = value!;
+                                  });
+                                },
+                                items: [
+                                  'Personal',
+                                  'Work',
+                                  'Study',
+                                  'Shopping',
+                                  'Sport',
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: const TextStyle(
+                                          fontFamily: "Quicksand",
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  );
+                                }).toList(),
+                                isExpanded: true,
+                                icon: const Icon(Icons.edit),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          const Icon(Icons.calendar_month_rounded),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                _selectDate(context);
                               },
-                              items: [
-                                'Personal',
-                                'Work',
-                                'Study',
-                                'Shopping',
-                                'Sport',
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                    labelText: 'Tap here to choose due date',
+                                    labelStyle: TextStyle(
+                                        fontFamily: "Quicksand",
+                                        fontWeight: FontWeight.w500),
+                                    hintText: 'Select due date',
+                                    border: InputBorder.none),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _selectDate(context);
+                                  },
+                                  child: TextField(
+                                    readOnly: true,
+                                    controller: dateController,
                                     style: const TextStyle(
                                         fontFamily: "Quicksand",
                                         fontWeight: FontWeight.w500),
                                   ),
-                                );
-                              }).toList(),
-                              isExpanded: true,
-                              icon: const Icon(Icons.edit),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        const Icon(Icons.calendar_month_rounded),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              _selectDate(context);
-                            },
-                            child: InputDecorator(
-                              decoration: const InputDecoration(
-                                  labelText: 'Tap here to choose due date',
-                                  labelStyle: TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.w500),
-                                  hintText: 'Select due date',
-                                  border: InputBorder.none),
-                              child: GestureDetector(
-                                onTap: () {
-                                  _selectDate(context);
-                                },
-                                child: TextField(
-                                  readOnly: true,
-                                  controller: dateController,
-                                  style: const TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.w500),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               actions: [
@@ -698,13 +702,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         setState(() {
           requestedClipboard = preState;
         });
-        if ((context
-              .read<TodoListDatabase>()
-              .preferences
-              .first
-              .accessClipboard ==
-                true) &&
-            (requestedClipboard == false)) {
+        if ((requestedClipboard == false)) {
           fetchClipboard(context, nonTrashedTodolistsState);
         }
       }
@@ -747,7 +745,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
 
-    initClipboard();
+    if(context.read<TodoListDatabase>().preferences.first.accessClipboard == true) {
+      initClipboard();
+    }
 
     return DefaultTabController(
       length: 6,
@@ -806,7 +806,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         drawer: const TodoListDrawer(),
         body: Column(
           children: [
-            count > 0 ? const Padding(
+            const Padding(
               padding: EdgeInsets.only(left: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -823,7 +823,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   Icon(Icons.bookmark_added_rounded),
                 ],
               ),
-            ) : const SizedBox(),
+            ),
             Expanded(
               child: TabBarView(children: [
                 Todo(
@@ -955,37 +955,85 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               Tooltip(
                 message: 'All',
                 child: Tab(
-                  icon: Icon(Icons.home_outlined),
+                  child: Column(
+                  children: [
+                    Icon(Icons.home_outlined),
+                    Text('All',
+                      style: TextStyle(
+                        fontSize: 8
+                      )
+                    )
+                  ]),
                 ),
               ),
               Tooltip(
                 message: 'Personal',
                 child: Tab(
-                  icon: Icon(Icons.person_2_outlined),
+                  child: Column(
+                  children: [
+                    Icon(Icons.person_2_outlined),
+                    Text('Personal',
+                      style: TextStyle(
+                        fontSize: 8
+                      )
+                    )
+                  ]),
                 ),
               ),
               Tooltip(
                 message: 'Work',
                 child: Tab(
-                  icon: Icon(Icons.work_outline_rounded),
+                  child: Column(
+                  children: [
+                    Icon(Icons.work_outline_rounded),
+                    Text('Work',
+                      style: TextStyle(
+                        fontSize: 8
+                      )
+                    )
+                  ]),
                 ),
               ),
               Tooltip(
                 message: 'Study',
                 child: Tab(
-                  icon: Icon(Icons.book_outlined),
+                  child: Column(
+                  children: [
+                    Icon(Icons.book_outlined),
+                    Text('Study',
+                      style: TextStyle(
+                        fontSize: 8
+                      )
+                    )
+                  ]),
                 ),
               ),
               Tooltip(
                 message: 'Shopping',
                 child: Tab(
-                  icon: Icon(Icons.shopping_basket_outlined),
+                  child: Column(
+                  children: [
+                    Icon(Icons.shopping_basket_outlined),
+                    Text('Shopping',
+                      style: TextStyle(
+                        fontSize: 8
+                      )
+                    )
+                  ]),
                 ),
               ),
               Tooltip(
                 message: 'Sport',
                 child: Tab(
-                  icon: Icon(Icons.sports_soccer_rounded),
+                  child: Column(
+                  children: [
+                    Icon(Icons.sports_soccer_rounded),
+                    Text('Sport',
+                      style: TextStyle(
+                        fontSize: 8
+                      )
+                    )
+                  ]),
                 ),
               ),
             ],
