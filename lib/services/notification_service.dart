@@ -113,7 +113,8 @@ class NotificationService {
           ok,
           completed,
           delete,
-        ]);
+        ]
+      );
   }
 
   darwinDetails() {

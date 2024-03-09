@@ -415,10 +415,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     String text = textController.text.trim();
                     String due = dateController.text;
                     String category = selectedCategory;
+                    String intvl = interval;
                     if (text.isNotEmpty) {
-                      context
-                          .read<TodoListDatabase>()
-                          .addTodoList(text, category, due);
+                      context.read<TodoListDatabase>().addTodoList(text, category, due, intvl);
                       setState(() {
                         selectedDate = DateTime.now();
                       });

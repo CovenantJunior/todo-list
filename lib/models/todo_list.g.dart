@@ -42,28 +42,33 @@ const TodoListSchema = CollectionSchema(
       name: r'due',
       type: IsarType.dateTime,
     ),
-    r'modified': PropertySchema(
+    r'interval': PropertySchema(
       id: 5,
+      name: r'interval',
+      type: IsarType.string,
+    ),
+    r'modified': PropertySchema(
+      id: 6,
       name: r'modified',
       type: IsarType.dateTime,
     ),
     r'plan': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'plan',
       type: IsarType.string,
     ),
     r'starred': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'starred',
       type: IsarType.bool,
     ),
     r'trashed': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'trashed',
       type: IsarType.bool,
     ),
     r'trashedDate': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'trashedDate',
       type: IsarType.dateTime,
     )
@@ -95,6 +100,12 @@ int _todoListEstimateSize(
     }
   }
   {
+    final value = object.interval;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.plan;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -114,11 +125,12 @@ void _todoListSerialize(
   writer.writeBool(offsets[2], object.completed);
   writer.writeDateTime(offsets[3], object.created);
   writer.writeDateTime(offsets[4], object.due);
-  writer.writeDateTime(offsets[5], object.modified);
-  writer.writeString(offsets[6], object.plan);
-  writer.writeBool(offsets[7], object.starred);
-  writer.writeBool(offsets[8], object.trashed);
-  writer.writeDateTime(offsets[9], object.trashedDate);
+  writer.writeString(offsets[5], object.interval);
+  writer.writeDateTime(offsets[6], object.modified);
+  writer.writeString(offsets[7], object.plan);
+  writer.writeBool(offsets[8], object.starred);
+  writer.writeBool(offsets[9], object.trashed);
+  writer.writeDateTime(offsets[10], object.trashedDate);
 }
 
 TodoList _todoListDeserialize(
@@ -134,11 +146,12 @@ TodoList _todoListDeserialize(
   object.created = reader.readDateTimeOrNull(offsets[3]);
   object.due = reader.readDateTimeOrNull(offsets[4]);
   object.id = id;
-  object.modified = reader.readDateTimeOrNull(offsets[5]);
-  object.plan = reader.readStringOrNull(offsets[6]);
-  object.starred = reader.readBoolOrNull(offsets[7]);
-  object.trashed = reader.readBoolOrNull(offsets[8]);
-  object.trashedDate = reader.readDateTimeOrNull(offsets[9]);
+  object.interval = reader.readStringOrNull(offsets[5]);
+  object.modified = reader.readDateTimeOrNull(offsets[6]);
+  object.plan = reader.readStringOrNull(offsets[7]);
+  object.starred = reader.readBoolOrNull(offsets[8]);
+  object.trashed = reader.readBoolOrNull(offsets[9]);
+  object.trashedDate = reader.readDateTimeOrNull(offsets[10]);
   return object;
 }
 
@@ -160,14 +173,16 @@ P _todoListDeserializeProp<P>(
     case 4:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 5:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 6:
       return (reader.readStringOrNull(offset)) as P;
+    case 6:
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 7:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 8:
       return (reader.readBoolOrNull(offset)) as P;
     case 9:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 10:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -694,6 +709,152 @@ extension TodoListQueryFilter
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> intervalIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'interval',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> intervalIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'interval',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> intervalEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'interval',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> intervalGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'interval',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> intervalLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'interval',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> intervalBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'interval',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> intervalStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'interval',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> intervalEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'interval',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> intervalContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'interval',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> intervalMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'interval',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> intervalIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'interval',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterFilterCondition> intervalIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'interval',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QAfterFilterCondition> modifiedIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1100,6 +1261,18 @@ extension TodoListQuerySortBy on QueryBuilder<TodoList, TodoList, QSortBy> {
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByInterval() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'interval', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByIntervalDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'interval', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QAfterSortBy> sortByModified() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'modified', Sort.asc);
@@ -1235,6 +1408,18 @@ extension TodoListQuerySortThenBy
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByInterval() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'interval', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByIntervalDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'interval', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QAfterSortBy> thenByModified() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'modified', Sort.asc);
@@ -1329,6 +1514,13 @@ extension TodoListQueryWhereDistinct
     });
   }
 
+  QueryBuilder<TodoList, TodoList, QDistinct> distinctByInterval(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'interval', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<TodoList, TodoList, QDistinct> distinctByModified() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'modified');
@@ -1396,6 +1588,12 @@ extension TodoListQueryProperty
   QueryBuilder<TodoList, DateTime?, QQueryOperations> dueProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'due');
+    });
+  }
+
+  QueryBuilder<TodoList, String?, QQueryOperations> intervalProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'interval');
     });
   }
 

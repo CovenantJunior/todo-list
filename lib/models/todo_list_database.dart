@@ -210,8 +210,8 @@ class TodoListDatabase extends ChangeNotifier{
   /* TODOLIST METHODS */
 
   // CREATE
-  void addTodoList(plan, category, due) async {
-    final newTodoList = TodoList()..plan = plan..category = category..completed = false..created = DateTime.now()..due = DateTime.parse(due)..starred = false..trashed = false;
+  void addTodoList(plan, category, due, intvl) async {
+    final newTodoList = TodoList()..plan = plan..category = category..completed = false..created = DateTime.now()..due = DateTime.parse(due)..starred = false..trashed = false..interval = intvl;
 
     // Save to DB
     await isar.writeTxn(() => isar.todoLists.put(newTodoList));

@@ -669,8 +669,7 @@ class _TodoState extends State<Todo> {
                       ),
                       plan.interval != null
                           ? Text(
-                              DateFormat('EEE, MMM d yyyy HH:mm:ss')
-                                  .format(plan.interval),
+                              "${plan.interval}",
                               style: const TextStyle(fontFamily: "Quicksand"))
                           : const Text('Not yet set',
                               style: TextStyle(fontFamily: "Quicksand")),
