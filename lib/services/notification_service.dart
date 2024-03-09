@@ -161,16 +161,35 @@ class NotificationService {
   // Schedule and Send Notification
   scheduleNotification(
     {
-      int id = 0,
+      int? id,
       String? title,
       String? body,
+      String? interval,
       scheduledDate,
       notificationDetails,
-      uiLocalNotificationDateInterpretation,
-      String? payload,
-      androidScheduleMode}) {
-      return flutterLocalNotificationsPlugin.zonedSchedule(
-        id, title, body, scheduledDate, notificationDetails, uiLocalNotificationDateInterpretation: uiLocalNotificationDateInterpretation, androidScheduleMode: androidScheduleMode
+      String? payload
+    }
+  ) {
+    RepeatInterval notificationInterval;
+      switch (interval) {
+        case 'Every Minute':
+          notificationInterval = RepeatInterval.everyMinute;
+          break;
+        case 'Hourly':
+          notificationInterval = RepeatInterval.hourly;
+          break;
+        case 'Daily':
+          notificationInterval = RepeatInterval.daily;
+          break;
+        case 'Weekly':
+          notificationInterval = RepeatInterval.weekly;
+          break;
+        default:
+          notificationInterval = RepeatInterval.daily;
+        break;
+      }
+      return flutterLocalNotificationsPlugin.periodicallyShow(
+        id!, title, body, notificationInterval, notificationDetails, androidScheduleMode: AndroidScheduleMode.alarmClock
       );
   }
 }
