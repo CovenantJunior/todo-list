@@ -98,7 +98,7 @@ class NotificationService {
       const LinuxNotificationAction(key: 'ACTION_DELETE', label: 'Delete');
 
   androidDetails() {
-    return AndroidNotificationDetails(
+    return const AndroidNotificationDetails(
         'todo_notifications', 'Todo List Notifications',
         channelDescription:
             'Get reminders for your tasks and stay organized with notifications from the Minimalist Todo List App',
@@ -109,11 +109,11 @@ class NotificationService {
         enableVibration: true,
         fullScreenIntent: false,
         enableLights: true,
-        actions: [
+        /* actions: [
           ok,
           completed,
           delete,
-        ]
+        ] */
       );
   }
 
@@ -136,11 +136,11 @@ class NotificationService {
       resident: false,
       defaultActionName: null,
       customHints: null,
-      actions: <LinuxNotificationAction>[
+      /* actions: <LinuxNotificationAction>[
         linuxOk,
         linuxCompleted,
         linuxDelete,
-      ],
+      ], */
     );
   }
 
