@@ -172,9 +172,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   }
 
   void trashAllTodoLists(nonTrashedTodolists) {
-    /* context.watch<TodoListDatabase>().preferences.first.vibration == true
+    context.watch<TodoListDatabase>().preferences.first.vibration == true
         ? Vibration.vibrate(duration: 50)
-        : Void; */
+        : Void;
     List trash;
     if (selectedCategory == 'All') {
       trash = nonTrashedTodolists;
