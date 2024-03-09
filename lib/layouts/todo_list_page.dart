@@ -45,7 +45,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   DateTime selectedDate = DateTime.now();
   String selectedCategory = 'Personal';
-  String interval = 'Daily';
+  String interval = 'Every Minute';
   bool isSearch = false;
   bool isOfLength = false;
   List searchResults = [];
