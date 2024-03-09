@@ -1034,9 +1034,6 @@ class _TodoState extends State<Todo> {
                                         deleteAction: deleteAction,
                                       ));
                               },
-                              onTap: () {
-                                planDetails(plan);
-                              },
                               child: Visibility(
                                 visible: !widget.cardToRemove.contains(plan.id) && !cardToRemove.contains(plan.id),
                                 child: Card(
@@ -1070,93 +1067,107 @@ class _TodoState extends State<Todo> {
                                         ],
                                       ),
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15.0, vertical: 15.0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Expanded(
-                                                child: SizedBox(
-                                                  height: 20,
-                                                  child: Text(
-                                                    plan.plan,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontFamily: "Quicksand",
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      // fontSize: 16,
-                                                      decoration: decorate(
-                                                          plan.completed),
-                                                    ),
+                                    child: Row(
+                                      children: [
+                                        Checkbox(value: plan.completed != true ? false : true, onChanged: (value){
+                                          mark(plan);
+                                        }),
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              planDetails(plan);
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 15.0, vertical: 15.0),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.spaceAround,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: [
+                                                      Expanded(
+                                                        child: SizedBox(
+                                                          height: 20,
+                                                          child: Text(
+                                                            plan.plan,
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow.ellipsis,
+                                                            style: TextStyle(
+                                                              fontFamily: "Quicksand",
+                                                              fontWeight:
+                                                                  FontWeight.w500,
+                                                              // fontSize: 16,
+                                                              decoration: decorate(
+                                                                  plan.completed),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      /* Builder(
+                                                builder: (context) {
+                                                  return IconButton(
+                                                    onPressed: () {
+                                                      showPopover(
+                                                        width: 370,
+                                                        context: context,
+                                                        bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                                                      );
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.more_vert, 
+                                                      color:Colors.blueGrey
+                                                    )
+                                                  );
+                                                }
+                                              ), */
+                                                      /* TodoListOptions(
+                                                id: plan.id,
+                                                plan: plan.plan
+                                              ) */
+                                                      plan.starred == true
+                                                          ? const Padding(
+                                                              padding: EdgeInsets.only(
+                                                                  left: 8.0),
+                                                              child: Icon(
+                                                                  Icons.star_rounded,
+                                                                  color: Colors
+                                                                      .orangeAccent),
+                                                            )
+                                                          : const SizedBox()
+                                                    ],
                                                   ),
+                                                  /* const Divider(height: 25),
+                                                                              Row(
+                                            children: [
+                                              const Icon(
+                                                Icons.rocket_launch_outlined,
+                                                size: 15,
+                                              ),
+                                              const SizedBox(width: 5),
+                                              Text(
+                                                DateFormat('EEE, MMM d yyyy').format(plan.due),
+                                                style: const TextStyle(
+                                                  fontFamily: "Quicksand",
+                                                  fontWeight: FontWeight.w500,
+                                                  // fontSize: 10
                                                 ),
                                               ),
-                                              /* Builder(
-                                        builder: (context) {
-                                          return IconButton(
-                                            onPressed: () {
-                                              showPopover(
-                                                width: 370,
-                                                context: context,
-                                                bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                                              );
-                                            },
-                                            icon: const Icon(
-                                              Icons.more_vert, 
-                                              color:Colors.blueGrey
-                                            )
-                                          );
-                                        }
-                                      ), */
-                                              /* TodoListOptions(
-                                        id: plan.id,
-                                        plan: plan.plan
-                                      ) */
-                                              plan.starred == true
-                                                  ? const Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 8.0),
-                                                      child: Icon(
-                                                          Icons.star_rounded,
-                                                          color: Colors
-                                                              .orangeAccent),
-                                                    )
-                                                  : const SizedBox()
                                             ],
+                                                                              ), */
+                                                ],
+                                              ),
+                                            ),
                                           ),
-                                          /* const Divider(height: 25),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.rocket_launch_outlined,
-                                        size: 15,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        DateFormat('EEE, MMM d yyyy').format(plan.due),
-                                        style: const TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontWeight: FontWeight.w500,
-                                          // fontSize: 10
                                         ),
-                                      ),
-                                    ],
-                                  ), */
-                                        ],
-                                      ),
+                                      ],
                                     ),
                                   ),
                                 ),
