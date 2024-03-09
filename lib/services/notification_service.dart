@@ -101,7 +101,7 @@ class NotificationService {
     return AndroidNotificationDetails(
         'todo_notifications', 'Todo List Notifications',
         channelDescription:
-            'Get reminders for your tasks and stay organized with notifications from the Todo List App',
+            'Get reminders for your tasks and stay organized with notifications from the Minimalist Todo List App',
         importance: Importance.max,
         priority: Priority.max,
         playSound: true,
@@ -119,7 +119,7 @@ class NotificationService {
   darwinDetails() {
     return const DarwinNotificationDetails(
         subtitle:
-            'Get reminders for your tasks and stay organized with notifications from the Todo List App',
+            'Get reminders for your tasks and stay organized with notifications from the Minimalist Todo List App',
         presentAlert: true,
         presentBadge: true,
         presentSound: true,
@@ -185,7 +185,7 @@ class NotificationService {
           notificationInterval = RepeatInterval.weekly;
           break;
         default:
-          notificationInterval = RepeatInterval.daily;
+          notificationInterval = RepeatInterval.everyMinute;
         break;
       }
       return flutterLocalNotificationsPlugin.periodicallyShow(

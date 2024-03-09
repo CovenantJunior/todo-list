@@ -49,6 +49,10 @@ class _TodoTrashState extends State<TodoTrash> {
 
   void restoreAll() {
       // context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+      setState(() {
+        isSearch = false;
+        isOfLength = false;
+      });
       showDialog(
         context: context,
         builder: (context) => AlertDialog(

@@ -130,9 +130,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     }
   }
 
-  void deleteAllAction(nonTrashedTodolistsState) {
+  void deleteAllAction(trash) {
     bool undo = true;
-    for (var list in nonTrashedTodolistsState) {
+    for (var list in trash) {
       setState(() {
         cardToRemove.add(list.id);
       });
@@ -141,7 +141,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       if (undo == true) {
         context
             .read<TodoListDatabase>()
-            .trashAllTodoLists(nonTrashedTodolistsState);
+            .trashAllTodoLists(trash);
         Future.delayed(const Duration(seconds: 3), () {
           cardToRemove.clear();
         });
@@ -167,10 +167,16 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     );
   }
 
-  void trashAllTodoLists() {
-    context.watch<TodoListDatabase>().preferences.first.vibration == true
+  void trashAllTodoLists(nonTrashedTodolists) {
+    /* context.watch<TodoListDatabase>().preferences.first.vibration == true
         ? Vibration.vibrate(duration: 50)
-        : Void;
+        : Void; */
+    List trash;
+    if (selectedCategory == 'All') {
+      trash = nonTrashedTodolists;
+    } else {  
+      trash = nonTrashedTodolists.where((e) => e.category == selectedCategory).toList();
+    }
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -186,7 +192,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 IconButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    deleteAllAction(nonTrashedTodolistsState);
+                    deleteAllAction(trash);
                   },
                   icon: const Icon(
                     Icons.done,
@@ -385,20 +391,24 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           ),
                         ),
                       );
-                      context.read<TodoListDatabase>().preferences.first.notification == true ? NotificationService().showNotification(
+                      if (context.read<TodoListDatabase>().preferences.first.notification == true) {
+                        NotificationService().showNotification(
                           id: nonTrashedTodolistsState.first.id + 1,
                           title: "New Plan Recorded",
                           body: text,
-                          payload: "Due by $due") : Void;
+                          payload: "Due by $due"
+                        );
+                        NotificationService().scheduleNotification(
+                          id: nonTrashedTodolistsState.first.id + 1,
+                          title: "Reminder",
+                          body: text,
+                          payload: "Due by $due"
+                        );
+                      }
                     } else {
-                      context
-                                  .watch<TodoListDatabase>()
-                                  .preferences
-                                  .first
-                                  .vibration ==
-                              true
-                          ? Vibration.vibrate(duration: 50)
-                          : Void;
+                      context.watch<TodoListDatabase>().preferences.first.vibration == true
+                        ? Vibration.vibrate(duration: 50)
+                        : Void;
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           duration: Duration(seconds: 2),
@@ -422,8 +432,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   void editTodoList(int id, Plan) {
     Navigator.pop(context);
     textController.text = Plan.plan;
-    dateController.text =
-        Plan.due != null ? DateFormat('yyyy-MM-dd').format(Plan.due) : date;
+    dateController.text = Plan.due != null ? DateFormat('yyyy-MM-dd').format(Plan.due) : date;
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -749,296 +758,312 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       initClipboard();
     }
 
-    return DefaultTabController(
-      length: 6,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: isSearch
-              ? searchTextField()
-              : const SizedBox(),
-          centerTitle: true,
-          actions: [
-            !isSearch ? Tooltip(
-              message: "Add a Date",
-              child: IconButton(
-                onPressed: () { 
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  actionSelectDate(context, selectedDate);
-                },
-                icon: const Icon(Icons.calendar_month_outlined),
-                ),
-            ) : const SizedBox(),
-            !isSearch ? Builder(
-              builder: (context) {
-                return Tooltip(
-                  message: "More Options",
-                  child: IconButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      showPopover(
-                        shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
-                        arrowHeight: 0,
-                        arrowWidth: 0,
-                        contentDxOffset: -80,
-                        width: 110,
-                        height: 100,
-                        direction: PopoverDirection.bottom,
-                        context: context,
-                        bodyBuilder: (context) => TodoActions(
-                          isSearch: () {
-                            setState(() {
-                              isSearch = true;
-                            });
-                          },
-                          category: selectedCategory,
-                          nonTrashedTodolists: nonTrashedTodolists
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.more_vert)
-                  ),
-                );
-              }
-            ) : const SizedBox(),
-          ],
-        ),
-        drawer: const TodoListDrawer(),
-        body: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Todo List",
-                    style: TextStyle(
-                      fontFamily: "DM serif Display",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 30
-                    ),
-                  ),
-                  SizedBox(width: 3),
-                  Icon(Icons.bookmark_added_rounded),
-                ],
-              ),
-            ),
-            Expanded(
-              child: TabBarView(children: [
-                Todo(
-                  list: nonTrashedTodolists,
-                  category: 'All'
-                ),
-                Todo(
-                  list: nonTrashedTodolists,
-                  category: 'Personal'
-                ),
-                Todo(
-                  list: nonTrashedTodolists,
-                  category: 'Work'
-                ),
-                Todo(
-                  list: nonTrashedTodolists,
-                  category: 'Study'
-                ),
-                Todo(
-                  list: nonTrashedTodolists,
-                  category: 'Shopping'
-                ),
-                Todo(
-                  list: nonTrashedTodolists,
-                  category: 'Sport'
-                ),
-              ]),
-            ),
-          ],
-        ),
-        floatingActionButton: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            nonTrashedTodolists.isNotEmpty && !isSearch && (count > 0)
-                ? Tooltip(
-                    message: "Move plans to trash",
-                    child: FloatingActionButton(
-                      onPressed: trashAllTodoLists,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.onSecondary,
-                      child: const Icon(Icons.delete_sweep_outlined),
-                    ),
-                  )
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          isSearch = false;
+          isOfLength = false;
+        });
+      },
+      child: DefaultTabController(
+        length: 6,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            title: isSearch
+                ? searchTextField()
                 : const SizedBox(),
-            const SizedBox(height: 8),
-            Tooltip(
-              message: "Add a plan",
-              child: RotationTransition(
-                turns: Tween(begin: 0.0, end: isSearch ? 0.25 : 0.0)
-                    .animate(_animationController),
-                child: FloatingActionButton(
-                  onPressed: () {
-                    if (isSearch == true) {
-                      closeSearch();
-                    } else {
-                      createTodoList('', context);
-                    }
+            centerTitle: true,
+            actions: [
+              !isSearch ? Tooltip(
+                message: "Add a Date",
+                child: IconButton(
+                  onPressed: () { 
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    actionSelectDate(context, selectedDate);
                   },
-                  backgroundColor: Theme.of(context).colorScheme.onSecondary,
-                  child: Transform.rotate(
-                    angle: isSearch
-                        ? 45 * (3.141592653589793238 / 180)
-                        : 0.0, // Rotate 45 degrees if isSearch is true
-                    child: const Icon(Icons.add),
+                  icon: const Icon(Icons.calendar_month_outlined),
                   ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        persistentFooterButtons: [
-          TabBar(
-            // padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-            indicatorWeight: 1,
-            indicatorPadding: EdgeInsets.zero,
-            indicatorSize: TabBarIndicatorSize.tab,
-            onTap: (value) {
-              switch (value) {
-                case 0:
-                  setState(() {
-                    selectedCategory = 'All';
-                    count = nonTrashedTodolists.length;
-                  });
-                  break;
-                case 1:
-                  setState(() {
-                    selectedCategory = 'Personal';
-                    count = nonTrashedTodolists
-                        .where((e) => e.category == selectedCategory)
-                        .length;
-                  });
-                  break;
-                case 2:
-                  setState(() {
-                    selectedCategory = 'Work';
-                    count = nonTrashedTodolists
-                        .where((e) => e.category == selectedCategory)
-                        .length;
-                  });
-                  break;
-                case 3:
-                  setState(() {
-                    selectedCategory = 'Study';
-                    count = nonTrashedTodolists
-                        .where((e) => e.category == selectedCategory)
-                        .length;
-                  });
-                  break;
-                case 4:
-                  setState(() {
-                    selectedCategory = 'Shopping';
-                    count = nonTrashedTodolists
-                        .where((e) => e.category == selectedCategory)
-                        .length;
-                  });
-                  break;
-                case 5:
-                  setState(() {
-                    selectedCategory = 'Sport';
-                    count = nonTrashedTodolists
-                        .where((e) => e.category == selectedCategory)
-                        .length;
-                  });
-                  break;
-                default:
-              }
-            },
-            tabs: const [
-              Tooltip(
-                message: 'All',
-                child: Tab(
-                  child: Column(
+              ) : const SizedBox(),
+              !isSearch ? Builder(
+                builder: (context) {
+                  return Tooltip(
+                    message: "More Options",
+                    child: IconButton(
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        showPopover(
+                          shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
+                          arrowHeight: 0,
+                          arrowWidth: 0,
+                          contentDxOffset: -80,
+                          width: 110,
+                          height: 100,
+                          direction: PopoverDirection.bottom,
+                          context: context,
+                          bodyBuilder: (context) => TodoActions(
+                            isSearch: () {
+                              setState(() {
+                                isSearch = true;
+                              });
+                            },
+                            category: selectedCategory,
+                            nonTrashedTodolists: nonTrashedTodolists
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.more_vert)
+                    ),
+                  );
+                }
+              ) : const SizedBox(),
+            ],
+          ),
+          drawer: const TodoListDrawer(),
+          body: Column(
+            children: [
+              !isSearch ? const Padding(
+                padding: EdgeInsets.only(left: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Icon(Icons.home_outlined),
-                    Text('All',
+                    Text(
+                      "Todo List",
                       style: TextStyle(
-                        fontSize: 8
-                      )
-                    )
-                  ]),
+                        fontFamily: "DM serif Display",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 30
+                      ),
+                    ),
+                    SizedBox(width: 3),
+                    Icon(Icons.bookmark_added_rounded),
+                  ],
                 ),
+              ) : const SizedBox(),
+              Expanded(
+                child: TabBarView(children: [
+                  Todo(
+                    list: nonTrashedTodolists,
+                    category: 'All',
+                    cardToRemove: cardToRemove
+                  ),
+                  Todo(
+                    list: nonTrashedTodolists,
+                    category: 'Personal',
+                    cardToRemove: cardToRemove
+                  ),
+                  Todo(
+                    list: nonTrashedTodolists,
+                    category: 'Work',
+                    cardToRemove: cardToRemove
+                  ),
+                  Todo(
+                    list: nonTrashedTodolists,
+                    category: 'Study',
+                    cardToRemove: cardToRemove
+                  ),
+                  Todo(
+                    list: nonTrashedTodolists,
+                    category: 'Shopping',
+                    cardToRemove: cardToRemove
+                  ),
+                  Todo(
+                    list: nonTrashedTodolists,
+                    category: 'Sport',
+                    cardToRemove: cardToRemove
+                  ),
+                ]),
               ),
-              Tooltip(
-                message: 'Personal',
-                child: Tab(
-                  child: Column(
-                  children: [
-                    Icon(Icons.person_2_outlined),
-                    Text('Personal',
-                      style: TextStyle(
-                        fontSize: 8
-                      )
+            ],
+          ),
+          floatingActionButton: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              nonTrashedTodolists.isNotEmpty && !isSearch && (count > 0)
+                  ? Tooltip(
+                      message: "Move plans to trash",
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          trashAllTodoLists(nonTrashedTodolists);
+                        },
+                        backgroundColor:
+                            Theme.of(context).colorScheme.onSecondary,
+                        child: const Icon(Icons.delete_sweep_outlined),
+                      ),
                     )
-                  ]),
-                ),
-              ),
+                  : const SizedBox(),
+              const SizedBox(height: 8),
               Tooltip(
-                message: 'Work',
-                child: Tab(
-                  child: Column(
-                  children: [
-                    Icon(Icons.work_outline_rounded),
-                    Text('Work',
-                      style: TextStyle(
-                        fontSize: 8
-                      )
-                    )
-                  ]),
-                ),
-              ),
-              Tooltip(
-                message: 'Study',
-                child: Tab(
-                  child: Column(
-                  children: [
-                    Icon(Icons.book_outlined),
-                    Text('Study',
-                      style: TextStyle(
-                        fontSize: 8
-                      )
-                    )
-                  ]),
-                ),
-              ),
-              Tooltip(
-                message: 'Shopping',
-                child: Tab(
-                  child: Column(
-                  children: [
-                    Icon(Icons.shopping_basket_outlined),
-                    Text('Shopping',
-                      style: TextStyle(
-                        fontSize: 8
-                      )
-                    )
-                  ]),
-                ),
-              ),
-              Tooltip(
-                message: 'Sport',
-                child: Tab(
-                  child: Column(
-                  children: [
-                    Icon(Icons.sports_soccer_rounded),
-                    Text('Sport',
-                      style: TextStyle(
-                        fontSize: 8
-                      )
-                    )
-                  ]),
+                message: "Add a plan",
+                child: RotationTransition(
+                  turns: Tween(begin: 0.0, end: isSearch ? 0.25 : 0.0)
+                      .animate(_animationController),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      if (isSearch == true) {
+                        closeSearch();
+                      } else {
+                        createTodoList('', context);
+                      }
+                    },
+                    backgroundColor: Theme.of(context).colorScheme.onSecondary,
+                    child: Transform.rotate(
+                      angle: isSearch
+                          ? 45 * (3.141592653589793238 / 180)
+                          : 0.0, // Rotate 45 degrees if isSearch is true
+                      child: const Icon(Icons.add),
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
-        ],
+          persistentFooterButtons: [
+            TabBar(
+              // padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+              indicatorWeight: 1,
+              indicatorPadding: EdgeInsets.zero,
+              indicatorSize: TabBarIndicatorSize.tab,
+              onTap: (value) {
+                switch (value) {
+                  case 0:
+                    setState(() {
+                      selectedCategory = 'All';
+                      count = nonTrashedTodolists.length;
+                    });
+                    break;
+                  case 1:
+                    setState(() {
+                      selectedCategory = 'Personal';
+                      count = nonTrashedTodolists
+                          .where((e) => e.category == selectedCategory)
+                          .length;
+                    });
+                    break;
+                  case 2:
+                    setState(() {
+                      selectedCategory = 'Work';
+                      count = nonTrashedTodolists
+                          .where((e) => e.category == selectedCategory)
+                          .length;
+                    });
+                    break;
+                  case 3:
+                    setState(() {
+                      selectedCategory = 'Study';
+                      count = nonTrashedTodolists
+                          .where((e) => e.category == selectedCategory)
+                          .length;
+                    });
+                    break;
+                  case 4:
+                    setState(() {
+                      selectedCategory = 'Shopping';
+                      count = nonTrashedTodolists
+                          .where((e) => e.category == selectedCategory)
+                          .length;
+                    });
+                    break;
+                  case 5:
+                    setState(() {
+                      selectedCategory = 'Sport';
+                      count = nonTrashedTodolists
+                          .where((e) => e.category == selectedCategory)
+                          .length;
+                    });
+                    break;
+                  default:
+                }
+              },
+              tabs: const [
+                Tooltip(
+                  message: 'All',
+                  child: Tab(
+                    child: Column(
+                    children: [
+                      Icon(Icons.home_outlined),
+                      Text('All',
+                        style: TextStyle(
+                          fontSize: 8
+                        )
+                      )
+                    ]),
+                  ),
+                ),
+                Tooltip(
+                  message: 'Personal',
+                  child: Tab(
+                    child: Column(
+                    children: [
+                      Icon(Icons.person_2_outlined),
+                      Text('Personal',
+                        style: TextStyle(
+                          fontSize: 8
+                        )
+                      )
+                    ]),
+                  ),
+                ),
+                Tooltip(
+                  message: 'Work',
+                  child: Tab(
+                    child: Column(
+                    children: [
+                      Icon(Icons.work_outline_rounded),
+                      Text('Work',
+                        style: TextStyle(
+                          fontSize: 8
+                        )
+                      )
+                    ]),
+                  ),
+                ),
+                Tooltip(
+                  message: 'Study',
+                  child: Tab(
+                    child: Column(
+                    children: [
+                      Icon(Icons.book_outlined),
+                      Text('Study',
+                        style: TextStyle(
+                          fontSize: 8
+                        )
+                      )
+                    ]),
+                  ),
+                ),
+                Tooltip(
+                  message: 'Shopping',
+                  child: Tab(
+                    child: Column(
+                    children: [
+                      Icon(Icons.shopping_basket_outlined),
+                      Text('Shopping',
+                        style: TextStyle(
+                          fontSize: 8
+                        )
+                      )
+                    ]),
+                  ),
+                ),
+                Tooltip(
+                  message: 'Sport',
+                  child: Tab(
+                    child: Column(
+                    children: [
+                      Icon(Icons.sports_soccer_rounded),
+                      Text('Sport',
+                        style: TextStyle(
+                          fontSize: 8
+                        )
+                      )
+                    ]),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

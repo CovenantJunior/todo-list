@@ -14,11 +14,13 @@ class Todo extends StatefulWidget {
 
   final List list;
   final String category;
+  final List cardToRemove;
 
   const Todo({
     super.key,
     required this.list,
-    required this.category
+    required this.category,
+    required this.cardToRemove
   });
 
   @override
@@ -1036,7 +1038,7 @@ class _TodoState extends State<Todo> {
                                 planDetails(plan);
                               },
                               child: Visibility(
-                                visible: !cardToRemove.contains(plan.id),
+                                visible: !widget.cardToRemove.contains(plan.id) && !cardToRemove.contains(plan.id),
                                 child: Card(
                                   surfaceTintColor: tint(plan.completed),
                                   child: Dismissible(
