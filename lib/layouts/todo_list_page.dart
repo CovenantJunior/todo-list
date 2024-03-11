@@ -1009,6 +1009,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               indicatorWeight: 1,
               indicatorPadding: EdgeInsets.zero,
               indicatorSize: TabBarIndicatorSize.tab,
+              // indicatorColor: Colors.transparent,
+              dividerColor: Colors.transparent,
               onTap: (value) {
                 switch (value) {
                   case 0:
@@ -1068,8 +1070,10 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     children: [
                       Icon(Icons.home_outlined),
                       Text('All',
+                        maxLines: 2,
                         style: TextStyle(
-                          fontSize: 8
+                          fontSize: 8,
+                          fontFamily: 'Quicksand',
                         )
                       )
                     ]),
@@ -1082,8 +1086,10 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     children: [
                       Icon(Icons.person_2_outlined),
                       Text('Personal',
+                        maxLines: 2,
                         style: TextStyle(
-                          fontSize: 8
+                          fontSize: 8,
+                          fontFamily: 'Quicksand',
                         )
                       )
                     ]),
@@ -1096,8 +1102,10 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     children: [
                       Icon(Icons.work_outline_rounded),
                       Text('Work',
+                        maxLines: 2,
                         style: TextStyle(
-                          fontSize: 8
+                          fontSize: 8,
+                          fontFamily: 'Quicksand',
                         )
                       )
                     ]),
@@ -1110,8 +1118,10 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     children: [
                       Icon(Icons.book_outlined),
                       Text('Study',
+                        maxLines: 2,
                         style: TextStyle(
-                          fontSize: 8
+                          fontSize: 8,
+                          fontFamily: 'Quicksand',
                         )
                       )
                     ]),
@@ -1124,8 +1134,10 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     children: [
                       Icon(Icons.shopping_basket_outlined),
                       Text('Shopping',
+                        maxLines: 2,
                         style: TextStyle(
-                          fontSize: 8
+                          fontSize: 8,
+                          fontFamily: 'Quicksand',
                         )
                       )
                     ]),
@@ -1138,8 +1150,10 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     children: [
                       Icon(Icons.sports_soccer_rounded),
                       Text('Sport',
+                        maxLines: 2,
                         style: TextStyle(
-                          fontSize: 8
+                          fontSize: 8,
+                          fontFamily: 'Quicksand',
                         )
                       )
                     ]),
