@@ -15,25 +15,59 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
   if (isTimeout) {
     // This task has exceeded its allowed running-time.
     // You must stop what you're doing and immediately .finish(taskId)
-    print("[BackgroundFetch] Headless task timed-out: $taskId");
+    // print("[BackgroundFetch] Headless task timed-out: $taskId");
     BackgroundFetch.finish(taskId);
     return;
   }
-  print('[BackgroundFetch] Headless event received.');
+  // print('[BackgroundFetch] Headless event received.');
   // Do your work here...
+  NotificationService().initNotifications();
   BackgroundFetch.finish(taskId);
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await TodoListDatabase.initialize();
-  NotificationService().initNotifications();
-  runApp(MultiProvider(providers: [
-    // TodoList Database Provider
-    ChangeNotifierProvider(
-      create: (context) => TodoListDatabase(),
+  runApp(
+    MultiProvider(
+      providers: [
+        // TodoList Database Provider
+        ChangeNotifierProvider(
+          create: (context) => TodoListDatabase(),
+        )
+      ],
+      child: const MyApp()
     )
-  ], child: const MyApp()));
+  );
+  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+  BackgroundFetch.configure(
+    BackgroundFetchConfig(
+      startOnBoot: true,
+      forceAlarmManager: true,
+      requiredNetworkType: NetworkType.NONE,
+      minimumFetchInterval: 15, // Fetch interval in minutes
+      stopOnTerminate: false, // Indicate that background fetch should not stop when the app is terminated
+      enableHeadless: true,
+      requiresBatteryNotLow: false,
+      requiresCharging: false,
+      requiresStorageNotLow: false,
+      requiresDeviceIdle: false,
+    ),
+    (String taskId) async {
+      // Handle background fetch event
+      // This is the fetch-event callback.
+      // print("[BackgroundFetch] Event received $taskId");
+
+      // IMPORTANT:  You must signal completion of your task or the OS can punish your app
+      // for taking too long in the background.
+      NotificationService().initNotifications();
+      BackgroundFetch.finish(taskId);
+    }, (String taskId) async { 
+      // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
+      // print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
+      BackgroundFetch.finish(taskId);
+    }
+  );
 }
 
 class MyApp extends StatelessWidget {

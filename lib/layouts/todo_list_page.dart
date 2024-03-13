@@ -127,6 +127,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       setState(() {
         dateController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
+      // ignore: use_build_context_synchronously
       createTodoList('', context);
     }
   }

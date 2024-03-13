@@ -287,6 +287,7 @@ class _TodoState extends State<Todo> {
       Future.delayed(const Duration(seconds: 5), () {
         if (undo == true) {
           context.read<TodoListDatabase>().trashTodoList(id);
+          context.read<TodoListDatabase>().completed(id);
           Future.delayed(const Duration(seconds: 2), () {
             cardToRemove.clear();
           });
