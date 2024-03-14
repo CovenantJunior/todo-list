@@ -32,6 +32,8 @@ class TodoListOptions extends StatefulWidget {
 class _TodoListOptionsState extends State<TodoListOptions> {
   @override
   Widget build(BuildContext context) {
+
+    String interval = 'Every Minute';
     // Access user input
     final textController = TextEditingController();
     final dateController = TextEditingController();
@@ -183,6 +185,47 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      const Icon(Icons.timer_outlined),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                              labelText: 'Interval',
+                              labelStyle: TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.w500),
+                              border: InputBorder.none),
+                          child: DropdownButtonFormField<String>(
+                            value: Plan.interval,
+                            onChanged: (value) {
+                              interval = value!;
+                            },
+                            items: [
+                              'Every Minute',
+                              'Hourly',
+                              'Daily',
+                              'Weekly'
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: const TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              );
+                            }).toList(),
+                            isExpanded: true,
+                            icon: const Icon(Icons.edit),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -199,7 +242,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                 String due = dateController.text;
                 String? category = selectedCategory;
                 if (text.isNotEmpty) {
-                  context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due);
+                  context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due, interval);
                   Navigator.pop(context);
                   textController.clear();
                   ScaffoldMessenger.of(context).showSnackBar(

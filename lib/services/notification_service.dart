@@ -99,7 +99,7 @@ class NotificationService {
 
   androidDetails() {
     return const AndroidNotificationDetails(
-        'todo_notifications', 'Todo List Notifications',
+        'todo_notifications', 'Minimalist Todo List Notifications',
         channelDescription:
             'Get reminders for your tasks and stay organized with notifications from the Minimalist Todo List App',
         importance: Importance.max,

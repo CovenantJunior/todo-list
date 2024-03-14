@@ -28,6 +28,7 @@ class Todo extends StatefulWidget {
 
 class _TodoState extends State<Todo> {
 
+  String interval = 'Every Minute';
   Future<bool?> hasVibrate = Vibration.hasVibrator();
   bool requestedClipboard = false;
   
@@ -187,6 +188,90 @@ class _TodoState extends State<Todo> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          const Icon(Icons.category),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: InputDecorator(
+                              decoration: const InputDecoration(
+                                  labelText: 'Category',
+                                  labelStyle: TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.w500),
+                                  border: InputBorder.none),
+                              child: DropdownButtonFormField<String>(
+                                value: Plan.category,
+                                onChanged: (value) {
+                                  selectedCategory = value!;
+                                },
+                                items: [
+                                  'Personal',
+                                  'Work',
+                                  'Study',
+                                  'Shopping',
+                                  'Sport',
+                                  'Wishlist'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: const TextStyle(
+                                          fontFamily: "Quicksand",
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  );
+                                }).toList(),
+                                isExpanded: true,
+                                icon: const Icon(Icons.edit),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          const Icon(Icons.timer_outlined),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: InputDecorator(
+                              decoration: const InputDecoration(
+                                  labelText: 'Interval',
+                                  labelStyle: TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontWeight: FontWeight.w500),
+                                  border: InputBorder.none),
+                              child: DropdownButtonFormField<String>(
+                                value: Plan.interval,
+                                onChanged: (value) {
+                                  interval = value!;
+                                },
+                                items: [
+                                  'Every Minute',
+                                  'Hourly',
+                                  'Daily',
+                                  'Weekly'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: const TextStyle(
+                                          fontFamily: "Quicksand",
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  );
+                                }).toList(),
+                                isExpanded: true,
+                                icon: const Icon(Icons.edit),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -205,7 +290,7 @@ class _TodoState extends State<Todo> {
                     if (text.isNotEmpty) {
                       context
                           .read<TodoListDatabase>()
-                          .updateTodoList(Plan.id, text, category, due);
+                          .updateTodoList(Plan.id, text, category, due, interval);
                       Navigator.pop(context);
                       textController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(

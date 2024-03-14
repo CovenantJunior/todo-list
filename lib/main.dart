@@ -68,6 +68,11 @@ void main() async {
       BackgroundFetch.finish(taskId);
     }
   );
+  BackgroundFetch.start().then((int status) {
+    // print('[BackgroundFetch] start success: $status');
+  }).catchError((e) {
+    // print('[BackgroundFetch] start FAILURE: $e');
+  });
 }
 
 class MyApp extends StatelessWidget {

@@ -127,7 +127,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       setState(() {
         dateController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
-      // ignore: use_build_context_synchronously
       createTodoList('', context);
     }
   }
@@ -356,7 +355,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       const SizedBox(height: 16),
                       Row(
                         children: [
-                          const Icon(Icons.category),
+                          const Icon(Icons.timer_outlined),
                           const SizedBox(width: 8),
                           Expanded(
                             child: InputDecorator(
@@ -654,7 +653,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     if (text.isNotEmpty) {
                       context
                           .read<TodoListDatabase>()
-                          .updateTodoList(Plan.id, text, category, due);
+                          .updateTodoList(Plan.id, text, category, due, interval);
                       Navigator.pop(context);
                       textController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -1069,10 +1068,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   child: Tab(
                     child: Column(
                     children: [
-                      Icon(
-                        size: 25,
-                        Icons.home_outlined
-                      ),
+                      Icon(Icons.home_outlined),
                       Text('All',
                         maxLines: 2,
                         style: TextStyle(
@@ -1088,10 +1084,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   child: Tab(
                     child: Column(
                     children: [
-                      Icon(
-                        size: 25,
-                        Icons.person_2_outlined
-                      ),
+                      Icon(Icons.person_2_outlined),
                       Text('Personal',
                         maxLines: 2,
                         style: TextStyle(
@@ -1107,10 +1100,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   child: Tab(
                     child: Column(
                     children: [
-                      Icon(
-                        size: 25,
-                        Icons.work_outline_rounded
-                      ),
+                      Icon(Icons.work_outline_rounded),
                       Text('Work',
                         maxLines: 2,
                         style: TextStyle(
@@ -1126,10 +1116,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   child: Tab(
                     child: Column(
                     children: [
-                      Icon(
-                        size: 25,
-                        Icons.book_outlined
-                      ),
+                      Icon(Icons.book_outlined),
                       Text('Study',
                         maxLines: 2,
                         style: TextStyle(
@@ -1145,11 +1132,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   child: Tab(
                     child: Column(
                     children: [
-                      Icon(
-                        size: 25,
-                        Icons.shopping_basket_outlined
-                      ),
-                      Text('Shop',
+                      Icon(Icons.shopping_basket_outlined),
+                      Text('Shopping',
                         maxLines: 2,
                         style: TextStyle(
                           fontSize: 8,
@@ -1164,10 +1148,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   child: Tab(
                     child: Column(
                     children: [
-                      Icon(
-                        size: 25,
-                        Icons.sports_soccer_rounded
-                      ),
+                      Icon(Icons.sports_soccer_rounded),
                       Text('Sport',
                         maxLines: 2,
                         style: TextStyle(

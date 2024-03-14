@@ -48,6 +48,8 @@ class _TodoStarredState extends State<TodoStarred> {
     });
   }
 
+  String interval = 'Every Minute';
+
   TextEditingController dateController = TextEditingController();
 
   final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -212,7 +214,7 @@ class _TodoStarredState extends State<TodoStarred> {
               String due = dateController.text;
               String? category = selectedCategory;
               if (text.isNotEmpty) {
-                context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due);
+                context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due, interval);
                 Navigator.pop(context);
                 textController.clear();
                 ScaffoldMessenger.of(context).showSnackBar(

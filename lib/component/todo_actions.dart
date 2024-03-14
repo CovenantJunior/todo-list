@@ -292,6 +292,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                   onPressed: () {
                                     for (var selectedList in selectedLists) {
                                       context.read<TodoListDatabase>().trashTodoList(selectedList.id);
+                                      context.read<TodoListDatabase>().completed(selectedList.id);
                                       NotificationService().cancelNotification(selectedList.id);
                                     }
                                     if (selectedLists.length > 1) {

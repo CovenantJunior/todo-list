@@ -271,13 +271,14 @@ class TodoListDatabase extends ChangeNotifier{
   }
 
   // UPDATE
-  void updateTodoList(int id, plan, category, due) async {
+  void updateTodoList(int id, plan, category, due, intvl) async {
     var existingTodoList = await isar.todoLists.get(id);
     if (existingTodoList != null) {
       existingTodoList.plan = plan;
       existingTodoList.category = category;
       existingTodoList.due = DateTime.parse(due);
       existingTodoList.modified = DateTime.now();
+      existingTodoList.interval = intvl;
       await isar.writeTxn(() => isar.todoLists.put(existingTodoList));
     }
 
