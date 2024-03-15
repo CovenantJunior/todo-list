@@ -52,6 +52,7 @@ dependencies:
   toast: ^0.3.0
   app_minimizer: ^1.0.0+2
   restart_app: ^1.2.1
+  workmanager: ^0.5.2
 
 dev_dependencies:
   flutter_test:
