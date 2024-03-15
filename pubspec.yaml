@@ -52,8 +52,6 @@ dependencies:
   toast: ^0.3.0
   app_minimizer: ^1.0.0+2
   restart_app: ^1.2.1
-  flutter_isolate: ^2.0.5-pre
-  background_fetch: ^1.2.4
 
 dev_dependencies:
   flutter_test:
