@@ -3,8 +3,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        // [required] background_fetch
-        maven { url "${project(':background_fetch').projectDir}/libs" }
     }
 
     dependencies {
@@ -16,8 +14,6 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        // [required] background_fetch
-        maven { url "${project(':background_fetch').projectDir}/libs" }
     }
 }
 
@@ -31,10 +27,4 @@ subprojects {
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
-}
-
-ext {
-   compileSdkVersion = 33 // or higher / as desired
-   targetSdkVersion = 33  // or higher / as desired
-   appCompatVersion = "1.4.2" // or higher / as desired
 }
