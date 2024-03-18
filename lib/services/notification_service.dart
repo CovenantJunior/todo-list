@@ -196,4 +196,9 @@ class NotificationService {
   cancelNotification(id) async {
     await flutterLocalNotificationsPlugin.cancel(id);
   }
+
+  fetchPendingNotifications() async {
+    await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    // print("Fetch pending reminders");
+  }
 }
