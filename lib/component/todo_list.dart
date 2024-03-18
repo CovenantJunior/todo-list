@@ -784,13 +784,13 @@ class _TodoState extends State<Todo> {
             content: Text('Plan reactivated!',
                 style: TextStyle(
                     fontFamily: "Quicksand", fontWeight: FontWeight.w500))));
-        NotificationService().scheduleNotification(
+        /* NotificationService().scheduleNotification(
           id: plan.id,
           title: "Reminder",
           body: "TODO: ${plan.plan}",
           interval: plan.interval,
           payload: "Due by ${plan.due}"
-        );
+        ); */
       } else {
         context.read<TodoListDatabase>().completed(plan.id);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

@@ -443,13 +443,13 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           body: text,
                           payload: "Due by $due"
                         );
-                        NotificationService().scheduleNotification(
+                        /* NotificationService().scheduleNotification(
                           id: nonTrashedTodolistsState.first.id + 1,
                           title: "Reminder",
                           body: "TODO: $text",
                           interval: intvl,
                           payload: "Due by $due"
-                        );
+                        ); */
                       }
                     } else {
                       context.watch<TodoListDatabase>().preferences.first.vibration == true

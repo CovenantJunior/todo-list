@@ -163,13 +163,13 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                   } else {
                     for (var selectedList in selectedLists) {
                       context.read<TodoListDatabase>().replan(selectedList.id);
-                      NotificationService().scheduleNotification(
+                      /* NotificationService().scheduleNotification(
                         id: selectedList.id,
                         title: "Reminder",
                         body: "TODO: ${selectedList.plan}",
                         interval: selectedList.interval,
                         payload: "Due by ${selectedList.due}"
-                      );
+                      ); */
                     }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
