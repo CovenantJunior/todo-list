@@ -153,7 +153,7 @@ class NotificationService {
   }
 
   androidDetailsSchedule() {
-    return const AndroidNotificationDetails(
+    return AndroidNotificationDetails(
       'todo_notifications',
       'Minimalist Todo List Notifications',
       channelDescription:
@@ -165,11 +165,11 @@ class NotificationService {
       enableVibration: true,
       fullScreenIntent: false,
       enableLights: true,
-      /* actions: [
+      actions: [
           ok,
           completed,
           delete,
-        ] */
+        ]
     );
   }
 

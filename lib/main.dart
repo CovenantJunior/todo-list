@@ -88,49 +88,48 @@ void onStart(ServiceInstance service) async {
       final scheduledDate =payload['scheduledDate'];
       final interval = payload['interval'];
       if (scheduledDate != null && interval != null) {
-        try {
-          DateTime scheduledDateTime = DateTime.parse(scheduledDate);
-          Duration difference = now.difference(scheduledDateTime);
-          
-          if (interval == 'Every Minute' && difference.inMinutes <= 1) {
-            NotificationService().showNotification(
-              id: notification.id,
-              title: notification.title,
-              body: notification.body,
-              payload: notification.payload
-            );
-          } else if (interval == 'Hourly' && difference.inHours <= 1) {
-            NotificationService().showScheduledNotification(
-              id: notification.id,
-              title: notification.title,
-              body: notification.body,
-              payload: notification.payload
-            );
-          } else if (interval == 'Daily' && difference.inDays <= 1) {
-            NotificationService().showNotification(
-              id: notification.id,
-              title: notification.title,
-              body: notification.body,
-              payload: notification.payload
-            );
-          } else if (interval == 'Weekly' && difference.inDays <= 7) {
-            NotificationService().showNotification(
-              id: notification.id,
-              title: notification.title,
-              body: notification.body,
-              payload: notification.payload
-            );
-          }
-        } catch (e) {
-          // Handle error parsing scheduled date
-          print('Error parsing scheduled date: $e');
-        }
-        
-        if (interval != 'Hourly' && interval != 'Every Minute' && interval != 'Daily') {
-          // Handle invalid interval value
-          print('Invalid interval value: $interval');
-        }
-      }
+  try {
+    DateTime scheduledDateTime = DateTime.parse(scheduledDate);
+    Duration difference = now.difference(scheduledDateTime);
+
+    if (interval == 'Every Minute' && difference.inMinutes <= 1) {
+      NotificationService().showNotification(
+        id: notification.id,
+        title: notification.title,
+        body: notification.body,
+        payload: notification.payload
+      );
+    } else if (interval == 'Hourly' && difference.inHours <= 1) {
+      NotificationService().showNotification(
+        id: notification.id,
+        title: notification.title,
+        body: notification.body,
+        payload: notification.payload
+      );
+    } else if (interval == 'Daily' && difference.inDays <= 1 && scheduledDateTime.isAfter(now.subtract(const Duration(days: 1)))) {
+      NotificationService().showNotification(
+        id: notification.id,
+        title: notification.title,
+        body: notification.body,
+        payload: notification.payload
+      );
+    } else if (interval == 'Weekly' && difference.inDays.abs() <= 7 && scheduledDateTime.weekday != now.weekday) {
+      NotificationService().showNotification(
+        id: notification.id,
+        title: notification.title,
+        body: notification.body,
+        payload: notification.payload
+      );
+    }
+  } catch (e) {
+    // Handle error parsing scheduled date
+  }
+
+  if (interval != 'Hourly' && interval != 'Every Minute' && interval != 'Daily' && interval != 'Weekly') {
+    // Handle invalid interval value
+  }
+}
+
     }
       
     // test using external plugin
