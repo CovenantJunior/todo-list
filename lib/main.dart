@@ -6,6 +6,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:todo_list/layouts/todo_list_page.dart';
 import 'package:todo_list/layouts/todo_list_preferences.dart';
 import 'package:todo_list/models/todo_list_database.dart';
@@ -77,8 +78,11 @@ void onStart(ServiceInstance service) async {
   Timer.periodic(const Duration(seconds: 30), (timer) async {
     /// you can see this log in logcat
     // print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
-    NotificationService notificationService = NotificationService();
-    notificationService.fetchPendingNotifications();
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    List<PendingNotificationRequest> pendings = await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    for (var notification in pendings) {
+      print(notification);
+    }
 
     // test using external plugin
     final deviceInfo = DeviceInfoPlugin();
