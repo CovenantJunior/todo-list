@@ -93,13 +93,33 @@ void onStart(ServiceInstance service) async {
           Duration difference = now.difference(scheduledDateTime);
           
           if (interval == 'Every Minute' && difference.inMinutes <= 1) {
-            // Trigger the notification
+            NotificationService().showNotification(
+              id: notification.id,
+              title: notification.title,
+              body: notification.body,
+              payload: notification.payload
+            );
           } else if (interval == 'Hourly' && difference.inHours <= 1) {
-            // Trigger the notification
+            NotificationService().showScheduledNotification(
+              id: notification.id,
+              title: notification.title,
+              body: notification.body,
+              payload: notification.payload
+            );
           } else if (interval == 'Daily' && difference.inDays <= 1) {
-            // Trigger the notification
+            NotificationService().showNotification(
+              id: notification.id,
+              title: notification.title,
+              body: notification.body,
+              payload: notification.payload
+            );
           } else if (interval == 'Weekly' && difference.inDays <= 7) {
-            // Trigger the notification
+            NotificationService().showNotification(
+              id: notification.id,
+              title: notification.title,
+              body: notification.body,
+              payload: notification.payload
+            );
           }
         } catch (e) {
           // Handle error parsing scheduled date

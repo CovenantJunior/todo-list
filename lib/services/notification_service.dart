@@ -2,7 +2,7 @@ import 'dart:async';
 
 // ignore: implementation_imports
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:restart_app/restart_app.dart';
+// import 'package:restart_app/restart_app.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 
 List preferences = [];
@@ -30,11 +30,11 @@ Future<void> notificationResponse(NotificationResponse notificationResponse) asy
     if (notificationResponse.actionId == 'ACTION_COMPLETED') {
       db.completed(notificationResponse.id!);
       db.fetchUntrashedTodoList();
-      Restart.restartApp(webOrigin: '/home');
+      // Restart.restartApp(webOrigin: '/home');
     } else if (notificationResponse.actionId == 'ACTION_DELETE') {
       db.trashTodoList(notificationResponse.id!);
       db.fetchUntrashedTodoList();
-      Restart.restartApp(webOrigin: '/home');
+      // Restart.restartApp(webOrigin: '/home');
     }
   }
 }
@@ -152,6 +152,62 @@ class NotificationService {
         linux: linuxDetails());
   }
 
+  androidDetailsSchedule() {
+    return const AndroidNotificationDetails(
+      'todo_notifications',
+      'Minimalist Todo List Notifications',
+      channelDescription:
+          'Get reminders for your tasks and stay organized with notifications from the Minimalist Todo List App',
+      importance: Importance.max,
+      priority: Priority.max,
+      playSound: true,
+      visibility: NotificationVisibility.public,
+      enableVibration: true,
+      fullScreenIntent: false,
+      enableLights: true,
+      /* actions: [
+          ok,
+          completed,
+          delete,
+        ] */
+    );
+  }
+
+  darwinDetailsSchedule() {
+    return const DarwinNotificationDetails(
+        subtitle:
+            'Get reminders for your tasks and stay organized with notifications from the Minimalist Todo List App',
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+        interruptionLevel: InterruptionLevel.critical);
+  }
+
+  linuxDetailsSchedule() {
+    return LinuxNotificationDetails(
+      sound: ThemeLinuxSound('message'),
+      category: LinuxNotificationCategory.imReceived,
+      urgency: LinuxNotificationUrgency.critical,
+      timeout: const LinuxNotificationTimeout.systemDefault(),
+      resident: false,
+      defaultActionName: null,
+      customHints: null,
+      actions: <LinuxNotificationAction>[
+        linuxOk,
+        linuxCompleted,
+        linuxDelete,
+      ],
+    );
+  }
+
+  notificationDetailsSchedule() {
+    return NotificationDetails(
+        android: androidDetailsSchedule(),
+        iOS: darwinDetailsSchedule(),
+        macOS: darwinDetailsSchedule(),
+        linux: linuxDetailsSchedule());
+  }
+
   // Build and Send Notification
   showNotification({int id = 0, String? title, String? body, String? payload}) {
     return flutterLocalNotificationsPlugin.show(
@@ -189,8 +245,14 @@ class NotificationService {
         break;
       }
       return flutterLocalNotificationsPlugin.periodicallyShow(
-        id!, title, body, notificationInterval, notificationDetails(), payload: payload, androidScheduleMode: AndroidScheduleMode.alarmClock
+        id!, title, body, notificationInterval, notificationDetailsSchedule(), payload: payload, androidScheduleMode: AndroidScheduleMode.alarmClock
       );
+  }
+
+  showScheduledNotification({int id = 0, String? title, String? body, String? payload}) {
+    return flutterLocalNotificationsPlugin.show(
+      id, title, body, notificationDetailsSchedule(), payload: payload
+    );
   }
 
   cancelNotification(id) async {
