@@ -25,7 +25,7 @@ Future<void> initializeService() async {
       // this will be executed when app is in foreground or background in separated isolate
       onStart: onStart,
 
-      isForegroundMode: false,
+      isForegroundMode: true,
     ),
     iosConfiguration: IosConfiguration(
       // auto start service
