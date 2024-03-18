@@ -788,6 +788,7 @@ class _TodoState extends State<Todo> {
           id: plan.id,
           title: "Reminder",
           body: "TODO: ${plan.plan}",
+          interval: plan.interval,
           payload: "Due by ${plan.due}"
         );
       } else {

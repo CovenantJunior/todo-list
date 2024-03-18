@@ -199,6 +199,6 @@ class NotificationService {
 
   fetchPendingNotifications() async {
     await flutterLocalNotificationsPlugin.pendingNotificationRequests();
-    // print("Fetch pending reminders");
+    
   }
 }

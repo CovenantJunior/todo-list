@@ -167,6 +167,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                         id: selectedList.id,
                         title: "Reminder",
                         body: "TODO: ${selectedList.plan}",
+                        interval: selectedList.interval,
                         payload: "Due by ${selectedList.due}"
                       );
                     }
