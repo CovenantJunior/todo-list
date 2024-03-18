@@ -53,6 +53,9 @@ dependencies:
   app_minimizer: ^1.0.0+2
   restart_app: ^1.2.1
   workmanager: ^0.5.2
+  flutter_background_service: ^5.0.5
+  device_info_plus: ^9.1.2
+  flutter_background_service_android: ^6.2.2
 
 dev_dependencies:
   flutter_test:

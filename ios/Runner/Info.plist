@@ -62,7 +62,7 @@
 	</array>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>task-identifier</string>
-  </array>
+		<string>dev.flutter.background.refresh</string>
+	</array>
 </dict>
 </plist>
