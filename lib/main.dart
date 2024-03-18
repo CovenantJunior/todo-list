@@ -81,7 +81,7 @@ void onStart(ServiceInstance service) async {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     List<PendingNotificationRequest> pendings = await flutterLocalNotificationsPlugin.pendingNotificationRequests();
     for (var notification in pendings) {
-      print(notification);
+      print(notification.id);
     }
 
     // test using external plugin
