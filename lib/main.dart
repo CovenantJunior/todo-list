@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
@@ -76,14 +77,42 @@ void onStart(ServiceInstance service) async {
 
   // bring to foreground
   Timer.periodic(const Duration(seconds: 30), (timer) async {
+    final now = DateTime.now();
+    
     /// you can see this log in logcat
     // print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     List<PendingNotificationRequest> pendings = await flutterLocalNotificationsPlugin.pendingNotificationRequests();
     for (var notification in pendings) {
-      print(notification.id);
+      Map<String, dynamic> payload = jsonDecode(notification.payload!);
+      final scheduledDate =payload['scheduledDate'];
+      final interval = payload['interval'];
+      if (scheduledDate != null && interval != null) {
+        try {
+          DateTime scheduledDateTime = DateTime.parse(scheduledDate);
+          Duration difference = now.difference(scheduledDateTime);
+          
+          if (interval == 'Every Minute' && difference.inMinutes <= 1) {
+            // Trigger the notification
+          } else if (interval == 'Hourly' && difference.inHours <= 1) {
+            // Trigger the notification
+          } else if (interval == 'Daily' && difference.inDays <= 1) {
+            // Trigger the notification
+          } else if (interval == 'Weekly' && difference.inDays <= 7) {
+            // Trigger the notification
+          }
+        } catch (e) {
+          // Handle error parsing scheduled date
+          print('Error parsing scheduled date: $e');
+        }
+        
+        if (interval != 'Hourly' && interval != 'Every Minute' && interval != 'Daily') {
+          // Handle invalid interval value
+          print('Invalid interval value: $interval');
+        }
+      }
     }
-
+      
     // test using external plugin
     final deviceInfo = DeviceInfoPlugin();
     String? device;

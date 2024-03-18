@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:ffi';
 import 'package:intl/intl.dart';
@@ -784,13 +786,16 @@ class _TodoState extends State<Todo> {
             content: Text('Plan reactivated!',
                 style: TextStyle(
                     fontFamily: "Quicksand", fontWeight: FontWeight.w500))));
-        /* NotificationService().scheduleNotification(
+        NotificationService().scheduleNotification(
           id: plan.id,
           title: "Reminder",
           body: "TODO: ${plan.plan}",
           interval: plan.interval,
-          payload: "Due by ${plan.due}"
-        ); */
+          payload: jsonEncode({
+            'scheduledDate': DateTime.now().toIso8601String(),
+            'interval': plan.interval
+          }),
+        );
       } else {
         context.read<TodoListDatabase>().completed(plan.id);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

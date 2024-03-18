@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -443,13 +444,16 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           body: text,
                           payload: "Due by $due"
                         );
-                        /* NotificationService().scheduleNotification(
+                        NotificationService().scheduleNotification(
                           id: nonTrashedTodolistsState.first.id + 1,
                           title: "Reminder",
                           body: "TODO: $text",
                           interval: intvl,
-                          payload: "Due by $due"
-                        ); */
+                          payload: jsonEncode({
+                            'scheduledDate': DateTime.now().toIso8601String(),
+                            'interval': intvl,
+                          }),
+                        );
                       }
                     } else {
                       context.watch<TodoListDatabase>().preferences.first.vibration == true

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
@@ -163,13 +164,16 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                   } else {
                     for (var selectedList in selectedLists) {
                       context.read<TodoListDatabase>().replan(selectedList.id);
-                      /* NotificationService().scheduleNotification(
+                      NotificationService().scheduleNotification(
                         id: selectedList.id,
                         title: "Reminder",
                         body: "TODO: ${selectedList.plan}",
                         interval: selectedList.interval,
-                        payload: "Due by ${selectedList.due}"
-                      ); */
+                        payload: jsonEncode({
+                          'scheduledDate': DateTime.now().toIso8601String(),
+                          'interval': selectedList.interval
+                        }),
+                      );
                     }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
