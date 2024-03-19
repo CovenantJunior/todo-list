@@ -439,7 +439,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       );
                       if (context.read<TodoListDatabase>().preferences.first.notification == true) {
                         NotificationService().showNotification(
-                          id: nonTrashedTodolistsState.first.id + 1,
+                          id: nonTrashedTodolistsState.first.id >= 1 ? nonTrashedTodolistsState.first.id + 1 : 0,
                           title: "New Plan Recorded",
                           body: text,
                           payload: "Due by $due"

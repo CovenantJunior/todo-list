@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:todo_list/layouts/todo_list_page.dart';
 import 'package:todo_list/layouts/todo_list_preferences.dart';
 import 'package:todo_list/models/todo_list_database.dart';
@@ -80,7 +82,7 @@ void onStart(ServiceInstance service) async {
     final now = DateTime.now();
     
     /// you can see this log in logcat
-    // print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
+    print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     List<PendingNotificationRequest> pendings = await flutterLocalNotificationsPlugin.pendingNotificationRequests();
     for (var notification in pendings) {
@@ -156,7 +158,36 @@ void onStart(ServiceInstance service) async {
 }
 
 
+Future<void> requestPermissions() async {
+  // Request the necessary permissions
+  Map<Permission, PermissionStatus> statuses = await [
+    Permission.backgroundRefresh,
+    Permission.bluetoothConnect,
+    Permission.calendarFullAccess,
+    Permission.criticalAlerts,
+    Permission.ignoreBatteryOptimizations,
+    Permission.microphone,
+    Permission.notification,
+    Permission.reminders,
+    Permission.speech,
+    Permission.scheduleExactAlarm,
+    Permission.location,
+    // Add other permissions you need here
+  ].request();
+
+  // Check if all permissions are granted
+  if (statuses.containsValue(PermissionStatus.denied)) {
+    Fluttertoast.showToast(
+      msg: "App may malfunctoin without granted permissions",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIosWeb: 1
+    );
+  }
+}
+
 void main() async {
+  requestPermissions();
   WidgetsFlutterBinding.ensureInitialized();
   await TodoListDatabase.initialize();
   NotificationService().initNotifications();
