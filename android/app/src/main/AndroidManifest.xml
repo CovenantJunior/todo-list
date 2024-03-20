@@ -30,8 +30,8 @@
         </intent>
     </queries>
     <application
-        android:label="todo_list"
-        android:name="Minimalist Todo List"
+        android:label="Minimalist Todo List"
+        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

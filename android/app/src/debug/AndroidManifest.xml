@@ -19,7 +19,7 @@
         </intent>
     </queries>
     <application
-        android:label="todo_list"
+        android:label="Minimalist Todo List"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
