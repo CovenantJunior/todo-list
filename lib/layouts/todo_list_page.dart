@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -21,6 +23,34 @@ class TodoListPage extends StatefulWidget {
 
 class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderStateMixin {
   
+  Future<void> requestPermissions() async {
+    // Request the necessary permissions
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.backgroundRefresh,
+      Permission.bluetoothConnect,
+      Permission.calendarFullAccess,
+      Permission.criticalAlerts,
+      Permission.ignoreBatteryOptimizations,
+      Permission.microphone,
+      Permission.notification,
+      Permission.reminders,
+      Permission.speech,
+      Permission.scheduleExactAlarm,
+      Permission.location,
+      // Add other permissions you need here
+    ].request();
+
+    // Check if all permissions are granted
+    if (statuses.containsValue(PermissionStatus.denied)) {
+      Fluttertoast.showToast(
+          msg: "App may malfunctoin without granted permissions",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1);
+    }
+  }
+
+  
   late SpeechToText _speech;
   Future<bool?> hasVibrate = Vibration.hasVibrator();
   String clipboard = '';
@@ -31,6 +61,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
+    requestPermissions();
     readTodoLists();
     _speech = SpeechToText();
     _animationController = AnimationController(
@@ -439,13 +470,13 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       );
                       if (context.read<TodoListDatabase>().preferences.first.notification == true) {
                         NotificationService().showNotification(
-                          id: nonTrashedTodolistsState.first.id >= 1 ? nonTrashedTodolistsState.first.id + 1 : 0,
+                          id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
                           title: "New Plan Recorded",
                           body: text,
                           payload: "Due by $due"
                         );
                         NotificationService().scheduleNotification(
-                          id: nonTrashedTodolistsState.first.id + 1,
+                          id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
                           title: "Reminder",
                           body: "TODO: $text",
                           interval: intvl,

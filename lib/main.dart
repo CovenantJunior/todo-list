@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:todo_list/layouts/todo_list_page.dart';
 import 'package:todo_list/layouts/todo_list_preferences.dart';
 import 'package:todo_list/models/todo_list_database.dart';
@@ -95,6 +93,8 @@ void onStart(ServiceInstance service) async {
     Duration difference = now.difference(scheduledDateTime);
 
     if (interval == 'Every Minute' && difference.inMinutes <= 1) {
+      print(notification.payload);
+      print(DateTime.now());
       NotificationService().showNotification(
         id: notification.id,
         title: notification.title,
@@ -102,6 +102,8 @@ void onStart(ServiceInstance service) async {
         payload: notification.payload
       );
     } else if (interval == 'Hourly' && difference.inHours <= 1) {
+      print(notification.payload);
+      print(DateTime.now());
       NotificationService().showNotification(
         id: notification.id,
         title: notification.title,
@@ -109,6 +111,8 @@ void onStart(ServiceInstance service) async {
         payload: notification.payload
       );
     } else if (interval == 'Daily' && difference.inDays <= 1 && scheduledDateTime.isAfter(now.subtract(const Duration(days: 1)))) {
+      print(notification.payload);
+      print(DateTime.now());
       NotificationService().showNotification(
         id: notification.id,
         title: notification.title,
@@ -116,6 +120,8 @@ void onStart(ServiceInstance service) async {
         payload: notification.payload
       );
     } else if (interval == 'Weekly' && difference.inDays.abs() <= 7 && scheduledDateTime.weekday != now.weekday) {
+      print(notification.payload);
+      print(DateTime.now());
       NotificationService().showNotification(
         id: notification.id,
         title: notification.title,
@@ -157,37 +163,7 @@ void onStart(ServiceInstance service) async {
   });
 }
 
-
-Future<void> requestPermissions() async {
-  // Request the necessary permissions
-  Map<Permission, PermissionStatus> statuses = await [
-    Permission.backgroundRefresh,
-    Permission.bluetoothConnect,
-    Permission.calendarFullAccess,
-    Permission.criticalAlerts,
-    Permission.ignoreBatteryOptimizations,
-    Permission.microphone,
-    Permission.notification,
-    Permission.reminders,
-    Permission.speech,
-    Permission.scheduleExactAlarm,
-    Permission.location,
-    // Add other permissions you need here
-  ].request();
-
-  // Check if all permissions are granted
-  if (statuses.containsValue(PermissionStatus.denied)) {
-    Fluttertoast.showToast(
-      msg: "App may malfunctoin without granted permissions",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.CENTER,
-      timeInSecForIosWeb: 1
-    );
-  }
-}
-
 void main() async {
-  requestPermissions();
   WidgetsFlutterBinding.ensureInitialized();
   await TodoListDatabase.initialize();
   NotificationService().initNotifications();
