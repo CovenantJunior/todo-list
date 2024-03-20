@@ -1,7 +1,9 @@
 import 'dart:async';
 
 // ignore: implementation_imports
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:todo_list/layouts/todo_list_page.dart';
 // import 'package:restart_app/restart_app.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 
@@ -32,11 +34,15 @@ Future<void> notificationResponse(NotificationResponse notificationResponse) asy
     if (notificationResponse.actionId == 'ACTION_COMPLETED') {
       completed(notificationResponse.id!);
       fetchUntrashedTodoList();
-      // Restart.restartApp(webOrigin: '/home');
+       MaterialPageRoute(
+        builder: (_) => const TodoListPage(),
+      );
     } else if (notificationResponse.actionId == 'ACTION_DELETE') {
       trashTodoList(notificationResponse.id!);
       fetchUntrashedTodoList();
-      // Restart.restartApp(webOrigin: '/home');
+       MaterialPageRoute(
+        builder: (_) => const TodoListPage(),
+      );
     }
   }
 }

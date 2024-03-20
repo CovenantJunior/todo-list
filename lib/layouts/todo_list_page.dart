@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
 import 'package:flutter/material.dart';
@@ -876,6 +877,13 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     if(context.read<TodoListDatabase>().preferences.first.accessClipboard == true) {
       initClipboard();
     }
+    
+    Timer.periodic(const Duration(seconds: 7), (timer) {
+      NotificationService().cancelNotification(144000);
+      setState(() {
+        readTodoLists();
+      });
+    });
 
     return GestureDetector(
       onTap: () {

@@ -15,6 +15,11 @@ Future<void> initializeService() async {
 
   await service.configure(
     androidConfiguration: AndroidConfiguration(
+      foregroundServiceNotificationId: 144000,
+
+      initialNotificationTitle: "Stay Productive",
+      initialNotificationContent: "Take one step at a time. Complete your todos and keep moving forward.",
+
       // auto start service
       autoStart: true,
 

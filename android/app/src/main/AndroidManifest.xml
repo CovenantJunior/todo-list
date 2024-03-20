@@ -31,7 +31,7 @@
     </queries>
     <application
         android:label="todo_list"
-        android:name="${applicationName}"
+        android:name="Minimalist Todo List"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
