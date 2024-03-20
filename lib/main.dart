@@ -76,11 +76,11 @@ void onStart(ServiceInstance service) async {
   });
 
   // bring to foreground
-  Timer.periodic(const Duration(seconds: 30), (timer) async {
+  /* Timer.periodic(const Duration(seconds: 30), (timer) async {
     final now = DateTime.now();
     
     /// you can see this log in logcat
-    print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
+    // print('FLUTTER BACKGROUND SERVICE: ${DateTime.now()}');
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     List<PendingNotificationRequest> pendings = await flutterLocalNotificationsPlugin.pendingNotificationRequests();
     for (var notification in pendings) {
@@ -93,36 +93,36 @@ void onStart(ServiceInstance service) async {
     Duration difference = now.difference(scheduledDateTime);
 
     if (interval == 'Every Minute' && difference.inMinutes <= 1) {
-      print(notification.payload);
-      print(DateTime.now());
-      NotificationService().showNotification(
+      // print(notification.payload);
+      // print(DateTime.now());
+      NotificationService().showScheduledNotification(
         id: notification.id,
         title: notification.title,
         body: notification.body,
         payload: notification.payload
       );
     } else if (interval == 'Hourly' && difference.inHours <= 1) {
-      print(notification.payload);
-      print(DateTime.now());
-      NotificationService().showNotification(
+      // print(notification.payload);
+      // print(DateTime.now());
+      NotificationService().showScheduledNotification(
         id: notification.id,
         title: notification.title,
         body: notification.body,
         payload: notification.payload
       );
     } else if (interval == 'Daily' && difference.inDays <= 1 && scheduledDateTime.isAfter(now.subtract(const Duration(days: 1)))) {
-      print(notification.payload);
-      print(DateTime.now());
-      NotificationService().showNotification(
+      // print(notification.payload);
+      // print(DateTime.now());
+      NotificationService().showScheduledNotification(
         id: notification.id,
         title: notification.title,
         body: notification.body,
         payload: notification.payload
       );
     } else if (interval == 'Weekly' && difference.inDays.abs() <= 7 && scheduledDateTime.weekday != now.weekday) {
-      print(notification.payload);
-      print(DateTime.now());
-      NotificationService().showNotification(
+      // print(notification.payload);
+      // print(DateTime.now());
+      NotificationService().showScheduledNotification(
         id: notification.id,
         title: notification.title,
         body: notification.body,
@@ -161,6 +161,7 @@ void onStart(ServiceInstance service) async {
       },
     );
   });
+ */
 }
 
 void main() async {

@@ -18,10 +18,12 @@ void fetchPreferences() async {
 
 void completed(int id) async {
   db.completed(id);
+  NotificationService().cancelNotification(id);
 }
 
 void trashTodoList(int id) async {
   db.trashTodoList(id);
+  NotificationService().cancelNotification(id);
 }
 
 @pragma('vm:entry-point')

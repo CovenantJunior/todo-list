@@ -26,27 +26,25 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   Future<void> requestPermissions() async {
     // Request the necessary permissions
     Map<Permission, PermissionStatus> statuses = await [
-      Permission.backgroundRefresh,
       Permission.bluetoothConnect,
       Permission.calendarFullAccess,
-      Permission.criticalAlerts,
       Permission.ignoreBatteryOptimizations,
       Permission.microphone,
       Permission.notification,
       Permission.reminders,
       Permission.speech,
       Permission.scheduleExactAlarm,
-      Permission.location,
       // Add other permissions you need here
     ].request();
 
     // Check if all permissions are granted
     if (statuses.containsValue(PermissionStatus.denied)) {
       Fluttertoast.showToast(
-          msg: "App may malfunctoin without granted permissions",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1);
+        msg: "App may malfunctoin without granted permissions",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1
+      );
     }
   }
 
