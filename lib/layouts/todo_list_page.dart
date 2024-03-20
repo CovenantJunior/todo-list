@@ -31,7 +31,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       Permission.ignoreBatteryOptimizations,
       Permission.microphone,
       Permission.notification,
-      Permission.reminders,
       Permission.speech,
       Permission.scheduleExactAlarm,
       // Add other permissions you need here

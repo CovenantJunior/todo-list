@@ -30,12 +30,12 @@ void trashTodoList(int id) async {
 Future<void> notificationResponse(NotificationResponse notificationResponse) async {
   if (notificationResponse.actionId != null) {
     if (notificationResponse.actionId == 'ACTION_COMPLETED') {
-      db.completed(notificationResponse.id!);
-      db.fetchUntrashedTodoList();
+      completed(notificationResponse.id!);
+      fetchUntrashedTodoList();
       // Restart.restartApp(webOrigin: '/home');
     } else if (notificationResponse.actionId == 'ACTION_DELETE') {
-      db.trashTodoList(notificationResponse.id!);
-      db.fetchUntrashedTodoList();
+      trashTodoList(notificationResponse.id!);
+      fetchUntrashedTodoList();
       // Restart.restartApp(webOrigin: '/home');
     }
   }
