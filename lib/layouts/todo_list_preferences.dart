@@ -186,7 +186,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      CupertinoSwitch(
+                      Switch(
                         value: darkMode,
                         onChanged: (value) {
                           Provider.of<TodoListDatabase>(context, listen: false).setDarkMode(id);
@@ -220,7 +220,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      CupertinoSwitch(
+                      Switch(
                         value: notification,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setNotification(id);
@@ -250,7 +250,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      CupertinoSwitch(
+                      Switch(
                         value: vibration,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setVibration(id);
@@ -285,7 +285,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      CupertinoSwitch(
+                      Switch(
                         value: stt,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setSTT(id);
@@ -311,7 +311,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      CupertinoSwitch(
+                      Switch(
                         value: readPlan,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setReadPlan(id);
@@ -337,7 +337,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      CupertinoSwitch(
+                      Switch(
                         value: backup,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setBackup(id);
@@ -363,7 +363,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      CupertinoSwitch(
+                      Switch(
                         value: autoSync,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setAutoSync(id);
@@ -397,7 +397,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           )
                         ],
                       ),
-                      CupertinoSwitch(
+                      Switch(
                         value: accessClipboard,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setAccessClipboard(id);
@@ -423,7 +423,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      CupertinoSwitch(
+                      Switch(
                         value: autoDelete,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setAutoDelete(id);
@@ -456,7 +456,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      CupertinoSwitch(
+                      Switch(
                           value: autoDeleteOnDismiss,
                           onChanged: (value) {
                             context.read<TodoListDatabase>().setAutoDeleteonDismiss(id);
