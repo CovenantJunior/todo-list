@@ -88,7 +88,7 @@ class NotificationService {
   }
 
   AndroidNotificationAction ok =
-      const AndroidNotificationAction('ACTION_OK', 'Ok', showsUserInterface: true);
+      const AndroidNotificationAction('ACTION_VIEW', 'View', showsUserInterface: true);
   AndroidNotificationAction completed =
       const AndroidNotificationAction('ACTION_COMPLETED', 'Mark as Completed', showsUserInterface: true);
   AndroidNotificationAction reschedule =
@@ -96,8 +96,8 @@ class NotificationService {
   AndroidNotificationAction delete =
       const AndroidNotificationAction('ACTION_DELETE', 'Delete', showsUserInterface: true);
 
-  LinuxNotificationAction linuxOk =
-      const LinuxNotificationAction(key: 'ACTION_OK', label: 'Ok');
+  LinuxNotificationAction linuxView =
+      const LinuxNotificationAction(key: 'ACTION_VIEW', label: 'View');
   LinuxNotificationAction linuxCompleted = const LinuxNotificationAction(
       key: 'ACTION_COMPLETED', label: 'Mark as Completed');
   LinuxNotificationAction linuxReschedule = const LinuxNotificationAction(
@@ -106,7 +106,7 @@ class NotificationService {
       const LinuxNotificationAction(key: 'ACTION_DELETE', label: 'Delete');
 
   androidDetails() {
-    return const AndroidNotificationDetails(
+    return AndroidNotificationDetails(
         'todo_notifications', 'Minimalist Todo List Notifications',
         channelDescription:
             'Get reminders for your tasks and stay organized with notifications from the Minimalist Todo List App',
@@ -117,11 +117,11 @@ class NotificationService {
         enableVibration: true,
         fullScreenIntent: false,
         enableLights: true,
-        /* actions: [
+        actions: [
           ok,
-          completed,
-          delete,
-        ] */
+          /* completed,
+          delete, */
+        ]
       );
   }
 
@@ -144,11 +144,11 @@ class NotificationService {
       resident: false,
       defaultActionName: null,
       customHints: null,
-      /* actions: <LinuxNotificationAction>[
-        linuxOk,
-        linuxCompleted,
-        linuxDelete,
-      ], */
+      actions: <LinuxNotificationAction>[
+        linuxView,
+        /* linuxCompleted,
+        linuxDelete, */
+      ],
     );
   }
 
@@ -175,8 +175,8 @@ class NotificationService {
       enableLights: true,
       actions: [
           ok,
-          completed,
-          delete,
+          /* completed,
+          delete, */
         ]
     );
   }
@@ -201,9 +201,9 @@ class NotificationService {
       defaultActionName: null,
       customHints: null,
       actions: <LinuxNotificationAction>[
-        linuxOk,
-        linuxCompleted,
-        linuxDelete,
+        linuxView,
+        /* linuxCompleted,
+        linuxDelete, */
       ],
     );
   }
