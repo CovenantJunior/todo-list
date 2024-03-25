@@ -247,9 +247,21 @@ class _TodoState extends State<Todo> {
                     String due = dateController.text;
                     String? category = selectedCategory;
                     if (text.isNotEmpty) {
-                      context
-                          .read<TodoListDatabase>()
-                          .updateTodoList(Plan.id, text, category, due, interval);
+                      if (Plan.completed == true) {
+                      } else {
+                        NotificationService().cancelNotification(Plan.id);
+                        context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due, interval);
+                        NotificationService().scheduleNotification(
+                          id: Plan.id,
+                          title: "Reminder",
+                          body: "TODO: ${Plan.plan}",
+                          interval: Plan.interval,
+                          payload: jsonEncode({
+                            'scheduledDate': DateTime.now().toIso8601String(),
+                            'interval': Plan.interval
+                          }),
+                        );
+                      }
                       Navigator.pop(context);
                       textController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -265,12 +277,7 @@ class _TodoState extends State<Todo> {
                         ),
                       );
                     } else {
-                      context
-                                  .watch<TodoListDatabase>()
-                                  .preferences
-                                  .first
-                                  .vibration ==
-                              true
+                      context.watch<TodoListDatabase>().preferences.first.vibration == true
                           ? Vibration.vibrate(duration: 50)
                           : Void;
                       ScaffoldMessenger.of(context).showSnackBar(
