@@ -39,7 +39,7 @@ class TodoListDatabase extends ChangeNotifier{
     if (currentPreferences.isEmpty) {
       final newPreference = TodoPreferences()
         ..darkMode = false
-        ..notification = false
+        ..notification = true // Make notification true by default
         ..vibration = false
         ..stt = false
         ..readPlan = false
