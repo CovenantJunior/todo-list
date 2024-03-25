@@ -872,19 +872,20 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
     setState(() {
       nonTrashedTodolistsState = nonTrashedTodolists;
+      count = nonTrashedTodolists.length;
     });
 
     if(context.read<TodoListDatabase>().preferences.first.accessClipboard == true) {
       initClipboard();
     }
     
-    Timer.periodic(const Duration(seconds: 7), (timer) {
+    /* Timer.periodic(const Duration(seconds: 7), (timer) {
       NotificationService().cancelNotification(144000);
       setState(() {
         readTodoLists();
       });
     });
-
+     */
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -1116,6 +1117,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         style: TextStyle(
                           fontSize: 8,
                           fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w900
                         )
                       )
                     ]),
@@ -1132,6 +1134,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         style: TextStyle(
                           fontSize: 8,
                           fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w900
                         )
                       )
                     ]),
@@ -1148,6 +1151,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         style: TextStyle(
                           fontSize: 8,
                           fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w900
                         )
                       )
                     ]),
@@ -1164,6 +1168,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         style: TextStyle(
                           fontSize: 8,
                           fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w900
                         )
                       )
                     ]),
@@ -1180,6 +1185,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         style: TextStyle(
                           fontSize: 8,
                           fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w900
                         )
                       )
                     ]),
@@ -1196,6 +1202,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         style: TextStyle(
                           fontSize: 8,
                           fontFamily: 'Quicksand',
+                          fontWeight: FontWeight.w900
                         )
                       )
                     ]),
