@@ -281,12 +281,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                               textCapitalization: TextCapitalization.sentences,
                               decoration: InputDecoration(
                                 hintText: hint,
-                                suffixIcon: context
-                                            .watch<TodoListDatabase>()
-                                            .preferences
-                                            .first
-                                            .stt ==
-                                        true
+                                suffixIcon: context.watch<TodoListDatabase>().preferences.first.stt == true
                                     ? (IconButton(
                                         onPressed: _listen,
                                         icon: Icon(_isListening == true
@@ -366,17 +361,16 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                         fontWeight: FontWeight.w500),
                                     hintText: 'Select due date',
                                     border: InputBorder.none),
-                                child: GestureDetector(
+                                child: TextFormField(
                                   onTap: () {
                                     _selectDate(context);
                                   },
-                                  child: TextField(
-                                    readOnly: true,
-                                    controller: dateController,
-                                    style: const TextStyle(
-                                        fontFamily: "Quicksand",
-                                        fontWeight: FontWeight.w500),
+                                  controller: dateController,
+                                  style: const TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.w500
                                   ),
+                                  readOnly: true, // Make the TextFormField read-only
                                 ),
                               ),
                             ),
@@ -618,11 +612,16 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                         fontFamily: "Quicksand",
                                         fontWeight: FontWeight.w500),
                                     border: InputBorder.none),
-                                child: TextField(
+                                child: TextFormField(
+                                  onTap: () {
+                                    selectDate(context, Plan.due);
+                                  },
                                   controller: dateController,
                                   style: const TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.w500),
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                  readOnly: true, // Make the TextFormField read-only
                                 ),
                               ),
                             ),

@@ -179,11 +179,16 @@ class _TodoState extends State<Todo> {
                                         fontFamily: "Quicksand",
                                         fontWeight: FontWeight.w500),
                                     border: InputBorder.none),
-                                child: TextField(
+                                child: TextFormField(
+                                  onTap: () {
+                                    selectDate(context, Plan.due);
+                                  },
                                   controller: dateController,
                                   style: const TextStyle(
                                       fontFamily: "Quicksand",
                                       fontWeight: FontWeight.w500),
+                                  readOnly:
+                                      true, // Make the TextFormField read-only
                                 ),
                               ),
                             ),
