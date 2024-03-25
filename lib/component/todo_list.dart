@@ -55,7 +55,7 @@ class _TodoState extends State<Todo> {
   Future<void> selectDate(BuildContext context, due) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: due,
+      initialDate: selectedDate,
       firstDate: selectedDate,
       lastDate: DateTime(3000),
     );
@@ -185,49 +185,6 @@ class _TodoState extends State<Todo> {
                                       fontFamily: "Quicksand",
                                       fontWeight: FontWeight.w500),
                                 ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          const Icon(Icons.category),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: InputDecorator(
-                              decoration: const InputDecoration(
-                                  labelText: 'Category',
-                                  labelStyle: TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.w500),
-                                  border: InputBorder.none),
-                              child: DropdownButtonFormField<String>(
-                                value: Plan.category,
-                                onChanged: (value) {
-                                  selectedCategory = value!;
-                                },
-                                items: [
-                                  'Personal',
-                                  'Work',
-                                  'Study',
-                                  'Shopping',
-                                  'Sport',
-                                  'Wishlist'
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                      style: const TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  );
-                                }).toList(),
-                                isExpanded: true,
-                                icon: const Icon(Icons.edit),
                               ),
                             ),
                           ),

@@ -964,7 +964,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       ),
                     ),
                     SizedBox(width: 3),
-                    Icon(Icons.bookmark_added_rounded),
+                    Icon(Icons.task_alt_rounded),
                   ],
                 ),
               ) : const SizedBox(),
@@ -1109,13 +1109,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 Tooltip(
                   message: 'All',
                   child: Tab(
+                    height: 40,
                     child: Column(
                     children: [
                       Icon(Icons.home_outlined),
                       Text('All',
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 8,
+                          fontSize: 7,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
@@ -1126,13 +1127,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 Tooltip(
                   message: 'Personal',
                   child: Tab(
+                    height: 40,
                     child: Column(
                     children: [
                       Icon(Icons.person_2_outlined),
                       Text('Personal',
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 8,
+                          fontSize: 7,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
@@ -1143,13 +1145,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 Tooltip(
                   message: 'Work',
                   child: Tab(
+                    height: 40,
                     child: Column(
                     children: [
                       Icon(Icons.work_outline_rounded),
                       Text('Work',
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 8,
+                          fontSize: 7,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
@@ -1160,13 +1163,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 Tooltip(
                   message: 'Study',
                   child: Tab(
+                    height: 40,
                     child: Column(
                     children: [
                       Icon(Icons.book_outlined),
                       Text('Study',
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 8,
+                          fontSize: 7,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
@@ -1177,13 +1181,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 Tooltip(
                   message: 'Shopping',
                   child: Tab(
+                    height: 40,
                     child: Column(
                     children: [
                       Icon(Icons.shopping_basket_outlined),
                       Text('Shopping',
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 8,
+                          fontSize: 7,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
@@ -1194,13 +1199,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 Tooltip(
                   message: 'Sport',
                   child: Tab(
+                    height: 40,
                     child: Column(
                     children: [
                       Icon(Icons.sports_soccer_rounded),
                       Text('Sport',
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 8,
+                          fontSize: 7,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
