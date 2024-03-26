@@ -957,13 +957,13 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     Text(
                       "Todo List",
                       style: TextStyle(
-                        fontFamily: "DM serif Display",
-                        fontWeight: FontWeight.w500,
-                        fontSize: 30
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25
                       ),
                     ),
                     SizedBox(width: 3),
-                    Icon(Icons.task_alt_rounded),
+                    Icon(Icons.task_alt_rounded, weight: 50),
                   ],
                 ),
               ) : const SizedBox(),
@@ -1115,7 +1115,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       Text('All',
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 7,
+                          fontSize: 7.8,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
@@ -1133,7 +1133,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       Text('Personal',
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 7,
+                          fontSize: 7.8,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
@@ -1151,7 +1151,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       Text('Work',
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 7,
+                          fontSize: 7.8,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
@@ -1169,7 +1169,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       Text('Study',
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 7,
+                          fontSize: 7.8,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
@@ -1184,10 +1184,10 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     child: Column(
                     children: [
                       Icon(Icons.shopping_basket_outlined),
-                      Text('Shopping',
+                      Text('Shop',
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 7,
+                          fontSize: 7.8,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
@@ -1205,7 +1205,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       Text('Sport',
                         maxLines: 2,
                         style: TextStyle(
-                          fontSize: 7,
+                          fontSize: 7.8,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
