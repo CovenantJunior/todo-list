@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -30,6 +31,14 @@ class TodoListOptions extends StatefulWidget {
 }
 
 class _TodoListOptionsState extends State<TodoListOptions> {
+
+  late final ConfettiController _completedController = ConfettiController();
+  @override
+  void dispose() {
+    _completedController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -360,6 +369,10 @@ class _TodoListOptionsState extends State<TodoListOptions> {
           )));
       } else {
         context.read<TodoListDatabase>().completed(Plan.id);
+        _completedController.play();
+        Future.delayed(const Duration(seconds: 5), () {
+          _completedController.stop();
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             duration: Duration(seconds: 2),

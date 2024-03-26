@@ -832,195 +832,199 @@ class _TodoState extends State<Todo> {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: ListView.builder(
-                      itemCount: nonTrashedTodolists.length,
-                      itemBuilder: (context, index) {
-                        final plan = nonTrashedTodolists[index];
-                        return plan.category == widget.category || widget.category == 'All' ? GestureDetector(
-                          onDoubleTap: () {
-                            mark(plan);
-                          },
-                          child: Column(
-                            children: [
-                              Builder(builder: (context) {
-                                return GestureDetector(
-                                  onLongPress: () {
-                                    showPopover(
-                                      shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
-                                      arrowHeight: 0,
-                                      arrowWidth: 0,
-                                      direction: PopoverDirection.top,
-                                      width: 290,
-                                      height: 50,
-                                      context: context,
-                                      bodyBuilder: (context) => TodoListOptions(
-                                            id: plan.id,
-                                            plan: plan.plan,
-                                            Plan: plan,
-                                            deleteAction: deleteAction,
-                                          ));
-                                  },
-                                  child: Visibility(
-                                    visible: !widget.cardToRemove.contains(plan.id) && !cardToRemove.contains(plan.id),
-                                    child: Card(
-                                      surfaceTintColor: tint(plan.completed),
-                                      child: Dismissible(
-                                        key: Key("${plan.id}"),
-                                        direction: DismissDirection.horizontal,
-                                        confirmDismiss: (direction) async {
-                                          swiptTrashTodoList(plan.id);
-                                          return null;
-                                        },
-                                        background: Container(
-                                          decoration: const BoxDecoration(
-                                              color: Colors.redAccent,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(15))),
-                                          child: const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.all(10.0),
-                                                child: Icon(Icons.delete,
-                                                    color: Colors.white),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.all(10.0),
-                                                child: Icon(Icons.delete,
-                                                    color: Colors.white),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        child: Row(
+                  child: Stack(
+                    children: [
+                      ListView.builder(
+                        itemCount: nonTrashedTodolists.length,
+                        itemBuilder: (context, index) {
+                          final plan = nonTrashedTodolists[index];
+                          return plan.category == widget.category || widget.category == 'All' ? GestureDetector(
+                            onDoubleTap: () {
+                              mark(plan);
+                            },
+                            child: Builder(builder: (context) {
+                              return GestureDetector(
+                                onLongPress: () {
+                                  showPopover(
+                                    shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
+                                    arrowHeight: 0,
+                                    arrowWidth: 0,
+                                    direction: PopoverDirection.top,
+                                    width: 290,
+                                    height: 50,
+                                    context: context,
+                                    bodyBuilder: (context) => TodoListOptions(
+                                          id: plan.id,
+                                          plan: plan.plan,
+                                          Plan: plan,
+                                          deleteAction: deleteAction,
+                                        ));
+                                },
+                                child: Visibility(
+                                  visible: !widget.cardToRemove.contains(plan.id) && !cardToRemove.contains(plan.id),
+                                  child: Card(
+                                    surfaceTintColor: tint(plan.completed),
+                                    child: Dismissible(
+                                      key: Key("${plan.id}"),
+                                      direction: DismissDirection.horizontal,
+                                      confirmDismiss: (direction) async {
+                                        swiptTrashTodoList(plan.id);
+                                        return null;
+                                      },
+                                      background: Container(
+                                        decoration: const BoxDecoration(
+                                            color: Colors.redAccent,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15))),
+                                        child: const Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Checkbox(value: plan.completed != true ? false : true,
-                                              onChanged: (value){
-                                                mark(plan);
-                                              }
+                                            Padding(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Icon(Icons.delete,
+                                                  color: Colors.white),
                                             ),
-                                            Expanded(
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  planDetails(plan);
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(
-                                                      horizontal: 15.0, vertical: 15.0),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment.spaceAround,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment.start,
-                                                        children: [
-                                                          Expanded(
-                                                            child: SizedBox(
-                                                              height: 20,
-                                                              child: Text(
-                                                                plan.plan,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow.ellipsis,
-                                                                style: TextStyle(
-                                                                  fontFamily: "Quicksand",
-                                                                  fontWeight:
-                                                                      FontWeight.w500,
-                                                                  // fontSize: 16,
-                                                                  decoration: decorate(
-                                                                      plan.completed),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          /* Builder(
-                                                    builder: (context) {
-                                                      return IconButton(
-                                                        onPressed: () {
-                                                          showPopover(
-                                                            width: 370,
-                                                            context: context,
-                                                            bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                                                          );
-                                                        },
-                                                        icon: const Icon(
-                                                          Icons.more_vert, 
-                                                          color:Colors.blueGrey
-                                                        )
-                                                      );
-                                                    }
-                                                  ), */
-                                                          /* TodoListOptions(
-                                                    id: plan.id,
-                                                    plan: plan.plan
-                                                  ) */
-                                                          plan.starred == true
-                                                              ? const Padding(
-                                                                  padding: EdgeInsets.only(
-                                                                      left: 8.0),
-                                                                  child: Icon(
-                                                                      Icons.star_rounded,
-                                                                      color: Colors
-                                                                          .orangeAccent),
-                                                                )
-                                                              : const SizedBox()
-                                                        ],
-                                                      ),
-                                                      /* const Divider(height: 25),
-                                                                                  Row(
-                                                children: [
-                                                  const Icon(
-                                                    Icons.rocket_launch_outlined,
-                                                    size: 15,
-                                                  ),
-                                                  const SizedBox(width: 5),
-                                                  Text(
-                                                    DateFormat('EEE, MMM d yyyy').format(plan.due),
-                                                    style: const TextStyle(
-                                                      fontFamily: "Quicksand",
-                                                      fontWeight: FontWeight.w500,
-                                                      // fontSize: 10
-                                                    ),
-                                                  ),
-                                                ],
-                                                                                  ), */
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
+                                            Padding(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Icon(Icons.delete,
+                                                  color: Colors.white),
                                             ),
                                           ],
                                         ),
                                       ),
+                                      child: Row(
+                                        children: [
+                                          Checkbox(value: plan.completed != true ? false : true,
+                                            onChanged: (value){
+                                              mark(plan);
+                                            }
+                                          ),
+                                          Expanded(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                planDetails(plan);
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(
+                                                    horizontal: 15.0, vertical: 15.0),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.spaceAround,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                      children: [
+                                                        Expanded(
+                                                          child: SizedBox(
+                                                            height: 20,
+                                                            child: Text(
+                                                              plan.plan,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow.ellipsis,
+                                                              style: TextStyle(
+                                                                fontFamily: "Quicksand",
+                                                                fontWeight:
+                                                                    FontWeight.w500,
+                                                                // fontSize: 16,
+                                                                decoration: decorate(
+                                                                    plan.completed),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        /* Builder(
+                                                  builder: (context) {
+                                                    return IconButton(
+                                                      onPressed: () {
+                                                        showPopover(
+                                                          width: 370,
+                                                          context: context,
+                                                          bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                                                        );
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.more_vert, 
+                                                        color:Colors.blueGrey
+                                                      )
+                                                    );
+                                                  }
+                                                ), */
+                                                        /* TodoListOptions(
+                                                  id: plan.id,
+                                                  plan: plan.plan
+                                                ) */
+                                                        plan.starred == true
+                                                            ? const Padding(
+                                                                padding: EdgeInsets.only(
+                                                                    left: 8.0),
+                                                                child: Icon(
+                                                                    Icons.star_rounded,
+                                                                    color: Colors
+                                                                        .orangeAccent),
+                                                              )
+                                                            : const SizedBox()
+                                                      ],
+                                                    ),
+                                                    /* const Divider(height: 25),
+                                                                                Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.rocket_launch_outlined,
+                                                  size: 15,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                Text(
+                                                  DateFormat('EEE, MMM d yyyy').format(plan.due),
+                                                  style: const TextStyle(
+                                                    fontFamily: "Quicksand",
+                                                    fontWeight: FontWeight.w500,
+                                                    // fontSize: 10
+                                                  ),
+                                                ),
+                                              ],
+                                                                                ), */
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                );
-                              }),
-                              ConfettiWidget(
-                                confettiController: _completedController,
-                                blastDirectionality: BlastDirectionality
-                                    .explosive, // don't specify a direction, blast randomly
-                                shouldLoop:
-                                    true, // start again as soon as the animation is finished
-                                colors: const [
-                                  Colors.green,
-                                  Colors.blue,
-                                  Colors.pink,
-                                  Colors.orange,
-                                  Colors.purple
-                                ], // manually specify the colors to be used
-                                createParticlePath: drawStar, // define a custom shape/path.
-                              ),
-                            ],
-                          ),
-                        ) : const SizedBox();
-                      }),
+                                ),
+                              );
+                            }),
+                          ) : const SizedBox();
+                        }),
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: ConfettiWidget(
+                          confettiController: _completedController,
+                          blastDirectionality: BlastDirectionality
+                              .explosive, // don't specify a direction, blast randomly
+                          shouldLoop:
+                              true, // start again as soon as the animation is finished
+                          colors: const [
+                            Colors.green,
+                            Colors.blue,
+                            Colors.pink,
+                            Colors.orange,
+                            Colors.purple
+                          ], // manually specify the colors to be used
+                          createParticlePath:
+                              drawStar, // define a custom shape/path.
+                        ),
+                      ),
+                    ]
+                  ),
                 ),
               )
             : !isSearch

@@ -12,11 +12,11 @@ class TodoConfetti extends StatefulWidget {
 
 class _TodoConfettiState extends State<TodoConfetti> {
 
-  late final ConfettiController _controllerCenter = ConfettiController();;
-  late final ConfettiController _controllerCenterRight = ConfettiController();;
-  late final ConfettiController _controllerCenterLeft = ConfettiController();;
-  late final ConfettiController _controllerTopCenter = ConfettiController();;
-  late final ConfettiController _controllerBottomCenter = ConfettiController();;
+  late final ConfettiController _controllerCenter = ConfettiController();
+  late final ConfettiController _controllerCenterRight = ConfettiController();
+  late final ConfettiController _controllerCenterLeft = ConfettiController();
+  late final ConfettiController _controllerTopCenter = ConfettiController();
+  late final ConfettiController _controllerBottomCenter = ConfettiController();
 
   @override
   void dispose() {

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
-import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -73,7 +72,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   String hint = 'Task description';
   TextEditingController dateController = TextEditingController();
   late AnimationController _animationController;
-  late final ConfettiController _completedController = ConfettiController();
   final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   DateTime selectedDate = DateTime.now();
   String selectedCategory = 'Personal';
@@ -865,7 +863,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   @override
   void dispose() {
     _animationController.dispose(); // Dispose the animation controller
-    _completedController.dispose();
     super.dispose();
   }
 
