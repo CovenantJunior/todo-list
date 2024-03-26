@@ -935,7 +935,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                               });
                             },
                             category: selectedCategory,
-                            nonTrashedTodolists: nonTrashedTodolists
+                            nonTrashedTodolists: nonTrashedTodolists,
                           ),
                         );
                       },
