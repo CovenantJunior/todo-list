@@ -33,12 +33,6 @@ class TodoListOptions extends StatefulWidget {
 }
 
 class _TodoListOptionsState extends State<TodoListOptions> {
-  
-  @override
-  void dispose() {
-    widget.completedController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +251,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                   textController.clear();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      duration: Duration(seconds: 2),
+                      duration: Duration(seconds: 1),
                       content: Text(
                         'Plan saved',
                         style: TextStyle(
@@ -271,7 +265,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                   context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      duration: Duration(seconds: 2),
+                      duration: Duration(seconds: 1),
                       content: Text(
                         'Oops, blank shot!',
                         style: TextStyle(
@@ -344,7 +338,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
       );
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            duration: Duration(seconds: 2),
+            duration: Duration(seconds: 1),
             content: Text(
             'Copied and locked! Paste at your leisure!',
             style: TextStyle(
@@ -360,7 +354,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
         context.read<TodoListDatabase>().replan(Plan.id);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            duration: Duration(seconds: 2),
+            duration: Duration(seconds: 1),
             content: Text(
             'Plan reactivated!',
             style: TextStyle(
@@ -373,7 +367,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
         widget.completedController.play();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            duration: Duration(seconds: 2),
+            duration: Duration(seconds: 1),
             content: Text(
             'Plan accomplished. You inspire!!!',
             style: TextStyle(
@@ -433,7 +427,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
               context.read<TodoListDatabase>().star(widget.id);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  duration: const Duration(seconds: 2),
+                  duration: const Duration(seconds: 1),
                   content: widget.Plan.starred != true ?
                   const Text(
                     'Starred!',

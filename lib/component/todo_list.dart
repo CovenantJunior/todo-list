@@ -306,7 +306,7 @@ class _TodoState extends State<Todo> {
                       textController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          duration: Duration(seconds: 2),
+                          duration: Duration(seconds: 1),
                           content: Text(
                             'Plan saved',
                             style: TextStyle(
@@ -322,7 +322,7 @@ class _TodoState extends State<Todo> {
                           : Void;
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          duration: Duration(seconds: 2),
+                          duration: Duration(seconds: 1),
                           content: Text(
                             'Oops, blank shot!',
                             style: TextStyle(
@@ -379,7 +379,7 @@ class _TodoState extends State<Todo> {
         if (undo == true) {
           context.read<TodoListDatabase>().completed(id);
           context.read<TodoListDatabase>().trashTodoList(id);
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(const Duration(seconds: 1), () {
             cardToRemove.clear();
           });
           setState(() {
@@ -786,7 +786,7 @@ class _TodoState extends State<Todo> {
       if (plan.completed == true) {
         context.read<TodoListDatabase>().replan(plan.id);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            duration: Duration(seconds: 2),
+            duration: Duration(seconds: 1),
             content: Text('Plan reactivated!',
                 style: TextStyle(
                     fontFamily: "Quicksand", fontWeight: FontWeight.w500))));
@@ -807,7 +807,7 @@ class _TodoState extends State<Todo> {
           _completedController.stop();
         });
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            duration: Duration(seconds: 2),
+            duration: Duration(seconds: 1),
             content: Text('Plan accomplished. You inspire!',
                 style: TextStyle(
                     fontFamily: "Quicksand", fontWeight: FontWeight.w500))));
@@ -826,7 +826,7 @@ class _TodoState extends State<Todo> {
       child: Scaffold(
         body: count > 0
             ? LiquidPullToRefresh(
-                springAnimationDurationInMilliseconds: 200,
+                springAnimationDurationInMilliseconds: 100,
                 onRefresh: () async {
                   readTodoLists();
                 },
