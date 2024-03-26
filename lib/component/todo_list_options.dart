@@ -16,16 +16,16 @@ class TodoListOptions extends StatefulWidget {
   // ignore: non_constant_identifier_names
   final TodoList Plan;
   final Function(int) deleteAction;
-  late final ConfettiController completedController = ConfettiController();
+  final ConfettiController completedController;
 
-  TodoListOptions({
+  const TodoListOptions({
     super.key,
     required this.id,
     required this.plan,
     // ignore: non_constant_identifier_names
     required this.Plan,
     required this.deleteAction,
-    required completedController
+    required this.completedController
   });
 
   @override
@@ -371,9 +371,6 @@ class _TodoListOptionsState extends State<TodoListOptions> {
       } else {
         context.read<TodoListDatabase>().completed(Plan.id);
         widget.completedController.play();
-        Future.delayed(const Duration(seconds: 5), () {
-          widget.completedController.stop();
-        });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             duration: Duration(seconds: 2),

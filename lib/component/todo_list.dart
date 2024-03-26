@@ -1009,10 +1009,8 @@ class _TodoState extends State<Todo> {
                         alignment: Alignment.topCenter,
                         child: ConfettiWidget(
                           confettiController: _completedController,
-                          blastDirectionality: BlastDirectionality
-                              .explosive, // don't specify a direction, blast randomly
-                          shouldLoop:
-                              true, // start again as soon as the animation is finished
+                          blastDirectionality: BlastDirectionality.explosive, // don't specify a direction, blast randomly
+                          shouldLoop: false,
                           colors: const [
                             Colors.green,
                             Colors.blue,

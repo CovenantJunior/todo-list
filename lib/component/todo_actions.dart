@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:ffi';
-
-import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
@@ -29,16 +27,7 @@ class TodoActions extends StatefulWidget {
 }
 
 class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin {
-  
-  late final ConfettiController _completedController = ConfettiController();
   List nonTrashedTodolists = [];
-
-  @override
-  void dispose() {
-    _completedController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     if (widget.category == 'All') {
@@ -202,10 +191,6 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                       fontWeight: FontWeight.w500))));
                     }
                     Navigator.pop(context);
-                    _completedController.play();
-                    Future.delayed(const Duration(seconds: 5), () {
-                      _completedController.stop();
-                    });
                   }
                 }),
           ),
