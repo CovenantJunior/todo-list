@@ -16,14 +16,16 @@ class TodoListOptions extends StatefulWidget {
   // ignore: non_constant_identifier_names
   final TodoList Plan;
   final Function(int) deleteAction;
+  late final ConfettiController completedController = ConfettiController();
 
-  const TodoListOptions({
+  TodoListOptions({
     super.key,
     required this.id,
     required this.plan,
     // ignore: non_constant_identifier_names
     required this.Plan,
-    required this.deleteAction
+    required this.deleteAction,
+    required completedController
   });
 
   @override
@@ -31,11 +33,10 @@ class TodoListOptions extends StatefulWidget {
 }
 
 class _TodoListOptionsState extends State<TodoListOptions> {
-
-  late final ConfettiController _completedController = ConfettiController();
+  
   @override
   void dispose() {
-    _completedController.dispose();
+    widget.completedController.dispose();
     super.dispose();
   }
 
@@ -369,9 +370,9 @@ class _TodoListOptionsState extends State<TodoListOptions> {
           )));
       } else {
         context.read<TodoListDatabase>().completed(Plan.id);
-        _completedController.play();
+        widget.completedController.play();
         Future.delayed(const Duration(seconds: 5), () {
-          _completedController.stop();
+          widget.completedController.stop();
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -455,12 +456,16 @@ class _TodoListOptionsState extends State<TodoListOptions> {
             },
             icon: Tooltip(
               message: widget.Plan.starred != true ? "Star" : "Unstar",
-              child: Icon(
-                widget.Plan.starred != true ? Icons.star_outlined : Icons.star_outline_rounded,
-                color: Colors.blueGrey,
+              child: widget.Plan.starred != true ? const Icon(
+                  Icons.star_outlined,
+                  color: Colors.orangeAccent
+                ) : const Icon(
+                  Icons.star_outline_rounded,
+                  color: Colors.blueGrey,
+                )
               ),
             ),
-          ),
+          
           IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -471,14 +476,14 @@ class _TodoListOptionsState extends State<TodoListOptions> {
             const Tooltip(
               message: "Reactivate Plan",
               child: Icon(
-                  Icons.bookmark_remove_rounded,
+                  Icons.bookmark_remove_outlined,
                   color: Colors.blueGrey,
                 ),
             ) :
               const Tooltip(
                 message: "Mark Plan as Completed",
                 child: Icon(
-                  Icons.bookmark_added_rounded,
+                  Icons.bookmark_added_outlined,
                   color: Colors.blueGrey,
                 ),
               ),
@@ -491,7 +496,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
             icon: const Tooltip(
               message: "Trash Plan",
               child: Icon(
-                Icons.delete,
+                Icons.delete_outline_rounded,
                 color: Colors.blueGrey,
               ),
             ),

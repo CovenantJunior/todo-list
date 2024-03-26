@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -20,6 +21,7 @@ class TodoStarred extends StatefulWidget {
 }
 
 class _TodoStarredState extends State<TodoStarred> {
+  late final ConfettiController _completedController = ConfettiController();
   Future<bool?> hasVibrate = Vibration.hasVibrator();
 
   @override
@@ -775,6 +777,7 @@ class _TodoStarredState extends State<TodoStarred> {
                             plan: plan.plan,
                             Plan: plan,
                             deleteAction: dismissAction,
+                            completedController: _completedController
                           )
                         );
                       },

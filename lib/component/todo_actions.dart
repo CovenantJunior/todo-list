@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
@@ -28,8 +29,15 @@ class TodoActions extends StatefulWidget {
 }
 
 class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin {
-
+  
+  late final ConfettiController _completedController = ConfettiController();
   List nonTrashedTodolists = [];
+
+  @override
+  void dispose() {
+    _completedController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +48,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
         nonTrashedTodolists = widget.nonTrashedTodolists.where((e) => e.category == widget.category).toList();
       });
     }
+    
 
     void search() {
       widget.isSearch();
@@ -62,7 +71,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
               style: TextStyle(
                   fontFamily: "Quicksand", fontWeight: FontWeight.w500),
             ),
-            buttonIcon: const Icon(Icons.waving_hand_rounded),
+            buttonIcon: const Icon(Icons.waving_hand_outlined),
             cancelText: const Text("Leave"),
             confirmText: const Text("Done"),
             backgroundColor: Theme.of(context).colorScheme.onSecondary,
@@ -90,7 +99,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
             message: "Star Plan",
             child: IconButton(
                 icon: const Icon(
-                  Icons.star_rounded,
+                  Icons.star_border_outlined,
                 ),
                 // color: Colors.blueGrey,
                 onPressed: () {
@@ -140,7 +149,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
             message: "Reactivate Plan",
             child: IconButton(
                 icon: const Icon(
-                  Icons.bookmark_remove_rounded,
+                  Icons.bookmark_remove_outlined,
                 ),
                 // color: Colors.blueGrey,
                 onPressed: () {
@@ -193,6 +202,10 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                       fontWeight: FontWeight.w500))));
                     }
                     Navigator.pop(context);
+                    _completedController.play();
+                    Future.delayed(const Duration(seconds: 5), () {
+                      _completedController.stop();
+                    });
                   }
                 }),
           ),
@@ -200,17 +213,12 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
             message: "Mark as completed",
             child: IconButton(
                 icon: const Icon(
-                  Icons.bookmark_added_rounded,
+                  Icons.bookmark_added_outlined,
                 ),
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
-                    context
-                                .watch<TodoListDatabase>()
-                                .preferences
-                                .first
-                                .vibration ==
-                            true
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true
                         ? Vibration.vibrate(duration: 50)
                         : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -224,8 +232,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                   } else {
                     for (var selectedList in selectedLists) {
                       context
-                          .read<TodoListDatabase>()
-                          .completed(selectedList.id);
+                          .read<TodoListDatabase>().completed(selectedList.id);
                       NotificationService().cancelNotification(selectedList.id);
                     }
                     if (selectedLists.length > 1) {
@@ -256,12 +263,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
-                    context
-                                .watch<TodoListDatabase>()
-                                .preferences
-                                .first
-                                .vibration ==
-                            true
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true
                         ? Vibration.vibrate(duration: 50)
                         : Void;
                     ScaffoldMessenger.of(context).showSnackBar(

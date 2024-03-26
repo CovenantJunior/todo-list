@@ -858,6 +858,7 @@ class _TodoState extends State<Todo> {
                                           plan: plan.plan,
                                           Plan: plan,
                                           deleteAction: deleteAction,
+                                          completedController: _completedController
                                         ));
                                 },
                                 child: Visibility(
