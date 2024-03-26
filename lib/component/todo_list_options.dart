@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:confetti/confetti.dart';
@@ -8,6 +9,7 @@ import 'package:todo_list/models/todo_list.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
 
 class TodoListOptions extends StatefulWidget {
@@ -362,6 +364,16 @@ class _TodoListOptionsState extends State<TodoListOptions> {
               fontWeight: FontWeight.w500
             )
           )));
+        NotificationService().scheduleNotification(
+          id: Plan.id,
+          title: "Reminder",
+          body: "TODO: ${Plan.plan}",
+          interval: Plan.interval,
+          payload: jsonEncode({
+            'scheduledDate': DateTime.now().toIso8601String(),
+            'interval': Plan.interval
+          })
+        );
       } else {
         context.read<TodoListDatabase>().completed(Plan.id);
         widget.completedController.play();
@@ -369,12 +381,13 @@ class _TodoListOptionsState extends State<TodoListOptions> {
           const SnackBar(
             duration: Duration(seconds: 1),
             content: Text(
-            'Plan accomplished. You inspire!!!',
+            'Plan accomplished. You inspire!',
             style: TextStyle(
               fontFamily: "Quicksand",
               fontWeight: FontWeight.w500
             )
           )));
+          NotificationService().cancelNotification(Plan.id);
       }
     }
 
