@@ -70,7 +70,7 @@ class NotificationService {
 
     const LinuxInitializationSettings initializationSettingsLinux =
         LinuxInitializationSettings(
-      defaultActionName: 'Open notification',
+      defaultActionName: 'Open Notification',
     );
 
     final InitializationSettings initializationSettings =
@@ -106,7 +106,7 @@ class NotificationService {
       const LinuxNotificationAction(key: 'ACTION_DELETE', label: 'Delete');
 
   androidDetails() {
-    return AndroidNotificationDetails(
+    return const AndroidNotificationDetails(
         'todo_notifications', 'Minimalist Todo List Notifications',
         channelDescription:
             'Get reminders for your tasks and stay organized with notifications from the Minimalist Todo List App',
@@ -118,8 +118,8 @@ class NotificationService {
         fullScreenIntent: false,
         enableLights: true,
         actions: [
-          ok,
-          /* completed,
+          /* ok,
+          completed,
           delete, */
         ]
       );
@@ -145,8 +145,8 @@ class NotificationService {
       defaultActionName: null,
       customHints: null,
       actions: <LinuxNotificationAction>[
-        linuxView,
-        /* linuxCompleted,
+       /* linuxView,
+        linuxCompleted,
         linuxDelete, */
       ],
     );
