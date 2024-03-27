@@ -10,6 +10,7 @@ import 'package:todo_list/component/todo_list_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list/services/audio_service.dart';
 import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
 
@@ -561,7 +562,7 @@ class _TodoState extends State<Todo> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Image.asset(
-                          'images/pointer.gif',
+                          'assets/images/pointer.gif',
                           width: 100,
                         ),
                       ],
@@ -801,6 +802,7 @@ class _TodoState extends State<Todo> {
           }),
         );
       } else {
+        AudioService().play('pings/completed.mp3');
         context.read<TodoListDatabase>().completed(plan.id);
         _completedController.play();
         Future.delayed(const Duration(seconds: 5), () {

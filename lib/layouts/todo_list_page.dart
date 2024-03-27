@@ -13,6 +13,7 @@ import 'package:todo_list/component/todo_actions.dart';
 import 'package:todo_list/component/todo_list.dart';
 import 'package:todo_list/component/todo_list_drawer.dart';
 import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/services/audio_service.dart';
 import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
 
@@ -437,6 +438,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 IconButton(
                   icon: const Icon(Icons.add_task_rounded),
                   onPressed: () {
+                    AudioService().play('pings/start.mp3');
                     String text = textController.text.trim();
                     String due = dateController.text;
                     String category = selectedCategory;
@@ -448,6 +450,24 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       });
                       Navigator.pop(context);
                       textController.clear();
+                      if (context.read<TodoListDatabase>().preferences.first.notification == true) {
+                        /* NotificationService().showNotification(
+                          id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
+                          title: "New Plan Recorded",
+                          body: text,
+                          payload: "Due by $due"
+                        ); */
+                        NotificationService().scheduleNotification(
+                          id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
+                          title: "Reminder",
+                          body: "TODO: $text",
+                          interval: intvl,
+                          payload: jsonEncode({
+                            'scheduledDate': DateTime.now().toIso8601String(),
+                            'interval': intvl,
+                          }),
+                        );
+                      }
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           duration: Duration(seconds: 2),
@@ -460,24 +480,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           ),
                         ),
                       );
-                      if (context.read<TodoListDatabase>().preferences.first.notification == true) {
-                        NotificationService().showNotification(
-                          id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
-                          title: "New Plan Recorded",
-                          body: text,
-                          payload: "Due by $due"
-                        );
-                        NotificationService().scheduleNotification(
-                          id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
-                          title: "Reminder",
-                          body: "TODO: $text",
-                          interval: intvl,
-                          payload: jsonEncode({
-                            'scheduledDate': DateTime.now().toIso8601String(),
-                            'interval': intvl,
-                          }),
-                        );
-                      }
                     } else {
                       context.watch<TodoListDatabase>().preferences.first.vibration == true
                         ? Vibration.vibrate(duration: 50)

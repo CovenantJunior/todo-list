@@ -27,7 +27,7 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
           children: [
             DrawerHeader(
               child: Image.asset(
-                  'images/note.png',
+                  'assets/images/note.png',
                   width: 70,
                 ),
             ),
