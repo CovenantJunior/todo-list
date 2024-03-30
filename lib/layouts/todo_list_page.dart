@@ -1008,7 +1008,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              nonTrashedTodolists.isNotEmpty && !isSearch && (count > 0) && (context.watch<TodoListDatabase>().preferences.first.bulkTrash == true)
+              (nonTrashedTodolists.isNotEmpty && !isSearch && (count > 0) && (context.watch<TodoListDatabase>().preferences.first.bulkTrash == true))
                   ? Tooltip(
                       message: "Move plans to trash",
                       child: FloatingActionButton(

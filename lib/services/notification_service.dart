@@ -263,7 +263,7 @@ class NotificationService {
     );
   }
 
-  cancelNotification(id) async {
-    await flutterLocalNotificationsPlugin.cancel(id);
+  cancelNotification(id) {
+    flutterLocalNotificationsPlugin.cancel(id);
   }
 }

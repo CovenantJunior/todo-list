@@ -208,11 +208,11 @@ class TodoListDatabase extends ChangeNotifier{
   void setBulkTrash(id) async {
     var existingPreference = await isar.todoPreferences.get(id);
     if (existingPreference != null) {
-      existingPreference.autoDeleteOnDismiss == false
-          ? existingPreference.autoDeleteOnDismiss = true
-          : existingPreference.autoDeleteOnDismiss = false;
+      existingPreference.bulkTrash == false
+          ? existingPreference.bulkTrash = true
+          : existingPreference.bulkTrash = false;
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
-      preferences.first.autoDeleteOnDismiss = existingPreference.autoDeleteOnDismiss;
+      preferences.first.bulkTrash = existingPreference.bulkTrash;
     }
 
     fetchPreferences();

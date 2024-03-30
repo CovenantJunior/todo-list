@@ -481,7 +481,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ],
                       ),
                       Switch(
-                          value: bulkTrash,
+                          value: autoDeleteOnDismiss,
                           onChanged: (value) {
                             context.read<TodoListDatabase>().setAutoDeleteonDismiss(id);
                           })
@@ -513,7 +513,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ],
                       ),
                       Switch(
-                          value: autoDeleteOnDismiss,
+                          value: bulkTrash,
                           onChanged: (value) {
                             context.read<TodoListDatabase>().setBulkTrash(id);
                           })
