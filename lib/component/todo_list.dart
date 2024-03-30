@@ -818,7 +818,7 @@ class _TodoState extends State<Todo> {
           }),
         );
       } else {
-        AudioService().play('pings/completed.mp3');
+        AudioService().play('assets/pings/completed.mp3');
         context.read<TodoListDatabase>().completed(plan.id);
         _completedController.play();
         Future.delayed(const Duration(seconds: 5), () {
@@ -865,6 +865,7 @@ class _TodoState extends State<Todo> {
                                 onLongPress: () {
                                   ScaffoldMessenger.of(context).removeCurrentSnackBar();
                                   showPopover(
+                                    backgroundColor: Theme.of(context).colorScheme.onSecondary,
                                     shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
                                     width: 290,
                                     height: 50,

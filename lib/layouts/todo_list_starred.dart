@@ -904,7 +904,7 @@ class _TodoStarredState extends State<TodoStarred> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('images/star.gif'),
+              Image.asset('assets/images/star.gif', height: 70),
               const Text(
                 "No starred plan yet",
                 style: TextStyle(
@@ -918,7 +918,7 @@ class _TodoStarredState extends State<TodoStarred> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('images/star.gif'),
+              Image.asset('assets/images/star.gif', height: 70),
               const Text(
                 "No result",
                 style: TextStyle(

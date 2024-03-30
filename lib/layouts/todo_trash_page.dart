@@ -681,7 +681,7 @@ class _TodoTrashState extends State<TodoTrash> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('images/trash.gif'),
+              Image.asset('assets/images/trash.gif', height: 70),
               const Text(
                 "You have no trash",
                 style: TextStyle(
@@ -695,7 +695,7 @@ class _TodoTrashState extends State<TodoTrash> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('images/trash.gif'),
+              Image.asset('assets/images/trash.gif', height: 70),
               const Text(
                 "No result",
                 style: TextStyle(

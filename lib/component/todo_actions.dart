@@ -248,7 +248,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
-                    context.watch<TodoListDatabase>().preferences.first.vibration == true
+                    context.read<TodoListDatabase>().preferences.first.vibration == true
                         ? Vibration.vibrate(duration: 50)
                         : Void;
                     ScaffoldMessenger.of(context).showSnackBar(

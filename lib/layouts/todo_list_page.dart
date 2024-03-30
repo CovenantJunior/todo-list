@@ -204,7 +204,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   }
 
   void trashAllTodoLists(nonTrashedTodolists) {
-    context.watch<TodoListDatabase>().preferences.first.vibration == true
+    context.read<TodoListDatabase>().preferences.first.vibration == true
         ? Vibration.vibrate(duration: 50)
         : Void;
     List trash;
@@ -438,7 +438,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 IconButton(
                   icon: const Icon(Icons.add_task_rounded),
                   onPressed: () {
-                    AudioService().play('pings/start.mp3');
+                    AudioService().play('assets/pings/start.mp3');
                     String text = textController.text.trim();
                     String due = dateController.text;
                     String category = selectedCategory;
@@ -898,6 +898,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         length: 6,
         child: Scaffold(
           appBar: AppBar(
+            elevation: 0,
             backgroundColor: Colors.transparent,
             title: isSearch
                 ? searchTextField()
@@ -1015,6 +1016,10 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         onPressed: () {
                           trashAllTodoLists(nonTrashedTodolists);
                         },
+                        mini: true,
+                        shape:  RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)
+                        ),
                         backgroundColor:
                             Theme.of(context).colorScheme.onSecondary,
                         child: const Icon(Icons.delete_sweep_outlined),
@@ -1035,6 +1040,10 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         createTodoList('', context);
                       }
                     },
+                    mini: true,
+                    shape:  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)
+                    ),
                     backgroundColor: Theme.of(context).colorScheme.onSecondary,
                     child: Transform.rotate(
                       angle: isSearch

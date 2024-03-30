@@ -317,7 +317,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
     
     // Trash
     void trashTodoList(int id) {
-      context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+      context.read<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
       showDialog(
         context: context,
         builder: (context) => AlertDialog(

@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 // import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
@@ -210,11 +211,14 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      Switch(
-                        value: darkMode,
-                        onChanged: (value) {
-                          Provider.of<TodoListDatabase>(context, listen: false).setDarkMode(id);
-                        }
+                      Transform.scale(
+                        scale: .7,
+                        child: Switch(
+                          value: darkMode,
+                          onChanged: (value) {
+                            Provider.of<TodoListDatabase>(context, listen: false).setDarkMode(id);
+                          }
+                        ),
                       )
                     ],
                   ),
@@ -244,11 +248,14 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      Switch(
-                        value: notification,
-                        onChanged: (value) {
-                          context.read<TodoListDatabase>().setNotification(id);
-                        }
+                      Transform.scale(
+                        scale: .7,
+                        child: Switch(
+                          value: notification,
+                          onChanged: (value) {
+                            context.read<TodoListDatabase>().setNotification(id);
+                          }
+                        ),
                       )
                     ],
                   ),
@@ -274,12 +281,15 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      Switch(
-                        value: vibration,
-                        onChanged: (value) {
-                          context.read<TodoListDatabase>().setVibration(id);
-                          vibration == false ? Vibration.vibrate(duration: 50) : Void;
-                        }
+                      Transform.scale(
+                        scale: .7,
+                        child: Switch(
+                          value: vibration,
+                          onChanged: (value) {
+                            context.read<TodoListDatabase>().setVibration(id);
+                            vibration == false ? Vibration.vibrate(duration: 50) : Void;
+                          }
+                        ),
                       )
                     ],
                   ),
@@ -309,11 +319,14 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      Switch(
-                        value: stt,
-                        onChanged: (value) {
-                          context.read<TodoListDatabase>().setSTT(id);
-                        }
+                      Transform.scale(
+                        scale: .7,
+                        child: Switch(
+                          value: stt,
+                          onChanged: (value) {
+                            context.read<TodoListDatabase>().setSTT(id);
+                          }
+                        ),
                       )
                     ],
                   ),
@@ -335,11 +348,14 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      Switch(
-                        value: readPlan,
-                        onChanged: (value) {
-                          context.read<TodoListDatabase>().setReadPlan(id);
-                        }
+                      Transform.scale(
+                        scale: .7,
+                        child: Switch(
+                          value: readPlan,
+                          onChanged: (value) {
+                            context.read<TodoListDatabase>().setReadPlan(id);
+                          }
+                        ),
                       )
                     ],
                   ),
@@ -361,11 +377,14 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      Switch(
-                        value: backup,
-                        onChanged: (value) {
-                          context.read<TodoListDatabase>().setBackup(id);
-                        }
+                      Transform.scale(
+                        scale: .7,
+                        child: Switch(
+                          value: backup,
+                          onChanged: (value) {
+                            context.read<TodoListDatabase>().setBackup(id);
+                          }
+                        ),
                       )
                     ],
                   ),
@@ -387,11 +406,14 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      Switch(
-                        value: autoSync,
-                        onChanged: (value) {
-                          context.read<TodoListDatabase>().setAutoSync(id);
-                        }
+                      Transform.scale(
+                        scale: .7,
+                        child: Switch(
+                          value: autoSync,
+                          onChanged: (value) {
+                            context.read<TodoListDatabase>().setAutoSync(id);
+                          }
+                        ),
                       )
                     ],
                   ),
@@ -421,11 +443,14 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           )
                         ],
                       ),
-                      Switch(
-                        value: accessClipboard,
-                        onChanged: (value) {
-                          context.read<TodoListDatabase>().setAccessClipboard(id);
-                        }
+                      Transform.scale(
+                        scale: .7,
+                        child: Switch(
+                          value: accessClipboard,
+                          onChanged: (value) {
+                            context.read<TodoListDatabase>().setAccessClipboard(id);
+                          }
+                        ),
                       )
                     ],
                   ),
@@ -447,11 +472,14 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      Switch(
-                        value: autoDelete,
-                        onChanged: (value) {
-                          context.read<TodoListDatabase>().setAutoDelete(id);
-                        }
+                      Transform.scale(
+                        scale: .7,
+                        child: Switch(
+                          value: autoDelete,
+                          onChanged: (value) {
+                            context.read<TodoListDatabase>().setAutoDelete(id);
+                          }
+                        ),
                       )
                     ],
                   ),
@@ -480,11 +508,14 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      Switch(
-                          value: autoDeleteOnDismiss,
-                          onChanged: (value) {
-                            context.read<TodoListDatabase>().setAutoDeleteonDismiss(id);
-                          })
+                      Transform.scale(
+                        scale: .7,
+                        child: Switch(
+                            value: autoDeleteOnDismiss,
+                            onChanged: (value) {
+                              context.read<TodoListDatabase>().setAutoDeleteonDismiss(id);
+                            }),
+                      )
                     ],
                   ),
                   const Divider(height: 40),
@@ -512,11 +543,14 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           ),
                         ],
                       ),
-                      Switch(
-                          value: bulkTrash,
-                          onChanged: (value) {
-                            context.read<TodoListDatabase>().setBulkTrash(id);
-                          })
+                      Transform.scale(
+                        scale: .7,
+                        child: Switch(
+                            value: bulkTrash,
+                            onChanged: (value) {
+                              context.read<TodoListDatabase>().setBulkTrash(id);
+                            }),
+                      )
                     ],
                   ),
                 ],
