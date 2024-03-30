@@ -289,34 +289,50 @@ class _TodoState extends State<Todo> {
                     String? category = selectedCategory;
                     if (text.isNotEmpty) {
                       if (Plan.completed == true) {
-                      } else {
-                        NotificationService().cancelNotification(Plan.id);
-                        context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due, interval);
-                        NotificationService().scheduleNotification(
-                          id: Plan.id,
-                          title: "Reminder",
-                          body: "TODO: ${Plan.plan}",
-                          interval: Plan.interval,
-                          payload: jsonEncode({
-                            'scheduledDate': DateTime.now().toIso8601String(),
-                            'interval': Plan.interval
-                          }),
-                        );
-                      }
-                      Navigator.pop(context);
-                      textController.clear();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 1),
-                          content: Text(
-                            'Plan saved',
-                            style: TextStyle(
-                              fontFamily: "Quicksand",
-                              fontWeight: FontWeight.w500,
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            duration: Duration(seconds: 1),
+                            content: Text(
+                              'Plan is already completed',
+                              style: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
-                        ),
-                      );
+                        );
+                        Navigator.pop(context);
+                      } else {
+                        context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due, interval);
+                        if ((Plan.interval != interval) || (Plan.plan != text)) {
+                          NotificationService().cancelNotification(Plan.id);
+                          NotificationService().scheduleNotification(
+                            id: Plan.id,
+                            title: "Reminder",
+                            body: "TODO: $text",
+                            interval: Plan.interval,
+                            payload: jsonEncode({
+                              'scheduledDate': DateTime.now().toIso8601String(),
+                              'interval': Plan.interval
+                            }),
+                          );
+                        } else {
+                        }
+                        Navigator.pop(context);
+                        textController.clear();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            duration: Duration(seconds: 1),
+                            content: Text(
+                              'Plan saved',
+                              style: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
                     } else {
                       context.watch<TodoListDatabase>().preferences.first.vibration == true
                           ? Vibration.vibrate(duration: 50)
@@ -808,12 +824,12 @@ class _TodoState extends State<Todo> {
         Future.delayed(const Duration(seconds: 5), () {
           _completedController.stop();
         });
+        NotificationService().cancelNotification(plan.id);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             duration: Duration(seconds: 1),
             content: Text('Plan accomplished. You inspire!',
                 style: TextStyle(
                     fontFamily: "Quicksand", fontWeight: FontWeight.w500))));
-        NotificationService().cancelNotification(plan.id);
       }
     }
 
@@ -847,11 +863,9 @@ class _TodoState extends State<Todo> {
                             child: Builder(builder: (context) {
                               return GestureDetector(
                                 onLongPress: () {
+                                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
                                   showPopover(
                                     shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
-                                    arrowHeight: 0,
-                                    arrowWidth: 0,
-                                    direction: PopoverDirection.top,
                                     width: 290,
                                     height: 50,
                                     context: context,

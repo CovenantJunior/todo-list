@@ -16,4 +16,5 @@ class TodoPreferences {
   bool? accessClipboard;
   bool? autoDelete;
   bool? autoDeleteOnDismiss;
+  bool? bulkTrash;
 }

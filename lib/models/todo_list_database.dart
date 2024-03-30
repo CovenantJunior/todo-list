@@ -47,7 +47,8 @@ class TodoListDatabase extends ChangeNotifier{
         ..autoSync = false
         ..accessClipboard = false
         ..autoDelete = false
-        ..autoDeleteOnDismiss = false;
+        ..autoDeleteOnDismiss = false
+        ..bulkTrash = false;
       await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
       preferences = isar.todoPreferences.where().findAllSync();
       notifyListeners();
@@ -192,6 +193,19 @@ class TodoListDatabase extends ChangeNotifier{
   }
 
   void setAutoDeleteonDismiss(id) async {
+    var existingPreference = await isar.todoPreferences.get(id);
+    if (existingPreference != null) {
+      existingPreference.autoDeleteOnDismiss == false
+          ? existingPreference.autoDeleteOnDismiss = true
+          : existingPreference.autoDeleteOnDismiss = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+      preferences.first.autoDeleteOnDismiss = existingPreference.autoDeleteOnDismiss;
+    }
+
+    fetchPreferences();
+  }
+
+  void setBulkTrash(id) async {
     var existingPreference = await isar.todoPreferences.get(id);
     if (existingPreference != null) {
       existingPreference.autoDeleteOnDismiss == false

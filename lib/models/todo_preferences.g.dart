@@ -42,28 +42,33 @@ const TodoPreferencesSchema = CollectionSchema(
       name: r'backup',
       type: IsarType.bool,
     ),
-    r'darkMode': PropertySchema(
+    r'bulkTrash': PropertySchema(
       id: 5,
+      name: r'bulkTrash',
+      type: IsarType.bool,
+    ),
+    r'darkMode': PropertySchema(
+      id: 6,
       name: r'darkMode',
       type: IsarType.bool,
     ),
     r'notification': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'notification',
       type: IsarType.bool,
     ),
     r'readPlan': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'readPlan',
       type: IsarType.bool,
     ),
     r'stt': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'stt',
       type: IsarType.bool,
     ),
     r'vibration': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'vibration',
       type: IsarType.bool,
     )
@@ -102,11 +107,12 @@ void _todoPreferencesSerialize(
   writer.writeBool(offsets[2], object.autoDeleteOnDismiss);
   writer.writeBool(offsets[3], object.autoSync);
   writer.writeBool(offsets[4], object.backup);
-  writer.writeBool(offsets[5], object.darkMode);
-  writer.writeBool(offsets[6], object.notification);
-  writer.writeBool(offsets[7], object.readPlan);
-  writer.writeBool(offsets[8], object.stt);
-  writer.writeBool(offsets[9], object.vibration);
+  writer.writeBool(offsets[5], object.bulkTrash);
+  writer.writeBool(offsets[6], object.darkMode);
+  writer.writeBool(offsets[7], object.notification);
+  writer.writeBool(offsets[8], object.readPlan);
+  writer.writeBool(offsets[9], object.stt);
+  writer.writeBool(offsets[10], object.vibration);
 }
 
 TodoPreferences _todoPreferencesDeserialize(
@@ -121,12 +127,13 @@ TodoPreferences _todoPreferencesDeserialize(
   object.autoDeleteOnDismiss = reader.readBoolOrNull(offsets[2]);
   object.autoSync = reader.readBoolOrNull(offsets[3]);
   object.backup = reader.readBoolOrNull(offsets[4]);
-  object.darkMode = reader.readBoolOrNull(offsets[5]);
+  object.bulkTrash = reader.readBoolOrNull(offsets[5]);
+  object.darkMode = reader.readBoolOrNull(offsets[6]);
   object.id = id;
-  object.notification = reader.readBoolOrNull(offsets[6]);
-  object.readPlan = reader.readBoolOrNull(offsets[7]);
-  object.stt = reader.readBoolOrNull(offsets[8]);
-  object.vibration = reader.readBoolOrNull(offsets[9]);
+  object.notification = reader.readBoolOrNull(offsets[7]);
+  object.readPlan = reader.readBoolOrNull(offsets[8]);
+  object.stt = reader.readBoolOrNull(offsets[9]);
+  object.vibration = reader.readBoolOrNull(offsets[10]);
   return object;
 }
 
@@ -156,6 +163,8 @@ P _todoPreferencesDeserializeProp<P>(
     case 8:
       return (reader.readBoolOrNull(offset)) as P;
     case 9:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 10:
       return (reader.readBoolOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -392,6 +401,34 @@ extension TodoPreferencesQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'backup',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      bulkTrashIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'bulkTrash',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      bulkTrashIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'bulkTrash',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
+      bulkTrashEqualTo(bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'bulkTrash',
         value: value,
       ));
     });
@@ -672,6 +709,20 @@ extension TodoPreferencesQuerySortBy
   }
 
   QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByBulkTrash() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'bulkTrash', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      sortByBulkTrashDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'bulkTrash', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
       sortByDarkMode() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'darkMode', Sort.asc);
@@ -812,6 +863,20 @@ extension TodoPreferencesQuerySortThenBy
   }
 
   QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByBulkTrash() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'bulkTrash', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
+      thenByBulkTrashDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'bulkTrash', Sort.desc);
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
       thenByDarkMode() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'darkMode', Sort.asc);
@@ -929,6 +994,13 @@ extension TodoPreferencesQueryWhereDistinct
   }
 
   QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
+      distinctByBulkTrash() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'bulkTrash');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
       distinctByDarkMode() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'darkMode');
@@ -1000,6 +1072,12 @@ extension TodoPreferencesQueryProperty
   QueryBuilder<TodoPreferences, bool?, QQueryOperations> backupProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'backup');
+    });
+  }
+
+  QueryBuilder<TodoPreferences, bool?, QQueryOperations> bulkTrashProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'bulkTrash');
     });
   }
 

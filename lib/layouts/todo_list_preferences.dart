@@ -25,6 +25,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
   late bool accessClipboard;
   late bool autoDelete;
   late bool autoDeleteOnDismiss;
+  late bool bulkTrash;
 
   @override
   void initState() {
@@ -127,6 +128,28 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
     );
   }
 
+  void bulkTrashInfo() {
+    showDialog(
+      context: context,
+      builder: (context) => const AlertDialog(
+        title: Text(
+          "Bulk Trash",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.w500,
+            fontSize: 20
+          ),
+        ),
+        content: Text(
+            "This option helps you clear all tasks/plans in one tap",
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.w500,
+            )),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List preferences = context.watch<TodoListDatabase>().preferences;
@@ -144,6 +167,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
         accessClipboard = preference.accessClipboard;
         autoDelete = preference.autoDelete;
         autoDeleteOnDismiss = preference.autoDeleteOnDismiss;
+        bulkTrash = preference.bulkTrash;
       });
     }
 
@@ -180,7 +204,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                             darkMode == true ? 'Dark Mode' : 'Light Mode',
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: 13,
+                              fontSize: 12,
                               fontFamily: "Quicksand"
                             ),
                           ),
@@ -208,7 +232,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                                 'Notification',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 13,
+                                  fontSize: 12,
                                   fontFamily: "Quicksand"
                                 ),
                               ),
@@ -242,7 +266,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                                 'In-app Vibration',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 13,
+                                  fontSize: 12,
                                   fontFamily: "Quicksand"
                                 ),
                               ),
@@ -273,7 +297,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                                 'Speech to Text',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 13,
+                                  fontSize: 12,
                                   fontFamily: "Quicksand"
                                 ),
                               ),
@@ -305,7 +329,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                             'Read out Plan Notifications',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: 13,
+                              fontSize: 12,
                               fontFamily: "Quicksand"
                             ),
                           ),
@@ -331,7 +355,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                             'Backup to Drive',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: 13,
+                              fontSize: 12,
                               fontFamily: "Quicksand"
                             ),
                           ),
@@ -357,7 +381,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                             'Auto Sync',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: 13,
+                              fontSize: 12,
                               fontFamily: "Quicksand"
                             ),
                           ),
@@ -385,7 +409,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                                 'Access Clipboard',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 13,
+                                  fontSize: 12,
                                   fontFamily: "Quicksand"
                                 ),
                               ),
@@ -417,7 +441,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                             'Auto Delete Completed Task',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: 13,
+                              fontSize: 12,
                               fontFamily: "Quicksand"
                             ),
                           ),
@@ -445,7 +469,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                                 'Delete Plan on Dismiss',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 13,
+                                    fontSize: 12,
                                     fontFamily: "Quicksand"),
                               ),
                               const SizedBox(width: 7),
@@ -457,9 +481,41 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ],
                       ),
                       Switch(
-                          value: autoDeleteOnDismiss,
+                          value: bulkTrash,
                           onChanged: (value) {
                             context.read<TodoListDatabase>().setAutoDeleteonDismiss(id);
+                          })
+                    ],
+                  ),
+                  const Divider(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.delete_sweep_outlined),
+                          const SizedBox(width: 20),
+                          Row(
+                            children: [
+                              const Text(
+                                'Bulk Trash Options',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12,
+                                    fontFamily: "Quicksand"),
+                              ),
+                              const SizedBox(width: 7),
+                              Baseline(baseline: 10.0,
+                              baselineType: TextBaseline.alphabetic,
+                              child: GestureDetector(onTap: bulkTrashInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
+                            ],
+                          ),
+                        ],
+                      ),
+                      Switch(
+                          value: autoDeleteOnDismiss,
+                          onChanged: (value) {
+                            context.read<TodoListDatabase>().setBulkTrash(id);
                           })
                     ],
                   ),

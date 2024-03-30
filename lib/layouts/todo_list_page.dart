@@ -961,11 +961,11 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       style: TextStyle(
                         fontFamily: "Quicksand",
                         fontWeight: FontWeight.bold,
-                        fontSize: 25
+                        fontSize: 20
                       ),
                     ),
                     SizedBox(width: 3),
-                    Icon(Icons.task_alt_rounded, weight: 50),
+                    Icon(Icons.task_alt_rounded, weight: 100),
                   ],
                 ),
               ) : const SizedBox(),
@@ -1008,7 +1008,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              nonTrashedTodolists.isNotEmpty && !isSearch && (count > 0)
+              nonTrashedTodolists.isNotEmpty && !isSearch && (count > 0) && (context.watch<TodoListDatabase>().preferences.first.bulkTrash == true)
                   ? Tooltip(
                       message: "Move plans to trash",
                       child: FloatingActionButton(
@@ -1049,10 +1049,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           ),
           persistentFooterButtons: [
             TabBar(
-              // padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
               indicatorWeight: 1,
               indicatorPadding: EdgeInsets.zero,
-              indicatorSize: TabBarIndicatorSize.tab,
+              indicatorSize: TabBarIndicatorSize.label,
               // indicatorColor: Colors.transparent,
               dividerColor: Colors.transparent,
               onTap: (value) {

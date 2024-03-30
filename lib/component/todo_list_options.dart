@@ -248,21 +248,51 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                 String due = dateController.text;
                 String? category = selectedCategory;
                 if (text.isNotEmpty) {
-                  context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due, interval);
-                  Navigator.pop(context);
-                  textController.clear();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      duration: Duration(seconds: 1),
-                      content: Text(
-                        'Plan saved',
-                        style: TextStyle(
-                          fontFamily: "Quicksand",
-                          fontWeight: FontWeight.w500,
+                  if (Plan.completed == true) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        duration: Duration(seconds: 1),
+                        content: Text(
+                          'Plan is already completed',
+                          style: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
-                  );
+                    );
+                    Navigator.pop(context);
+                  } else {
+                    context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due, interval);
+                    if ((Plan.interval != interval) || (Plan.plan != text)) {
+                      NotificationService().cancelNotification(Plan.id);
+                      NotificationService().scheduleNotification(
+                        id: Plan.id,
+                        title: "Reminder",
+                        body: "TODO: $text",
+                        interval: Plan.interval,
+                        payload: jsonEncode({
+                          'scheduledDate': DateTime.now().toIso8601String(),
+                          'interval': Plan.interval
+                        }),
+                      );
+                    } else {
+                    }
+                    Navigator.pop(context);
+                    textController.clear();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        duration: Duration(seconds: 1),
+                        content: Text(
+                          'Plan saved',
+                          style: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
                 } else {
                   context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                   ScaffoldMessenger.of(context).showSnackBar(

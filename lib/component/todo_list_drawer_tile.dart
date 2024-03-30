@@ -24,7 +24,7 @@ class TodoListDrawerTile extends StatelessWidget {
           style: const TextStyle(
             fontFamily: "Quicksand",
             fontWeight: FontWeight.w500,
-            fontSize: 13
+            fontSize: 12
           ),
         ),
         leading: leading,
