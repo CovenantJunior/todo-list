@@ -60,6 +60,10 @@ dependencies:
   confetti: ^0.7.0
   audioplayers: ^6.0.0
   package_info: ^2.0.2
+  googleapis: ^13.1.0
+  googleapis_auth: ^1.5.1
+  http: ^1.2.1
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:

@@ -818,7 +818,7 @@ class _TodoState extends State<Todo> {
           }),
         );
       } else {
-        AudioService().play('assets/pings/completed.mp3');
+        AudioService().play('pings/completed.mp3');
         context.read<TodoListDatabase>().completed(plan.id);
         _completedController.play();
         Future.delayed(const Duration(seconds: 5), () {

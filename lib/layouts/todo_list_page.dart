@@ -216,35 +216,35 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              content: const Text(
-                "Move all plans to Trash?",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    deleteAllAction(trash);
-                  },
-                  icon: const Icon(
-                    Icons.done,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    Icons.cancel_outlined,
-                  ),
-                ),
-              ],
-            ));
-  }
+        content: const Text(
+          "Move all plans to Trash?",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+            fontFamily: 'Quicksand',
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+              deleteAllAction(trash);
+            },
+            icon: const Icon(
+              Icons.done,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.cancel_outlined,
+            ),
+          ),
+        ],
+      ));
+    }
 
   // Create
   void createTodoList(String data, BuildContext context) {
@@ -438,7 +438,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 IconButton(
                   icon: const Icon(Icons.add_task_rounded),
                   onPressed: () {
-                    AudioService().play('assets/pings/start.mp3');
+                    AudioService().play('pings/start.mp3');
                     String text = textController.text.trim();
                     String due = dateController.text;
                     String category = selectedCategory;
@@ -921,7 +921,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     message: "More Options",
                     child: IconButton(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).removeCurrentSnackBar();
                         showPopover(
                           shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
                           arrowHeight: 0,
@@ -962,7 +962,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       style: TextStyle(
                         fontFamily: "Quicksand",
                         fontWeight: FontWeight.bold,
-                        fontSize: 20
+                        fontSize: 25
                       ),
                     ),
                     SizedBox(width: 3),
@@ -1122,14 +1122,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     child: Column(
                     children: [
                       Icon(Icons.home_outlined),
-                      Text('All',
+                      /* Text('All',
                         maxLines: 2,
                         style: TextStyle(
                           fontSize: 7.8,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
-                      )
+                      ) */
                     ]),
                   ),
                 ),
@@ -1140,14 +1140,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     child: Column(
                     children: [
                       Icon(Icons.person_2_outlined),
-                      Text('Personal',
+                      /* Text('Personal',
                         maxLines: 2,
                         style: TextStyle(
                           fontSize: 7.8,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
-                      )
+                      ) */
                     ]),
                   ),
                 ),
@@ -1158,14 +1158,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     child: Column(
                     children: [
                       Icon(Icons.work_outline_rounded),
-                      Text('Work',
+                      /* Text('Work',
                         maxLines: 2,
                         style: TextStyle(
                           fontSize: 7.8,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
-                      )
+                      ) */
                     ]),
                   ),
                 ),
@@ -1176,14 +1176,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     child: Column(
                     children: [
                       Icon(Icons.book_outlined),
-                      Text('Study',
+                      /* Text('Study',
                         maxLines: 2,
                         style: TextStyle(
                           fontSize: 7.8,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
-                      )
+                      ) */
                     ]),
                   ),
                 ),
@@ -1194,14 +1194,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     child: Column(
                     children: [
                       Icon(Icons.shopping_basket_outlined),
-                      Text('Shop',
+                      /* Text('Shop',
                         maxLines: 2,
                         style: TextStyle(
                           fontSize: 7.8,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
-                      )
+                      ) */
                     ]),
                   ),
                 ),
@@ -1212,14 +1212,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     child: Column(
                     children: [
                       Icon(Icons.sports_soccer_rounded),
-                      Text('Sport',
+                      /* Text('Sport',
                         maxLines: 2,
                         style: TextStyle(
                           fontSize: 7.8,
                           fontFamily: 'Quicksand',
                           fontWeight: FontWeight.w900
                         )
-                      )
+                      ) */
                     ]),
                   ),
                 ),
