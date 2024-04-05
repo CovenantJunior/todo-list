@@ -880,6 +880,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       initClipboard();
     }
     
+    double screenWidth = MediaQuery.of(context).size.width;
+
     /* Timer.periodic(const Duration(seconds: 7), (timer) {
       NotificationService().cancelNotification(144000);
       setState(() {
@@ -1018,7 +1020,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         },
                         mini: true,
                         shape:  RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50)
+                          borderRadius: BorderRadius.circular(10)
                         ),
                         backgroundColor:
                             Theme.of(context).colorScheme.onSecondary,
@@ -1042,7 +1044,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     },
                     mini: true,
                     shape:  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50)
+                      borderRadius: BorderRadius.circular(10)
                     ),
                     backgroundColor: Theme.of(context).colorScheme.onSecondary,
                     child: Transform.rotate(
@@ -1058,9 +1060,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           ),
           persistentFooterButtons: [
             TabBar(
-              indicatorWeight: 1,
+              indicatorWeight: 0.5,
               indicatorPadding: EdgeInsets.zero,
-              indicatorSize: TabBarIndicatorSize.label,
+              indicatorSize: TabBarIndicatorSize.tab,
               // indicatorColor: Colors.transparent,
               dividerColor: Colors.transparent,
               onTap: (value) {
@@ -1114,14 +1116,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   default:
                 }
               },
-              tabs: const [
+              tabs: [
                 Tooltip(
                   message: 'All',
                   child: Tab(
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.home_outlined),
+                      Icon(Icons.home_outlined, size: screenWidth/14),
                       /* Text('All',
                         maxLines: 2,
                         style: TextStyle(
@@ -1139,7 +1141,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.person_2_outlined),
+                      Icon(Icons.person_2_outlined, size: screenWidth/14),
                       /* Text('Personal',
                         maxLines: 2,
                         style: TextStyle(
@@ -1157,7 +1159,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.work_outline_rounded),
+                      Icon(Icons.work_outline_rounded, size: screenWidth/14),
                       /* Text('Work',
                         maxLines: 2,
                         style: TextStyle(
@@ -1175,7 +1177,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.book_outlined),
+                      Icon(Icons.book_outlined, size: screenWidth/14),
                       /* Text('Study',
                         maxLines: 2,
                         style: TextStyle(
@@ -1193,8 +1195,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.shopping_basket_outlined),
-                      /* Text('Shop',
+                      Icon(Icons.shopping_basket_outlined, size: screenWidth/14),
+                      /* Text('Shopping',
                         maxLines: 2,
                         style: TextStyle(
                           fontSize: 7.8,
@@ -1211,7 +1213,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.sports_soccer_rounded),
+                      Icon(Icons.sports_soccer_rounded, size: screenWidth/14),
                       /* Text('Sport',
                         maxLines: 2,
                         style: TextStyle(
