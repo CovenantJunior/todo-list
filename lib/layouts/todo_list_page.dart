@@ -172,18 +172,16 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     }
     Future.delayed(const Duration(seconds: 5), () {
       if (undo == true) {
-        context
-            .read<TodoListDatabase>()
-            .trashAllTodoLists(trash);
+        for (var list in trash) {
+          NotificationService().cancelNotification(list.id);
+        }
+        context.read<TodoListDatabase>().trashAllTodoLists(trash);
         Future.delayed(const Duration(seconds: 3), () {
           cardToRemove.clear();
         });
         setState(() {
           undo = true;
         });
-        for (var list in trash) {
-          NotificationService().cancelNotification(list.id);
-        }
       }
     });
     ScaffoldMessenger.of(context).showSnackBar(
@@ -879,8 +877,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     if(context.read<TodoListDatabase>().preferences.first.accessClipboard == true) {
       initClipboard();
     }
-    
-    double screenWidth = MediaQuery.of(context).size.width;
 
     /* Timer.periodic(const Duration(seconds: 7), (timer) {
       NotificationService().cancelNotification(144000);
@@ -1116,14 +1112,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   default:
                 }
               },
-              tabs: [
+              tabs: const [
                 Tooltip(
                   message: 'All',
                   child: Tab(
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.home_outlined, size: screenWidth/14),
+                      Icon(Icons.home_outlined),
                       /* Text('All',
                         maxLines: 2,
                         style: TextStyle(
@@ -1141,7 +1137,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.person_2_outlined, size: screenWidth/14),
+                      Icon(Icons.person_2_outlined),
                       /* Text('Personal',
                         maxLines: 2,
                         style: TextStyle(
@@ -1159,7 +1155,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.work_outline_rounded, size: screenWidth/14),
+                      Icon(Icons.work_outline_rounded),
                       /* Text('Work',
                         maxLines: 2,
                         style: TextStyle(
@@ -1177,7 +1173,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.book_outlined, size: screenWidth/14),
+                      Icon(Icons.book_outlined),
                       /* Text('Study',
                         maxLines: 2,
                         style: TextStyle(
@@ -1195,7 +1191,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.shopping_basket_outlined, size: screenWidth/14),
+                      Icon(Icons.shopping_basket_outlined),
                       /* Text('Shopping',
                         maxLines: 2,
                         style: TextStyle(
@@ -1213,7 +1209,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.sports_soccer_rounded, size: screenWidth/14),
+                      Icon(Icons.sports_soccer_rounded),
                       /* Text('Sport',
                         maxLines: 2,
                         style: TextStyle(

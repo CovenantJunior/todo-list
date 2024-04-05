@@ -216,9 +216,8 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                     fontWeight: FontWeight.w500))));
                   } else {
                     for (var selectedList in selectedLists) {
-                      context
-                          .read<TodoListDatabase>().completed(selectedList.id);
                       NotificationService().cancelNotification(selectedList.id);
+                      context.read<TodoListDatabase>().completed(selectedList.id);
                     }
                     if (selectedLists.length > 1) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -283,9 +282,9 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                 IconButton(
                                   onPressed: () {
                                     for (var selectedList in selectedLists) {
+                                      NotificationService().cancelNotification(selectedList.id);
                                       context.read<TodoListDatabase>().trashTodoList(selectedList.id);
                                       context.read<TodoListDatabase>().completed(selectedList.id);
-                                      NotificationService().cancelNotification(selectedList.id);
                                     }
                                     if (selectedLists.length > 1) {
                                       ScaffoldMessenger.of(context)

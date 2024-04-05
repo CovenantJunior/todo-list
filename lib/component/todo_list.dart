@@ -394,6 +394,7 @@ class _TodoState extends State<Todo> {
       });
       Future.delayed(const Duration(seconds: 5), () {
         if (undo == true) {
+          NotificationService().cancelNotification(id);
           context.read<TodoListDatabase>().completed(id);
           context.read<TodoListDatabase>().trashTodoList(id);
           Future.delayed(const Duration(seconds: 1), () {
@@ -402,7 +403,6 @@ class _TodoState extends State<Todo> {
           setState(() {
             undo = true;
           });
-          NotificationService().cancelNotification(id);
         }
       });
       ScaffoldMessenger.of(context).showSnackBar(
@@ -814,17 +814,18 @@ class _TodoState extends State<Todo> {
           interval: plan.interval,
           payload: jsonEncode({
             'scheduledDate': DateTime.now().toIso8601String(),
-            'interval': plan.interval
+            'interval': plan.interval,
+            'plan': plan.plan
           }),
         );
       } else {
+        NotificationService().cancelNotification(plan.id);
         AudioService().play('pings/completed.mp3');
         context.read<TodoListDatabase>().completed(plan.id);
         _completedController.play();
         Future.delayed(const Duration(seconds: 5), () {
           _completedController.stop();
         });
-        NotificationService().cancelNotification(plan.id);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             duration: Duration(seconds: 1),
             content: Text('Plan accomplished. You inspire!',

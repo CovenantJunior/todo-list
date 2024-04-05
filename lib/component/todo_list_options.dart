@@ -405,6 +405,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
           })
         );
       } else {
+        NotificationService().cancelNotification(Plan.id);
         context.read<TodoListDatabase>().completed(Plan.id);
         widget.completedController.play();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -417,7 +418,6 @@ class _TodoListOptionsState extends State<TodoListOptions> {
               fontWeight: FontWeight.w500
             )
           )));
-          NotificationService().cancelNotification(Plan.id);
       }
     }
 
