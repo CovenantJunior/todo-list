@@ -943,7 +943,7 @@ class _TodoState extends State<Todo> {
                                                           child: SizedBox(
                                                             height: 20,
                                                             child: Text(
-                                                              "${plan.id}",
+                                                              plan.plan,
                                                               maxLines: 1,
                                                               overflow:
                                                                   TextOverflow.ellipsis,
