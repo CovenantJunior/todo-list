@@ -102,9 +102,12 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                         ? Vibration.vibrate(duration: 50)
                         : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            duration: Duration(seconds: 2),
-                            content: Text(
+                        SnackBar(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                            ),
+                            duration: const Duration(seconds: 2),
+                            content: const Text(
                                 'Please select a plan to deal with',
                                 style: TextStyle(
                                     fontFamily: "Quicksand",
@@ -123,12 +126,15 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                   fontWeight: FontWeight.w500))));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              duration: Duration(seconds: 2),
-                              content: Text('Starring plan',
-                                  style: TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.w500))));
+                          SnackBar(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                            ),
+                            duration: const Duration(seconds: 2),
+                            content: const Text('Starring plan',
+                                style: TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.w500))));
                     }
                     Navigator.pop(context);
                   }
@@ -152,9 +158,11 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                         ? Vibration.vibrate(duration: 50)
                         : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            duration: Duration(seconds: 2),
-                            content: Text(
+                        SnackBar(
+                          shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                            duration: const Duration(seconds: 2),
+                            content: const Text(
                                 'Please select a plan to deal with',
                                 style: TextStyle(
                                     fontFamily: "Quicksand",
@@ -183,9 +191,12 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                   fontWeight: FontWeight.w500))));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              duration: Duration(seconds: 2),
-                              content: Text('Reactivating plan',
+                          SnackBar(
+                            shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                              duration: const Duration(seconds: 2),
+                              content: const Text('Reactivating plan',
                                   style: TextStyle(
                                       fontFamily: "Quicksand",
                                       fontWeight: FontWeight.w500))));
@@ -207,9 +218,11 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                         ? Vibration.vibrate(duration: 50)
                         : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            duration: Duration(seconds: 2),
-                            content: Text(
+                        SnackBar(
+                            shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10)),
+                            duration: const Duration(seconds: 2),
+                            content: const Text(
                                 'Please select a plan to deal with',
                                 style: TextStyle(
                                     fontFamily: "Quicksand",
@@ -229,9 +242,12 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                   fontWeight: FontWeight.w500))));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              duration: Duration(seconds: 2),
-                              content: Text('Marking plan as completed',
+                          SnackBar(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                            ),
+                              duration: const Duration(seconds: 2),
+                              content: const Text('Marking plan as completed',
                                   style: TextStyle(
                                       fontFamily: "Quicksand",
                                       fontWeight: FontWeight.w500))));
@@ -251,9 +267,11 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                         ? Vibration.vibrate(duration: 50)
                         : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            duration: Duration(seconds: 2),
-                            content: Text(
+                        SnackBar(
+                          shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10)),
+                            duration: const Duration(seconds: 2),
+                            content: const Text(
                                 'Please select a plan to deal with',
                                 style: TextStyle(
                                     fontFamily: "Quicksand",
@@ -301,10 +319,13 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                                               .w500))));
                                     } else {
                                       ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
+                                          .showSnackBar(SnackBar(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10)
+                                            ),
                                               duration:
-                                                  Duration(seconds: 2),
-                                              content: Text(
+                                                  const Duration(seconds: 2),
+                                              content: const Text(
                                                   'Deleting selected plan',
                                                   style: TextStyle(
                                                       fontFamily:

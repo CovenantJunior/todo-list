@@ -14,6 +14,7 @@ import 'package:todo_list/component/todo_list.dart';
 import 'package:todo_list/component/todo_list_drawer.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:todo_list/services/audio_service.dart';
+import 'package:todo_list/services/backup_service.dart';
 import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
 
@@ -85,6 +86,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   List preference = [];
   List cardToRemove = [];
   bool _isListening = false;
+  bool backingUp = false;
   
   Widget searchTextField() {
     //add
@@ -186,7 +188,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-          duration: const Duration(seconds: 4),
+          duration: const Duration(seconds: 1),
           content: const Text('Moving all to Trash',
               style: TextStyle(
                   fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
@@ -467,9 +469,11 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         );
                       }
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 2),
-                          content: Text(
+                        SnackBar(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          duration: const Duration(seconds: 2),
+                          content: const Text(
                             'Plan saved',
                             style: TextStyle(
                               fontFamily: "Quicksand",
@@ -483,9 +487,12 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         ? Vibration.vibrate(duration: 50)
                         : Void;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 2),
-                          content: Text(
+                        SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                          duration: const Duration(seconds: 2),
+                          content: const Text(
                             'Oops, blank shot!',
                             style: TextStyle(
                               fontFamily: "Quicksand",
@@ -691,9 +698,12 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       Navigator.pop(context);
                       textController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 2),
-                          content: Text(
+                        SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                          duration: const Duration(seconds: 2),
+                          content: const Text(
                             'Plan saved',
                             style: TextStyle(
                               fontFamily: "Quicksand",
@@ -712,9 +722,12 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           ? Vibration.vibrate(duration: 50)
                           : Void;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 2),
-                          content: Text(
+                        SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                          duration: const Duration(seconds: 2),
+                          content: const Text(
                             'Oops, blank shot!',
                             style: TextStyle(
                               fontFamily: "Quicksand",
@@ -904,6 +917,19 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             centerTitle: true,
             actions: [
               !isSearch ? Tooltip(
+                message: "Backup",
+                child: IconButton(
+                  onPressed: () { 
+                    setState(() {
+                      backingUp = !backingUp;
+                    });
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    Backup().backup(context);
+                  },
+                  icon: backingUp == false ? const Icon(Icons.backup_outlined) : const Icon(Icons.backup_rounded),
+                  ),
+              ) : const SizedBox(),
+              !isSearch ? Tooltip(
                 message: "Add a Date",
                 child: IconButton(
                   onPressed: () { 
@@ -960,7 +986,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       style: TextStyle(
                         fontFamily: "Quicksand",
                         fontWeight: FontWeight.bold,
-                        fontSize: 25
+                        fontSize: 20
                       ),
                     ),
                     SizedBox(width: 3),

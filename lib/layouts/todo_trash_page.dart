@@ -321,9 +321,12 @@ class _TodoTrashState extends State<TodoTrash> {
                   if (selectedLists.isEmpty) {
                     context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      duration: Duration(seconds: 2),
-                      content: Text(
+                    SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                      duration: const Duration(seconds: 2),
+                      content: const Text(
                       'Please select a plan to deal with',
                       style: TextStyle(
                         fontFamily: "Quicksand",
@@ -347,9 +350,11 @@ class _TodoTrashState extends State<TodoTrash> {
                         )));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 2),
-                          content: Text(
+                        SnackBar(
+                          shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10)),
+                          duration: const Duration(seconds: 2),
+                          content: const Text(
                           'Restoring plan',
                           style: TextStyle(
                             fontFamily: "Quicksand",
@@ -371,9 +376,12 @@ class _TodoTrashState extends State<TodoTrash> {
                   context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                   if (selectedLists.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      duration: Duration(seconds: 2),
-                      content: Text(
+                    SnackBar(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                      duration: const Duration(seconds: 2),
+                      content: const Text(
                       'Please select a plan to deal with',
                       style: TextStyle(
                         fontFamily: "Quicksand",
@@ -412,9 +420,12 @@ class _TodoTrashState extends State<TodoTrash> {
                                   )));
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    duration: Duration(seconds: 2),
-                                    content: Text(
+                                  SnackBar(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)
+                                    ),
+                                    duration: const Duration(seconds: 2),
+                                    content: const Text(
                                     'Deleting selected plan',
                                     style: TextStyle(
                                       fontFamily: "Quicksand",

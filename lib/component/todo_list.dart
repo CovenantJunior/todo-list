@@ -290,9 +290,12 @@ class _TodoState extends State<Todo> {
                     if (text.isNotEmpty) {
                       if (Plan.completed == true) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            duration: Duration(seconds: 1),
-                            content: Text(
+                          SnackBar(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            duration: const Duration(seconds: 1),
+                            content: const Text(
                               'Plan is already completed',
                               style: TextStyle(
                                 fontFamily: "Quicksand",
@@ -321,9 +324,12 @@ class _TodoState extends State<Todo> {
                         Navigator.pop(context);
                         textController.clear();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            duration: Duration(seconds: 1),
-                            content: Text(
+                          SnackBar(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            duration: const Duration(seconds: 1),
+                            content: const Text(
                               'Plan saved',
                               style: TextStyle(
                                 fontFamily: "Quicksand",
@@ -338,9 +344,12 @@ class _TodoState extends State<Todo> {
                           ? Vibration.vibrate(duration: 50)
                           : Void;
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 1),
-                          content: Text(
+                        SnackBar(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          duration: const Duration(seconds: 1),
+                          content: const Text(
                             'Oops, blank shot!',
                             style: TextStyle(
                               fontFamily: "Quicksand",
@@ -407,6 +416,8 @@ class _TodoState extends State<Todo> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             duration: const Duration(seconds: 4),
             content: const Text('Trashed',
                 style: TextStyle(
@@ -802,9 +813,12 @@ class _TodoState extends State<Todo> {
     void mark(plan) {
       if (plan.completed == true) {
         context.read<TodoListDatabase>().replan(plan.id);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            duration: Duration(seconds: 1),
-            content: Text('Plan reactivated!',
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+            duration: const Duration(seconds: 1),
+            content: const Text('Plan reactivated!',
                 style: TextStyle(
                     fontFamily: "Quicksand", fontWeight: FontWeight.w500))));
         NotificationService().scheduleNotification(
@@ -826,9 +840,12 @@ class _TodoState extends State<Todo> {
         Future.delayed(const Duration(seconds: 5), () {
           _completedController.stop();
         });
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            duration: Duration(seconds: 1),
-            content: Text('Plan accomplished. You inspire!',
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+            duration: const Duration(seconds: 1),
+            content: const Text('Plan accomplished. You inspire!',
                 style: TextStyle(
                     fontFamily: "Quicksand", fontWeight: FontWeight.w500))));
       }

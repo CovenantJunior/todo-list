@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
+// import 'dart:convert';
 
 // ignore: implementation_imports
 import 'package:flutter/material.dart';
@@ -7,7 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:todo_list/main.dart';
 // import 'package:restart_app/restart_app.dart';
 import 'package:todo_list/models/todo_list_database.dart';
-import 'package:todo_list/services/stt_service.dart';
+// import 'package:todo_list/services/stt_service.dart';
 
 List preferences = [];
 TodoListDatabase db = TodoListDatabase();
@@ -32,9 +32,9 @@ void trashTodoList(int id) async {
 
 @pragma('vm:entry-point')
 Future<void> notificationResponse(NotificationResponse notificationResponse) async {
-  Map<String, dynamic> payload = jsonDecode(notificationResponse.payload!);
-  final plan = payload['plan'];
-  STT().speak(plan);
+  // Map<String, dynamic> payload = jsonDecode(notificationResponse.payload!);
+  // final plan = payload['plan'];
+  // STT().speak(plan);
   if (notificationResponse.actionId != null) {
     if (notificationResponse.actionId == 'ACTION_COMPLETED') {
       completed(notificationResponse.id!);

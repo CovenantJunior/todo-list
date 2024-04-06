@@ -48,9 +48,12 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
                   context.read<TodoListDatabase>().deleteTodoList(id);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        duration: Duration(seconds: 2),
-                        content: Text(
+                      SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                        duration: const Duration(seconds: 2),
+                        content: const Text(
                         'Poof! Gone like the wind',
                         style: TextStyle(
                           fontFamily: "Quicksand",
@@ -79,9 +82,12 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
         context.read<TodoListDatabase>().restoreTodoLists(id);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              duration: Duration(seconds: 2),
-              content: Text(
+            SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+              duration: const Duration(seconds: 2),
+              content: const Text(
               'Restored back on track',
               style: TextStyle(
                 fontFamily: "Quicksand",

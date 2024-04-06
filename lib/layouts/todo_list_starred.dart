@@ -220,9 +220,12 @@ class _TodoStarredState extends State<TodoStarred> {
                 Navigator.pop(context);
                 textController.clear();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    duration: Duration(seconds: 2),
-                    content: Text(
+                  SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    duration: const Duration(seconds: 2),
+                    content: const Text(
                       'Plan saved',
                       style: TextStyle(
                         fontFamily: "Quicksand",
@@ -234,9 +237,12 @@ class _TodoStarredState extends State<TodoStarred> {
               } else {
                 context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    duration: Duration(seconds: 2),
-                    content: Text(
+                  SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    duration: const Duration(seconds: 2),
+                    content: const Text(
                       'Oops, blank shot!',
                       style: TextStyle(
                         fontFamily: "Quicksand",
@@ -564,9 +570,12 @@ class _TodoStarredState extends State<TodoStarred> {
                   if (selectedLists.isEmpty) {
                     context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      duration: Duration(seconds: 2),
-                      content: Text(
+                    SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                      duration: const Duration(seconds: 2),
+                      content: const Text(
                       'Please select a plan to deal with',
                       style: TextStyle(
                         fontFamily: "Quicksand",
@@ -590,9 +599,12 @@ class _TodoStarredState extends State<TodoStarred> {
                         )));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          duration: Duration(seconds: 2),
-                          content: Text(
+                        SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                          duration: const Duration(seconds: 2),
+                          content: const Text(
                           'Unstarring plan',
                           style: TextStyle(
                             fontFamily: "Quicksand",
@@ -662,9 +674,12 @@ class _TodoStarredState extends State<TodoStarred> {
       if (plan.completed == true) {
         context.read<TodoListDatabase>().replan(plan.id);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            content: Text(
+          SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+            duration: const Duration(seconds: 2),
+            content: const Text(
             'Plan reactivated!',
             style: TextStyle(
               fontFamily: "Quicksand",
@@ -674,9 +689,12 @@ class _TodoStarredState extends State<TodoStarred> {
       } else {
         context.read<TodoListDatabase>().completed(plan.id);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            content: Text(
+          SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+            duration: const Duration(seconds: 2),
+            content: const Text(
             'Plan accomplished. You inspire!!!',
             style: TextStyle(
               fontFamily: "Quicksand",
