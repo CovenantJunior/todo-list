@@ -921,10 +921,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 child: IconButton(
                   onPressed: () { 
                     setState(() {
-                      backingUp = !backingUp;
+                      backingUp = true;
                     });
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    Backup().backup(context);
+                    Backup().backup(context, backup: () {
+                      setState(() {
+                        backingUp = false;
+                      });
+                    });
                   },
                   icon: backingUp == false ? const Icon(Icons.backup_outlined) : const Icon(Icons.backup_rounded),
                   ),
