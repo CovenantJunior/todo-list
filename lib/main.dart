@@ -171,8 +171,8 @@ void main() async {
   await TodoListDatabase.initialize();
   NotificationService().initNotifications();
   initializeService();
-  JsonReader jsonReader = JsonReader();
-  Credential credential = await jsonReader.readCredentials();
+  // JsonReader jsonReader = JsonReader();
+  // Credential credential = await jsonReader.readCredentials();
   runApp(
     MultiProvider(
       providers: [

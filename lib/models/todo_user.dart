@@ -8,11 +8,13 @@ class TodoUser {
   Id id = Isar.autoIncrement;
   String? username;
   String? email;
+  bool? pro;
   DateTime? createdAt;
 
   // Authentication fields
   String? googleUserId;
   String? authToken;
+  bool? signed;
 
   // Backup fields
   DateTime? lastBackup;

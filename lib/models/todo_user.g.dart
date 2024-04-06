@@ -42,8 +42,13 @@ const TodoUserSchema = CollectionSchema(
       name: r'lastBackup',
       type: IsarType.dateTime,
     ),
-    r'username': PropertySchema(
+    r'pro': PropertySchema(
       id: 5,
+      name: r'pro',
+      type: IsarType.bool,
+    ),
+    r'username': PropertySchema(
+      id: 6,
       name: r'username',
       type: IsarType.string,
     )
@@ -106,7 +111,8 @@ void _todoUserSerialize(
   writer.writeString(offsets[2], object.email);
   writer.writeString(offsets[3], object.googleUserId);
   writer.writeDateTime(offsets[4], object.lastBackup);
-  writer.writeString(offsets[5], object.username);
+  writer.writeBool(offsets[5], object.pro);
+  writer.writeString(offsets[6], object.username);
 }
 
 TodoUser _todoUserDeserialize(
@@ -122,7 +128,8 @@ TodoUser _todoUserDeserialize(
   object.googleUserId = reader.readStringOrNull(offsets[3]);
   object.id = id;
   object.lastBackup = reader.readDateTimeOrNull(offsets[4]);
-  object.username = reader.readStringOrNull(offsets[5]);
+  object.pro = reader.readBoolOrNull(offsets[5]);
+  object.username = reader.readStringOrNull(offsets[6]);
   return object;
 }
 
@@ -144,6 +151,8 @@ P _todoUserDeserializeProp<P>(
     case 4:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 5:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 6:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -874,6 +883,32 @@ extension TodoUserQueryFilter
     });
   }
 
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition> proIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'pro',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition> proIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'pro',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition> proEqualTo(
+      bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'pro',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition> usernameIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1088,6 +1123,18 @@ extension TodoUserQuerySortBy on QueryBuilder<TodoUser, TodoUser, QSortBy> {
     });
   }
 
+  QueryBuilder<TodoUser, TodoUser, QAfterSortBy> sortByPro() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'pro', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterSortBy> sortByProDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'pro', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoUser, TodoUser, QAfterSortBy> sortByUsername() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'username', Sort.asc);
@@ -1175,6 +1222,18 @@ extension TodoUserQuerySortThenBy
     });
   }
 
+  QueryBuilder<TodoUser, TodoUser, QAfterSortBy> thenByPro() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'pro', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterSortBy> thenByProDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'pro', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoUser, TodoUser, QAfterSortBy> thenByUsername() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'username', Sort.asc);
@@ -1223,6 +1282,12 @@ extension TodoUserQueryWhereDistinct
     });
   }
 
+  QueryBuilder<TodoUser, TodoUser, QDistinct> distinctByPro() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'pro');
+    });
+  }
+
   QueryBuilder<TodoUser, TodoUser, QDistinct> distinctByUsername(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1266,6 +1331,12 @@ extension TodoUserQueryProperty
   QueryBuilder<TodoUser, DateTime?, QQueryOperations> lastBackupProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'lastBackup');
+    });
+  }
+
+  QueryBuilder<TodoUser, bool?, QQueryOperations> proProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'pro');
     });
   }
 

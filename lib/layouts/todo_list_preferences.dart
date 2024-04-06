@@ -389,8 +389,8 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       )
                     ],
                   ),
-                  const Divider(height: 40),
-                  Row(
+                  backup == true ? const Divider(height: 40) : const SizedBox(),
+                  backup == true ?  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
@@ -417,7 +417,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         ),
                       )
                     ],
-                  ),
+                  )  : const SizedBox(),
                   const Divider(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
