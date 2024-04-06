@@ -40,14 +40,14 @@ class TodoListDatabase extends ChangeNotifier{
       final newPreference = TodoPreferences()
         ..darkMode = false
         ..notification = true // Make notification true by default
-        ..vibration = false
+        ..vibration = true
         ..stt = false
         ..readPlan = false
         ..backup = false
         ..autoSync = false
         ..accessClipboard = false
         ..autoDelete = false
-        ..autoDeleteOnDismiss = false
+        ..autoDeleteOnDismiss = true
         ..bulkTrash = false;
       await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
       preferences = isar.todoPreferences.where().findAllSync();
