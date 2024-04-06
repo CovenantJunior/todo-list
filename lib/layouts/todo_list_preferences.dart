@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
 
 class TodoListPreferences extends StatefulWidget {
@@ -252,6 +253,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         child: Switch(
                           value: notification,
                           onChanged: (value) {
+                            notification == true ? NotificationService().cancelAllnotification() : Void;
                             context.read<TodoListDatabase>().setNotification(id);
                           }
                         ),

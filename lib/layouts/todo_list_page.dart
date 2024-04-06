@@ -456,7 +456,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           payload: "Due by $due"
                         ); */
                         NotificationService().scheduleNotification(
-                          id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
+                          id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.first.id + 1 : 0,
                           title: "Reminder",
                           body: "TODO: $text",
                           interval: intvl,
@@ -924,7 +924,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
                           arrowHeight: 0,
                           arrowWidth: 0,
-                          contentDxOffset: -80,
+                          contentDxOffset: -100,
                           width: 110,
                           height: 100,
                           direction: PopoverDirection.bottom,
@@ -1119,7 +1119,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.home_outlined),
+                      Icon(Icons.home_outlined, size: 25),
                       /* Text('All',
                         maxLines: 2,
                         style: TextStyle(
@@ -1137,7 +1137,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.person_2_outlined),
+                      Icon(Icons.person_2_outlined, size: 25),
                       /* Text('Personal',
                         maxLines: 2,
                         style: TextStyle(
@@ -1155,7 +1155,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.work_outline_rounded),
+                      Icon(Icons.work_outline_rounded, size: 25),
                       /* Text('Work',
                         maxLines: 2,
                         style: TextStyle(
@@ -1173,7 +1173,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.book_outlined),
+                      Icon(Icons.book_outlined, size: 25),
                       /* Text('Study',
                         maxLines: 2,
                         style: TextStyle(
@@ -1191,7 +1191,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.shopping_basket_outlined),
+                      Icon(Icons.shopping_basket_outlined, size: 25),
                       /* Text('Shopping',
                         maxLines: 2,
                         style: TextStyle(
@@ -1209,7 +1209,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     height: 40,
                     child: Column(
                     children: [
-                      Icon(Icons.sports_soccer_rounded),
+                      Icon(Icons.sports_soccer_rounded, size: 25),
                       /* Text('Sport',
                         maxLines: 2,
                         style: TextStyle(
