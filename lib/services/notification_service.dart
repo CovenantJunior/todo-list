@@ -32,6 +32,7 @@ void trashTodoList(int id) async {
 
 @pragma('vm:entry-point')
 Future<void> notificationResponse(NotificationResponse notificationResponse) async {
+  print(notificationResponse.id);
   Map<String, dynamic> payload = jsonDecode(notificationResponse.payload!);
   final plan = payload['plan'];
   STT().speak(plan);
@@ -269,6 +270,8 @@ class NotificationService {
   }
 
   cancelNotification(id) async {
+    print(id);
+    await flutterLocalNotificationsPlugin.cancel(id);
     await flutterLocalNotificationsPlugin.cancel(id);
   }
 

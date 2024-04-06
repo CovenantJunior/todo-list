@@ -237,7 +237,7 @@ class TodoListDatabase extends ChangeNotifier{
 
   // READ
   void fetchTodoList() async {
-    // fetchAllTodoList();
+    fetchAllTodoList();
     fetchUntrashedTodoList();
     fetchTrashedTodoList();
     fetchStarredTodoList();
