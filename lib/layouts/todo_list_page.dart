@@ -916,7 +916,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 : const SizedBox(),
             centerTitle: true,
             actions: [
-              !isSearch ? Tooltip(
+              !isSearch && context.watch<TodoListDatabase>().preferences.first.backup == true ? Tooltip(
                 message: "Backup",
                 child: IconButton(
                   onPressed: () { 

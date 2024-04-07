@@ -24,7 +24,6 @@ class Backup {
             fontFamily: "Quicksand", fontWeight: FontWeight.w500
           )
         ),
-        showCloseIcon: true,
       ),
     );
     final dir = await getApplicationDocumentsDirectory();
