@@ -8,7 +8,7 @@ import 'package:todo_list/layouts/todo_list_page.dart';
 import 'package:todo_list/layouts/todo_list_preferences.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_list/services/credential_service.dart';
+// import 'package:todo_list/services/credential_service.dart';
 import 'package:todo_list/services/notification_service.dart';
 
 Future<void> initializeService() async {
