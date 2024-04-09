@@ -50,7 +50,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
                         duration: const Duration(seconds: 2),
                         content: const Text(
@@ -84,7 +84,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
               duration: const Duration(seconds: 2),
               content: const Text(

@@ -47,8 +47,13 @@ const TodoUserSchema = CollectionSchema(
       name: r'pro',
       type: IsarType.bool,
     ),
-    r'username': PropertySchema(
+    r'signed': PropertySchema(
       id: 6,
+      name: r'signed',
+      type: IsarType.bool,
+    ),
+    r'username': PropertySchema(
+      id: 7,
       name: r'username',
       type: IsarType.string,
     )
@@ -112,7 +117,8 @@ void _todoUserSerialize(
   writer.writeString(offsets[3], object.googleUserId);
   writer.writeDateTime(offsets[4], object.lastBackup);
   writer.writeBool(offsets[5], object.pro);
-  writer.writeString(offsets[6], object.username);
+  writer.writeBool(offsets[6], object.signed);
+  writer.writeString(offsets[7], object.username);
 }
 
 TodoUser _todoUserDeserialize(
@@ -129,7 +135,8 @@ TodoUser _todoUserDeserialize(
   object.id = id;
   object.lastBackup = reader.readDateTimeOrNull(offsets[4]);
   object.pro = reader.readBoolOrNull(offsets[5]);
-  object.username = reader.readStringOrNull(offsets[6]);
+  object.signed = reader.readBoolOrNull(offsets[6]);
+  object.username = reader.readStringOrNull(offsets[7]);
   return object;
 }
 
@@ -153,6 +160,8 @@ P _todoUserDeserializeProp<P>(
     case 5:
       return (reader.readBoolOrNull(offset)) as P;
     case 6:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 7:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -909,6 +918,32 @@ extension TodoUserQueryFilter
     });
   }
 
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition> signedIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'signed',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition> signedIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'signed',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition> signedEqualTo(
+      bool? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'signed',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition> usernameIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1135,6 +1170,18 @@ extension TodoUserQuerySortBy on QueryBuilder<TodoUser, TodoUser, QSortBy> {
     });
   }
 
+  QueryBuilder<TodoUser, TodoUser, QAfterSortBy> sortBySigned() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'signed', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterSortBy> sortBySignedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'signed', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoUser, TodoUser, QAfterSortBy> sortByUsername() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'username', Sort.asc);
@@ -1234,6 +1281,18 @@ extension TodoUserQuerySortThenBy
     });
   }
 
+  QueryBuilder<TodoUser, TodoUser, QAfterSortBy> thenBySigned() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'signed', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterSortBy> thenBySignedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'signed', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoUser, TodoUser, QAfterSortBy> thenByUsername() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'username', Sort.asc);
@@ -1288,6 +1347,12 @@ extension TodoUserQueryWhereDistinct
     });
   }
 
+  QueryBuilder<TodoUser, TodoUser, QDistinct> distinctBySigned() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'signed');
+    });
+  }
+
   QueryBuilder<TodoUser, TodoUser, QDistinct> distinctByUsername(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1337,6 +1402,12 @@ extension TodoUserQueryProperty
   QueryBuilder<TodoUser, bool?, QQueryOperations> proProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'pro');
+    });
+  }
+
+  QueryBuilder<TodoUser, bool?, QQueryOperations> signedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'signed');
     });
   }
 

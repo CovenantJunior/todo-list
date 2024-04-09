@@ -15,7 +15,7 @@ class Backup {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10)
+          borderRadius: BorderRadius.circular(7)
         ),
         duration: const Duration(seconds: 1),
         behavior: SnackBarBehavior.fixed,
@@ -36,7 +36,7 @@ class Backup {
     ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
         duration: const Duration(seconds: 1),
         content: const Text('Backup completed',
           style: TextStyle(

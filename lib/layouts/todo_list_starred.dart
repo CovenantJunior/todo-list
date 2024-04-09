@@ -56,7 +56,7 @@ class _TodoStarredState extends State<TodoStarred> {
 
   final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
   String selectedCategory = 'Personal';
 
   Future<void> selectDate(BuildContext context, due) async {
@@ -222,7 +222,7 @@ class _TodoStarredState extends State<TodoStarred> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
                     duration: const Duration(seconds: 2),
                     content: const Text(
@@ -239,7 +239,7 @@ class _TodoStarredState extends State<TodoStarred> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
                     duration: const Duration(seconds: 2),
                     content: const Text(
@@ -572,7 +572,7 @@ class _TodoStarredState extends State<TodoStarred> {
                     ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
                       duration: const Duration(seconds: 2),
                       content: const Text(
@@ -601,7 +601,7 @@ class _TodoStarredState extends State<TodoStarred> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
                           duration: const Duration(seconds: 2),
                           content: const Text(
@@ -676,7 +676,7 @@ class _TodoStarredState extends State<TodoStarred> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
             duration: const Duration(seconds: 2),
             content: const Text(
@@ -691,7 +691,7 @@ class _TodoStarredState extends State<TodoStarred> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
             duration: const Duration(seconds: 2),
             content: const Text(

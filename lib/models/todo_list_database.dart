@@ -42,7 +42,6 @@ class TodoListDatabase extends ChangeNotifier{
         ..notification = true // Make notification true by default
         ..vibration = true
         ..stt = false
-        ..readPlan = false
         ..backup = false
         ..autoSync = false
         ..accessClipboard = false
@@ -132,17 +131,6 @@ class TodoListDatabase extends ChangeNotifier{
       existingPreference.stt == false ?  existingPreference.stt = true : existingPreference.stt = false;
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
       preferences.first.stt = existingPreference.stt;
-    }
-    
-    fetchPreferences();
-  }
-
-  void setReadPlan (id) async {
-    var existingPreference = await isar.todoPreferences.get(id);
-    if (existingPreference != null) {
-      existingPreference.readPlan == false ?  existingPreference.readPlan = true : existingPreference.readPlan = false;
-      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
-      preferences.first.readPlan = existingPreference.readPlan;
     }
     
     fetchPreferences();

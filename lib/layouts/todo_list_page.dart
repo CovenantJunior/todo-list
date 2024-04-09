@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:timezone/timezone.dart' as tz;
 import 'package:todo_list/component/todo_actions.dart';
 import 'package:todo_list/component/todo_list.dart';
 import 'package:todo_list/component/todo_list_drawer.dart';
@@ -458,29 +459,17 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           body: text,
                           payload: "Due by $due"
                         ); */
-                        if (intvl == 'Once') {
-                          NotificationService().scheduleNotification(
-                            id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.first.id + 1 : 1,
-                            title: "Reminder",
-                            body: "TODO: $text",
-                            interval: intvl,
-                            payload: jsonEncode({
-                              'scheduledDate': DateTime.now().toIso8601String(),
-                              'interval': intvl,
-                            }),
-                          );
-                        } else {
-                          NotificationService().scheduleNotification(
-                            id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.first.id + 1 : 1,
-                            title: "Reminder",
-                            body: "TODO: $text",
-                            interval: intvl,
-                            payload: jsonEncode({
-                              'scheduledDate': DateTime.now().toIso8601String(),
-                              'interval': intvl,
-                            }),
-                          );
-                        }
+                        NotificationService().scheduleNotification(
+                          id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.first.id + 1 : 1,
+                          title: "Reminder",
+                          body: "TODO: $text",
+                          interval: intvl,
+                          scheduledDate: convertToTZDateTime(due),
+                          payload: jsonEncode({
+                            'scheduledDate': DateTime.now().toIso8601String(),
+                            'interval': intvl,
+                          }),
+                        );
                       }
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -885,6 +874,18 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         requestedClipboard = true;
       });
     }
+  }
+
+  tz.TZDateTime convertToTZDateTime(String dateString) {
+    // Parse the string into a DateTime object
+    DateTime parsedDateTime = DateTime.parse(dateString);
+    
+    print(tz.local);
+
+    // Convert the DateTime object to a TZDateTime object
+    tz.TZDateTime tzDateTime = tz.TZDateTime.from(parsedDateTime, tz.local);
+
+    return tzDateTime;
   }
 
   @override

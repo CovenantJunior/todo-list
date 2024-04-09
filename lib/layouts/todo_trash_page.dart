@@ -323,7 +323,7 @@ class _TodoTrashState extends State<TodoTrash> {
                     ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
                       duration: const Duration(seconds: 2),
                       content: const Text(
@@ -352,7 +352,7 @@ class _TodoTrashState extends State<TodoTrash> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10)),
+                                        borderRadius: BorderRadius.circular(7)),
                           duration: const Duration(seconds: 2),
                           content: const Text(
                           'Restoring plan',
@@ -378,7 +378,7 @@ class _TodoTrashState extends State<TodoTrash> {
                     ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                       ),
                       duration: const Duration(seconds: 2),
                       content: const Text(
@@ -422,7 +422,7 @@ class _TodoTrashState extends State<TodoTrash> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)
+                                      borderRadius: BorderRadius.circular(7)
                                     ),
                                     duration: const Duration(seconds: 2),
                                     content: const Text(

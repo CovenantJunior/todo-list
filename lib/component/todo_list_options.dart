@@ -45,7 +45,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
     final dateController = TextEditingController();
     final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-    DateTime selectedDate = DateTime.now();
+    DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
     String? selectedCategory = widget.Plan.category;
 
     Future<void> selectDate(BuildContext context, due) async {
@@ -252,7 +252,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
+                            borderRadius: BorderRadius.circular(7)
                         ),
                         duration: const Duration(seconds: 1),
                         content: const Text(
@@ -286,7 +286,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
                         duration: const Duration(seconds: 1),
                         content: const Text(
@@ -304,7 +304,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
                       duration: const Duration(seconds: 1),
                       content: const Text(
@@ -380,7 +380,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
             duration: const Duration(seconds: 1),
             content: const Text(
@@ -399,7 +399,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
             duration: const Duration(seconds: 1),
             content: const Text(
@@ -426,7 +426,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
             duration: const Duration(seconds: 1),
             content: const Text(

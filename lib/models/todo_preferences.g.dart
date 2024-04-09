@@ -57,18 +57,13 @@ const TodoPreferencesSchema = CollectionSchema(
       name: r'notification',
       type: IsarType.bool,
     ),
-    r'readPlan': PropertySchema(
-      id: 8,
-      name: r'readPlan',
-      type: IsarType.bool,
-    ),
     r'stt': PropertySchema(
-      id: 9,
+      id: 8,
       name: r'stt',
       type: IsarType.bool,
     ),
     r'vibration': PropertySchema(
-      id: 10,
+      id: 9,
       name: r'vibration',
       type: IsarType.bool,
     )
@@ -110,9 +105,8 @@ void _todoPreferencesSerialize(
   writer.writeBool(offsets[5], object.bulkTrash);
   writer.writeBool(offsets[6], object.darkMode);
   writer.writeBool(offsets[7], object.notification);
-  writer.writeBool(offsets[8], object.readPlan);
-  writer.writeBool(offsets[9], object.stt);
-  writer.writeBool(offsets[10], object.vibration);
+  writer.writeBool(offsets[8], object.stt);
+  writer.writeBool(offsets[9], object.vibration);
 }
 
 TodoPreferences _todoPreferencesDeserialize(
@@ -131,9 +125,8 @@ TodoPreferences _todoPreferencesDeserialize(
   object.darkMode = reader.readBoolOrNull(offsets[6]);
   object.id = id;
   object.notification = reader.readBoolOrNull(offsets[7]);
-  object.readPlan = reader.readBoolOrNull(offsets[8]);
-  object.stt = reader.readBoolOrNull(offsets[9]);
-  object.vibration = reader.readBoolOrNull(offsets[10]);
+  object.stt = reader.readBoolOrNull(offsets[8]);
+  object.vibration = reader.readBoolOrNull(offsets[9]);
   return object;
 }
 
@@ -163,8 +156,6 @@ P _todoPreferencesDeserializeProp<P>(
     case 8:
       return (reader.readBoolOrNull(offset)) as P;
     case 9:
-      return (reader.readBoolOrNull(offset)) as P;
-    case 10:
       return (reader.readBoolOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -547,34 +538,6 @@ extension TodoPreferencesQueryFilter
   }
 
   QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
-      readPlanIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'readPlan',
-      ));
-    });
-  }
-
-  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
-      readPlanIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'readPlan',
-      ));
-    });
-  }
-
-  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
-      readPlanEqualTo(bool? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'readPlan',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<TodoPreferences, TodoPreferences, QAfterFilterCondition>
       sttIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -750,20 +713,6 @@ extension TodoPreferencesQuerySortBy
     });
   }
 
-  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
-      sortByReadPlan() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'readPlan', Sort.asc);
-    });
-  }
-
-  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
-      sortByReadPlanDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'readPlan', Sort.desc);
-    });
-  }
-
   QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy> sortByStt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'stt', Sort.asc);
@@ -916,20 +865,6 @@ extension TodoPreferencesQuerySortThenBy
     });
   }
 
-  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
-      thenByReadPlan() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'readPlan', Sort.asc);
-    });
-  }
-
-  QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy>
-      thenByReadPlanDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'readPlan', Sort.desc);
-    });
-  }
-
   QueryBuilder<TodoPreferences, TodoPreferences, QAfterSortBy> thenByStt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'stt', Sort.asc);
@@ -1014,13 +949,6 @@ extension TodoPreferencesQueryWhereDistinct
     });
   }
 
-  QueryBuilder<TodoPreferences, TodoPreferences, QDistinct>
-      distinctByReadPlan() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'readPlan');
-    });
-  }
-
   QueryBuilder<TodoPreferences, TodoPreferences, QDistinct> distinctByStt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'stt');
@@ -1091,12 +1019,6 @@ extension TodoPreferencesQueryProperty
       notificationProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'notification');
-    });
-  }
-
-  QueryBuilder<TodoPreferences, bool?, QQueryOperations> readPlanProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'readPlan');
     });
   }
 

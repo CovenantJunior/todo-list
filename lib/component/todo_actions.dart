@@ -104,7 +104,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)
+                              borderRadius: BorderRadius.circular(7)
                             ),
                             duration: const Duration(seconds: 2),
                             content: const Text(
@@ -128,7 +128,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)
+                              borderRadius: BorderRadius.circular(7)
                             ),
                             duration: const Duration(seconds: 2),
                             content: const Text('Starring plan',
@@ -160,7 +160,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
+                                    borderRadius: BorderRadius.circular(7)),
                             duration: const Duration(seconds: 2),
                             content: const Text(
                                 'Please select a plan to deal with',
@@ -220,7 +220,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                             shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10)),
+                                        borderRadius: BorderRadius.circular(7)),
                             duration: const Duration(seconds: 2),
                             content: const Text(
                                 'Please select a plan to deal with',
@@ -244,7 +244,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)
+                              borderRadius: BorderRadius.circular(7)
                             ),
                               duration: const Duration(seconds: 2),
                               content: const Text('Marking plan as completed',
@@ -269,7 +269,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10)),
+                                        borderRadius: BorderRadius.circular(7)),
                             duration: const Duration(seconds: 2),
                             content: const Text(
                                 'Please select a plan to deal with',
@@ -321,7 +321,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10)
+                                              borderRadius: BorderRadius.circular(7)
                                             ),
                                               duration:
                                                   const Duration(seconds: 2),

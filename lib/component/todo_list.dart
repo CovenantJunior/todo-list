@@ -81,7 +81,7 @@ class _TodoState extends State<Todo> {
   String hint = 'Task description';
   TextEditingController dateController = TextEditingController();
   final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
   String selectedCategory = 'Personal';
   bool isSearch = false;
   bool isOfLength = false;
@@ -292,7 +292,7 @@ class _TodoState extends State<Todo> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)
+                                borderRadius: BorderRadius.circular(7)
                             ),
                             duration: const Duration(seconds: 1),
                             content: const Text(
@@ -326,7 +326,7 @@ class _TodoState extends State<Todo> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)
+                                borderRadius: BorderRadius.circular(7)
                             ),
                             duration: const Duration(seconds: 1),
                             content: const Text(
@@ -346,7 +346,7 @@ class _TodoState extends State<Todo> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)
+                              borderRadius: BorderRadius.circular(7)
                           ),
                           duration: const Duration(seconds: 1),
                           content: const Text(
@@ -417,7 +417,7 @@ class _TodoState extends State<Todo> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
             duration: const Duration(seconds: 4),
             content: const Text('Trashed',
                 style: TextStyle(
@@ -815,7 +815,7 @@ class _TodoState extends State<Todo> {
         context.read<TodoListDatabase>().replan(plan.id);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
             duration: const Duration(seconds: 1),
             content: const Text('Plan reactivated!',
@@ -842,7 +842,7 @@ class _TodoState extends State<Todo> {
         });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                        borderRadius: BorderRadius.circular(7)
                     ),
             duration: const Duration(seconds: 1),
             content: const Text('Plan accomplished. You inspire!',
