@@ -262,6 +262,21 @@ class NotificationService {
       );
   }
 
+  singleNotification(
+    {
+      int? id,
+      String? title,
+      String? body,
+      String? interval,
+      scheduledDate,
+      String? payload
+    }
+  ) {
+      return flutterLocalNotificationsPlugin.zonedSchedule(
+        id!, title, body, scheduledDate, notificationDetailsSchedule(), payload: payload, androidScheduleMode: AndroidScheduleMode.alarmClock, uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime
+      );
+  }
+
   showScheduledNotification({int id = 0, String? title, String? body, String? payload}) {
     return flutterLocalNotificationsPlugin.show(
       id, title, body, notificationDetailsSchedule(), payload: payload
@@ -271,7 +286,7 @@ class NotificationService {
   cancelNotification(id) async {
     await flutterLocalNotificationsPlugin.cancel(id);
   }
-
+  
   cancelAllnotification() async {
     await flutterLocalNotificationsPlugin.cancelAll();
   }

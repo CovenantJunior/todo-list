@@ -20,7 +20,6 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
   late bool notification;
   late bool vibration;
   late bool stt;
-  late bool readPlan;
   late bool backup;
   late bool autoSync;
   late bool accessClipboard;
@@ -162,7 +161,6 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
         notification = preference.notification;
         vibration = preference.vibration;
         stt = preference.stt;
-        readPlan = preference.readPlan;
         backup = preference.backup;
         autoSync = preference.autoSync;
         accessClipboard = preference.accessClipboard;
@@ -326,35 +324,6 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                           value: stt,
                           onChanged: (value) {
                             context.read<TodoListDatabase>().setSTT(id);
-                          }
-                        ),
-                      )
-                    ],
-                  ),
-                  const Divider(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          readPlan == true ? const Icon(Icons.volume_up_outlined) : const Icon(Icons.volume_off_outlined),
-                          const SizedBox(width: 20),
-                          const Text(
-                            'Read out Plan Notifications',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              fontFamily: "Quicksand"
-                            ),
-                          ),
-                        ],
-                      ),
-                      Transform.scale(
-                        scale: .7,
-                        child: Switch(
-                          value: readPlan,
-                          onChanged: (value) {
-                            context.read<TodoListDatabase>().setReadPlan(id);
                           }
                         ),
                       )

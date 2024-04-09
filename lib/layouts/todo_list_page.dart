@@ -77,7 +77,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   DateTime selectedDate = DateTime.now();
   String selectedCategory = 'Personal';
-  String interval = 'Every Minute';
+  String interval = 'Once';
   bool isSearch = false;
   bool isOfLength = false;
   List searchResults = [];
@@ -386,7 +386,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           Expanded(
                             child: InputDecorator(
                               decoration: const InputDecoration(
-                                  labelText: 'Interval',
+                                  labelText: 'Reminder Interval',
                                   labelStyle: TextStyle(
                                       fontFamily: "Quicksand",
                                       fontWeight: FontWeight.w500),
@@ -397,6 +397,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                   interval = value!;
                                 },
                                 items: [
+                                  'Once',
                                   'Every Minute',
                                   'Hourly',
                                   'Daily',
@@ -457,16 +458,29 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           body: text,
                           payload: "Due by $due"
                         ); */
-                        NotificationService().scheduleNotification(
-                          id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.first.id + 1 : 1,
-                          title: "Reminder",
-                          body: "TODO: $text",
-                          interval: intvl,
-                          payload: jsonEncode({
-                            'scheduledDate': DateTime.now().toIso8601String(),
-                            'interval': intvl,
-                          }),
-                        );
+                        if (intvl == 'Once') {
+                          NotificationService().scheduleNotification(
+                            id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.first.id + 1 : 1,
+                            title: "Reminder",
+                            body: "TODO: $text",
+                            interval: intvl,
+                            payload: jsonEncode({
+                              'scheduledDate': DateTime.now().toIso8601String(),
+                              'interval': intvl,
+                            }),
+                          );
+                        } else {
+                          NotificationService().scheduleNotification(
+                            id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.first.id + 1 : 1,
+                            title: "Reminder",
+                            body: "TODO: $text",
+                            interval: intvl,
+                            payload: jsonEncode({
+                              'scheduledDate': DateTime.now().toIso8601String(),
+                              'interval': intvl,
+                            }),
+                          );
+                        }
                       }
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -989,7 +1003,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       "Todo List",
                       style: TextStyle(
                         fontFamily: "Quicksand",
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w800,
                         fontSize: 20
                       ),
                     ),
