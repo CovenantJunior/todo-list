@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+// import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:todo_list/component/todo_actions.dart';
 import 'package:todo_list/component/todo_list.dart';
@@ -75,8 +79,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   String hint = 'Task description';
   TextEditingController dateController = TextEditingController();
   late AnimationController _animationController;
-  final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
-  DateTime selectedDate = DateTime.now();
+  final date = DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(days: 1)));
+  DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
   String selectedCategory = 'Personal';
   String interval = 'Once';
   bool isSearch = false;
@@ -134,6 +138,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       _animationController.forward();
     }
   }
+  
   Future<void> selectDate(BuildContext context, due) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -161,7 +166,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       setState(() {
         dateController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
-      // ignore: use_build_context_synchronously
       createTodoList('', context);
     }
   }
@@ -431,7 +435,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     Navigator.pop(context);
                     textController.clear();
                     setState(() {
-                      selectedDate = DateTime.now();
+                      selectedDate = DateTime.now().add(const Duration(days: 1));
                       requestedClipboard = true;
                     });
                   },
@@ -439,7 +443,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 ),
                 IconButton(
                   icon: const Icon(Icons.add_task_rounded),
-                  onPressed: () {
+                  onPressed: () async {
                     AudioService().play('pings/start.mp3');
                     String text = textController.text.trim();
                     String due = dateController.text;
@@ -448,11 +452,12 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     if (text.isNotEmpty) {
                       context.read<TodoListDatabase>().addTodoList(text, category, due, intvl);
                       setState(() {
-                        selectedDate = DateTime.now();
+                        selectedDate = DateTime.now().add(const Duration(days: 1));
                       });
                       Navigator.pop(context);
                       textController.clear();
                       if (context.read<TodoListDatabase>().preferences.first.notification == true) {
+                        var scheduledDate = await convertToTZDateTime(due);
                         /* NotificationService().showNotification(
                           id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
                           title: "New Plan Recorded",
@@ -464,7 +469,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           title: "Reminder",
                           body: "TODO: $text",
                           interval: intvl,
-                          scheduledDate: convertToTZDateTime(due),
+                          scheduledDate: scheduledDate,
                           payload: jsonEncode({
                             'scheduledDate': DateTime.now().toIso8601String(),
                             'interval': intvl,
@@ -855,7 +860,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 
   Future<void> fetchClipboard(context, nonTrashedTodolists) async {
     if (clipboard != '') {
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(days: 1),
@@ -876,16 +880,22 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     }
   }
 
-  tz.TZDateTime convertToTZDateTime(String dateString) {
-    // Parse the string into a DateTime object
-    DateTime parsedDateTime = DateTime.parse(dateString);
-    
-    print(tz.local);
+  Future<tz.TZDateTime> convertToTZDateTime(String dateString) async {
 
-    // Convert the DateTime object to a TZDateTime object
-    tz.TZDateTime tzDateTime = tz.TZDateTime.from(parsedDateTime, tz.local);
+    DateTime scheduledDateTime = DateTime.parse(dateString);
 
-    return tzDateTime;
+    String? timezoneName = Platform.environment['TZ'];
+    tz.Location location;
+    if (timezoneName != null) {
+      location = tz.getLocation(timezoneName);
+    } else {
+      // Fallback logic (e.g., use UTC or prompt user)
+      print("Default timezone not found. Using UTC as fallback.");
+      location = tz.getLocation('UTC');
+    }
+
+    tz.TZDateTime scheduledDate = tz.TZDateTime.from(scheduledDateTime, location);
+    return scheduledDate;
   }
 
   @override
