@@ -65,6 +65,7 @@ dependencies:
   http: ^1.2.1
   flutter_dotenv: ^5.1.0
   timezone: ^0.9.2
+  flutter_animate: ^4.5.0
 
 dev_dependencies:
   flutter_test:

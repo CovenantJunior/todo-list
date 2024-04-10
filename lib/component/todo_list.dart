@@ -1039,7 +1039,8 @@ class _TodoState extends State<Todo> {
                               );
                             }),
                           ) : const SizedBox();
-                        }),
+                        }
+                      ),
                       Align(
                         alignment: Alignment.topCenter,
                         child: ConfettiWidget(
