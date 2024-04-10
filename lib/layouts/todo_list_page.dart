@@ -183,7 +183,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           NotificationService().cancelNotification(list.id);
         }
         context.read<TodoListDatabase>().trashAllTodoLists(trash);
-        Future.delayed(const Duration(seconds: 3), () {
+        Future.delayed(const Duration(seconds: 4), () {
           cardToRemove.clear();
         });
         setState(() {
@@ -193,7 +193,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-          duration: const Duration(seconds: 1),
+          duration: const Duration(seconds: 4),
           content: const Text('Moving all to Trash',
               style: TextStyle(
                   fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
@@ -890,7 +890,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       location = tz.getLocation(timezoneName);
     } else {
       // Fallback logic (e.g., use UTC or prompt user)
-      print("Default timezone not found. Using UTC as fallback.");
       location = tz.getLocation('UTC');
     }
 

@@ -406,7 +406,7 @@ class _TodoState extends State<Todo> {
           NotificationService().cancelNotification(id);
           context.read<TodoListDatabase>().completed(id);
           context.read<TodoListDatabase>().trashTodoList(id);
-          Future.delayed(const Duration(seconds: 1), () {
+          Future.delayed(const Duration(seconds: 4), () {
             cardToRemove.clear();
           });
           setState(() {
