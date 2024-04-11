@@ -111,134 +111,137 @@ class _TodoTrashState extends State<TodoTrash> {
             // fontSize: 25
           ),
         ),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Title",
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      // fontSize: 15,
-                      fontWeight: FontWeight.w700
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Title",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        // fontSize: 15,
+                        fontWeight: FontWeight.w700
+                      ),
                     ),
-                  ),
-                  Text(plan.plan, style: const TextStyle(fontFamily: "Quicksand"))
-                ],
-              ),
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Category",
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      // fontSize: 15,
-                      fontWeight: FontWeight.w700
+                    Text(plan.plan, style: const TextStyle(fontFamily: "Quicksand"))
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Category",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        // fontSize: 15,
+                        fontWeight: FontWeight.w700
+                      ),
                     ),
-                  ),
-                  Text(plan.category, style: const TextStyle(fontFamily: "Quicksand"))
-                ],
-              ),
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Status",
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      // fontSize: 15,
-                      fontWeight: FontWeight.w700
+                    Text(plan.category, style: const TextStyle(fontFamily: "Quicksand"))
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Status",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        // fontSize: 15,
+                        fontWeight: FontWeight.w700
+                      ),
                     ),
-                  ),
-                  plan.completed == true ? const Text("Proudly executed", style: TextStyle(fontFamily: "Quicksand")) : const Text("Uncompleted", style: TextStyle(fontFamily: "Quicksand"))
-                ],
-              ),
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Starred",
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      // fontSize: 15,
-                      fontWeight: FontWeight.w700
+                    plan.completed == true ? const Text("Proudly executed", style: TextStyle(fontFamily: "Quicksand")) : const Text("Uncompleted", style: TextStyle(fontFamily: "Quicksand"))
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Starred",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        // fontSize: 15,
+                        fontWeight: FontWeight.w700
+                      ),
                     ),
-                  ),
-                  plan.starred == true ? const Text("Starred", style: TextStyle(fontFamily: "Quicksand")) : const Text("Not starred", style: TextStyle(fontFamily: "Quicksand"))
-                ],
-              ),
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Date Created",
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      // fontSize: 15,
-                      fontWeight: FontWeight.w700
+                    plan.starred == true ? const Text("Starred", style: TextStyle(fontFamily: "Quicksand")) : const Text("Not starred", style: TextStyle(fontFamily: "Quicksand"))
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Date Created",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        // fontSize: 15,
+                        fontWeight: FontWeight.w700
+                      ),
                     ),
-                  ),
-                  Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created), style: const TextStyle(fontFamily: "Quicksand"))
-                ],
-              ),
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Due Date",
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      // fontSize: 15,
-                      fontWeight: FontWeight.w700
+                    Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.created), style: const TextStyle(fontFamily: "Quicksand"))
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Due Date",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        // fontSize: 15,
+                        fontWeight: FontWeight.w700
+                      ),
                     ),
-                  ),
-                  plan.due != null ? Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.due), style: const TextStyle(fontFamily: "Quicksand")) : const Text('Unset', style: TextStyle(fontFamily: "Quicksand"))
-                ],
-              ),
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Date Modified",
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      // fontSize: 15,
-                      fontWeight: FontWeight.w700
+                    plan.due != null ? Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.due), style: const TextStyle(fontFamily: "Quicksand")) : const Text('Unset', style: TextStyle(fontFamily: "Quicksand"))
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Date Modified",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        // fontSize: 15,
+                        fontWeight: FontWeight.w700
+                      ),
                     ),
-                  ),
-                  plan.modified != null ?
-                    Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.modified), style: const TextStyle(fontFamily: "Quicksand"))
-                  : const Text('Not yet modified', style: TextStyle(fontFamily: "Quicksand")),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Date Achieved",
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      // fontSize: 15,
-                      fontWeight: FontWeight.w700
+                    plan.modified != null ?
+                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.modified), style: const TextStyle(fontFamily: "Quicksand"))
+                    : const Text('Not yet modified', style: TextStyle(fontFamily: "Quicksand")),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Date Achieved",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        // fontSize: 15,
+                        fontWeight: FontWeight.w700
+                      ),
                     ),
-                  ),
-                  plan.achieved != null ?
-                    Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.achieved), style: const TextStyle(fontFamily: "Quicksand"))
-                  : const Text('Not yet achieved', style: TextStyle(fontFamily: "Quicksand")),
-                ],
-              )
-            ],
+                    plan.achieved != null ?
+                      Text(DateFormat('EEE, MMM d yyyy HH:mm:ss').format(plan.achieved), style: const TextStyle(fontFamily: "Quicksand"))
+                    : const Text('Not yet achieved', style: TextStyle(fontFamily: "Quicksand")),
+                  ],
+                )
+              ],
+            ),
           ),
         )
       )
