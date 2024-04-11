@@ -608,6 +608,13 @@ class _TodoTrashState extends State<TodoTrash> {
                     itemCount: trashedTodoList.length,
                     itemBuilder: (context, index) {
                     final plan = trashedTodoList[index];
+                    // Get the current time
+                    DateTime currentTime = DateTime.now();
+                    // Calculate the difference between current time and database time
+                    Duration difference = currentTime.difference(plan.trashedDate);
+                    if (difference.inDays >= 30) {
+                      context.read<TodoListDatabase>().deleteTodoList(plan.id);
+                    }
                     return Builder(
                       builder: (context) {
                         return plan.trashed == true ? GestureDetector(
@@ -668,7 +675,7 @@ class _TodoTrashState extends State<TodoTrash> {
                                         ),
                                         const SizedBox(width: 5),
                                         Text(
-                                          plan.trashedDate != null ? DateFormat('EEE, MMM d yyyy').format(plan.due) : "Something went wrong",
+                                          plan.trashedDate != null ? DateFormat('EEE, MMM d yyyy').format(plan.trashedDate) : "Something went wrong",
                                           style: const TextStyle(
                                             fontFamily: "Quicksand",
                                             fontWeight: FontWeight.w500,
