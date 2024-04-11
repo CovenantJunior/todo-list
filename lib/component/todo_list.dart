@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:ffi';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -1037,7 +1038,7 @@ class _TodoState extends State<Todo> {
                                   ),
                                 ),
                               );
-                            }),
+                            }) // runs after the above w/new duration,
                           ) : const SizedBox();
                         }
                       ),

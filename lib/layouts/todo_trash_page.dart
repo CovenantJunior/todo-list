@@ -636,7 +636,7 @@ class _TodoTrashState extends State<TodoTrash> {
                                       children: [
                                         Expanded(
                                           child: SizedBox(
-                                            height: 40,
+                                            height: 20,
                                             child: Text(
                                               plan.plan,
                                               maxLines: 1,
