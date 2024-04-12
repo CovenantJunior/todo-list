@@ -448,7 +448,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                     setState(() {
                       animate = true;
                     });
-                    Future.delayed(const Duration(seconds: 1), () {
+                    Future.delayed(const Duration(milliseconds: 1), () {
                       setState(() {
                         animate = false;
                       });
