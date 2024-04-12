@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,8 +11,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-// import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 import 'package:todo_list/component/todo_actions.dart';
 import 'package:todo_list/component/todo_list.dart';
 import 'package:todo_list/component/todo_list_drawer.dart';
@@ -195,6 +192,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
           duration: const Duration(seconds: 4),
           content: const Text('Moving all to Trash',
               style: TextStyle(
@@ -466,7 +464,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       Navigator.pop(context);
                       textController.clear();
                       if (context.read<TodoListDatabase>().preferences.first.notification == true) {
-                        var scheduledDate = await convertToTZDateTime(due);
                         /* NotificationService().showNotification(
                           id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
                           title: "New Plan Recorded",
@@ -478,7 +475,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           title: "Reminder",
                           body: "TODO: $text",
                           interval: intvl,
-                          scheduledDate: scheduledDate,
                           payload: jsonEncode({
                             'scheduledDate': DateTime.now().toIso8601String(),
                             'interval': intvl,
@@ -887,23 +883,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         requestedClipboard = true;
       });
     }
-  }
-
-  Future<tz.TZDateTime> convertToTZDateTime(String dateString) async {
-
-    DateTime scheduledDateTime = DateTime.parse(dateString);
-
-    String? timezoneName = Platform.environment['TZ'];
-    tz.Location location;
-    if (timezoneName != null) {
-      location = tz.getLocation(timezoneName);
-    } else {
-      // Fallback logic (e.g., use UTC or prompt user)
-      location = tz.getLocation('UTC');
-    }
-
-    tz.TZDateTime scheduledDate = tz.TZDateTime.from(scheduledDateTime, location);
-    return scheduledDate;
   }
 
   @override

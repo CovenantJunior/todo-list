@@ -280,6 +280,7 @@ class _TodoStarredState extends State<TodoStarred> {
       ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
           duration: const Duration(seconds: 4),
           content: const Text('Trashed',
               style: TextStyle(
