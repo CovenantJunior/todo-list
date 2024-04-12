@@ -277,6 +277,7 @@ class _TodoStarredState extends State<TodoStarred> {
           });
         }
       });
+      ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 4),

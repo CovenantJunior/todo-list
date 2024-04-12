@@ -254,26 +254,11 @@ class NotificationService {
           notificationInterval = RepeatInterval.weekly;
           break;
         default:
-          return flutterLocalNotificationsPlugin.zonedSchedule(
-            id!, "Task Due Reminder", body, scheduledDate, notificationDetailsSchedule(), payload: payload, androidScheduleMode: AndroidScheduleMode.alarmClock, uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime
-          );
+          notificationInterval = RepeatInterval.everyMinute;
+        break;
       }
       return flutterLocalNotificationsPlugin.periodicallyShow(
         id!, title, body, notificationInterval, notificationDetailsSchedule(), payload: payload, androidScheduleMode: AndroidScheduleMode.alarmClock
-      );
-  }
-
-  singleNotification(
-    {
-      int? id,
-      String? title,
-      String? body,
-      scheduledDate,
-      String? payload
-    }
-  ) {
-      return flutterLocalNotificationsPlugin.zonedSchedule(
-        id!, title, body, scheduledDate, notificationDetailsSchedule(), payload: payload, androidScheduleMode: AndroidScheduleMode.alarmClock, uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime
       );
   }
 
@@ -286,7 +271,7 @@ class NotificationService {
   cancelNotification(id) async {
     await flutterLocalNotificationsPlugin.cancel(id);
   }
-  
+
   cancelAllnotification() async {
     await flutterLocalNotificationsPlugin.cancelAll();
   }

@@ -20,22 +20,26 @@ class Todo extends StatefulWidget {
   final List list;
   final String category;
   final List cardToRemove;
+  final bool animate;
 
   const Todo({
     super.key,
     required this.list,
     required this.category,
-    required this.cardToRemove
+    required this.cardToRemove,
+    required this.animate
   });
 
   @override
   State<Todo> createState() => _TodoState();
 }
 
-class _TodoState extends State<Todo> {
+class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
 
   late final ConfettiController _completedController = ConfettiController();
+  late AnimationController _controller;
 
+  int plansCount = 0;
   String interval = 'Every Minute';
   Future<bool?> hasVibrate = Vibration.hasVibrator();
   bool requestedClipboard = false;
@@ -44,6 +48,10 @@ class _TodoState extends State<Todo> {
   void initState() {
     super.initState();
     readTodoLists();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
   }
 
   @override
@@ -415,6 +423,7 @@ class _TodoState extends State<Todo> {
           });
         }
       });
+      ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           shape:
@@ -871,10 +880,14 @@ class _TodoState extends State<Todo> {
                   padding: const EdgeInsets.all(10.0),
                   child: Stack(
                     children: [
-                      ListView.builder(
+                       ListView.builder(
                         itemCount: nonTrashedTodolists.length,
                         itemBuilder: (context, index) {
                           final plan = nonTrashedTodolists[index];
+                          if (widget.animate) {
+                            _controller.repeat();
+                            _controller.forward();
+                          }
                           return plan.category == widget.category || widget.category == 'All' ? GestureDetector(
                             onDoubleTap: () {
                               mark(plan);
@@ -1171,16 +1184,21 @@ class _TodoState extends State<Todo> {
                                         ],
                                       ),
                                     ),
-                                  ).animate()
-                                    .fadeIn() // uses `Animate.defaultDuration`
-                                    .scale() // inherits duration from fadeIn
-                                    .moveX(delay: 1000.ms, duration: 1000.ms),
+                                  ).animate(
+                                    controller: _controller
+                                  )
+                                    .fadeIn()
+                                    .scale()
+                                    .moveX(delay: 300.ms, duration: 600.ms),
                                 ),
                               );
                             }) // runs after the above w/new duration,
                           ) : const SizedBox();
-                        }
-                      ),
+                        } 
+                      ).animate()
+                        .fadeIn()
+                        .scale()
+                        .moveX(delay: 300.ms, duration: 600.ms),
                       Align(
                         alignment: Alignment.topCenter,
                         child: ConfettiWidget(

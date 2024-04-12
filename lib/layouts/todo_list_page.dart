@@ -62,6 +62,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   bool requestedClipboard = false;
   bool preState = false;
   int count = 0;
+  bool animate = false;
 
   @override
   void initState() {
@@ -82,7 +83,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   final date = DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(days: 1)));
   DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
   String selectedCategory = 'Personal';
-  String interval = 'Once';
+  String interval = 'Every Minute';
   bool isSearch = false;
   bool isOfLength = false;
   List searchResults = [];
@@ -191,6 +192,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         });
       }
     });
+    ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
           duration: const Duration(seconds: 4),
@@ -402,7 +404,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                   interval = value!;
                                 },
                                 items: [
-                                  'Once',
                                   'Every Minute',
                                   'Hourly',
                                   'Daily',
@@ -444,6 +445,14 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                 IconButton(
                   icon: const Icon(Icons.add_task_rounded),
                   onPressed: () async {
+                    setState(() {
+                      animate = true;
+                    });
+                    Future.delayed(const Duration(seconds: 1), () {
+                      setState(() {
+                        animate = false;
+                      });
+                    });
                     AudioService().play('pings/start.mp3');
                     String text = textController.text.trim();
                     String due = dateController.text;
@@ -1027,32 +1036,38 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   Todo(
                     list: nonTrashedTodolists,
                     category: 'All',
-                    cardToRemove: cardToRemove
+                    cardToRemove: cardToRemove,
+                    animate: animate
                   ),
                   Todo(
                     list: nonTrashedTodolists,
                     category: 'Personal',
-                    cardToRemove: cardToRemove
+                    cardToRemove: cardToRemove,
+                    animate: animate
                   ),
                   Todo(
                     list: nonTrashedTodolists,
                     category: 'Work',
-                    cardToRemove: cardToRemove
+                    cardToRemove: cardToRemove,
+                    animate: animate
                   ),
                   Todo(
                     list: nonTrashedTodolists,
                     category: 'Study',
-                    cardToRemove: cardToRemove
+                    cardToRemove: cardToRemove,
+                    animate: animate
                   ),
                   Todo(
                     list: nonTrashedTodolists,
                     category: 'Shopping',
-                    cardToRemove: cardToRemove
+                    cardToRemove: cardToRemove,
+                    animate: animate
                   ),
                   Todo(
                     list: nonTrashedTodolists,
                     category: 'Sport',
-                    cardToRemove: cardToRemove
+                    cardToRemove: cardToRemove,
+                    animate: animate
                   ),
                 ]),
               ),
