@@ -471,7 +471,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           payload: "Due by $due"
                         ); */
                         NotificationService().scheduleNotification(
-                          id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.first.id + 1 : 1,
+                          id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.last.id + 1 : 1,
                           title: "Reminder",
                           body: "TODO: $text",
                           interval: intvl,
