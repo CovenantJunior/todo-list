@@ -94,7 +94,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                 onPressed: () {
                   if (selectedLists.isEmpty) {
                     context
-                                .watch<TodoListDatabase>()
+                                .read<TodoListDatabase>()
                                 .preferences
                                 .first
                                 .vibration ==
@@ -150,7 +150,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                 onPressed: () {
                   if (selectedLists.isEmpty) {
                     context
-                                .watch<TodoListDatabase>()
+                                .read<TodoListDatabase>()
                                 .preferences
                                 .first
                                 .vibration ==
@@ -214,7 +214,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
-                    context.watch<TodoListDatabase>().preferences.first.vibration == true
+                    context.read<TodoListDatabase>().preferences.first.vibration == true
                         ? Vibration.vibrate(duration: 50)
                         : Void;
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -277,14 +277,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                     fontFamily: "Quicksand",
                                     fontWeight: FontWeight.w500))));
                   } else {
-                    context
-                                .watch<TodoListDatabase>()
-                                .preferences
-                                .first
-                                .vibration ==
-                            true
-                        ? Vibration.vibrate(duration: 50)
-                        : Void;
+                    context .read<TodoListDatabase>() .preferences .first .vibration == true ? Vibration.vibrate(duration: 50) : Void;
                     showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -301,8 +294,8 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                   onPressed: () {
                                     for (var selectedList in selectedLists) {
                                       NotificationService().cancelNotification(selectedList.id);
-                                      context.read<TodoListDatabase>().trashTodoList(selectedList.id);
                                       context.read<TodoListDatabase>().completed(selectedList.id);
+                                      context.read<TodoListDatabase>().trashTodoList(selectedList.id);
                                     }
                                     if (selectedLists.length > 1) {
                                       ScaffoldMessenger.of(context)
