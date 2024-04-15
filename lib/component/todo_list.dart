@@ -1189,7 +1189,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                                   )
                                     .fadeIn()
                                     .scale()
-                                    .moveX(delay: 300.ms, duration: 400.ms),
+                                    .moveX(delay: 300.ms, duration: 200.ms),
                                 ),
                               );
                             }) // runs after the above w/new duration,
@@ -1198,7 +1198,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                       ).animate()
                         .fadeIn()
                         .scale()
-                        .moveX(delay: 300.ms, duration: 600.ms),
+                        .moveX(delay: 300.ms, duration: 100.ms),
                       Align(
                         alignment: Alignment.topCenter,
                         child: ConfettiWidget(
