@@ -187,344 +187,342 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SingleChildScrollView(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          darkMode == true ? const Icon(Icons.dark_mode_outlined) : const Icon(Icons.light_mode_outlined),
-                          const SizedBox(width: 20),
-                          Text(
-                            darkMode == true ? 'Dark Mode' : 'Light Mode',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              fontFamily: "Quicksand"
-                            ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        darkMode == true ? const Icon(Icons.dark_mode_outlined) : const Icon(Icons.light_mode_outlined),
+                        const SizedBox(width: 20),
+                        Text(
+                          darkMode == true ? 'Dark Mode' : 'Light Mode',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            fontFamily: "Quicksand"
                           ),
-                        ],
-                      ),
-                      Transform.scale(
-                        scale: .7,
-                        child: Switch(
-                          value: darkMode,
-                          onChanged: (value) {
-                            Provider.of<TodoListDatabase>(context, listen: false).setDarkMode(id);
-                          }
                         ),
-                      )
-                    ],
-                  ),
-                  const Divider(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          notification == true ? const Icon(Icons.notifications_none_rounded) : const Icon(Icons.notifications_off_outlined),
-                          const SizedBox(width: 20),
-                          Row(
-                            children: [
-                              const Text(
-                                'Notification',
-                                style: TextStyle(
+                      ],
+                    ),
+                    Transform.scale(
+                      scale: .7,
+                      child: Switch(
+                        value: darkMode,
+                        onChanged: (value) {
+                          Provider.of<TodoListDatabase>(context, listen: false).setDarkMode(id);
+                        }
+                      ),
+                    )
+                  ],
+                ),
+                const Divider(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        notification == true ? const Icon(Icons.notifications_none_rounded) : const Icon(Icons.notifications_off_outlined),
+                        const SizedBox(width: 20),
+                        Row(
+                          children: [
+                            const Text(
+                              'Notification',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                                fontFamily: "Quicksand"
+                              ),
+                            ),
+                            const SizedBox(width: 7),
+                            Baseline(baseline: 10.0,
+                            baselineType: TextBaseline.alphabetic,
+                            child: GestureDetector(onTap: notifyInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
+                          ],
+                        ),
+                      ],
+                    ),
+                    Transform.scale(
+                      scale: .7,
+                      child: Switch(
+                        value: notification,
+                        onChanged: (value) {
+                          notification == true ? NotificationService().cancelAllnotification() : Void;
+                          context.read<TodoListDatabase>().setNotification(id);
+                        }
+                      ),
+                    )
+                  ],
+                ),
+                const Divider(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.vibration_rounded),
+                        SizedBox(width: 20),
+                        Row(
+                          children: [
+                            Text(
+                              'In-app Vibration',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                                fontFamily: "Quicksand"
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Transform.scale(
+                      scale: .7,
+                      child: Switch(
+                        value: vibration,
+                        onChanged: (value) {
+                          context.read<TodoListDatabase>().setVibration(id);
+                          vibration == false ? Vibration.vibrate(duration: 50) : Void;
+                        }
+                      ),
+                    )
+                  ],
+                ),
+                const Divider(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        stt == true ? const Icon(Icons.mic_none_rounded) : const Icon(Icons.mic_off_outlined),
+                        const SizedBox(width: 20),
+                        Row(
+                          children: [
+                            const Text(
+                              'Speech to Text',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                                fontFamily: "Quicksand"
+                              ),
+                            ),
+                            const SizedBox(width: 7),
+                            Baseline(baseline: 10.0,
+                            baselineType: TextBaseline.alphabetic,
+                            child: GestureDetector(onTap: ttsInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
+                          ],
+                        ),
+                      ],
+                    ),
+                    Transform.scale(
+                      scale: .7,
+                      child: Switch(
+                        value: stt,
+                        onChanged: (value) {
+                          context.read<TodoListDatabase>().setSTT(id);
+                        }
+                      ),
+                    )
+                  ],
+                ),
+                const Divider(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.add_to_drive),
+                        SizedBox(width: 20),
+                        Text(
+                          'Backup to Drive',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            fontFamily: "Quicksand"
+                          ),
+                        ),
+                      ],
+                    ),
+                    Transform.scale(
+                      scale: .7,
+                      child: Switch(
+                        value: backup,
+                        onChanged: (value) {
+                          context.read<TodoListDatabase>().setBackup(id);
+                        }
+                      ),
+                    )
+                  ],
+                ),
+                backup == true ? const Divider(height: 40) : const SizedBox(),
+                backup == true ?  Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        autoSync == true ? const Icon(Icons.sync_rounded) : const Icon(Icons.sync_disabled_rounded),
+                        const SizedBox(width: 20),
+                        const Text(
+                          'Auto Sync',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            fontFamily: "Quicksand"
+                          ),
+                        ),
+                      ],
+                    ),
+                    Transform.scale(
+                      scale: .7,
+                      child: Switch(
+                        value: autoSync,
+                        onChanged: (value) {
+                          context.read<TodoListDatabase>().setAutoSync(id);
+                        }
+                      ),
+                    )
+                  ],
+                )  : const SizedBox(),
+                const Divider(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.copy_outlined),
+                        const SizedBox(width: 20),
+                        Row(
+                          children: [
+                            const Text(
+                              'Access Clipboard',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                                fontFamily: "Quicksand"
+                              ),
+                            ),
+                            const SizedBox(width: 7),
+                            Baseline(baseline: 10.0,
+                            baselineType: TextBaseline.alphabetic,
+                            child: GestureDetector(onTap: clipBoardInfo, child: const Icon(Icons.help_outline_rounded, size: 15))),
+                          ],
+                        )
+                      ],
+                    ),
+                    Transform.scale(
+                      scale: .7,
+                      child: Switch(
+                        value: accessClipboard,
+                        onChanged: (value) {
+                          context.read<TodoListDatabase>().setAccessClipboard(id);
+                        }
+                      ),
+                    )
+                  ],
+                ),
+                const Divider(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.auto_delete_outlined),
+                        SizedBox(width: 20),
+                        Text(
+                          'Auto Delete Completed Task',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            fontFamily: "Quicksand"
+                          ),
+                        ),
+                      ],
+                    ),
+                    Transform.scale(
+                      scale: .7,
+                      child: Switch(
+                        value: autoDelete,
+                        onChanged: (value) {
+                          context.read<TodoListDatabase>().setAutoDelete(id);
+                        }
+                      ),
+                    )
+                  ],
+                ),
+                const Divider(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.swipe_outlined),
+                        const SizedBox(width: 20),
+                        Row(
+                          children: [
+                            const Text(
+                              'Delete Plan on Dismiss',
+                              style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 12,
-                                  fontFamily: "Quicksand"
-                                ),
-                              ),
-                              const SizedBox(width: 7),
-                              Baseline(baseline: 10.0,
-                              baselineType: TextBaseline.alphabetic,
-                              child: GestureDetector(onTap: notifyInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
-                            ],
-                          ),
-                        ],
-                      ),
-                      Transform.scale(
-                        scale: .7,
-                        child: Switch(
-                          value: notification,
-                          onChanged: (value) {
-                            notification == true ? NotificationService().cancelAllnotification() : Void;
-                            context.read<TodoListDatabase>().setNotification(id);
-                          }
+                                  fontFamily: "Quicksand"),
+                            ),
+                            const SizedBox(width: 7),
+                            Baseline(baseline: 10.0,
+                            baselineType: TextBaseline.alphabetic,
+                            child: GestureDetector(onTap: dismissInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
+                          ],
                         ),
-                      )
-                    ],
-                  ),
-                  const Divider(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Row(
-                        children: [
-                          Icon(Icons.vibration_rounded),
-                          SizedBox(width: 20),
-                          Row(
-                            children: [
-                              Text(
-                                'In-app Vibration',
-                                style: TextStyle(
+                      ],
+                    ),
+                    Transform.scale(
+                      scale: .7,
+                      child: Switch(
+                          value: autoDeleteOnDismiss,
+                          onChanged: (value) {
+                            context.read<TodoListDatabase>().setAutoDeleteonDismiss(id);
+                          }),
+                    )
+                  ],
+                ),
+                const Divider(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.delete_sweep_outlined),
+                        const SizedBox(width: 20),
+                        Row(
+                          children: [
+                            const Text(
+                              'Bulk Trash Options',
+                              style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 12,
-                                  fontFamily: "Quicksand"
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Transform.scale(
-                        scale: .7,
-                        child: Switch(
-                          value: vibration,
-                          onChanged: (value) {
-                            context.read<TodoListDatabase>().setVibration(id);
-                            vibration == false ? Vibration.vibrate(duration: 50) : Void;
-                          }
-                        ),
-                      )
-                    ],
-                  ),
-                  const Divider(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          stt == true ? const Icon(Icons.mic_none_rounded) : const Icon(Icons.mic_off_outlined),
-                          const SizedBox(width: 20),
-                          Row(
-                            children: [
-                              const Text(
-                                'Speech to Text',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                  fontFamily: "Quicksand"
-                                ),
-                              ),
-                              const SizedBox(width: 7),
-                              Baseline(baseline: 10.0,
-                              baselineType: TextBaseline.alphabetic,
-                              child: GestureDetector(onTap: ttsInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
-                            ],
-                          ),
-                        ],
-                      ),
-                      Transform.scale(
-                        scale: .7,
-                        child: Switch(
-                          value: stt,
-                          onChanged: (value) {
-                            context.read<TodoListDatabase>().setSTT(id);
-                          }
-                        ),
-                      )
-                    ],
-                  ),
-                  const Divider(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Row(
-                        children: [
-                          Icon(Icons.add_to_drive),
-                          SizedBox(width: 20),
-                          Text(
-                            'Backup to Drive',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              fontFamily: "Quicksand"
+                                  fontFamily: "Quicksand"),
                             ),
-                          ),
-                        ],
-                      ),
-                      Transform.scale(
-                        scale: .7,
-                        child: Switch(
-                          value: backup,
-                          onChanged: (value) {
-                            context.read<TodoListDatabase>().setBackup(id);
-                          }
+                            const SizedBox(width: 7),
+                            Baseline(baseline: 10.0,
+                            baselineType: TextBaseline.alphabetic,
+                            child: GestureDetector(onTap: bulkTrashInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
+                          ],
                         ),
-                      )
-                    ],
-                  ),
-                  backup == true ? const Divider(height: 40) : const SizedBox(),
-                  backup == true ?  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          autoSync == true ? const Icon(Icons.sync_rounded) : const Icon(Icons.sync_disabled_rounded),
-                          const SizedBox(width: 20),
-                          const Text(
-                            'Auto Sync',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              fontFamily: "Quicksand"
-                            ),
-                          ),
-                        ],
-                      ),
-                      Transform.scale(
-                        scale: .7,
-                        child: Switch(
-                          value: autoSync,
+                      ],
+                    ),
+                    Transform.scale(
+                      scale: .7,
+                      child: Switch(
+                          value: bulkTrash,
                           onChanged: (value) {
-                            context.read<TodoListDatabase>().setAutoSync(id);
-                          }
-                        ),
-                      )
-                    ],
-                  )  : const SizedBox(),
-                  const Divider(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.copy_outlined),
-                          const SizedBox(width: 20),
-                          Row(
-                            children: [
-                              const Text(
-                                'Access Clipboard',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                  fontFamily: "Quicksand"
-                                ),
-                              ),
-                              const SizedBox(width: 7),
-                              Baseline(baseline: 10.0,
-                              baselineType: TextBaseline.alphabetic,
-                              child: GestureDetector(onTap: clipBoardInfo, child: const Icon(Icons.help_outline_rounded, size: 15))),
-                            ],
-                          )
-                        ],
-                      ),
-                      Transform.scale(
-                        scale: .7,
-                        child: Switch(
-                          value: accessClipboard,
-                          onChanged: (value) {
-                            context.read<TodoListDatabase>().setAccessClipboard(id);
-                          }
-                        ),
-                      )
-                    ],
-                  ),
-                  const Divider(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Row(
-                        children: [
-                          Icon(Icons.auto_delete_outlined),
-                          SizedBox(width: 20),
-                          Text(
-                            'Auto Delete Completed Task',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              fontFamily: "Quicksand"
-                            ),
-                          ),
-                        ],
-                      ),
-                      Transform.scale(
-                        scale: .7,
-                        child: Switch(
-                          value: autoDelete,
-                          onChanged: (value) {
-                            context.read<TodoListDatabase>().setAutoDelete(id);
-                          }
-                        ),
-                      )
-                    ],
-                  ),
-                  const Divider(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.swipe_outlined),
-                          const SizedBox(width: 20),
-                          Row(
-                            children: [
-                              const Text(
-                                'Delete Plan on Dismiss',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
-                                    fontFamily: "Quicksand"),
-                              ),
-                              const SizedBox(width: 7),
-                              Baseline(baseline: 10.0,
-                              baselineType: TextBaseline.alphabetic,
-                              child: GestureDetector(onTap: dismissInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
-                            ],
-                          ),
-                        ],
-                      ),
-                      Transform.scale(
-                        scale: .7,
-                        child: Switch(
-                            value: autoDeleteOnDismiss,
-                            onChanged: (value) {
-                              context.read<TodoListDatabase>().setAutoDeleteonDismiss(id);
-                            }),
-                      )
-                    ],
-                  ),
-                  const Divider(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.delete_sweep_outlined),
-                          const SizedBox(width: 20),
-                          Row(
-                            children: [
-                              const Text(
-                                'Bulk Trash Options',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
-                                    fontFamily: "Quicksand"),
-                              ),
-                              const SizedBox(width: 7),
-                              Baseline(baseline: 10.0,
-                              baselineType: TextBaseline.alphabetic,
-                              child: GestureDetector(onTap: bulkTrashInfo, child: const Icon(Icons.help_outline_rounded, size: 15)))
-                            ],
-                          ),
-                        ],
-                      ),
-                      Transform.scale(
-                        scale: .7,
-                        child: Switch(
-                            value: bulkTrash,
-                            onChanged: (value) {
-                              context.read<TodoListDatabase>().setBulkTrash(id);
-                            }),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                            context.read<TodoListDatabase>().setBulkTrash(id);
+                          }),
+                    )
+                  ],
+                ),
+              ],
             ),
           ),
         ),
