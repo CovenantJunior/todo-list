@@ -61,8 +61,18 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                   fontFamily: "Quicksand", fontWeight: FontWeight.w500),
             ),
             buttonIcon: const Icon(Icons.waving_hand_outlined),
-            cancelText: const Text("Leave"),
-            confirmText: const Text("Done"),
+            cancelText: const Text(
+              "Leave",
+              style: TextStyle(
+                fontFamily: "Quicksand"
+              ),  
+            ),
+            confirmText: const Text(
+              "Done",
+              style: TextStyle(
+                fontFamily: "Quicksand"
+              ),  
+            ),
             backgroundColor: Theme.of(context).colorScheme.onSecondary,
             selectedItemsTextStyle: const TextStyle(color: Colors.white),
             selectedColor: Colors.grey,
