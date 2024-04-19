@@ -1,12 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io' as fa;
+import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http/src/client.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:googleapis_auth/googleapis_auth.dart' as auth show AuthClient;
 
 class Backup {
   Isar? isar; 
@@ -14,6 +15,7 @@ class Backup {
   DateTime date = DateTime.now();
 
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: "702532065815-r76gi0bsj1ikchjhlmmphmdvramgdfrr.apps.googleusercontent.com",
     scopes: [drive.DriveApi.driveFileScope],
   );
 
@@ -52,7 +54,7 @@ class Backup {
       // If user is not authenticated, prompt for authorization
       await _googleSignIn.signInSilently();
       final googleUser = await _googleSignIn.signIn();
-      print(googleUser);
+      final auth.AuthClient? client = await _googleSignIn.authenticatedClient();
       if (googleUser == null) {
         // Show backup completed message
         ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
@@ -69,7 +71,7 @@ class Backup {
         return backup;
       } else {
         // Initialize Drive API
-        final driveApi = drive.DriveApi(googleUser.authHeaders as Client);
+        final driveApi = drive.DriveApi(client!);
 
         // Create file metadata
         final upload = driveApi.files.create(
@@ -118,8 +120,9 @@ class Backup {
         );
       }
     } else {
+        final auth.AuthClient? client = await _googleSignIn.authenticatedClient();
         // Initialize Drive API
-        final driveApi = drive.DriveApi(googleUser.authHeaders as Client);
+        final driveApi = drive.DriveApi(client!);
 
         // Create file metadata
         final upload = driveApi.files.create(
