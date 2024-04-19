@@ -15,7 +15,7 @@ class Backup {
   DateTime date = DateTime.now();
 
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: "702532065815-r76gi0bsj1ikchjhlmmphmdvramgdfrr.apps.googleusercontent.com",
+    serverClientId: "702532065815-r76gi0bsj1ikchjhlmmphmdvramgdfrr.apps.googleusercontent.com",
     scopes: [drive.DriveApi.driveFileScope],
   );
 

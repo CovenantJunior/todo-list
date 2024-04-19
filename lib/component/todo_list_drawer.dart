@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:todo_list/component/todo_list_drawer_tile.dart';
 import 'package:todo_list/layouts/todo_list_about.dart';
@@ -6,6 +7,7 @@ import 'package:todo_list/layouts/todo_list_preferences.dart';
 import 'package:todo_list/layouts/todo_list_privacy.dart';
 import 'package:todo_list/layouts/todo_list_starred.dart';
 import 'package:todo_list/layouts/todo_trash_page.dart';
+import 'package:googleapis/drive/v3.dart' as drive;
 
 class TodoListDrawer extends StatefulWidget {
   const TodoListDrawer({super.key});
@@ -15,6 +17,20 @@ class TodoListDrawer extends StatefulWidget {
 }
 
 class _TodoListDrawerState extends State<TodoListDrawer> {
+  
+  GoogleSignInAccount? googleUser;
+  getGoogleUser() async {
+    final googleSignIn = GoogleSignIn(
+      clientId: "702532065815-r76gi0bsj1ikchjhlmmphmdvramgdfrr.apps.googleusercontent.com",
+      scopes: [drive.DriveApi.driveFileScope],
+    );
+    final setGoogleUser = await googleSignIn.signIn();
+    print("User photo is in ${setGoogleUser?.photoUrl}");
+    setState(() {
+      googleUser = setGoogleUser;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // List todolists = context.watch<TodoListDatabase>().todolists;
@@ -26,10 +42,12 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
         child: Column(
           children: [
             DrawerHeader(
-              child: Image.asset(
-                  'assets/images/note.png',
-                  width: 70,
-                ),
+              child: googleUser == null 
+                ? Image.asset(
+                    'assets/images/note.png',
+                    width: 70,
+                  )
+                : Image.network(googleUser?.photoUrl ?? ''),
             ),
 
             TodoListDrawerTile(
