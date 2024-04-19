@@ -14,7 +14,6 @@ class Backup {
   DateTime date = DateTime.now();
 
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
-    serverClientId: "702532065815-c7ge8g2iftigrj8107jnlkh8nigmraf4.apps.googleusercontent.com",
     scopes: [drive.DriveApi.driveFileScope],
   );
 
@@ -68,58 +67,107 @@ class Backup {
           ]),
         ));
         return backup;
-      }
-    }
+      } else {
+        // Initialize Drive API
+        final driveApi = drive.DriveApi(googleUser.authHeaders as Client);
 
-    // Initialize Drive API
-    final driveApi = drive.DriveApi(googleUser?.authHeaders as Client);
-
-    // Create file metadata
-    final upload = driveApi.files.create(
-      drive.File(
-        name: 'minimalist.isar',
-      ),
-      uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
-    );
-
-    // Execute upload
-    await upload.onError((error, stackTrace) {
-      // Show backup completed message
-      ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-          duration: const Duration(seconds: 1),
-          content: const Row(
-            children: [
-              Icon(
-                Icons.error_outline_rounded
-              ),
-              Text('Something went wrong',
-              style: TextStyle(
-                  fontFamily: "Quicksand", fontWeight: FontWeight.w500)
-                ),
-            ]
+        // Create file metadata
+        final upload = driveApi.files.create(
+          drive.File(
+            name: 'minimalist.isar',
           ),
-        )
-      );
-      return backup;
-    }).whenComplete(() {
-      // Show backup completed message
-      ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-          duration: const Duration(seconds: 1),
-          content: const Text('Backup completed',
-            style: TextStyle(
-                fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+          uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
+        );
+
+        // Execute upload
+        await upload.onError((error, stackTrace) {
+          // Show backup completed message
+          ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+              duration: const Duration(seconds: 1),
+              content: const Row(
+                children: [
+                  Icon(
+                    Icons.error_outline_rounded
+                  ),
+                  Text('Something went wrong',
+                  style: TextStyle(
+                      fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+                    ),
+                ]
               ),
-        )
-      );
+            )
+          );
+          return backup;
+        }).whenComplete(() {
+          // Show backup completed message
+          ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+              duration: const Duration(seconds: 1),
+              content: const Text('Backup completed',
+                style: TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+                  ),
+            )
+          );
+        }
+        );
+      }
+    } else {
+        // Initialize Drive API
+        final driveApi = drive.DriveApi(googleUser.authHeaders as Client);
+
+        // Create file metadata
+        final upload = driveApi.files.create(
+          drive.File(
+            name: 'minimalist.isar',
+          ),
+          uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
+        );
+
+        // Execute upload
+        await upload.onError((error, stackTrace) {
+          // Show backup completed message
+          ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+              duration: const Duration(seconds: 1),
+              content: const Row(
+                children: [
+                  Icon(
+                    Icons.error_outline_rounded
+                  ),
+                  Text('Something went wrong',
+                  style: TextStyle(
+                      fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+                    ),
+                ]
+              ),
+            )
+          );
+          return backup;
+        }).whenComplete(() {
+          // Show backup completed message
+          ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+              duration: const Duration(seconds: 1),
+              content: const Text('Backup completed',
+                style: TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+                  ),
+            )
+          );
+        }
+        );
     }
-    );
-    
+
 
     // Call backup function
     backup();
