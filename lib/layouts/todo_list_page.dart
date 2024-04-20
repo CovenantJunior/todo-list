@@ -936,6 +936,20 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       backingUp = true;
                     });
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7)
+                        ),
+                        duration: const Duration(seconds: 1),
+                        behavior: SnackBarBehavior.fixed,
+                        content: const Text('Backing up...',
+                          style: TextStyle(
+                            fontFamily: "Quicksand", fontWeight: FontWeight.w500
+                          )
+                        ),
+                      ),
+                    );
                     Backup().backup(context, backup: () {
                       setState(() {
                         backingUp = false;
@@ -1050,6 +1064,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   ),
                 ]),
               ),
+              backingUp == true ? const LinearProgressIndicator() : const SizedBox()
             ],
           ),
           floatingActionButton: Column(

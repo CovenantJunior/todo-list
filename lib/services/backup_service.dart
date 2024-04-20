@@ -19,28 +19,18 @@ class Backup {
     scopes: [drive.DriveApi.driveFileScope],
   );
 
-  Future<void> backup(BuildContext context, {required backup}) async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(7)
-        ),
-        duration: const Duration(seconds: 1),
-        behavior: SnackBarBehavior.fixed,
-        content: const Text('Backing up...',
-          style: TextStyle(
-            fontFamily: "Quicksand", fontWeight: FontWeight.w500
-          )
-        ),
-      ),
-    );
+  String generateTimestampId() {
+    DateTime now = DateTime.now();
+    return now.millisecondsSinceEpoch.toString();
+  }
 
+  Future<void> backup(BuildContext context, {required backup}) async {
     // Get directory
     final dir = await getApplicationDocumentsDirectory();
     // Initialize Isar
     isar = Isar.getInstance();
     // Create file
-    fa.File backupFile = fa.File("${dir.path}/minimalist.isar");
+    fa.File backupFile = fa.File("${dir.path}/.minimalist");
     // Check if file exists and delete if it does
     if (await backupFile.exists()) {
       await backupFile.delete();
@@ -73,102 +63,206 @@ class Backup {
         // Initialize Drive API
         final driveApi = drive.DriveApi(client!);
 
-        // Create file metadata
-        final upload = driveApi.files.create(
-          drive.File(
-            name: 'minimalist.isar',
-          ),
-          uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
+        // Search for the file in Google Drive
+        drive.FileList fileList = await driveApi.files.list(
+          q: "name='.minimalist'",
+          spaces: 'drive',
+          $fields: 'files(id)',
         );
 
-        // Execute upload
-        await upload.onError((error, stackTrace) {
-          // Show backup completed message
-          ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-              duration: const Duration(seconds: 1),
-              content: const Row(
-                children: [
-                  Icon(
-                    Icons.error_outline_rounded
-                  ),
-                  Text('Something went wrong',
+        if (fileList.files!.isNotEmpty) {
+          // File exists, update it
+          final fileId = fileList.files![0].id;
+          // Update the file using its ID
+          final upload = driveApi.files.update(
+            drive.File(name: '.minimalist'),
+            fileId!,
+            uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
+          );
+          // Execute upload
+          await upload.onError((error, stackTrace) {
+            // Show backup completed message
+            ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                duration: const Duration(seconds: 1),
+                content: const Row(
+                  children: [
+                    Icon(
+                      Icons.error_outline_rounded
+                    ),
+                    Text('Something went wrong',
+                    style: TextStyle(
+                        fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+                      ),
+                  ]
+                ),
+              )
+            );
+            return backup;
+          }).whenComplete(() {
+            // Show backup completed message
+            ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                duration: const Duration(seconds: 1),
+                content: const Text('Backup completed',
                   style: TextStyle(
                       fontFamily: "Quicksand", fontWeight: FontWeight.w500)
                     ),
-                ]
-              ),
-            )
+              )
+            );
+          });
+        } else {
+          // Create file metadata
+          final upload = driveApi.files.create(
+            drive.File(
+              name: '.minimalist',
+            ),
+            uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
           );
-          return backup;
-        }).whenComplete(() {
-          // Show backup completed message
-          ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-              duration: const Duration(seconds: 1),
-              content: const Text('Backup completed',
-                style: TextStyle(
-                    fontFamily: "Quicksand", fontWeight: FontWeight.w500)
-                  ),
-            )
-          );
+          // Execute upload
+          await upload.onError((error, stackTrace) {
+            // Show backup completed message
+            ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                duration: const Duration(seconds: 1),
+                content: const Row(
+                  children: [
+                    Icon(
+                      Icons.error_outline_rounded
+                    ),
+                    Text('Something went wrong',
+                    style: TextStyle(
+                        fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+                      ),
+                  ]
+                ),
+              )
+            );
+            return backup;
+          }).whenComplete(() {
+            // Show backup completed message
+            ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                duration: const Duration(seconds: 1),
+                content: const Text('Backup completed',
+                  style: TextStyle(
+                      fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+                    ),
+              )
+            );
+          });
         }
-        );
       }
     } else {
         final auth.AuthClient? client = await _googleSignIn.authenticatedClient();
         // Initialize Drive API
         final driveApi = drive.DriveApi(client!);
 
-        // Create file metadata
-        final upload = driveApi.files.create(
-          drive.File(
-            name: 'minimalist.isar',
-          ),
-          uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
+        // Search for the file in Google Drive
+        drive.FileList fileList = await driveApi.files.list(
+          q: "name='.minimalist'",
+          spaces: 'drive',
+          $fields: 'files(id)',
         );
 
-        // Execute upload
-        await upload.onError((error, stackTrace) {
-          // Show backup completed message
-          ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-              duration: const Duration(seconds: 1),
-              content: const Row(
-                children: [
-                  Icon(
-                    Icons.error_outline_rounded
-                  ),
-                  Text('Something went wrong',
+        if (fileList.files!.isNotEmpty) {
+          // File exists, update it
+          final fileId = fileList.files![0].id;
+          // Update the file using its ID
+          final upload = driveApi.files.update(
+            drive.File(name: '.minimalist'),
+            fileId!,
+            uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
+          );
+          // Execute upload
+          await upload.onError((error, stackTrace) {
+            // Show backup completed message
+            ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                duration: const Duration(seconds: 1),
+                content: const Row(
+                  children: [
+                    Icon(
+                      Icons.error_outline_rounded
+                    ),
+                    Text('Something went wrong',
+                    style: TextStyle(
+                        fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+                      ),
+                  ]
+                ),
+              )
+            );
+            return backup;
+          }).whenComplete(() {
+            // Show backup completed message
+            ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                duration: const Duration(seconds: 1),
+                content: const Text('Backup completed',
                   style: TextStyle(
                       fontFamily: "Quicksand", fontWeight: FontWeight.w500)
                     ),
-                ]
-              ),
-            )
+              )
+            );
+          });
+        } else {
+          // Create file metadata
+          final upload = driveApi.files.create(
+            drive.File(
+              name: '.minimalist',
+            ),
+            uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
           );
-          return backup;
-        }).whenComplete(() {
-          // Show backup completed message
-          ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-              duration: const Duration(seconds: 1),
-              content: const Text('Backup completed',
-                style: TextStyle(
-                    fontFamily: "Quicksand", fontWeight: FontWeight.w500)
-                  ),
-            )
-          );
+          // Execute upload
+          await upload.onError((error, stackTrace) {
+            // Show backup completed message
+            ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                duration: const Duration(seconds: 1),
+                content: const Row(
+                  children: [
+                    Icon(
+                      Icons.error_outline_rounded
+                    ),
+                    Text('Something went wrong',
+                    style: TextStyle(
+                        fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+                      ),
+                  ]
+                ),
+              )
+            );
+            return backup;
+          }).whenComplete(() {
+            // Show backup completed message
+            ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                duration: const Duration(seconds: 1),
+                content: const Text('Backup completed',
+                  style: TextStyle(
+                      fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+                    ),
+              )
+            );
+          });
         }
-        );
     }
 
 
