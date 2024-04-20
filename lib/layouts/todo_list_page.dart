@@ -929,7 +929,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             centerTitle: true,
             actions: [
               !isSearch && context.watch<TodoListDatabase>().preferences.first.backup == true ? Tooltip(
-                message: "Backup",
+                message: "Backup Tasks and Preferences",
                 child: IconButton(
                   onPressed: () { 
                     setState(() {
