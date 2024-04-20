@@ -773,7 +773,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           if (status == 'listening') {
             setState(() {
               _isListening = true;
-              hint = 'Listening...';
+              hint = 'Listening';
             });
           } else {
             setState(() {
@@ -794,7 +794,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       if (available) {
         setState(() {
           _isListening = true;
-          hint = 'Listening...';
+          hint = 'Listening';
         });
         _speech.listen(
           onResult: (result) {
@@ -943,7 +943,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         ),
                         duration: const Duration(seconds: 1),
                         behavior: SnackBarBehavior.fixed,
-                        content: const Text('Backing up...',
+                        content: const Text('Backing up',
                           style: TextStyle(
                             fontFamily: "Quicksand", fontWeight: FontWeight.w500
                           )

@@ -25,7 +25,8 @@ class Backup {
   }
 
   Future<void> backup(BuildContext context, {required backup}) async {
-    // Get directory
+    try {
+      // Get directory
     final dir = await getApplicationDocumentsDirectory();
     // Initialize Isar
     isar = Isar.getInstance();
@@ -46,13 +47,14 @@ class Backup {
       final googleUser = await _googleSignIn.signIn();
       final auth.AuthClient? client = await _googleSignIn.authenticatedClient();
       if (googleUser == null) {
-        // Show backup completed message
+        // Show backup error message
         ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
           duration: const Duration(seconds: 1),
           content: const Row(children: [
-            Icon(Icons.error_outline_rounded),
+            Icon(Icons.error_outline_rounded, color: Colors.red),
+            SizedBox(width: 10),
             Text('Something went wrong',
                 style: TextStyle(
                     fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
@@ -81,7 +83,7 @@ class Backup {
           );
           // Execute upload
           await upload.onError((error, stackTrace) {
-            // Show backup completed message
+            // Show backup error message
             ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -89,9 +91,8 @@ class Backup {
                 duration: const Duration(seconds: 1),
                 content: const Row(
                   children: [
-                    Icon(
-                      Icons.error_outline_rounded
-                    ),
+                    Icon(Icons.error_outline_rounded, color: Colors.red),
+                    SizedBox(width: 10),
                     Text('Something went wrong',
                     style: TextStyle(
                         fontFamily: "Quicksand", fontWeight: FontWeight.w500)
@@ -125,7 +126,7 @@ class Backup {
           );
           // Execute upload
           await upload.onError((error, stackTrace) {
-            // Show backup completed message
+            // Show backup error message
             ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -133,9 +134,8 @@ class Backup {
                 duration: const Duration(seconds: 1),
                 content: const Row(
                   children: [
-                    Icon(
-                      Icons.error_outline_rounded
-                    ),
+                    Icon(Icons.error_outline_rounded, color: Colors.red),
+                    SizedBox(width: 10),
                     Text('Something went wrong',
                     style: TextStyle(
                         fontFamily: "Quicksand", fontWeight: FontWeight.w500)
@@ -184,7 +184,7 @@ class Backup {
           );
           // Execute upload
           await upload.onError((error, stackTrace) {
-            // Show backup completed message
+            // Show backup error message
             ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -192,9 +192,8 @@ class Backup {
                 duration: const Duration(seconds: 1),
                 content: const Row(
                   children: [
-                    Icon(
-                      Icons.error_outline_rounded
-                    ),
+                    Icon(Icons.error_outline_rounded, color: Colors.red),
+                    SizedBox(width: 10),
                     Text('Something went wrong',
                     style: TextStyle(
                         fontFamily: "Quicksand", fontWeight: FontWeight.w500)
@@ -228,7 +227,7 @@ class Backup {
           );
           // Execute upload
           await upload.onError((error, stackTrace) {
-            // Show backup completed message
+            // Show backup error message
             ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -236,9 +235,8 @@ class Backup {
                 duration: const Duration(seconds: 1),
                 content: const Row(
                   children: [
-                    Icon(
-                      Icons.error_outline_rounded
-                    ),
+                    Icon(Icons.error_outline_rounded, color: Colors.red),
+                    SizedBox(width: 10),
                     Text('Something went wrong',
                     style: TextStyle(
                         fontFamily: "Quicksand", fontWeight: FontWeight.w500)
@@ -265,8 +263,24 @@ class Backup {
         }
     }
 
-
     // Call backup function
     backup();
+    } catch (e) {
+      backup();
+      
+      // Show backup error message
+      ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+        duration: const Duration(seconds: 1),
+        content: const Row(children: [
+          Icon(Icons.error_outline_rounded, color: Colors.red),
+          SizedBox(width: 10),
+          Text('Check your internet connection',
+              style: TextStyle(
+                  fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+        ]),
+      ));
+    }
   }
 }
