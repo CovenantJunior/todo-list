@@ -10,6 +10,7 @@ import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
 // import 'package:todo_list/services/credential_service.dart';
 import 'package:todo_list/services/notification_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
@@ -173,6 +174,7 @@ void main() async {
   initializeService();
   // JsonReader jsonReader = JsonReader();
   // Credential credential = await jsonReader.readCredentials();
+  await dotenv.load(fileName: ".env");
   runApp(
     MultiProvider(
       providers: [

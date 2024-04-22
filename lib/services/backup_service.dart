@@ -8,6 +8,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis_auth/googleapis_auth.dart' as auth show AuthClient;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 class Backup {
   Isar? isar; 
@@ -15,7 +17,7 @@ class Backup {
   DateTime date = DateTime.now();
 
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
-    serverClientId: "702532065815-r76gi0bsj1ikchjhlmmphmdvramgdfrr.apps.googleusercontent.com",
+    serverClientId: dotenv.env['SERVER_CLIENT'],
     scopes: [drive.DriveApi.driveFileScope],
   );
 
