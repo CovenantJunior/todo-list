@@ -37,23 +37,28 @@ const TodoUserSchema = CollectionSchema(
       name: r'googleUserId',
       type: IsarType.string,
     ),
-    r'lastBackup': PropertySchema(
+    r'googleUserPhotoUrl': PropertySchema(
       id: 4,
+      name: r'googleUserPhotoUrl',
+      type: IsarType.string,
+    ),
+    r'lastBackup': PropertySchema(
+      id: 5,
       name: r'lastBackup',
       type: IsarType.dateTime,
     ),
     r'pro': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'pro',
       type: IsarType.bool,
     ),
     r'signed': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'signed',
       type: IsarType.bool,
     ),
     r'username': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'username',
       type: IsarType.string,
     )
@@ -97,6 +102,12 @@ int _todoUserEstimateSize(
     }
   }
   {
+    final value = object.googleUserPhotoUrl;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.username;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -115,10 +126,11 @@ void _todoUserSerialize(
   writer.writeDateTime(offsets[1], object.createdAt);
   writer.writeString(offsets[2], object.email);
   writer.writeString(offsets[3], object.googleUserId);
-  writer.writeDateTime(offsets[4], object.lastBackup);
-  writer.writeBool(offsets[5], object.pro);
-  writer.writeBool(offsets[6], object.signed);
-  writer.writeString(offsets[7], object.username);
+  writer.writeString(offsets[4], object.googleUserPhotoUrl);
+  writer.writeDateTime(offsets[5], object.lastBackup);
+  writer.writeBool(offsets[6], object.pro);
+  writer.writeBool(offsets[7], object.signed);
+  writer.writeString(offsets[8], object.username);
 }
 
 TodoUser _todoUserDeserialize(
@@ -132,11 +144,12 @@ TodoUser _todoUserDeserialize(
   object.createdAt = reader.readDateTimeOrNull(offsets[1]);
   object.email = reader.readStringOrNull(offsets[2]);
   object.googleUserId = reader.readStringOrNull(offsets[3]);
+  object.googleUserPhotoUrl = reader.readStringOrNull(offsets[4]);
   object.id = id;
-  object.lastBackup = reader.readDateTimeOrNull(offsets[4]);
-  object.pro = reader.readBoolOrNull(offsets[5]);
-  object.signed = reader.readBoolOrNull(offsets[6]);
-  object.username = reader.readStringOrNull(offsets[7]);
+  object.lastBackup = reader.readDateTimeOrNull(offsets[5]);
+  object.pro = reader.readBoolOrNull(offsets[6]);
+  object.signed = reader.readBoolOrNull(offsets[7]);
+  object.username = reader.readStringOrNull(offsets[8]);
   return object;
 }
 
@@ -156,12 +169,14 @@ P _todoUserDeserializeProp<P>(
     case 3:
       return (reader.readStringOrNull(offset)) as P;
     case 4:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readBoolOrNull(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 6:
       return (reader.readBoolOrNull(offset)) as P;
     case 7:
+      return (reader.readBoolOrNull(offset)) as P;
+    case 8:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -770,6 +785,160 @@ extension TodoUserQueryFilter
     });
   }
 
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition>
+      googleUserPhotoUrlIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'googleUserPhotoUrl',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition>
+      googleUserPhotoUrlIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'googleUserPhotoUrl',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition>
+      googleUserPhotoUrlEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'googleUserPhotoUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition>
+      googleUserPhotoUrlGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'googleUserPhotoUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition>
+      googleUserPhotoUrlLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'googleUserPhotoUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition>
+      googleUserPhotoUrlBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'googleUserPhotoUrl',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition>
+      googleUserPhotoUrlStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'googleUserPhotoUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition>
+      googleUserPhotoUrlEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'googleUserPhotoUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition>
+      googleUserPhotoUrlContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'googleUserPhotoUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition>
+      googleUserPhotoUrlMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'googleUserPhotoUrl',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition>
+      googleUserPhotoUrlIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'googleUserPhotoUrl',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition>
+      googleUserPhotoUrlIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'googleUserPhotoUrl',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<TodoUser, TodoUser, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1146,6 +1315,19 @@ extension TodoUserQuerySortBy on QueryBuilder<TodoUser, TodoUser, QSortBy> {
     });
   }
 
+  QueryBuilder<TodoUser, TodoUser, QAfterSortBy> sortByGoogleUserPhotoUrl() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'googleUserPhotoUrl', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterSortBy>
+      sortByGoogleUserPhotoUrlDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'googleUserPhotoUrl', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoUser, TodoUser, QAfterSortBy> sortByLastBackup() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'lastBackup', Sort.asc);
@@ -1245,6 +1427,19 @@ extension TodoUserQuerySortThenBy
     });
   }
 
+  QueryBuilder<TodoUser, TodoUser, QAfterSortBy> thenByGoogleUserPhotoUrl() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'googleUserPhotoUrl', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TodoUser, TodoUser, QAfterSortBy>
+      thenByGoogleUserPhotoUrlDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'googleUserPhotoUrl', Sort.desc);
+    });
+  }
+
   QueryBuilder<TodoUser, TodoUser, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1335,6 +1530,14 @@ extension TodoUserQueryWhereDistinct
     });
   }
 
+  QueryBuilder<TodoUser, TodoUser, QDistinct> distinctByGoogleUserPhotoUrl(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'googleUserPhotoUrl',
+          caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<TodoUser, TodoUser, QDistinct> distinctByLastBackup() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'lastBackup');
@@ -1390,6 +1593,13 @@ extension TodoUserQueryProperty
   QueryBuilder<TodoUser, String?, QQueryOperations> googleUserIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'googleUserId');
+    });
+  }
+
+  QueryBuilder<TodoUser, String?, QQueryOperations>
+      googleUserPhotoUrlProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'googleUserPhotoUrl');
     });
   }
 
