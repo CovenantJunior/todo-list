@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:todo_list/component/todo_list_drawer_tile.dart';
@@ -21,11 +22,10 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
   GoogleSignInAccount? googleUser;
   getGoogleUser() async {
     final googleSignIn = GoogleSignIn(
-      clientId: "702532065815-r76gi0bsj1ikchjhlmmphmdvramgdfrr.apps.googleusercontent.com",
+      serverClientId: dotenv.env['SERVER_CLIENT'],
       scopes: [drive.DriveApi.driveFileScope],
     );
     final setGoogleUser = await googleSignIn.signIn();
-    print("User photo is in ${setGoogleUser?.photoUrl}");
     setState(() {
       googleUser = setGoogleUser;
     });

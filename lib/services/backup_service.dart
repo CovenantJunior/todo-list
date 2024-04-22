@@ -164,6 +164,7 @@ class Backup {
         }
       }
     } else {
+        print("No sign in needed");
         final auth.AuthClient? client = await _googleSignIn.authenticatedClient();
         // Initialize Drive API
         final driveApi = drive.DriveApi(client!);
@@ -264,7 +265,6 @@ class Backup {
           });
         }
     }
-
     // Call backup function
     backup();
     } catch (e) {

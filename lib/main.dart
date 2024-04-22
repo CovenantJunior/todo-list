@@ -174,7 +174,7 @@ void main() async {
   initializeService();
   // JsonReader jsonReader = JsonReader();
   // Credential credential = await jsonReader.readCredentials();
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "assets/.env");
   runApp(
     MultiProvider(
       providers: [
