@@ -9,6 +9,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis_auth/googleapis_auth.dart' as auth show AuthClient;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_list/models/todo_list_database.dart';
 
 
 class Backup {
@@ -26,9 +28,15 @@ class Backup {
     return now.millisecondsSinceEpoch.toString();
   }
 
+
   Future<void> backup(BuildContext context, {required backup}) async {
     try {
-      // Get directory
+      // Fetch User
+      Future<void> user() async {
+        context.read<TodoListDatabase>().fetchUser();
+      }
+    
+    // Get directory
     final dir = await getApplicationDocumentsDirectory();
     // Initialize Isar
     isar = Isar.getInstance();
@@ -64,6 +72,13 @@ class Backup {
         ));
         return backup;
       } else {
+        // Grab some User details
+        await user();
+        
+        var currentUser = context.read<TodoListDatabase>().user;
+        int id = currentUser.first.id;
+        context.read<TodoListDatabase>().setGoogleUser(id, googleUser.email, googleUser.id, googleUser.photoUrl, googleUser.displayName);
+
         // Initialize Drive API
         final driveApi = drive.DriveApi(client!);
 
@@ -164,7 +179,13 @@ class Backup {
         }
       }
     } else {
-        print("No sign in needed");
+        // Grab some User details
+        await user();
+        
+        var currentUser = context.read<TodoListDatabase>().user;
+        int id = currentUser.first.id;
+        context.read<TodoListDatabase>().setGoogleUser(id, googleUser.email, googleUser.id, googleUser.photoUrl, googleUser.displayName);
+
         final auth.AuthClient? client = await _googleSignIn.authenticatedClient();
         // Initialize Drive API
         final driveApi = drive.DriveApi(client!);

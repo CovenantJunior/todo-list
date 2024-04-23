@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:todo_list/component/todo_list_drawer_tile.dart';
 import 'package:todo_list/layouts/todo_list_about.dart';
@@ -8,7 +7,7 @@ import 'package:todo_list/layouts/todo_list_preferences.dart';
 import 'package:todo_list/layouts/todo_list_privacy.dart';
 import 'package:todo_list/layouts/todo_list_starred.dart';
 import 'package:todo_list/layouts/todo_trash_page.dart';
-import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:todo_list/models/todo_list_database.dart';
 
 class TodoListDrawer extends StatefulWidget {
   const TodoListDrawer({super.key});
@@ -18,23 +17,11 @@ class TodoListDrawer extends StatefulWidget {
 }
 
 class _TodoListDrawerState extends State<TodoListDrawer> {
-  
-  GoogleSignInAccount? googleUser;
-  getGoogleUser() async {
-    final googleSignIn = GoogleSignIn(
-      serverClientId: dotenv.env['SERVER_CLIENT'],
-      scopes: [drive.DriveApi.driveFileScope],
-    );
-    final setGoogleUser = await googleSignIn.signIn();
-    setState(() {
-      googleUser = setGoogleUser;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    // List todolists = context.watch<TodoListDatabase>().todolists;
-    // List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
+    
+    context.read<TodoListDatabase>().fetchUser();
+    List user = context.watch<TodoListDatabase>().user;
     
     return Drawer(
       semanticLabel: "TodoList Drawer Menu",
@@ -42,12 +29,19 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
         child: Column(
           children: [
             DrawerHeader(
-              child: googleUser == null 
-                ? Image.asset(
-                    'assets/images/note.png',
-                    width: 70,
-                  )
-                : Image.network(googleUser?.photoUrl ?? ''),
+              child: user.isEmpty && user.first.googleUserPhotoUrl != '' ? Image.asset(
+                  'assets/images/note.png',
+                  width: 70,
+                ) : CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.transparent,
+                  child: ClipOval(
+                      child: Image.network(
+                        user.first.googleUserPhotoUrl,
+                        width: 70,
+                      ),
+                  ),
+              ),
             ),
 
             TodoListDrawerTile(

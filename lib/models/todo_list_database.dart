@@ -3,6 +3,7 @@ import 'package:isar/isar.dart';
 import 'package:todo_list/models/todo_list.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:todo_list/models/todo_preferences.dart';
+import 'package:todo_list/models/todo_user.dart';
 
 class TodoListDatabase extends ChangeNotifier{
   static late Isar isar;
@@ -11,7 +12,7 @@ class TodoListDatabase extends ChangeNotifier{
   static Future<void> initialize() async {
     final dir = await getApplicationDocumentsDirectory();
     isar = await Isar.open(
-      [TodoListSchema, TodoPreferencesSchema],
+      [TodoListSchema, TodoPreferencesSchema, TodoUserSchema],
       directory: dir.path
     );
   }
@@ -30,6 +31,8 @@ class TodoListDatabase extends ChangeNotifier{
   List preferences = [];
 
   bool? isDark;
+
+  List user = [];
 
 
   /* PREFERENCES METHODS */
@@ -52,7 +55,8 @@ class TodoListDatabase extends ChangeNotifier{
       preferences = isar.todoPreferences.where().findAllSync();
       notifyListeners();
     } else if (currentPreferences.length > 1) {
-      await isar.writeTxn(() => isar.todoPreferences.clear());
+      currentPreferences.last.clear();
+      // await isar.writeTxn(() => isar.todoPreferences.clear());
       initPreference();
     }
   }
@@ -208,6 +212,35 @@ class TodoListDatabase extends ChangeNotifier{
   
   
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
   /* TODOLIST METHODS */
 
@@ -230,6 +263,7 @@ class TodoListDatabase extends ChangeNotifier{
     fetchTrashedTodoList();
     fetchStarredTodoList();
     fetchPreferences();
+    fetchUser();
   }
 
   void fetchAllTodoList() async {
@@ -418,4 +452,73 @@ class TodoListDatabase extends ChangeNotifier{
     // Update TodoList List
     fetchTodoList();
   }
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  /* USERS' MODEL */
+  void fetchUser() async {
+    List currentUser = isar.todoUsers.where().findAllSync();
+    if (currentUser.isEmpty) {
+      final newUser = TodoUser()
+        ..username = ''
+        ..email = ''
+        ..pro = false
+        ..createdAt = DateTime.now()
+        ..googleUserId = ''
+        ..googleUserPhotoUrl = ''
+        ..lastBackup = DateTime.now();
+      await isar.writeTxn(() => isar.todoUsers.put(newUser));
+      user = isar.todoUsers.where().findAllSync();
+    } else if (currentUser.length  > 1) {
+      currentUser.last.clear();
+      fetchUser();
+    } else {
+      user.clear();
+      user.addAll(currentUser);
+      notifyListeners();
+    }
+  }
+
+  void setGoogleUser(id, email, googleUserId, image, username) async {
+    var existingUser = await isar.todoUsers.get(id);
+    if (existingUser != null) {
+      existingUser.email = email;
+      existingUser.googleUserId = googleUserId;
+      existingUser.googleUserPhotoUrl = image;
+      existingUser.username = username;
+      await isar.writeTxn(() => isar.todoUsers.put(existingUser));
+    }
+
+    // Update User List
+    fetchUser();
+  }
+  
 }

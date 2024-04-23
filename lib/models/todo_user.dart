@@ -14,8 +14,6 @@ class TodoUser {
   // Authentication fields
   String? googleUserId;
   String? googleUserPhotoUrl;
-  String? authToken;
-  bool? signed;
 
   // Backup fields
   DateTime? lastBackup;
