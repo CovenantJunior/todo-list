@@ -29,19 +29,25 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
         child: Column(
           children: [
             DrawerHeader(
-              child: user.isEmpty && user.first.googleUserPhotoUrl != '' ? Image.asset(
-                  'assets/images/note.png',
-                  width: 70,
-                ) : CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.transparent,
-                  child: ClipOval(
-                      child: Image.network(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  user.isEmpty || user.first.googleUserPhotoUrl == '' ? Image.asset(
+                    'assets/images/note.png',
+                    width: 70,
+                  ) : CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.transparent,
+                      child: ClipOval(
+                       child: Image.network(
                         user.first.googleUserPhotoUrl,
                         width: 70,
                       ),
                   ),
-              ),
+                ),
+                user.isEmpty || user.first.username == '' ? const SizedBox() : Text(user.first.username)
+              ]
+              )
             ),
 
             TodoListDrawerTile(
