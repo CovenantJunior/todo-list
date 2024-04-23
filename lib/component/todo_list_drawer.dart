@@ -45,7 +45,7 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
                       ),
                   ),
                 ),
-                user.isEmpty || user.first.username == '' ? const SizedBox() : Text(user.first.username)
+                user.isEmpty || user.first.username == '' ? const SizedBox() : Text(user.first.username, style: const TextStyle(fontFamily: 'Quicksand'),)
               ]
               )
             ),
