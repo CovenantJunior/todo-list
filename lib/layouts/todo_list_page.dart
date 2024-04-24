@@ -519,30 +519,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               ),
             ],
           ));
-
-          context.read<TodoListDatabase>().preferences.first.autoSync == true ?
-          Timer.periodic(const Duration(hours: 1), (timer) {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(7)
-                ),
-                duration: const Duration(seconds: 1),
-                behavior: SnackBarBehavior.fixed,
-                content: const Text('Synchronizing your data',
-                  style: TextStyle(
-                    fontFamily: "Quicksand", fontWeight: FontWeight.w500
-                  )
-                ),
-              ),
-            );
-            Backup().backup(context, backup: () {
-              setState(() {
-                backingUp = false;
-              });
-            });
-          }) : Void;
   }
 
   // ignore: non_constant_identifier_names
@@ -934,6 +910,40 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       });
     });
      */
+
+    context.read<TodoListDatabase>().fetchUser();
+    List user = context.watch<TodoListDatabase>().user;
+
+    if (context.read<TodoListDatabase>().preferences.first.autoSync == true && user.isNotEmpty) {
+      Timer.periodic(const Duration(minutes: 30), (timer) {
+        setState(() {
+          backingUp = true;
+        });
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(7)
+            ),
+            duration: const Duration(seconds: 1),
+            behavior: SnackBarBehavior.fixed,
+            content: const Text('Synchronizing your data',
+              style: TextStyle(
+                fontFamily: "Quicksand", fontWeight: FontWeight.w500
+              )
+            ),
+          ),
+        );
+        Backup().backup(context, backup: () {
+          setState(() {
+            backingUp = false;
+          });
+        });
+      });
+    } else {
+      // Do nothing
+    }
+
     return GestureDetector(
       onTap: () {
         setState(() {
