@@ -259,266 +259,290 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     dateController.text == '' ? dateController.text = date : dateController.text= dateController.text;
     selectedCategory == 'All' ? selectedCategory = 'Personal' : selectedCategory = selectedCategory;
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: const Text(
-                "Add a plan",
-                style: TextStyle(
-                  fontFamily: "Quicksand",
-                  fontWeight: FontWeight.w500,
-                ),
+      context: context,
+      builder: (context) => AlertDialog(
+            title: const Text(
+              "Add a plan",
+              style: TextStyle(
+                fontFamily: "Quicksand",
+                fontWeight: FontWeight.w500,
               ),
-              content: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(Icons.list_rounded),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: TextFormField(
-                              autocorrect: true,
-                              autofocus: true,
-                              minLines: 1,
-                              maxLines: 20,
-                              controller: textController,
-                              textCapitalization: TextCapitalization.sentences,
-                              decoration: InputDecoration(
-                                hintText: hint,
-                                suffixIcon: context.watch<TodoListDatabase>().preferences.first.stt == true
-                                    ? (IconButton(
-                                        onPressed: _listen,
-                                        icon: Icon(_isListening == true
-                                            ? Icons.mic_off
-                                            : Icons.mic)))
-                                    : const SizedBox(),
-                                hintStyle: const TextStyle(
-                                    fontFamily: "Quicksand",
-                                    fontWeight: FontWeight.w500),
-                                labelStyle: const TextStyle(
-                                    fontFamily: "Quicksand",
-                                    fontWeight: FontWeight.w500),
-                              ),
+            ),
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.list_rounded),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: TextFormField(
+                            autocorrect: true,
+                            autofocus: true,
+                            minLines: 1,
+                            maxLines: 20,
+                            controller: textController,
+                            textCapitalization: TextCapitalization.sentences,
+                            decoration: InputDecoration(
+                              hintText: hint,
+                              suffixIcon: context.watch<TodoListDatabase>().preferences.first.stt == true
+                                  ? (IconButton(
+                                      onPressed: _listen,
+                                      icon: Icon(_isListening == true
+                                          ? Icons.mic_off
+                                          : Icons.mic)))
+                                  : const SizedBox(),
+                              hintStyle: const TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.w500),
+                              labelStyle: const TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.w500),
                             ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          const Icon(Icons.category),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: InputDecorator(
-                              decoration: const InputDecoration(
-                                  labelText: 'Category',
-                                  labelStyle: TextStyle(
-                                      fontFamily: "Quicksand",
-                                      fontWeight: FontWeight.w500),
-                                  border: InputBorder.none),
-                              child: DropdownButtonFormField<String>(
-                                value: selectedCategory,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedCategory = value!;
-                                  });
-                                },
-                                items: [
-                                  'Personal',
-                                  'Work',
-                                  'Study',
-                                  'Shopping',
-                                  'Sport',
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                      style: const TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  );
-                                }).toList(),
-                                isExpanded: true,
-                                icon: const Icon(Icons.edit),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          const Icon(Icons.calendar_month_rounded),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                _selectDate(context);
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        const Icon(Icons.category),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: InputDecorator(
+                            decoration: const InputDecoration(
+                                labelText: 'Category',
+                                labelStyle: TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.w500),
+                                border: InputBorder.none),
+                            child: DropdownButtonFormField<String>(
+                              value: selectedCategory,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedCategory = value!;
+                                });
                               },
-                              child: InputDecorator(
-                                decoration: const InputDecoration(
-                                    labelText: 'Tap here to choose due date',
-                                    labelStyle: TextStyle(
+                              items: [
+                                'Personal',
+                                'Work',
+                                'Study',
+                                'Shopping',
+                                'Sport',
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: const TextStyle(
                                         fontFamily: "Quicksand",
                                         fontWeight: FontWeight.w500),
-                                    hintText: 'Select due date',
-                                    border: InputBorder.none),
-                                child: TextFormField(
-                                  onTap: () {
-                                    _selectDate(context);
-                                  },
-                                  controller: dateController,
-                                  style: const TextStyle(
-                                    fontFamily: "Quicksand",
-                                    fontWeight: FontWeight.w500
                                   ),
-                                  readOnly: true, // Make the TextFormField read-only
-                                ),
-                              ),
+                                );
+                              }).toList(),
+                              isExpanded: true,
+                              icon: const Icon(Icons.edit),
                             ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          const Icon(Icons.timer_outlined),
-                          const SizedBox(width: 8),
-                          Expanded(
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        const Icon(Icons.calendar_month_rounded),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              _selectDate(context);
+                            },
                             child: InputDecorator(
                               decoration: const InputDecoration(
-                                  labelText: 'Reminder Interval',
+                                  labelText: 'Tap here to choose due date',
                                   labelStyle: TextStyle(
                                       fontFamily: "Quicksand",
                                       fontWeight: FontWeight.w500),
+                                  hintText: 'Select due date',
                                   border: InputBorder.none),
-                              child: DropdownButtonFormField<String>(
-                                value: interval,
-                                onChanged: (value) {
-                                  interval = value!;
+                              child: TextFormField(
+                                onTap: () {
+                                  _selectDate(context);
                                 },
-                                items: [
-                                  'Every Minute',
-                                  'Hourly',
-                                  'Daily',
-                                  'Weekly'
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                      style: const TextStyle(
-                                          fontFamily: "Quicksand",
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  );
-                                }).toList(),
-                                isExpanded: true,
-                                icon: const Icon(Icons.edit),
+                                controller: dateController,
+                                style: const TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.w500
+                                ),
+                                readOnly: true, // Make the TextFormField read-only
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        const Icon(Icons.timer_outlined),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: InputDecorator(
+                            decoration: const InputDecoration(
+                                labelText: 'Reminder Interval',
+                                labelStyle: TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.w500),
+                                border: InputBorder.none),
+                            child: DropdownButtonFormField<String>(
+                              value: interval,
+                              onChanged: (value) {
+                                interval = value!;
+                              },
+                              items: [
+                                'Every Minute',
+                                'Hourly',
+                                'Daily',
+                                'Weekly'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: const TextStyle(
+                                        fontFamily: "Quicksand",
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                );
+                              }).toList(),
+                              isExpanded: true,
+                              icon: const Icon(Icons.edit),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    textController.clear();
+            ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  textController.clear();
+                  setState(() {
+                    selectedDate = DateTime.now().add(const Duration(days: 1));
+                    requestedClipboard = true;
+                  });
+                },
+                icon: const Icon(Icons.undo_rounded),
+              ),
+              IconButton(
+                icon: const Icon(Icons.add_task_rounded),
+                onPressed: () async {
+                  setState(() {
+                    animate = true;
+                  });
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    setState(() {
+                      animate = false;
+                    });
+                  });
+                  AudioService().play('pings/start.mp3');
+                  String text = textController.text.trim();
+                  String due = dateController.text;
+                  String category = selectedCategory;
+                  String intvl = interval;
+                  if (text.isNotEmpty) {
+                    context.read<TodoListDatabase>().addTodoList(text, category, due, intvl);
                     setState(() {
                       selectedDate = DateTime.now().add(const Duration(days: 1));
-                      requestedClipboard = true;
                     });
-                  },
-                  icon: const Icon(Icons.undo_rounded),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add_task_rounded),
-                  onPressed: () async {
-                    setState(() {
-                      animate = true;
-                    });
-                    Future.delayed(const Duration(milliseconds: 300), () {
-                      setState(() {
-                        animate = false;
-                      });
-                    });
-                    AudioService().play('pings/start.mp3');
-                    String text = textController.text.trim();
-                    String due = dateController.text;
-                    String category = selectedCategory;
-                    String intvl = interval;
-                    if (text.isNotEmpty) {
-                      context.read<TodoListDatabase>().addTodoList(text, category, due, intvl);
-                      setState(() {
-                        selectedDate = DateTime.now().add(const Duration(days: 1));
-                      });
-                      Navigator.pop(context);
-                      textController.clear();
-                      if (context.read<TodoListDatabase>().preferences.first.notification == true) {
-                        /* NotificationService().showNotification(
-                          id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
-                          title: "New Plan Recorded",
-                          body: text,
-                          payload: "Due by $due"
-                        ); */
-                        NotificationService().scheduleNotification(
-                          id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.last.id + 1 : 1,
-                          title: "Reminder",
-                          body: "TODO: $text",
-                          interval: intvl,
-                          payload: jsonEncode({
-                            'scheduledDate': DateTime.now().toIso8601String(),
-                            'interval': intvl,
-                          }),
-                        );
-                      }
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          duration: const Duration(seconds: 2),
-                          content: const Text(
-                            'Plan saved',
-                            style: TextStyle(
-                              fontFamily: "Quicksand",
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      );
-                    } else {
-                      context.watch<TodoListDatabase>().preferences.first.vibration == true
-                        ? Vibration.vibrate(duration: 50)
-                        : Void;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                          duration: const Duration(seconds: 2),
-                          content: const Text(
-                            'Oops, blank shot!',
-                            style: TextStyle(
-                              fontFamily: "Quicksand",
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
+                    Navigator.pop(context);
+                    textController.clear();
+                    if (context.read<TodoListDatabase>().preferences.first.notification == true) {
+                      /* NotificationService().showNotification(
+                        id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
+                        title: "New Plan Recorded",
+                        body: text,
+                        payload: "Due by $due"
+                      ); */
+                      NotificationService().scheduleNotification(
+                        id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.last.id + 1 : 1,
+                        title: "Reminder",
+                        body: "TODO: $text",
+                        interval: intvl,
+                        payload: jsonEncode({
+                          'scheduledDate': DateTime.now().toIso8601String(),
+                          'interval': intvl,
+                        }),
                       );
                     }
-                  },
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        duration: const Duration(seconds: 2),
+                        content: const Text(
+                          'Plan saved',
+                          style: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true
+                      ? Vibration.vibrate(duration: 50)
+                      : Void;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)
+                  ),
+                        duration: const Duration(seconds: 2),
+                        content: const Text(
+                          'Oops, blank shot!',
+                          style: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
+          ));
+
+          context.read<TodoListDatabase>().preferences.first.autoSync == true ?
+          Timer.periodic(const Duration(hours: 1), (timer) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(7)
                 ),
-              ],
-            ));
+                duration: const Duration(seconds: 1),
+                behavior: SnackBarBehavior.fixed,
+                content: const Text('Synchronizing your data',
+                  style: TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.w500
+                  )
+                ),
+              ),
+            );
+            Backup().backup(context, backup: () {
+              setState(() {
+                backingUp = false;
+              });
+            });
+          }) : Void;
   }
 
   // ignore: non_constant_identifier_names

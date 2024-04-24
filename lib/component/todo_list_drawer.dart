@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -35,14 +36,30 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
                   user.isEmpty || user.first.googleUserPhotoUrl == '' ? Image.asset(
                     'assets/images/note.png',
                     width: 70,
+                    height: 70,
                   ) : CircleAvatar(
                       radius: 50,
                       backgroundColor: Colors.transparent,
                       child: ClipOval(
-                       child: Image.network(
-                        user.first.googleUserPhotoUrl,
+                       child: CachedNetworkImage(
                         width: 70,
-                      ),
+                        height: 70,
+                        imageUrl: user.first.googleUserPhotoUrl,
+                        placeholder: (context, url) => const CircularProgressIndicator(
+                          value: null,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.lightBlue),
+                        ),
+                        errorWidget: (context, url, error) => const CircleAvatar(
+                          backgroundImage: AssetImage('assets/images/note.png'),
+                          backgroundColor: Colors.transparent,
+                          radius: 50,
+                        ),
+                        imageBuilder: (context, imageProvider) => CircleAvatar(
+                          backgroundImage: imageProvider,
+                          backgroundColor: Colors.transparent,
+                          radius: 50,
+                        ),
+                      )
                   ),
                 ),
                 user.isEmpty || user.first.username == '' ? const SizedBox() : Text(user.first.username, style: const TextStyle(fontFamily: 'Quicksand'),)
