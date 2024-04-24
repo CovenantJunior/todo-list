@@ -18,6 +18,7 @@ import 'package:todo_list/models/todo_list_database.dart';
 import 'package:todo_list/services/audio_service.dart';
 import 'package:todo_list/services/backup_service.dart';
 import 'package:todo_list/services/notification_service.dart';
+import 'package:todo_list/services/sync_service.dart';
 import 'package:vibration/vibration.dart';
 
 class TodoListPage extends StatefulWidget {
@@ -934,7 +935,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             ),
           ),
         );
-        Backup().backup(context, backup: () {
+        Sync().sync(context, backup: () {
           setState(() {
             backingUp = false;
           });
