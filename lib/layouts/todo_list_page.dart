@@ -915,7 +915,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     context.read<TodoListDatabase>().fetchUser();
     List user = context.watch<TodoListDatabase>().user;
 
-    if (context.read<TodoListDatabase>().preferences.first.autoSync == true && user.isNotEmpty) {
+    if (context.read<TodoListDatabase>().preferences.first.backup == true && context.read<TodoListDatabase>().preferences.first.autoSync == true && user.isNotEmpty) {
       Timer.periodic(const Duration(minutes: 30), (timer) {
         setState(() {
           backingUp = true;
