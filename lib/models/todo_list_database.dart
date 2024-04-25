@@ -88,7 +88,7 @@ class TodoListDatabase extends ChangeNotifier{
     }
   }
 
-  void reserPreferences() async {
+  void resetPreferences() async {
     await isar.writeTxn(() => isar.todoPreferences.clear());
   }
 
