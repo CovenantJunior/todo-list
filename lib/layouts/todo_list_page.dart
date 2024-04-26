@@ -557,7 +557,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                               autofocus: true,
                               minLines: 1,
                               maxLines: 10,
-                              maxLength: 100,
                               controller: textController,
                               decoration: const InputDecoration(
                                 hintText: 'Task description',
