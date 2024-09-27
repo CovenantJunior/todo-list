@@ -210,9 +210,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   }
 
   void trashAllTodoLists(nonTrashedTodolists) {
-    context.read<TodoListDatabase>().preferences.first.vibration == true
-        ? Vibration.vibrate(duration: 50)
-        : Void;
+    if (context.read<TodoListDatabase>().preferences.first.vibration) Vibration.vibrate(duration: 50);
     List trash;
     if (selectedCategory == 'All') {
       trash = nonTrashedTodolists;
@@ -497,9 +495,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                       ),
                     );
                   } else {
-                    context.watch<TodoListDatabase>().preferences.first.vibration == true
-                      ? Vibration.vibrate(duration: 50)
-                      : Void;
+                    if (context.read<TodoListDatabase>().preferences.first.vibration) Vibration.vibrate(duration: 50);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                   shape: RoundedRectangleBorder(
@@ -726,14 +722,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                         ),
                       );
                     } else {
-                      context
-                                  .watch<TodoListDatabase>()
-                                  .preferences
-                                  .first
-                                  .vibration ==
-                              true
-                          ? Vibration.vibrate(duration: 50)
-                          : Void;
+                      if (context.read<TodoListDatabase>().preferences.first.vibration) Vibration.vibrate(duration: 50);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                     shape: RoundedRectangleBorder(
