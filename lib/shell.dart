@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'package:todo_list/tabs/home.dart';
+import 'package:todo_list/component/todo_list.dart';
 class Shell extends StatelessWidget {
   final int index;
+  late List nonTrashedTodolists;
+  late List cardToRemove;
+  late bool animate;
 
-  const Shell({
+  Shell({
     super.key,
-    required this.index
+    required this.index,
+    required this.nonTrashedTodolists,
+    required this.cardToRemove,
+    required this.animate
   });
 
 
@@ -18,19 +24,43 @@ class Shell extends StatelessWidget {
       child: PersistentTabView(
         context,
         controller: controller,
-        screens: const [
-          Home(),
-          Home(),
-          Home(),
-          Home(),
-          Home(),
-          Home(),
+        screens: [
+          Todo(
+            list: nonTrashedTodolists,
+            category: 'All',
+            cardToRemove: cardToRemove,
+            animate: animate),
+        Todo(
+            list: nonTrashedTodolists,
+            category: 'Personal',
+            cardToRemove: cardToRemove,
+            animate: animate),
+        Todo(
+            list: nonTrashedTodolists,
+            category: 'Work',
+            cardToRemove: cardToRemove,
+            animate: animate),
+        Todo(
+            list: nonTrashedTodolists,
+            category: 'Study',
+            cardToRemove: cardToRemove,
+            animate: animate),
+        Todo(
+            list: nonTrashedTodolists,
+            category: 'Shopping',
+            cardToRemove: cardToRemove,
+            animate: animate),
+        Todo(
+            list: nonTrashedTodolists,
+            category: 'Sport',
+            cardToRemove: cardToRemove,
+            animate: animate),
         ],
         items: [
           PersistentBottomNavBarItem(
             activeColorPrimary: Colors.white,
             icon: const Icon(
-              Icons.download_done_rounded,
+              Icons.home_outlined,
               color: Colors.white,
               size: 20,
             ),
@@ -44,7 +74,7 @@ class Shell extends StatelessWidget {
           PersistentBottomNavBarItem(
             activeColorPrimary: Colors.white,
             icon: const Icon(
-              Icons.downhill_skiing_rounded,
+              Icons.person_2_outlined,
               color: Colors.white,
               size: 20,
             ),
@@ -58,7 +88,7 @@ class Shell extends StatelessWidget {
           PersistentBottomNavBarItem(
             activeColorPrimary: Colors.white,
             icon: const Icon(
-              Icons.settings_outlined,
+              Icons.work_outline_rounded,
               color: Colors.white,
               size: 20,
             ),
@@ -72,7 +102,7 @@ class Shell extends StatelessWidget {
           PersistentBottomNavBarItem(
             activeColorPrimary: Colors.white,
             icon: const Icon(
-              Icons.download_done_rounded,
+              Icons.book_outlined,
               color: Colors.white,
               size: 20,
             ),
@@ -86,7 +116,7 @@ class Shell extends StatelessWidget {
           PersistentBottomNavBarItem(
             activeColorPrimary: Colors.white,
             icon: const Icon(
-              Icons.downhill_skiing_rounded,
+              Icons.shopping_basket_outlined,
               color: Colors.white,
               size: 20,
             ),
@@ -100,7 +130,7 @@ class Shell extends StatelessWidget {
           PersistentBottomNavBarItem(
             activeColorPrimary: Colors.white,
             icon: const Icon(
-              Icons.settings_outlined,
+              Icons.sports_soccer_rounded,
               color: Colors.white,
               size: 20,
             ),
