@@ -61,16 +61,12 @@ class NotificationService {
       const AndroidInitializationSettings('@mipmap/ic_launcher');
 
   Future<void> initNotifications() async {
-    final initializationSettingsDarwin = DarwinInitializationSettings(
+    const initializationSettingsDarwin = DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestCriticalPermission: true,
       requestProvisionalPermission: true,
-      requestSoundPermission: true,
-      onDidReceiveLocalNotification:
-        (int id, String? title, String? body, String? payload) async {
-          
-        },
+      requestSoundPermission: true
     );
 
     const LinuxInitializationSettings initializationSettingsLinux =
