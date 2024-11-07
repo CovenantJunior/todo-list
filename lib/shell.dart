@@ -64,7 +64,7 @@ class Shell extends StatelessWidget {
               color: Colors.white,
               size: 20,
             ),
-            title: ("Downloads"),
+            title: ("All"),
             textStyle: const TextStyle(
               fontFamily: "Montserrat",
               fontWeight: FontWeight.bold,
@@ -78,7 +78,7 @@ class Shell extends StatelessWidget {
               color: Colors.white,
               size: 20,
             ),
-            title: ("Surf"),
+            title: ("Personal"),
             textStyle: const TextStyle(
               fontFamily: "Montserrat",
               fontWeight: FontWeight.bold,
@@ -92,7 +92,7 @@ class Shell extends StatelessWidget {
               color: Colors.white,
               size: 20,
             ),
-            title: ("Settings"),
+            title: ("Work"),
             textStyle: const TextStyle(
               fontFamily: "Montserrat",
               fontWeight: FontWeight.bold,
@@ -106,7 +106,7 @@ class Shell extends StatelessWidget {
               color: Colors.white,
               size: 20,
             ),
-            title: ("Downloads"),
+            title: ("Study"),
             textStyle: const TextStyle(
               fontFamily: "Montserrat",
               fontWeight: FontWeight.bold,
@@ -120,7 +120,7 @@ class Shell extends StatelessWidget {
               color: Colors.white,
               size: 20,
             ),
-            title: ("Surf"),
+            title: ("Shopping"),
             textStyle: const TextStyle(
               fontFamily: "Montserrat",
               fontWeight: FontWeight.bold,
@@ -134,7 +134,7 @@ class Shell extends StatelessWidget {
               color: Colors.white,
               size: 20,
             ),
-            title: ("Settings"),
+            title: ("Sport"),
             textStyle: const TextStyle(
               fontFamily: "Montserrat",
               fontWeight: FontWeight.bold,
