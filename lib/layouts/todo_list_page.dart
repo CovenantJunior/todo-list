@@ -19,6 +19,7 @@ import 'package:todo_list/services/audio_service.dart';
 import 'package:todo_list/services/backup_service.dart';
 import 'package:todo_list/services/notification_service.dart';
 import 'package:todo_list/services/sync_service.dart';
+import 'package:todo_list/shell.dart';
 import 'package:vibration/vibration.dart';
 
 class TodoListPage extends StatefulWidget {
@@ -1027,68 +1028,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             ],
           ),
           drawer: const TodoListDrawer(),
-          body: Column(
-            children: [
-              !isSearch ? const Padding(
-                padding: EdgeInsets.only(left: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Todo List",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.w800,
-                        fontSize: 20
-                      ),
-                    ),
-                    SizedBox(width: 3),
-                    Icon(Icons.task_alt_rounded, weight: 100),
-                  ],
-                ),
-              ) : const SizedBox(),
-              Expanded(
-                child: TabBarView(children: [
-                  Todo(
-                    list: nonTrashedTodolists,
-                    category: 'All',
-                    cardToRemove: cardToRemove,
-                    animate: animate
-                  ),
-                  Todo(
-                    list: nonTrashedTodolists,
-                    category: 'Personal',
-                    cardToRemove: cardToRemove,
-                    animate: animate
-                  ),
-                  Todo(
-                    list: nonTrashedTodolists,
-                    category: 'Work',
-                    cardToRemove: cardToRemove,
-                    animate: animate
-                  ),
-                  Todo(
-                    list: nonTrashedTodolists,
-                    category: 'Study',
-                    cardToRemove: cardToRemove,
-                    animate: animate
-                  ),
-                  Todo(
-                    list: nonTrashedTodolists,
-                    category: 'Shopping',
-                    cardToRemove: cardToRemove,
-                    animate: animate
-                  ),
-                  Todo(
-                    list: nonTrashedTodolists,
-                    category: 'Sport',
-                    cardToRemove: cardToRemove,
-                    animate: animate
-                  ),
-                ]),
-              ),
-              backingUp == true ? const LinearProgressIndicator() : const SizedBox()
-            ],
+          body: const Shell(
+            index: 1
           ),
           floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,

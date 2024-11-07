@@ -47,5 +47,5 @@ app.*.map.json
 /lib/.env
 
 # Credentials
-/assets/credentials.json
-google-services.json
+*credentials.json
+*google-services.json
