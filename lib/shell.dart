@@ -9,7 +9,8 @@ class Shell extends StatefulWidget {
   late bool isSearch;
   late bool isOfLength;
   late String selectedCategory;
-  dynamic closeSearch;
+  Function closeSearch;
+  Function toggle;
 
   Shell({
     super.key,
@@ -20,7 +21,8 @@ class Shell extends StatefulWidget {
     required this.isSearch,
     required this.isOfLength,
     required this.selectedCategory,
-    required this.closeSearch
+    required this.closeSearch,
+    required this.toggle
   });
 
   @override
@@ -37,6 +39,29 @@ class _ShellState extends State<Shell> {
       child: PersistentTabView(
         context,
         controller: controller,
+        onItemSelected: (e) {
+          switch (e) {
+            case 0:
+              widget.toggle('Personal');
+              break;
+            case 1:
+              widget.toggle('Personal');
+              break;
+            case 2:
+              widget.toggle('Work');
+              break;
+            case 3:
+              widget.toggle('Study');
+              break;
+            case 4:
+              widget.toggle('Shopping');
+              break;
+            case 5:
+              widget.toggle('Sport');
+            break;
+            default:
+          }
+        },
         screens: [
           Todo(
             list: widget.nonTrashedTodolists,
