@@ -321,12 +321,12 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                   animate = false;
                 });
               });
-              AudioService().play('pings/start.mp3');
               String text = textController.text.trim();
               String due = dateController.text;
               String category = selectedCategory;
               String intvl = interval;
               if (text.isNotEmpty) {
+                AudioService().play('pings/start.mp3');
                 context.read<TodoListDatabase>().addTodoList(text, category, due, intvl);
                 setState(() {
                   selectedDate = DateTime.now().add(const Duration(days: 1));
@@ -334,14 +334,10 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                 Navigator.pop(context);
                 textController.clear();
                 if (context.read<TodoListDatabase>().preferences.first.notification == true) {
-                  /* NotificationService().showNotification(
-                    id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
-                    title: "New Plan Recorded",
-                    body: text,
-                    payload: "Due by $due"
-                  ); */
+                  int notifID = context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.last.id + 1 : 1;
+                  print(notifID);
                   NotificationService().scheduleNotification(
-                    id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.last.id + 1 : 1,
+                    id: notifID,
                     title: "Reminder",
                     body: "TODO: $text",
                     interval: intvl,
@@ -592,9 +588,10 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                         );
                         Navigator.pop(context);
                       } else {
-                        context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due, interval);
                         if ((Plan.interval != interval) || (Plan.plan != text)) {
+                          context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due, interval);
                           NotificationService().cancelNotification(Plan.id);
+                          print(Plan.id);
                           NotificationService().scheduleNotification(
                             id: Plan.id,
                             title: "Reminder",
@@ -1269,6 +1266,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
         NotificationService().cancelNotification(plan.id);
         AudioService().play('pings/completed.mp3');
         context.read<TodoListDatabase>().completed(plan.id);
+        print(plan.id);
         _completedController.play();
         Future.delayed(const Duration(seconds: 5), () {
           _completedController.stop();
