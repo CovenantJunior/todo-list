@@ -9,6 +9,7 @@ class Shell extends StatefulWidget {
   late bool isSearch;
   late bool isOfLength;
   late String selectedCategory;
+  dynamic closeSearch;
 
   Shell({
     super.key,
@@ -18,7 +19,8 @@ class Shell extends StatefulWidget {
     required this.animate,
     required this.isSearch,
     required this.isOfLength,
-    required this.selectedCategory
+    required this.selectedCategory,
+    required this.closeSearch
   });
 
   @override
@@ -26,13 +28,6 @@ class Shell extends StatefulWidget {
 }
 
 class _ShellState extends State<Shell> {
-
-  void closeSearch() {
-    setState(() {
-      widget.isSearch = false;
-      widget.isOfLength = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +46,7 @@ class _ShellState extends State<Shell> {
             isSearch: widget.isSearch,
             isOfLength: widget.isOfLength,
             selectedCategory: widget.selectedCategory,
-            closeSearch: closeSearch
+            closeSearch: widget.closeSearch
           ),
         Todo(
             list: widget.nonTrashedTodolists,
@@ -61,7 +56,7 @@ class _ShellState extends State<Shell> {
             isSearch: widget.isSearch,
             isOfLength: widget.isOfLength,
             selectedCategory: widget.selectedCategory,
-            closeSearch: closeSearch
+            closeSearch: widget.closeSearch
           ),
         Todo(
             list: widget.nonTrashedTodolists,
@@ -71,7 +66,7 @@ class _ShellState extends State<Shell> {
             isSearch: widget.isSearch,
             isOfLength: widget.isOfLength,
             selectedCategory: widget.selectedCategory,
-            closeSearch: closeSearch
+            closeSearch: widget.closeSearch
           ),
         Todo(
             list: widget.nonTrashedTodolists,
@@ -81,7 +76,7 @@ class _ShellState extends State<Shell> {
             isSearch: widget.isSearch,
             isOfLength: widget.isOfLength,
             selectedCategory: widget.selectedCategory,
-            closeSearch: closeSearch
+            closeSearch: widget.closeSearch
           ),
         Todo(
             list: widget.nonTrashedTodolists,
@@ -91,7 +86,7 @@ class _ShellState extends State<Shell> {
             isSearch: widget.isSearch,
             isOfLength: widget.isOfLength,
             selectedCategory: widget.selectedCategory,
-            closeSearch: closeSearch
+            closeSearch: widget.closeSearch
           ),
         Todo(
             list: widget.nonTrashedTodolists,
@@ -101,7 +96,7 @@ class _ShellState extends State<Shell> {
             isSearch: widget.isSearch,
             isOfLength: widget.isOfLength,
             selectedCategory: widget.selectedCategory,
-            closeSearch: closeSearch
+            closeSearch: widget.closeSearch
           ),
         ],
         items: [

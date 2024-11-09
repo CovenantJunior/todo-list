@@ -959,14 +959,28 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             ],
           ),
           drawer: const TodoListDrawer(),
-          body: Shell(
-            index: 0,
-            nonTrashedTodolists: nonTrashedTodolists,
-            cardToRemove: cardToRemove,
-            animate: animate,
-            isSearch: isSearch,
-            isOfLength: isOfLength,
-            selectedCategory: selectedCategory
+          body: GestureDetector(
+            onTap: () {
+              setState(() {
+                isSearch = false;
+                isOfLength = false;
+              });
+            },
+            child: Shell(
+              index: 0,
+              nonTrashedTodolists: nonTrashedTodolists,
+              cardToRemove: cardToRemove,
+              animate: animate,
+              isSearch: isSearch,
+              isOfLength: isOfLength,
+              selectedCategory: selectedCategory,
+              closeSearch: () {
+                setState(() {
+                  isSearch = false;
+                  isOfLength = false;
+                });
+              },            
+            ),
           ),
         ),
       ),

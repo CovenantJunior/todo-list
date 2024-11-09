@@ -1283,7 +1283,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
 
     return GestureDetector(
       onTap: () {
-        widget.closeSearch;
+        widget.closeSearch();
       },
       child: Scaffold(
         body: count > 0
@@ -1668,7 +1668,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                   child: FloatingActionButton(
                     onPressed: () {
                       if (widget.isSearch == true) {
-                        widget.closeSearch;
+                        widget.closeSearch();
                       } else {
                         createTodoList('', context);
                       }
