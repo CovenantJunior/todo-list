@@ -42,7 +42,7 @@ class _ShellState extends State<Shell> {
         onItemSelected: (e) {
           switch (e) {
             case 0:
-              widget.toggle('Personal');
+              widget.toggle('All');
               break;
             case 1:
               widget.toggle('Personal');

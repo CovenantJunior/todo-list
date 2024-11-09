@@ -392,7 +392,6 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
 
   // ignore: non_constant_identifier_names
   void editTodoList(int id, Plan) {
-    Navigator.pop(context);
     textController.text = Plan.plan;
     dateController.text =
         Plan.due != null ? DateFormat('yyyy-MM-dd').format(Plan.due) : date;
@@ -461,8 +460,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                                   'Work',
                                   'Study',
                                   'Shopping',
-                                  'Sport',
-                                  'Wishlist'
+                                  'Sport'
                                 ].map<DropdownMenuItem<String>>((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
@@ -575,6 +573,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                     String due = dateController.text;
                     if (text.isNotEmpty) {
                       if (Plan.completed == true) {
+                        Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             shape: RoundedRectangleBorder(
@@ -593,6 +592,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                         Navigator.pop(context);
                       } else {
                         if ((Plan.interval != interval) || (Plan.plan != text)) {
+                          Navigator.pop(context);
                           AudioService().play('pings/pop.mp3');
                           context.read<TodoListDatabase>().updateTodoList(Plan.id, text, widget.category, due, interval);
                           NotificationService().cancelNotification(Plan.id);
