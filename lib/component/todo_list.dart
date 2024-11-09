@@ -7,6 +7,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'dart:ffi';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'package:todo_list/component/todo_list_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:popover/popover.dart';
@@ -21,13 +22,17 @@ class Todo extends StatefulWidget {
   final String category;
   final List cardToRemove;
   final bool animate;
+  late bool isSearch;
+  late bool isOfLength;
 
-  const Todo({
+  Todo({
     super.key,
     required this.list,
     required this.category,
     required this.cardToRemove,
-    required this.animate
+    required this.animate,
+    required this.isSearch,
+    required this.isOfLength
   });
 
   @override
@@ -39,15 +44,32 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
   late final ConfettiController _completedController = ConfettiController();
   late AnimationController _controller;
 
-  int plansCount = 0;
+  TextEditingController textController = TextEditingController();
+  String hint = 'Task description';
+  TextEditingController dateController = TextEditingController();
+  final date = DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(days: 1)));
+  DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
+  String selectedCategory = 'Personal';
   String interval = 'Every Minute';
+  List searchResults = [];
+  List nonTrashedTodolists = [];
+  List nonTrashedTodolistsState = [];
+  List preference = [];
+  List cardToRemove = [];
+  bool _isListening = false;
+  bool backingUp = false;
+  late SpeechToText _speech;
+
+  int plansCount = 0;
   Future<bool?> hasVibrate = Vibration.hasVibrator();
   bool requestedClipboard = false;
+  bool animate = false;
   
   @override
   void initState() {
     super.initState();
     readTodoLists();
+    _speech = SpeechToText();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -85,18 +107,6 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
     return path;
   }
   
-
-  TextEditingController textController = TextEditingController();
-  String hint = 'Task description';
-  TextEditingController dateController = TextEditingController();
-  final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
-  DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
-  String selectedCategory = 'Personal';
-  bool isSearch = false;
-  bool isOfLength = false;
-  List nonTrashedTodolistsState = [];
-  List preference = [];
-  List cardToRemove = [];
   Future<void> selectDate(BuildContext context, due) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -110,6 +120,273 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
         dateController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
     }
+  }
+
+  void createTodoList(String data, BuildContext context) {
+    if (data != '') {
+      textController.text = data;
+    }
+    dateController.text == '' ? dateController.text = date : dateController.text= dateController.text;
+    selectedCategory == 'All' ? selectedCategory = 'Personal' : selectedCategory = selectedCategory;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          "Add a plan",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.list_rounded),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextFormField(
+                        autocorrect: true,
+                        autofocus: true,
+                        minLines: 1,
+                        maxLines: 20,
+                        controller: textController,
+                        textCapitalization: TextCapitalization.sentences,
+                        decoration: InputDecoration(
+                          hintText: hint,
+                          suffixIcon: context.watch<TodoListDatabase>().preferences.first.stt == true
+                              ? (IconButton(
+                                  onPressed: _listen,
+                                  icon: Icon(_isListening == true
+                                      ? Icons.mic_off
+                                      : Icons.mic)))
+                              : const SizedBox(),
+                          hintStyle: const TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.w500),
+                          labelStyle: const TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Icon(Icons.category),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                            labelText: 'Category',
+                            labelStyle: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.w500),
+                            border: InputBorder.none),
+                        child: DropdownButtonFormField<String>(
+                          value: selectedCategory,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedCategory = value!;
+                            });
+                          },
+                          items: [
+                            'Personal',
+                            'Work',
+                            'Study',
+                            'Shopping',
+                            'Sport',
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: const TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            );
+                          }).toList(),
+                          isExpanded: true,
+                          icon: const Icon(Icons.edit),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Icon(Icons.calendar_month_rounded),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                              labelText: 'Tap here to choose due date',
+                              labelStyle: TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.w500),
+                              hintText: 'Select due date',
+                              border: InputBorder.none),
+                          child: TextFormField(
+                            onTap: () {
+                              _selectDate(context);
+                            },
+                            controller: dateController,
+                            style: const TextStyle(
+                              fontFamily: "Quicksand",
+                              fontWeight: FontWeight.w500
+                            ),
+                            readOnly: true, // Make the TextFormField read-only
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    const Icon(Icons.timer_outlined),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                            labelText: 'Reminder Interval',
+                            labelStyle: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.w500),
+                            border: InputBorder.none),
+                        child: DropdownButtonFormField<String>(
+                          value: interval,
+                          onChanged: (value) {
+                            interval = value!;
+                          },
+                          items: [
+                            'Every Minute',
+                            'Hourly',
+                            'Daily',
+                            'Weekly'
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: const TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            );
+                          }).toList(),
+                          isExpanded: true,
+                          icon: const Icon(Icons.edit),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+              textController.clear();
+              setState(() {
+                selectedDate = DateTime.now().add(const Duration(days: 1));
+                requestedClipboard = true;
+              });
+            },
+            icon: const Icon(Icons.undo_rounded),
+          ),
+          IconButton(
+            icon: const Icon(Icons.add_task_rounded),
+            onPressed: () async {
+              setState(() {
+                animate = true;
+              });
+              Future.delayed(const Duration(milliseconds: 300), () {
+                setState(() {
+                  animate = false;
+                });
+              });
+              AudioService().play('pings/start.mp3');
+              String text = textController.text.trim();
+              String due = dateController.text;
+              String category = selectedCategory;
+              String intvl = interval;
+              if (text.isNotEmpty) {
+                context.read<TodoListDatabase>().addTodoList(text, category, due, intvl);
+                setState(() {
+                  selectedDate = DateTime.now().add(const Duration(days: 1));
+                });
+                Navigator.pop(context);
+                textController.clear();
+                if (context.read<TodoListDatabase>().preferences.first.notification == true) {
+                  /* NotificationService().showNotification(
+                    id: nonTrashedTodolistsState.isNotEmpty ? nonTrashedTodolistsState.first.id + 1 : 0,
+                    title: "New Plan Recorded",
+                    body: text,
+                    payload: "Due by $due"
+                  ); */
+                  NotificationService().scheduleNotification(
+                    id: context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.last.id + 1 : 1,
+                    title: "Reminder",
+                    body: "TODO: $text",
+                    interval: intvl,
+                    payload: jsonEncode({
+                      'scheduledDate': DateTime.now().toIso8601String(),
+                      'interval': intvl,
+                    }),
+                  );
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    duration: const Duration(seconds: 2),
+                    content: const Text(
+                      'Plan saved',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                if (context.read<TodoListDatabase>().preferences.first.vibration) Vibration.vibrate(duration: 50);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)
+              ),
+                    duration: const Duration(seconds: 2),
+                    content: const Text(
+                      'Oops, blank shot!',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      ));
   }
 
   // ignore: non_constant_identifier_names
@@ -374,14 +651,160 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
             ));
   }
 
+  void trashAllTodoLists(nonTrashedTodolists) {
+    if (context.read<TodoListDatabase>().preferences.first.vibration) Vibration.vibrate(duration: 50);
+    List trash;
+    if (selectedCategory == 'All') {
+      trash = nonTrashedTodolists;
+    } else {  
+      trash = nonTrashedTodolists.where((e) => e.category == selectedCategory).toList();
+    }
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+      content: const Text(
+        "Move all plans to Trash?",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 20,
+          fontFamily: 'Quicksand',
+        ),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+            deleteAllAction(trash);
+          },
+          icon: const Icon(
+            Icons.done,
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.cancel_outlined,
+          ),
+        ),
+      ],
+    ));
+  }
+
+  void deleteAllAction(trash) {
+    bool undo = true;
+    for (var list in trash) {
+      setState(() {
+        cardToRemove.add(list.id);
+      });
+    }
+    Future.delayed(const Duration(seconds: 5), () {
+      if (undo == true) {
+        for (var list in trash) {
+          NotificationService().cancelNotification(list.id);
+        }
+        context.read<TodoListDatabase>().trashAllTodoLists(trash);
+        Future.delayed(const Duration(seconds: 4), () {
+          cardToRemove.clear();
+        });
+        setState(() {
+          undo = true;
+        });
+      }
+    });
+    ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+          duration: const Duration(seconds: 4),
+          content: const Text('Moving all to Trash',
+              style: TextStyle(
+                  fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+          action: SnackBarAction(
+              label: 'UNDO',
+              onPressed: () {
+                setState(() {
+                  undo = false;
+                });
+                cardToRemove.clear();
+              })),
+    );
+  }
+
   void closeSearch() {
     readTodoLists();
     setState(() {
-      isSearch = false;
-      isOfLength = false;
+      widget.isSearch = false;
+      widget.isOfLength = false;
     });
   }
   
+  void _listen() async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (status) {
+          // print('Speech recognition status: $status');
+          if (status == 'listening') {
+            setState(() {
+              _isListening = true;
+              hint = 'Listening';
+            });
+          } else {
+            setState(() {
+              _isListening = false;
+              hint = 'Task description';
+            });
+          }
+        },
+        onError: (errorNotification) {
+          // print('Speech recognition error: $errorNotification');
+          setState(() {
+            _isListening = false;
+            _speech.stop();
+            hint = 'Task description';
+          });
+        },
+      );
+      if (available) {
+        setState(() {
+          _isListening = true;
+          hint = 'Listening';
+        });
+        _speech.listen(
+          onResult: (result) {
+            setState(() {
+              hint = 'Task description';
+              textController.text = result.recognizedWords;
+            });
+          },
+        );
+      }
+    } else {
+      setState(() {
+        _isListening = false;
+        _speech.stop();
+        hint = 'Task description';
+        textController.text = '';
+      });
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: selectedDate,
+      lastDate: DateTime(3000),
+    );
+    dateController.text = DateFormat('yyyy-MM-dd').format(picked!);
+    if (mounted && picked != selectedDate) {
+      setState(() {
+        dateController.text = DateFormat('yyyy-MM-dd').format(picked);
+      });
+    }
+  }
+
   // Read
   Future<void> readTodoLists() async {
     context.read<TodoListDatabase>().fetchUntrashedTodoList();
@@ -864,383 +1287,415 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
     return GestureDetector(
       onTap: () {
         setState(() {
-          isSearch = false;
-          isOfLength = false;
+          widget.isSearch = false;
+          widget.isOfLength = false;
         });
         readTodoLists();
       },
       child: Scaffold(
         body: count > 0
-            ? Column(
-              children: [
-                const Row(
-                  children: [
-                    Text(
-                      "Todo List",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.w800,
-                        fontSize: 20
-                      ),
-                    ),
-                    SizedBox(width: 3),
-                    Icon(Icons.task_alt_rounded, weight: 100),
-                  ],
-                ),
-                LiquidPullToRefresh(
-                    springAnimationDurationInMilliseconds: 100,
-                    onRefresh: () async {
-                      readTodoLists();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Stack(
-                        children: [
-                           ListView.builder(
-                            itemCount: nonTrashedTodolists.length,
-                            itemBuilder: (context, index) {
-                              final plan = nonTrashedTodolists[index];
-                              if (widget.animate) {
-                                _controller.repeat();
-                                _controller.forward();
-                              }
-                              return plan.category == widget.category || widget.category == 'All' ? GestureDetector(
-                                onDoubleTap: () {
-                                  mark(plan);
+            ? LiquidPullToRefresh(
+                springAnimationDurationInMilliseconds: 100,
+                onRefresh: () async {
+                  readTodoLists();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Stack(
+                    children: [
+                       ListView.builder(
+                        itemCount: nonTrashedTodolists.length,
+                        itemBuilder: (context, index) {
+                          final plan = nonTrashedTodolists[index];
+                          if (widget.animate) {
+                            _controller.repeat();
+                            _controller.forward();
+                          }
+                          return plan.category == widget.category || widget.category == 'All' ? GestureDetector(
+                            onDoubleTap: () {
+                              mark(plan);
+                            },
+                            child: Builder(builder: (context) {
+                              return GestureDetector(
+                                onLongPress: () {
+                                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                                  showPopover(
+                                    backgroundColor: Theme.of(context).colorScheme.onSecondary,
+                                    shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
+                                    width: 290,
+                                    height: 50,
+                                    context: context,
+                                    bodyBuilder: (context) => TodoListOptions(
+                                          id: plan.id,
+                                          plan: plan.plan,
+                                          Plan: plan,
+                                          deleteAction: deleteAction,
+                                          completedController: _completedController
+                                        ));
                                 },
-                                child: Builder(builder: (context) {
-                                  return GestureDetector(
-                                    onLongPress: () {
-                                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                                      showPopover(
-                                        backgroundColor: Theme.of(context).colorScheme.onSecondary,
-                                        shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
-                                        width: 290,
-                                        height: 50,
-                                        context: context,
-                                        bodyBuilder: (context) => TodoListOptions(
-                                              id: plan.id,
-                                              plan: plan.plan,
-                                              Plan: plan,
-                                              deleteAction: deleteAction,
-                                              completedController: _completedController
-                                            ));
-                                    },
-                                    child: Visibility(
-                                      visible: !widget.cardToRemove.contains(plan.id) && !cardToRemove.contains(plan.id),
-                                      child: index != 0 ? Card(
-                                        surfaceTintColor: tint(plan.completed),
-                                        child: Dismissible(
-                                          key: Key("${plan.id}"),
-                                          direction: DismissDirection.horizontal,
-                                          confirmDismiss: (direction) async {
-                                            swiptTrashTodoList(plan.id);
-                                            return null;
-                                          },
-                                          background: Container(
-                                            decoration: const BoxDecoration(
-                                                color: Colors.redAccent,
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(15))),
-                                            child: const Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.all(10.0),
-                                                  child: Icon(Icons.delete,
-                                                      color: Colors.white),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(10.0),
-                                                  child: Icon(Icons.delete,
-                                                      color: Colors.white),
-                                                ),
-                                              ],
+                                child: Visibility(
+                                  visible: !widget.cardToRemove.contains(plan.id) && !cardToRemove.contains(plan.id),
+                                  child: index != 0 ? Card(
+                                    surfaceTintColor: tint(plan.completed),
+                                    child: Dismissible(
+                                      key: Key("${plan.id}"),
+                                      direction: DismissDirection.horizontal,
+                                      confirmDismiss: (direction) async {
+                                        swiptTrashTodoList(plan.id);
+                                        return null;
+                                      },
+                                      background: Container(
+                                        decoration: const BoxDecoration(
+                                            color: Colors.redAccent,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15))),
+                                        child: const Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Icon(Icons.delete,
+                                                  color: Colors.white),
                                             ),
+                                            Padding(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Icon(Icons.delete,
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Checkbox(value: plan.completed != true ? false : true,
+                                            onChanged: (value){
+                                              mark(plan);
+                                            }
                                           ),
-                                          child: Row(
-                                            children: [
-                                              Checkbox(value: plan.completed != true ? false : true,
-                                                onChanged: (value){
-                                                  mark(plan);
-                                                }
-                                              ),
-                                              Expanded(
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    planDetails(plan);
-                                                  },
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(
-                                                        horizontal: 15.0, vertical: 15.0),
-                                                    child: Column(
+                                          Expanded(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                planDetails(plan);
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(
+                                                    horizontal: 15.0, vertical: 15.0),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
                                                       mainAxisAlignment:
-                                                          MainAxisAlignment.end,
+                                                          MainAxisAlignment.spaceAround,
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment.start,
                                                       children: [
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment.spaceAround,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment.start,
-                                                          children: [
-                                                            Expanded(
-                                                              child: SizedBox(
-                                                                height: 20,
-                                                                child: Text(
-                                                                  plan.plan,
-                                                                  maxLines: 1,
-                                                                  overflow:
-                                                                      TextOverflow.ellipsis,
-                                                                  style: TextStyle(
-                                                                    fontFamily: "Quicksand",
-                                                                    fontWeight:
-                                                                        FontWeight.w500,
-                                                                    // fontSize: 16,
-                                                                    decoration: decorate(
-                                                                        plan.completed),
-                                                                  ),
-                                                                ),
+                                                        Expanded(
+                                                          child: SizedBox(
+                                                            height: 20,
+                                                            child: Text(
+                                                              plan.plan,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow.ellipsis,
+                                                              style: TextStyle(
+                                                                fontFamily: "Quicksand",
+                                                                fontWeight:
+                                                                    FontWeight.w500,
+                                                                // fontSize: 16,
+                                                                decoration: decorate(
+                                                                    plan.completed),
                                                               ),
                                                             ),
-                                                            /* Builder(
-                                                      builder: (context) {
-                                                        return IconButton(
-                                                          onPressed: () {
-                                                            showPopover(
-                                                              width: 370,
-                                                              context: context,
-                                                              bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                                                            );
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons.more_vert, 
-                                                            color:Colors.blueGrey
-                                                          )
-                                                        );
-                                                      }
-                                                    ), */
-                                                            /* TodoListOptions(
-                                                      id: plan.id,
-                                                      plan: plan.plan
-                                                    ) */
-                                                            plan.starred == true
-                                                                ? const Padding(
-                                                                    padding: EdgeInsets.only(
-                                                                        left: 8.0),
-                                                                    child: Icon(
-                                                                        Icons.star_rounded,
-                                                                        color: Colors
-                                                                            .orangeAccent),
-                                                                  )
-                                                                : const SizedBox()
-                                                          ],
+                                                          ),
                                                         ),
-                                                        /* const Divider(height: 25),
-                                                                                    Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.rocket_launch_outlined,
-                                                      size: 15,
-                                                    ),
-                                                    const SizedBox(width: 5),
-                                                    Text(
-                                                      DateFormat('EEE, MMM d yyyy').format(plan.due),
-                                                      style: const TextStyle(
-                                                        fontFamily: "Quicksand",
-                                                        fontWeight: FontWeight.w500,
-                                                        // fontSize: 10
-                                                      ),
-                                                    ),
-                                                  ],
-                                                                                    ), */
+                                                        /* Builder(
+                                                  builder: (context) {
+                                                    return IconButton(
+                                                      onPressed: () {
+                                                        showPopover(
+                                                          width: 370,
+                                                          context: context,
+                                                          bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                                                        );
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.more_vert, 
+                                                        color:Colors.blueGrey
+                                                      )
+                                                    );
+                                                  }
+                                                ), */
+                                                        /* TodoListOptions(
+                                                  id: plan.id,
+                                                  plan: plan.plan
+                                                ) */
+                                                        plan.starred == true
+                                                            ? const Padding(
+                                                                padding: EdgeInsets.only(
+                                                                    left: 8.0),
+                                                                child: Icon(
+                                                                    Icons.star_rounded,
+                                                                    color: Colors
+                                                                        .orangeAccent),
+                                                              )
+                                                            : const SizedBox()
                                                       ],
                                                     ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ) : Card(
-                                        surfaceTintColor: tint(plan.completed),
-                                        child: Dismissible(
-                                          key: Key("${plan.id}"),
-                                          direction: DismissDirection.horizontal,
-                                          confirmDismiss: (direction) async {
-                                            swiptTrashTodoList(plan.id);
-                                            return null;
-                                          },
-                                          background: Container(
-                                            decoration: const BoxDecoration(
-                                                color: Colors.redAccent,
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(15))),
-                                            child: const Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                    /* const Divider(height: 25),
+                                                                                Row(
                                               children: [
-                                                Padding(
-                                                  padding: EdgeInsets.all(10.0),
-                                                  child: Icon(Icons.delete,
-                                                      color: Colors.white),
+                                                const Icon(
+                                                  Icons.rocket_launch_outlined,
+                                                  size: 15,
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(10.0),
-                                                  child: Icon(Icons.delete,
-                                                      color: Colors.white),
+                                                const SizedBox(width: 5),
+                                                Text(
+                                                  DateFormat('EEE, MMM d yyyy').format(plan.due),
+                                                  style: const TextStyle(
+                                                    fontFamily: "Quicksand",
+                                                    fontWeight: FontWeight.w500,
+                                                    // fontSize: 10
+                                                  ),
                                                 ),
                                               ],
-                                            ),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Checkbox(value: plan.completed != true ? false : true,
-                                                onChanged: (value){
-                                                  mark(plan);
-                                                }
-                                              ),
-                                              Expanded(
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    planDetails(plan);
-                                                  },
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(
-                                                        horizontal: 15.0, vertical: 15.0),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
-                                                      children: [
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment.spaceAround,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment.start,
-                                                          children: [
-                                                            Expanded(
-                                                              child: SizedBox(
-                                                                height: 20,
-                                                                child: Text(
-                                                                  plan.plan,
-                                                                  maxLines: 1,
-                                                                  overflow:
-                                                                      TextOverflow.ellipsis,
-                                                                  style: TextStyle(
-                                                                    fontFamily: "Quicksand",
-                                                                    fontWeight:
-                                                                        FontWeight.w500,
-                                                                    // fontSize: 16,
-                                                                    decoration: decorate(
-                                                                        plan.completed),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            /* Builder(
-                                                      builder: (context) {
-                                                        return IconButton(
-                                                          onPressed: () {
-                                                            showPopover(
-                                                              width: 370,
-                                                              context: context,
-                                                              bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
-                                                            );
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons.more_vert, 
-                                                            color:Colors.blueGrey
-                                                          )
-                                                        );
-                                                      }
-                                                    ), */
-                                                            /* TodoListOptions(
-                                                      id: plan.id,
-                                                      plan: plan.plan
-                                                    ) */
-                                                            plan.starred == true
-                                                                ? const Padding(
-                                                                    padding: EdgeInsets.only(
-                                                                        left: 8.0),
-                                                                    child: Icon(
-                                                                        Icons.star_rounded,
-                                                                        color: Colors
-                                                                            .orangeAccent),
-                                                                  )
-                                                                : const SizedBox()
-                                                          ],
-                                                        ),
-                                                        /* const Divider(height: 25),
-                                                                                    Row(
-                                                  children: [
-                                                    const Icon(
-                                                      Icons.rocket_launch_outlined,
-                                                      size: 15,
-                                                    ),
-                                                    const SizedBox(width: 5),
-                                                    Text(
-                                                      DateFormat('EEE, MMM d yyyy').format(plan.due),
-                                                      style: const TextStyle(
-                                                        fontFamily: "Quicksand",
-                                                        fontWeight: FontWeight.w500,
-                                                        // fontSize: 10
-                                                      ),
-                                                    ),
+                                                                                ), */
                                                   ],
-                                                                                    ), */
-                                                      ],
-                                                    ),
-                                                  ),
                                                 ),
                                               ),
-                                            ],
+                                            ),
                                           ),
-                                        ),
-                                      ).animate(
-                                        controller: _controller
-                                      )
-                                        .fadeIn()
-                                        .scale()
-                                        .moveX(delay: 300.ms, duration: 200.ms),
+                                        ],
+                                      ),
                                     ),
-                                  );
-                                }) // runs after the above w/new duration,
-                              ) : const SizedBox();
-                            } 
-                          ).animate()
-                            .fadeIn()
-                            .scale()
-                            .moveX(delay: 300.ms, duration: 100.ms),
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: ConfettiWidget(
-                              confettiController: _completedController,
-                              blastDirectionality: BlastDirectionality.explosive, // don't specify a direction, blast randomly
-                              shouldLoop: false,
-                              colors: const [
-                                Colors.green,
-                                Colors.blue,
-                                Colors.pink,
-                                Colors.orange,
-                                Colors.purple
-                              ], // manually specify the colors to be used
-                              createParticlePath:
-                                  drawStar, // define a custom shape/path.
-                            ),
-                          ),
-                        ]
+                                  ) : Card(
+                                    surfaceTintColor: tint(plan.completed),
+                                    child: Dismissible(
+                                      key: Key("${plan.id}"),
+                                      direction: DismissDirection.horizontal,
+                                      confirmDismiss: (direction) async {
+                                        swiptTrashTodoList(plan.id);
+                                        return null;
+                                      },
+                                      background: Container(
+                                        decoration: const BoxDecoration(
+                                            color: Colors.redAccent,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15))),
+                                        child: const Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Icon(Icons.delete,
+                                                  color: Colors.white),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Icon(Icons.delete,
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Checkbox(value: plan.completed != true ? false : true,
+                                            onChanged: (value){
+                                              mark(plan);
+                                            }
+                                          ),
+                                          Expanded(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                planDetails(plan);
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(
+                                                    horizontal: 15.0, vertical: 15.0),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.spaceAround,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                      children: [
+                                                        Expanded(
+                                                          child: SizedBox(
+                                                            height: 20,
+                                                            child: Text(
+                                                              plan.plan,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow.ellipsis,
+                                                              style: TextStyle(
+                                                                fontFamily: "Quicksand",
+                                                                fontWeight:
+                                                                    FontWeight.w500,
+                                                                // fontSize: 16,
+                                                                decoration: decorate(
+                                                                    plan.completed),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        /* Builder(
+                                                  builder: (context) {
+                                                    return IconButton(
+                                                      onPressed: () {
+                                                        showPopover(
+                                                          width: 370,
+                                                          context: context,
+                                                          bodyBuilder: (context) => TodoListOptions(id: plan.id, plan: plan.plan, Plan: plan)
+                                                        );
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.more_vert, 
+                                                        color:Colors.blueGrey
+                                                      )
+                                                    );
+                                                  }
+                                                ), */
+                                                        /* TodoListOptions(
+                                                  id: plan.id,
+                                                  plan: plan.plan
+                                                ) */
+                                                        plan.starred == true
+                                                            ? const Padding(
+                                                                padding: EdgeInsets.only(
+                                                                    left: 8.0),
+                                                                child: Icon(
+                                                                    Icons.star_rounded,
+                                                                    color: Colors
+                                                                        .orangeAccent),
+                                                              )
+                                                            : const SizedBox()
+                                                      ],
+                                                    ),
+                                                    /* const Divider(height: 25),
+                                                                                Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.rocket_launch_outlined,
+                                                  size: 15,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                Text(
+                                                  DateFormat('EEE, MMM d yyyy').format(plan.due),
+                                                  style: const TextStyle(
+                                                    fontFamily: "Quicksand",
+                                                    fontWeight: FontWeight.w500,
+                                                    // fontSize: 10
+                                                  ),
+                                                ),
+                                              ],
+                                                                                ), */
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ).animate(
+                                    controller: _controller
+                                  )
+                                    .fadeIn()
+                                    .scale()
+                                    .moveX(delay: 300.ms, duration: 200.ms),
+                                ),
+                              );
+                            }) // runs after the above w/new duration,
+                          ) : const SizedBox();
+                        } 
+                      ).animate()
+                        .fadeIn()
+                        .scale()
+                        .moveX(delay: 300.ms, duration: 100.ms),
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: ConfettiWidget(
+                          confettiController: _completedController,
+                          blastDirectionality: BlastDirectionality.explosive, // don't specify a direction, blast randomly
+                          shouldLoop: false,
+                          colors: const [
+                            Colors.green,
+                            Colors.blue,
+                            Colors.pink,
+                            Colors.orange,
+                            Colors.purple
+                          ], // manually specify the colors to be used
+                          createParticlePath:
+                              drawStar, // define a custom shape/path.
+                        ),
                       ),
-                    ),
+                    ]
                   ),
-              ],
-            )
-            : !isSearch
+                ),
+              )
+            : !widget.isSearch
                 ? pattern
                 : const Center(child: Text("No result")),
+          floatingActionButton: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              (nonTrashedTodolists.isNotEmpty && !widget.isSearch && (count > 0) && (context.watch<TodoListDatabase>().preferences.first.bulkTrash == true))
+                  ? Tooltip(
+                      message: "Move plans to trash",
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          trashAllTodoLists(nonTrashedTodolists);
+                        },
+                        mini: true,
+                        shape:  RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                        backgroundColor:
+                            Theme.of(context).colorScheme.onSecondary,
+                        child: const Icon(Icons.delete_sweep_outlined),
+                      ),
+                    )
+                  : const SizedBox(),
+              const SizedBox(height: 8),
+              Tooltip(
+                message: "Add a plan",
+                child: RotationTransition(
+                  turns: Tween(begin: 0.0, end: widget.isSearch ? 0.25 : 0.0)
+                      .animate(_controller),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      if (widget.isSearch == true) {
+                        closeSearch();
+                      } else {
+                        createTodoList('', context);
+                      }
+                    },
+                    mini: true,
+                    shape:  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    backgroundColor: Theme.of(context).colorScheme.onSecondary,
+                    child: Transform.rotate(
+                      angle: widget.isSearch
+                          ? 45 * (3.141592653589793238 / 180)
+                          : 0.0, // Rotate 45 degrees if widget.isSearch is true
+                      child: const Icon(Icons.add),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
     );
   }

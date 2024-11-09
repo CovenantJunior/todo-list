@@ -6,13 +6,17 @@ class Shell extends StatelessWidget {
   late List nonTrashedTodolists;
   late List cardToRemove;
   late bool animate;
+  late bool isSearch;
+  late bool isOfLength;
 
   Shell({
     super.key,
     required this.index,
     required this.nonTrashedTodolists,
     required this.cardToRemove,
-    required this.animate
+    required this.animate,
+    required this.isSearch,
+    required this.isOfLength
   });
 
 
@@ -29,32 +33,50 @@ class Shell extends StatelessWidget {
             list: nonTrashedTodolists,
             category: 'All',
             cardToRemove: cardToRemove,
-            animate: animate),
+            animate: animate,
+            isSearch: isSearch,
+            isOfLength: isOfLength
+          ),
         Todo(
             list: nonTrashedTodolists,
             category: 'Personal',
             cardToRemove: cardToRemove,
-            animate: animate),
+            animate: animate,
+            isSearch: isSearch,
+            isOfLength: isOfLength
+          ),
         Todo(
             list: nonTrashedTodolists,
             category: 'Work',
             cardToRemove: cardToRemove,
-            animate: animate),
+            animate: animate,
+            isSearch: isSearch,
+            isOfLength: isOfLength
+          ),
         Todo(
             list: nonTrashedTodolists,
             category: 'Study',
             cardToRemove: cardToRemove,
-            animate: animate),
+            animate: animate,
+            isSearch: isSearch,
+            isOfLength: isOfLength
+          ),
         Todo(
             list: nonTrashedTodolists,
             category: 'Shopping',
             cardToRemove: cardToRemove,
-            animate: animate),
+            animate: animate,
+            isSearch: isSearch,
+            isOfLength: isOfLength
+          ),
         Todo(
             list: nonTrashedTodolists,
             category: 'Sport',
             cardToRemove: cardToRemove,
-            animate: animate),
+            animate: animate,
+            isSearch: isSearch,
+            isOfLength: isOfLength
+          ),
         ],
         items: [
           PersistentBottomNavBarItem(
