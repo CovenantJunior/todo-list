@@ -335,7 +335,6 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                 textController.clear();
                 if (context.read<TodoListDatabase>().preferences.first.notification == true) {
                   int notifID = context.read<TodoListDatabase>().todolists.isNotEmpty ? context.read<TodoListDatabase>().todolists.last.id + 1 : 1;
-                  print(notifID);
                   NotificationService().scheduleNotification(
                     id: notifID,
                     title: "Reminder",
@@ -591,7 +590,6 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                         if ((Plan.interval != interval) || (Plan.plan != text)) {
                           context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due, interval);
                           NotificationService().cancelNotification(Plan.id);
-                          print(Plan.id);
                           NotificationService().scheduleNotification(
                             id: Plan.id,
                             title: "Reminder",
@@ -1244,13 +1242,14 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
       if (plan.completed == true) {
         context.read<TodoListDatabase>().replan(plan.id);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7)
-                    ),
-            duration: const Duration(seconds: 1),
-            content: const Text('Plan reactivated!',
-                style: TextStyle(
-                    fontFamily: "Quicksand", fontWeight: FontWeight.w500))));
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(7)
+          ),
+          duration: const Duration(seconds: 1),
+          content: const Text('Plan reactivated!',
+          style: TextStyle(
+          fontFamily: "Quicksand", fontWeight: FontWeight.w500))
+        ));
         NotificationService().scheduleNotification(
           id: plan.id,
           title: "Reminder",
@@ -1266,19 +1265,20 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
         NotificationService().cancelNotification(plan.id);
         AudioService().play('pings/completed.mp3');
         context.read<TodoListDatabase>().completed(plan.id);
-        print(plan.id);
         _completedController.play();
         Future.delayed(const Duration(seconds: 5), () {
           _completedController.stop();
         });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7)
-                    ),
-            duration: const Duration(seconds: 1),
-            content: const Text('Plan accomplished. You inspire!',
-                style: TextStyle(
-                    fontFamily: "Quicksand", fontWeight: FontWeight.w500))));
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(7)
+          ),
+          duration: const Duration(seconds: 1),
+          content: const Text('Plan accomplished. You inspire!',
+          style: TextStyle(
+            fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+          )
+        ));
       }
     }
 

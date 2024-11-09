@@ -138,8 +138,7 @@ class Backup {
           final upload = driveApi.files.create(
             drive.File(
               name: '.minimalist',
-            )
-            ..fileExtension = '.isar',
+            ),
             uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
           );
           // Execute upload
@@ -247,8 +246,7 @@ class Backup {
           final upload = driveApi.files.create(
             drive.File(
               name: '.minimalist',
-            )
-            ..fileExtension = '.isar',
+            ),
             uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
           );
           // Execute upload
