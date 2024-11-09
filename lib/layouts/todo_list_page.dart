@@ -650,10 +650,23 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         child: Scaffold(
           appBar: AppBar(
             elevation: 0,
-            backgroundColor: Colors.transparent,
             title: isSearch
-                ? searchTextField()
-                : const SizedBox(),
+              ? searchTextField()
+              : const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Todo List",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20
+                      ),
+                    ),
+                    SizedBox(width: 3),
+                    Icon(Icons.task_alt_rounded, weight: 100),
+                  ],
+                ),
             centerTitle: true,
             actions: [
               !isSearch && context.watch<TodoListDatabase>().preferences.first.backup == true ? Tooltip(
@@ -732,25 +745,27 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             ],
           ),
           drawer: const TodoListDrawer(),
-          body: Shell(
-            index: 0,
-            nonTrashedTodolists: nonTrashedTodolists,
-            cardToRemove: cardToRemove,
-            animate: animate,
-            isSearch: isSearch,
-            isOfLength: isOfLength,
-            selectedCategory: selectedCategory,
-            closeSearch: () {
-              setState(() {
-                isSearch = false;
-                isOfLength = false;
-              });
-            },
-            toggle: (c) {
-              setState(() {
-                selectedCategory = c;
-              });
-            }
+          body: ClipRRect(
+            child: Shell(
+              index: 0,
+              nonTrashedTodolists: nonTrashedTodolists,
+              cardToRemove: cardToRemove,
+              animate: animate,
+              isSearch: isSearch,
+              isOfLength: isOfLength,
+              selectedCategory: selectedCategory,
+              closeSearch: () {
+                setState(() {
+                  isSearch = false;
+                  isOfLength = false;
+                });
+              },
+              toggle: (c) {
+                setState(() {
+                  selectedCategory = c;
+                });
+              }
+            ),
           ),
         ),
       ),
