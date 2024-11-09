@@ -98,8 +98,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       autofocus: true,
       autocorrect: true,
       decoration: InputDecoration(
-          labelText: 'Search Plans / $selectedCategory',
-          labelStyle: const TextStyle(fontFamily: "Quicksand")),
+        labelText: 'Search Plans / $selectedCategory',
+        labelStyle: const TextStyle(fontFamily: "Quicksand")
+      ),
       onChanged: (q) {
         if (q.isNotEmpty) {
           setState(() {
@@ -741,6 +742,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   Future<void> readTodoLists() async {
     context.read<TodoListDatabase>().fetchUntrashedTodoList();
     context.read<TodoListDatabase>().fetchPreferences();
+    context.read<TodoListDatabase>().fetchTrashedTodoList();
   }
 
   void getClipBoardData() async {
@@ -801,6 +803,18 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
+    List trashedTodolists = context.read<TodoListDatabase>().trashedTodoLists;
+
+    for (var plan in trashedTodolists) {
+      // Get the current time
+      DateTime currentTime = DateTime.now();
+      // Calculate the difference between current time and database time
+      Duration difference = currentTime.difference(plan.trashedDate);
+      if (difference.inDays >= 30) {
+        context.read<TodoListDatabase>().deleteTodoList(plan.id);
+      }
+    }
+
     setState(() {
       nonTrashedTodolistsState = nonTrashedTodolists;
       count = nonTrashedTodolists.length;
@@ -951,7 +965,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             cardToRemove: cardToRemove,
             animate: animate,
             isSearch: isSearch,
-            isOfLength: isOfLength
+            isOfLength: isOfLength,
+            selectedCategory: selectedCategory
           ),
         ),
       ),

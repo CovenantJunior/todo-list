@@ -18,12 +18,14 @@ import 'package:vibration/vibration.dart';
 
 class Todo extends StatefulWidget {
 
-  final List list;
-  final String category;
-  final List cardToRemove;
-  final bool animate;
+  late List list;
+  late String category;
+  late List cardToRemove;
+  late bool animate;
   late bool isSearch;
   late bool isOfLength;
+  late String selectedCategory;
+  late Function closeSearch;
 
   Todo({
     super.key,
@@ -32,7 +34,9 @@ class Todo extends StatefulWidget {
     required this.cardToRemove,
     required this.animate,
     required this.isSearch,
-    required this.isOfLength
+    required this.isOfLength,
+    required this.selectedCategory,
+    required this.closeSearch
   });
 
   @override
@@ -49,7 +53,6 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
   TextEditingController dateController = TextEditingController();
   final date = DateFormat('yyyy-MM-dd').format(DateTime.now().add(const Duration(days: 1)));
   DateTime selectedDate = DateTime.now().add(const Duration(days: 1));
-  String selectedCategory = 'Personal';
   String interval = 'Every Minute';
   List searchResults = [];
   List nonTrashedTodolists = [];
@@ -74,6 +77,9 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
+    setState(() {
+      widget.selectedCategory = widget.category;
+    });
   }
 
   @override
@@ -127,7 +133,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
       textController.text = data;
     }
     dateController.text == '' ? dateController.text = date : dateController.text= dateController.text;
-    selectedCategory == 'All' ? selectedCategory = 'Personal' : selectedCategory = selectedCategory;
+    widget.category == 'All' ? widget.category = 'Personal' : widget.category = widget.category;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -189,10 +195,10 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                                 fontWeight: FontWeight.w500),
                             border: InputBorder.none),
                         child: DropdownButtonFormField<String>(
-                          value: selectedCategory,
+                          value: widget.category,
                           onChanged: (value) {
                             setState(() {
-                              selectedCategory = value!;
+                              widget.category = value!;
                             });
                           },
                           items: [
@@ -323,7 +329,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
               });
               String text = textController.text.trim();
               String due = dateController.text;
-              String category = selectedCategory;
+              String category = widget.category;
               String intvl = interval;
               if (text.isNotEmpty) {
                 AudioService().play('pings/start.mp3');
@@ -448,7 +454,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                               child: DropdownButtonFormField<String>(
                                 value: Plan.category,
                                 onChanged: (value) {
-                                  selectedCategory = value!;
+                                  widget.category = value!;
                                 },
                                 items: [
                                   'Personal',
@@ -567,7 +573,6 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                   onPressed: () {
                     String text = textController.text;
                     String due = dateController.text;
-                    String? category = selectedCategory;
                     if (text.isNotEmpty) {
                       if (Plan.completed == true) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -588,7 +593,8 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                         Navigator.pop(context);
                       } else {
                         if ((Plan.interval != interval) || (Plan.plan != text)) {
-                          context.read<TodoListDatabase>().updateTodoList(Plan.id, text, category, due, interval);
+                          AudioService().play('pings/pop.mp3');
+                          context.read<TodoListDatabase>().updateTodoList(Plan.id, text, widget.category, due, interval);
                           NotificationService().cancelNotification(Plan.id);
                           NotificationService().scheduleNotification(
                             id: Plan.id,
@@ -649,10 +655,10 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
   void trashAllTodoLists(nonTrashedTodolists) {
     if (context.read<TodoListDatabase>().preferences.first.vibration) Vibration.vibrate(duration: 50);
     List trash;
-    if (selectedCategory == 'All') {
+    if (widget.category == 'All') {
       trash = nonTrashedTodolists;
     } else {  
-      trash = nonTrashedTodolists.where((e) => e.category == selectedCategory).toList();
+      trash = nonTrashedTodolists.where((e) => e.category == widget.category).toList();
     }
     showDialog(
       context: context,
@@ -727,13 +733,6 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
     );
   }
 
-  void closeSearch() {
-    readTodoLists();
-    setState(() {
-      widget.isSearch = false;
-      widget.isOfLength = false;
-    });
-  }
   
   void _listen() async {
     if (!_isListening) {
@@ -1284,11 +1283,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
 
     return GestureDetector(
       onTap: () {
-        setState(() {
-          widget.isSearch = false;
-          widget.isOfLength = false;
-        });
-        readTodoLists();
+        widget.closeSearch;
       },
       child: Scaffold(
         body: count > 0
@@ -1673,7 +1668,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                   child: FloatingActionButton(
                     onPressed: () {
                       if (widget.isSearch == true) {
-                        closeSearch();
+                        widget.closeSearch;
                       } else {
                         createTodoList('', context);
                       }

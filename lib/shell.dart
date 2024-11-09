@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:todo_list/component/todo_list.dart';
-class Shell extends StatelessWidget {
+class Shell extends StatefulWidget {
   final int index;
   late List nonTrashedTodolists;
   late List cardToRemove;
   late bool animate;
   late bool isSearch;
   late bool isOfLength;
+  late String selectedCategory;
 
   Shell({
     super.key,
@@ -16,13 +17,26 @@ class Shell extends StatelessWidget {
     required this.cardToRemove,
     required this.animate,
     required this.isSearch,
-    required this.isOfLength
+    required this.isOfLength,
+    required this.selectedCategory
   });
 
+  @override
+  State<Shell> createState() => _ShellState();
+}
+
+class _ShellState extends State<Shell> {
+
+  void closeSearch() {
+    setState(() {
+      widget.isSearch = false;
+      widget.isOfLength = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final PersistentTabController controller = PersistentTabController(initialIndex: index);
+    final PersistentTabController controller = PersistentTabController(initialIndex: widget.index);
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: PersistentTabView(
@@ -30,52 +44,64 @@ class Shell extends StatelessWidget {
         controller: controller,
         screens: [
           Todo(
-            list: nonTrashedTodolists,
+            list: widget.nonTrashedTodolists,
             category: 'All',
-            cardToRemove: cardToRemove,
-            animate: animate,
-            isSearch: isSearch,
-            isOfLength: isOfLength
+            cardToRemove: widget.cardToRemove,
+            animate: widget.animate,
+            isSearch: widget.isSearch,
+            isOfLength: widget.isOfLength,
+            selectedCategory: widget.selectedCategory,
+            closeSearch: closeSearch
           ),
         Todo(
-            list: nonTrashedTodolists,
+            list: widget.nonTrashedTodolists,
             category: 'Personal',
-            cardToRemove: cardToRemove,
-            animate: animate,
-            isSearch: isSearch,
-            isOfLength: isOfLength
+            cardToRemove: widget.cardToRemove,
+            animate: widget.animate,
+            isSearch: widget.isSearch,
+            isOfLength: widget.isOfLength,
+            selectedCategory: widget.selectedCategory,
+            closeSearch: closeSearch
           ),
         Todo(
-            list: nonTrashedTodolists,
+            list: widget.nonTrashedTodolists,
             category: 'Work',
-            cardToRemove: cardToRemove,
-            animate: animate,
-            isSearch: isSearch,
-            isOfLength: isOfLength
+            cardToRemove: widget.cardToRemove,
+            animate: widget.animate,
+            isSearch: widget.isSearch,
+            isOfLength: widget.isOfLength,
+            selectedCategory: widget.selectedCategory,
+            closeSearch: closeSearch
           ),
         Todo(
-            list: nonTrashedTodolists,
+            list: widget.nonTrashedTodolists,
             category: 'Study',
-            cardToRemove: cardToRemove,
-            animate: animate,
-            isSearch: isSearch,
-            isOfLength: isOfLength
+            cardToRemove: widget.cardToRemove,
+            animate: widget.animate,
+            isSearch: widget.isSearch,
+            isOfLength: widget.isOfLength,
+            selectedCategory: widget.selectedCategory,
+            closeSearch: closeSearch
           ),
         Todo(
-            list: nonTrashedTodolists,
+            list: widget.nonTrashedTodolists,
             category: 'Shopping',
-            cardToRemove: cardToRemove,
-            animate: animate,
-            isSearch: isSearch,
-            isOfLength: isOfLength
+            cardToRemove: widget.cardToRemove,
+            animate: widget.animate,
+            isSearch: widget.isSearch,
+            isOfLength: widget.isOfLength,
+            selectedCategory: widget.selectedCategory,
+            closeSearch: closeSearch
           ),
         Todo(
-            list: nonTrashedTodolists,
+            list: widget.nonTrashedTodolists,
             category: 'Sport',
-            cardToRemove: cardToRemove,
-            animate: animate,
-            isSearch: isSearch,
-            isOfLength: isOfLength
+            cardToRemove: widget.cardToRemove,
+            animate: widget.animate,
+            isSearch: widget.isSearch,
+            isOfLength: widget.isOfLength,
+            selectedCategory: widget.selectedCategory,
+            closeSearch: closeSearch
           ),
         ],
         items: [
