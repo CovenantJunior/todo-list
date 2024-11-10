@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_list/models/todo_list.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list/services/ads/interstitial.dart';
 import 'package:vibration/vibration.dart';
 
 class TodoListTrashOptions extends StatefulWidget {
@@ -27,6 +28,8 @@ class TodoListTrashOptions extends StatefulWidget {
 class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
   @override
   Widget build(BuildContext context) {
+
+    InterstitialAds().loadInterstitialAd();
 
       // Delete Forever
       void deleteTodoList(int id) {
@@ -60,6 +63,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
                           fontWeight: FontWeight.w500
                         )
                       )));
+                  InterstitialAds().showInterstitialAd(context);
                 },
                 icon: const Icon(
                   Icons.done,

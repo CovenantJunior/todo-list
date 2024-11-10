@@ -129,7 +129,7 @@ class _ShellState extends State<Shell> {
       ],
       items: [
         PersistentBottomNavBarItem(
-          activeColorPrimary: !isDark! ? Colors.black87 : Colors.white,
+          activeColorPrimary: !isDark ? Colors.black87 : Colors.white,
           icon: Icon(
             Icons.home_outlined,
             color: !isDark ? Colors.black87 : Colors.white,

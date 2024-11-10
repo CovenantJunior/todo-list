@@ -72,6 +72,7 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   win32: ^5.8.0
   persistent_bottom_nav_bar: ^6.2.1
+  google_mobile_ads: ^5.2.0
 
 dev_dependencies:
   flutter_test:

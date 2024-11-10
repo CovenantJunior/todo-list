@@ -138,7 +138,8 @@ class Backup {
           final upload = driveApi.files.create(
             drive.File(
               name: '.minimalist',
-            ),
+            )
+            ..fileExtension = '.isar',
             uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
           );
           // Execute upload
@@ -246,7 +247,8 @@ class Backup {
           final upload = driveApi.files.create(
             drive.File(
               name: '.minimalist',
-            ),
+            )
+            ..fileExtension = '.isar',
             uploadMedia: drive.Media(backupFile.openRead(), backupFile.lengthSync()),
           );
           // Execute upload
@@ -289,7 +291,8 @@ class Backup {
     // Call backup function
     backup();
     } catch (e) {
-      backup();
+      print(e.toString());
+      // backup();zz
       
       // Show backup error message
       ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
@@ -299,7 +302,7 @@ class Backup {
         content: const Row(children: [
           Icon(Icons.error_outline_rounded, color: Colors.red),
           SizedBox(width: 10),
-          Text('Check your internet connection',
+          Text('Something went wrong.',
               style: TextStyle(
                   fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
         ]),

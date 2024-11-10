@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todo_list/layouts/todo_list_page.dart';
 import 'package:todo_list/layouts/todo_list_preferences.dart';
 import 'package:todo_list/models/todo_list_database.dart';
@@ -168,6 +169,7 @@ void onStart(ServiceInstance service) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  unawaited(MobileAds.instance.initialize());
   await TodoListDatabase.initialize();
   NotificationService().initNotifications();
   initializeService();

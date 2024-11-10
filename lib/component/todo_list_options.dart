@@ -9,6 +9,7 @@ import 'package:todo_list/models/todo_list.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:todo_list/services/ads/interstitial.dart';
 import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
 
@@ -38,6 +39,8 @@ class _TodoListOptionsState extends State<TodoListOptions> {
 
   @override
   Widget build(BuildContext context) {
+
+    InterstitialAds().loadInterstitialAd();
 
     String interval = 'Every Minute';
     // Access user input
@@ -436,6 +439,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
               fontWeight: FontWeight.w500
             )
           )));
+        InterstitialAds().showInterstitialAd(context);
       }
     }
 

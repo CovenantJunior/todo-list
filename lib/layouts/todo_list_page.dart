@@ -13,6 +13,7 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:todo_list/component/todo_actions.dart';
 import 'package:todo_list/component/todo_list_drawer.dart';
 import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/services/ads/interstitial.dart';
 import 'package:todo_list/services/audio_service.dart';
 import 'package:todo_list/services/backup_service.dart';
 import 'package:todo_list/services/notification_service.dart';
@@ -71,6 +72,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
+    InterstitialAds().loadInterstitialAd();
   }
 
   TextEditingController textController = TextEditingController();

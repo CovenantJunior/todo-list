@@ -12,6 +12,7 @@ import 'package:todo_list/component/todo_list_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list/services/ads/interstitial.dart';
 import 'package:todo_list/services/audio_service.dart';
 import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
@@ -807,8 +808,10 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List nonTrashedTodolists =
-        context.watch<TodoListDatabase>().nonTrashedTodolists;
+
+    InterstitialAds().loadInterstitialAd();
+    
+    List nonTrashedTodolists =context.watch<TodoListDatabase>().nonTrashedTodolists;
     setState(() {
       nonTrashedTodolistsState = nonTrashedTodolists;
     });
@@ -1278,6 +1281,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
             fontFamily: "Quicksand", fontWeight: FontWeight.w500)
           )
         ));
+        InterstitialAds().showInterstitialAd(context);
       }
     }
 
