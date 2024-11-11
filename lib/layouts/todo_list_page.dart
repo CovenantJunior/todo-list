@@ -61,19 +61,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   bool preState = false;
   int count = 0;
   bool animate = false;
+  Timer? _timer;
 
-  @override
-  void initState() {
-    super.initState();
-    requestPermissions();
-    readTodoLists();
-    _speech = SpeechToText();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
-    InterstitialAds().loadInterstitialAd();
-  }
 
   TextEditingController textController = TextEditingController();
   String hint = 'Task description';
@@ -569,10 +558,32 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     }
   }
 
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(minutes: 3), (timer) {
+      InterstitialAds().loadInterstitialAd(context);
+    });
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    requestPermissions();
+    readTodoLists();
+    _speech = SpeechToText();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _startTimer();
+  }
+
   @override
   void dispose() {
     _animationController.dispose(); // Dispose the animation controller
     super.dispose();
+    _timer?.cancel();
+
   }
 
   @override

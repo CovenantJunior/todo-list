@@ -29,7 +29,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
   @override
   Widget build(BuildContext context) {
 
-    InterstitialAds().loadInterstitialAd();
+    // InterstitialAds().loadInterstitialAd(context);
 
       // Delete Forever
       void deleteTodoList(int id) {

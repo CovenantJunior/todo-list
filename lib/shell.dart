@@ -39,7 +39,7 @@ class _ShellState extends State<Shell> {
     bool? isDark = context.watch<TodoListDatabase>().isDark;
     
     return PersistentTabView(
-      backgroundColor: !isDark! ? Colors.white : Colors.black,
+      backgroundColor: !isDark ? Colors.white : Colors.black,
       context,
       controller: controller,
       onItemSelected: (e) {

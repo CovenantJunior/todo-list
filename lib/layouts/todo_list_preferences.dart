@@ -34,7 +34,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
   }
 
   Future<void> readPreferences () async {
-    Provider.of<TodoListDatabase>(context, listen: false).fetchPreferences();
+    context.read<TodoListDatabase>().fetchPreferences();
   }
 
   void notifyInfo() {
@@ -155,18 +155,22 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
     List preferences = context.watch<TodoListDatabase>().preferences;
 
     for (var preference in preferences) {
-      setState(() {
-        id = preference.id;
-        darkMode = preference.darkMode;
-        notification = preference.notification;
-        vibration = preference.vibration;
-        stt = preference.stt;
-        backup = preference.backup;
-        autoSync = preference.autoSync;
-        accessClipboard = preference.accessClipboard;
-        autoDelete = preference.autoDelete;
-        autoDeleteOnDismiss = preference.autoDeleteOnDismiss;
-        bulkTrash = preference.bulkTrash;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            id = preference.id;
+            darkMode = preference.darkMode;
+            notification = preference.notification;
+            vibration = preference.vibration;
+            stt = preference.stt;
+            backup = preference.backup;
+            autoSync = preference.autoSync;
+            accessClipboard = preference.accessClipboard;
+            autoDelete = preference.autoDelete;
+            autoDeleteOnDismiss = preference.autoDeleteOnDismiss;
+            bulkTrash = preference.bulkTrash;
+          });
+        }
       });
     }
 
@@ -213,7 +217,9 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       child: Switch(
                         value: darkMode,
                         onChanged: (value) {
-                          Provider.of<TodoListDatabase>(context, listen: false).setDarkMode(id);
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            context.read<TodoListDatabase>().setDarkMode(id);
+                          });
                         }
                       ),
                     )
@@ -251,7 +257,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         value: notification,
                         onChanged: (value) {
                           notification == true ? NotificationService().cancelAllnotification() : Void;
-                          Provider.of<TodoListDatabase>(context, listen: false).setNotification(id);
+                          context.read<TodoListDatabase>().setNotification(id);
                         }
                       ),
                     )
@@ -284,7 +290,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       child: Switch(
                         value: vibration,
                         onChanged: (value) {
-                          Provider.of<TodoListDatabase>(context, listen: false).setVibration(id);
+                          context.read<TodoListDatabase>().setVibration(id);
                           vibration == false ? Vibration.vibrate(duration: 50) : Void;
                         }
                       ),
@@ -322,7 +328,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       child: Switch(
                         value: stt,
                         onChanged: (value) {
-                          Provider.of<TodoListDatabase>(context, listen: false).setSTT(id);
+                          context.read<TodoListDatabase>().setSTT(id);
                         }
                       ),
                     )
@@ -351,7 +357,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       child: Switch(
                         value: backup,
                         onChanged: (value) {
-                          Provider.of<TodoListDatabase>(context, listen: false).setBackup(id);
+                          context.read<TodoListDatabase>().setBackup(id);
                         }
                       ),
                     )
@@ -380,7 +386,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       child: Switch(
                         value: autoSync,
                         onChanged: (value) {
-                          Provider.of<TodoListDatabase>(context, listen: false).setAutoSync(id);
+                          context.read<TodoListDatabase>().setAutoSync(id);
                         }
                       ),
                     )
@@ -417,7 +423,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       child: Switch(
                         value: accessClipboard,
                         onChanged: (value) {
-                          Provider.of<TodoListDatabase>(context, listen: false).setAccessClipboard(id);
+                          context.read<TodoListDatabase>().setAccessClipboard(id);
                         }
                       ),
                     )
@@ -446,7 +452,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       child: Switch(
                         value: autoDelete,
                         onChanged: (value) {
-                          Provider.of<TodoListDatabase>(context, listen: false).setAutoDelete(id);
+                          context.read<TodoListDatabase>().setAutoDelete(id);
                         }
                       ),
                     )
@@ -482,7 +488,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       child: Switch(
                           value: autoDeleteOnDismiss,
                           onChanged: (value) {
-                            Provider.of<TodoListDatabase>(context, listen: false).setAutoDeleteonDismiss(id);
+                            context.read<TodoListDatabase>().setAutoDeleteonDismiss(id);
                           }),
                     )
                   ],
@@ -517,7 +523,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       child: Switch(
                           value: bulkTrash,
                           onChanged: (value) {
-                            Provider.of<TodoListDatabase>(context, listen: false).setBulkTrash(id);
+                            context.read<TodoListDatabase>().setBulkTrash(id);
                           }),
                     )
                   ],

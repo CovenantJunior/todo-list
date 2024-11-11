@@ -5,7 +5,7 @@ part 'todo_list.g.dart';
 
 @Collection()
 class TodoList {
-  Id id = Isar.autoIncrement;
+  Id id = 0;
   String? plan;
   String? category;
   bool? completed;

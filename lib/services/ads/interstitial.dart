@@ -16,17 +16,18 @@ class InterstitialAds {
   InterstitialAd? _interstitialAd;
 
   /// Loads an interstitial ad.
-  Future<void> loadInterstitialAd() async {
+  Future<void> loadInterstitialAd(context) async {
     InterstitialAd.load(
       adUnitId: interstitialAdUnitId,
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
           _interstitialAd = ad;
-          // showInterstitialAd(); // Optionally show the ad after it's loaded
+          showInterstitialAd(context);
+          print('Ad loaded');
         },
         onAdFailedToLoad: (LoadAdError error) {
-          loadInterstitialAd(); // Retry loading the ad
+          loadInterstitialAd(context); // Retry loading the ad
           debugPrint('InterstitialAd failed to load: $error');
         },
       ),
@@ -37,16 +38,18 @@ class InterstitialAds {
   bool showInterstitialAd(BuildContext context) {
     if (_interstitialAd == null) {
       debugPrint('Warning: attempt to show interstitial ad before it is loaded.');
+      loadInterstitialAd(context);
       return false;
     }
 
     _interstitialAd!.show();
+    print('ad shown');
 
     // Dispose of the ad after it is shown.
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
         ad.dispose();
-        loadInterstitialAd(); // Load another ad after the previous one is dismissed.
+        // loadInterstitialAd(context); 
       },
       onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
         Fluttertoast.showToast(

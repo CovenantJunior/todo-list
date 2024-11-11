@@ -11,6 +11,7 @@ import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/component/todo_list_options.dart';
 import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/services/ads/interstitial.dart';
 import 'package:vibration/vibration.dart';
 
 class TodoStarred extends StatefulWidget {
@@ -703,6 +704,7 @@ class _TodoStarredState extends State<TodoStarred> {
               fontWeight: FontWeight.w500
             )
           )));
+          InterstitialAds().loadInterstitialAd(context);
       }
     }
 

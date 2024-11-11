@@ -30,7 +30,7 @@ class TodoListDatabase extends ChangeNotifier{
 
   List preferences = [];
 
-  bool? isDark;
+  bool isDark = false;
 
   List user = [];
 
@@ -100,7 +100,7 @@ class TodoListDatabase extends ChangeNotifier{
 
       await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
       preferences.first.darkMode = existingPreference.darkMode;
-      isDark = existingPreference.darkMode;
+      isDark = existingPreference.darkMode!;
 
       // print("$isDark + ${preferences.first.darkMode}");
       fetchPreferences();

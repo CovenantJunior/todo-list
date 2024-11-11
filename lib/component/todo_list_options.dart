@@ -40,7 +40,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
   @override
   Widget build(BuildContext context) {
 
-    InterstitialAds().loadInterstitialAd();
+    // InterstitialAds().loadInterstitialAd(context);
 
     String interval = 'Every Minute';
     // Access user input
@@ -439,7 +439,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
               fontWeight: FontWeight.w500
             )
           )));
-        InterstitialAds().showInterstitialAd(context);
+        InterstitialAds().loadInterstitialAd(context);
       }
     }
 

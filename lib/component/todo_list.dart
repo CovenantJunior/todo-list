@@ -809,7 +809,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
 
-    InterstitialAds().loadInterstitialAd();
+    // InterstitialAds().loadInterstitialAd(context);
     
     List nonTrashedTodolists =context.watch<TodoListDatabase>().nonTrashedTodolists;
     setState(() {
@@ -1281,7 +1281,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
             fontFamily: "Quicksand", fontWeight: FontWeight.w500)
           )
         ));
-        InterstitialAds().showInterstitialAd(context);
+        InterstitialAds().loadInterstitialAd(context);
       }
     }
 
