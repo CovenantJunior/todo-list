@@ -39,7 +39,6 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
 
   void setPreferences() {
     List preferences = context.watch<TodoListDatabase>().preferences;
-    print("Length ${preferences.length}");
     for (var preference in preferences) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
