@@ -5,7 +5,7 @@ part 'todo_list.g.dart';
 
 @Collection()
 class TodoList {
-  Id id = 0;
+  Id id = 1;
   String? plan;
   String? category;
   bool? completed;

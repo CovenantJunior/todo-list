@@ -693,9 +693,9 @@ class _TodoStarredState extends State<TodoStarred> {
         context.read<TodoListDatabase>().completed(plan.id);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7)
-                    ),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7)
+            ),
             duration: const Duration(seconds: 2),
             content: const Text(
             'Plan accomplished. You inspire!!!',

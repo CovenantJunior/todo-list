@@ -24,7 +24,6 @@ class InterstitialAds {
         onAdLoaded: (InterstitialAd ad) {
           _interstitialAd = ad;
           showInterstitialAd(context);
-          print('Ad loaded');
         },
         onAdFailedToLoad: (LoadAdError error) {
           loadInterstitialAd(context); // Retry loading the ad
@@ -43,7 +42,6 @@ class InterstitialAds {
     }
 
     _interstitialAd!.show();
-    print('ad shown');
 
     // Dispose of the ad after it is shown.
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(

@@ -15,7 +15,7 @@ class TodoListPreferences extends StatefulWidget {
 }
 
 class _TodoListPreferencesState extends State<TodoListPreferences> {
-  int? id;
+  int id = 1;
   late bool darkMode;
   late bool notification;
   late bool vibration;
@@ -35,6 +35,29 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
 
   Future<void> readPreferences () async {
     context.read<TodoListDatabase>().fetchPreferences();
+  }
+
+  void setPreferences() {
+    List preferences = context.watch<TodoListDatabase>().preferences;
+    print("Length ${preferences.length}");
+    for (var preference in preferences) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            darkMode = preference.darkMode;
+            notification = preference.notification;
+            vibration = preference.vibration;
+            stt = preference.stt;
+            backup = preference.backup;
+            autoSync = preference.autoSync;
+            accessClipboard = preference.accessClipboard;
+            autoDelete = preference.autoDelete;
+            autoDeleteOnDismiss = preference.autoDeleteOnDismiss;
+            bulkTrash = preference.bulkTrash;
+          });
+        }
+      });
+    }
   }
 
   void notifyInfo() {
@@ -152,28 +175,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
 
   @override
   Widget build(BuildContext context) {
-    List preferences = context.watch<TodoListDatabase>().preferences;
-
-    for (var preference in preferences) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {
-            id = preference.id;
-            darkMode = preference.darkMode;
-            notification = preference.notification;
-            vibration = preference.vibration;
-            stt = preference.stt;
-            backup = preference.backup;
-            autoSync = preference.autoSync;
-            accessClipboard = preference.accessClipboard;
-            autoDelete = preference.autoDelete;
-            autoDeleteOnDismiss = preference.autoDeleteOnDismiss;
-            bulkTrash = preference.bulkTrash;
-          });
-        }
-      });
-    }
-
+    setPreferences();
 
     return Scaffold(
       appBar: AppBar(

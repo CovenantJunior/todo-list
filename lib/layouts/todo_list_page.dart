@@ -559,7 +559,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(minutes: 3), (timer) {
+    _timer = Timer.periodic(const Duration(minutes: 5), (timer) {
       InterstitialAds().loadInterstitialAd(context);
     });
   }
@@ -661,6 +661,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       child: DefaultTabController(
         length: 6,
         child: Scaffold(
+          backgroundColor: context.watch<TodoListDatabase>().isDark ? Colors.black : Colors.white,
           appBar: AppBar(
             elevation: 0,
             title: isSearch
