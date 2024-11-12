@@ -54,9 +54,7 @@ class TodoListDatabase extends ChangeNotifier{
       await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
       preferences = isar.todoPreferences.where().findAllSync();
       notifyListeners();
-    } else if (currentPreferences.length > 1) {
-      currentPreferences.last.clear();
-      // await isar.writeTxn(() => isar.todoPreferences.clear());
+    } else {
       initPreference();
     }
   }
@@ -66,9 +64,6 @@ class TodoListDatabase extends ChangeNotifier{
     if (currentPreference.isEmpty) {
       initPreference();
       isDark = currentPreference.first.darkMode!;
-    } else if (currentPreference.length > 1) {
-      await isar.writeTxn(() => isar.todoPreferences.clear());
-      initPreference();
     } else {
       // print("Preference length is ${currentPreference.length}");
       isDark = currentPreference.first.darkMode!;
@@ -497,10 +492,6 @@ class TodoListDatabase extends ChangeNotifier{
         ..lastBackup = DateTime.now();
       await isar.writeTxn(() => isar.todoUsers.put(newUser));
       user = isar.todoUsers.where().findAllSync();
-    } else if (currentUser.length  > 1) {
-      currentUser.last.clear();
-      // await isar.writeTxn(() => isar.todoUsers.clear());
-      fetchUser();
     } else {
       user.clear();
       user.addAll(currentUser);

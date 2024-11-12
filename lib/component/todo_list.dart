@@ -1290,7 +1290,6 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
         widget.closeSearch();
       },
       child: Scaffold(
-        backgroundColor: context.watch<TodoListDatabase>().isDark ? Colors.black : Colors.white,
         body: count > 0
             ? LiquidPullToRefresh(
                 springAnimationDurationInMilliseconds: 100,

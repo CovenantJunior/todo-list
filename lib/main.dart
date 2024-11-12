@@ -197,9 +197,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Initialize theme preference
     context.read<TodoListDatabase>().themePreference();
-    bool isDark = context.watch<TodoListDatabase>().isDark;
     return MaterialApp(
-      theme: isDark == true ? ThemeData.dark() : ThemeData.light(),
+      theme: context.watch<TodoListDatabase>().isDark == true
+          ? ThemeData.dark()
+          : ThemeData.light(),
       debugShowCheckedModeBanner: false,
       initialRoute: '/home',
       routes: {

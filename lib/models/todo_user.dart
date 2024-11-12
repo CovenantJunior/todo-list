@@ -5,7 +5,7 @@ part 'todo_user.g.dart';
 
 @Collection()
 class TodoUser {
-  Id id = Isar.autoIncrement;
+  Id id = 1;
   String? username;
   String? email;
   bool? pro;
