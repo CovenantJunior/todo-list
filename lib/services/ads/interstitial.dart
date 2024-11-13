@@ -37,7 +37,7 @@ class InterstitialAds {
   bool showInterstitialAd(BuildContext context) {
     if (_interstitialAd == null) {
       debugPrint('Warning: attempt to show interstitial ad before it is loaded.');
-      loadInterstitialAd(context);
+      // loadInterstitialAd(context);
       return false;
     }
 

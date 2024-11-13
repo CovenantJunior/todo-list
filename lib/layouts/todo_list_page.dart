@@ -94,15 +94,19 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       ),
       onChanged: (q) {
         if (q.isNotEmpty) {
-          setState(() {
-            isOfLength = true;
-            searchResults = [];
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              isOfLength = true;
+              searchResults = [];
+            });
           });
           context.read<TodoListDatabase>().search(q.toLowerCase());
         } else {
-          setState(() {
-            isOfLength = false;
-            searchResults = [];
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              isOfLength = false;
+              searchResults = [];
+            });
           });
           readTodoLists();
         }
@@ -658,128 +662,125 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           isOfLength = false;
         });
       },
-      child: DefaultTabController(
-        length: 6,
-        child: Scaffold(
-          backgroundColor: context.watch<TodoListDatabase>().isDark ? Colors.black : Colors.white,
-          appBar: AppBar(
-            elevation: 0,
-            title: isSearch
-              ? searchTextField()
-              : const Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Todo List",
-                      style: TextStyle(
-                        fontFamily: "Quicksand",
-                        fontWeight: FontWeight.w800,
-                        fontSize: 20
-                      ),
+      child: Scaffold(
+        backgroundColor: context.watch<TodoListDatabase>().isDark ? Colors.black : Colors.white,
+        appBar: AppBar(
+          elevation: 0,
+          title: isSearch
+            ? searchTextField()
+            : const Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Todo List",
+                    style: TextStyle(
+                      fontFamily: "Quicksand",
+                      fontWeight: FontWeight.w800,
+                      fontSize: 20
                     ),
-                    SizedBox(width: 3),
-                    Icon(Icons.task_alt_rounded, weight: 100),
-                  ],
-                ),
-            centerTitle: true,
-            actions: [
-              !isSearch && context.watch<TodoListDatabase>().preferences.first.backup == true ? Tooltip(
-                message: "Backup Tasks and Preferences",
-                child: IconButton(
-                  onPressed: () { 
-                    setState(() {
-                      backingUp = true;
-                    });
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7)
-                        ),
-                        duration: const Duration(seconds: 1),
-                        behavior: SnackBarBehavior.fixed,
-                        content: const Text('Backing up',
-                          style: TextStyle(
-                            fontFamily: "Quicksand", fontWeight: FontWeight.w500
-                          )
-                        ),
+                  ),
+                  SizedBox(width: 3),
+                  Icon(Icons.task_alt_rounded, weight: 100),
+                ],
+              ),
+          centerTitle: true,
+          actions: [
+            !isSearch && context.watch<TodoListDatabase>().preferences.first.backup == true ? Tooltip(
+              message: "Backup Tasks and Preferences",
+              child: IconButton(
+                onPressed: () { 
+                  setState(() {
+                    backingUp = true;
+                  });
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(7)
                       ),
-                    );
-                    Backup().backup(context, backup: () {
-                      setState(() {
-                        backingUp = false;
-                      });
-                    });
-                  },
-                  icon: backingUp == false ? const Icon(Icons.backup_outlined) : const Icon(Icons.backup_rounded),
-                  ),
-              ) : const SizedBox(),
-              !isSearch ? Tooltip(
-                message: "Add a Date",
-                child: IconButton(
-                  onPressed: () { 
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    actionSelectDate(context, selectedDate);
-                  },
-                  icon: const Icon(Icons.calendar_month_outlined),
-                  ),
-              ) : const SizedBox(),
-              !isSearch ? Builder(
-                builder: (context) {
-                  return Tooltip(
-                    message: "More Options",
-                    child: IconButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                        showPopover(
-                          shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
-                          arrowHeight: 0,
-                          arrowWidth: 0,
-                          contentDxOffset: -100,
-                          width: 110,
-                          height: 100,
-                          direction: PopoverDirection.bottom,
-                          context: context,
-                          bodyBuilder: (context) => TodoActions(
-                            isSearch: () {
-                              setState(() {
-                                isSearch = true;
-                              });
-                            },
-                            category: selectedCategory,
-                            nonTrashedTodolists: nonTrashedTodolists,
-                          ),
-                        );
-                      },
-                      icon: const Icon(Icons.more_vert)
+                      duration: const Duration(seconds: 1),
+                      behavior: SnackBarBehavior.fixed,
+                      content: const Text('Backing up',
+                        style: TextStyle(
+                          fontFamily: "Quicksand", fontWeight: FontWeight.w500
+                        )
+                      ),
                     ),
                   );
-                }
-              ) : const SizedBox(),
-            ],
-          ),
-          drawer: const TodoListDrawer(),
-          body: ClipRRect(
-            child: Shell(
-              index: 0,
-              nonTrashedTodolists: nonTrashedTodolists,
-              cardToRemove: cardToRemove,
-              animate: animate,
-              isSearch: isSearch,
-              isOfLength: isOfLength,
-              selectedCategory: selectedCategory,
-              closeSearch: () {
-                setState(() {
-                  isSearch = false;
-                  isOfLength = false;
-                });
-              },
-              toggle: (c) {
-                setState(() {
-                  selectedCategory = c;
-                });
+                  Backup().backup(context, backup: () {
+                    setState(() {
+                      backingUp = false;
+                    });
+                  });
+                },
+                icon: backingUp == false ? const Icon(Icons.backup_outlined) : const Icon(Icons.backup_rounded),
+                ),
+            ) : const SizedBox(),
+            !isSearch ? Tooltip(
+              message: "Add a Date",
+              child: IconButton(
+                onPressed: () { 
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  actionSelectDate(context, selectedDate);
+                },
+                icon: const Icon(Icons.calendar_month_outlined),
+                ),
+            ) : const SizedBox(),
+            !isSearch ? Builder(
+              builder: (context) {
+                return Tooltip(
+                  message: "More Options",
+                  child: IconButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                      showPopover(
+                        shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10)],
+                        arrowHeight: 0,
+                        arrowWidth: 0,
+                        contentDxOffset: -100,
+                        width: 110,
+                        height: 100,
+                        direction: PopoverDirection.bottom,
+                        context: context,
+                        bodyBuilder: (context) => TodoActions(
+                          isSearch: () {
+                            setState(() {
+                              isSearch = true;
+                            });
+                          },
+                          category: selectedCategory,
+                          nonTrashedTodolists: nonTrashedTodolists,
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.more_vert)
+                  ),
+                );
               }
-            ),
+            ) : const SizedBox(),
+          ],
+        ),
+        drawer: const TodoListDrawer(),
+        body: ClipRRect(
+          child: Shell(
+            index: 0,
+            nonTrashedTodolists: nonTrashedTodolists,
+            cardToRemove: cardToRemove,
+            animate: animate,
+            isSearch: isSearch,
+            isOfLength: isOfLength,
+            selectedCategory: selectedCategory,
+            closeSearch: () {
+              setState(() {
+                isSearch = false;
+                isOfLength = false;
+              });
+            },
+            toggle: (c) {
+              setState(() {
+                selectedCategory = c;
+              });
+            }
           ),
         ),
       ),

@@ -40,22 +40,20 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
   void setPreferences() {
     List preferences = context.watch<TodoListDatabase>().preferences;
     for (var preference in preferences) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {
-            darkMode = preference.darkMode;
-            notification = preference.notification;
-            vibration = preference.vibration;
-            stt = preference.stt;
-            backup = preference.backup;
-            autoSync = preference.autoSync;
-            accessClipboard = preference.accessClipboard;
-            autoDelete = preference.autoDelete;
-            autoDeleteOnDismiss = preference.autoDeleteOnDismiss;
-            bulkTrash = preference.bulkTrash;
-          });
-        }
-      });
+      if (mounted) {
+        setState(() {
+          darkMode = preference.darkMode;
+          notification = preference.notification;
+          vibration = preference.vibration;
+          stt = preference.stt;
+          backup = preference.backup;
+          autoSync = preference.autoSync;
+          accessClipboard = preference.accessClipboard;
+          autoDelete = preference.autoDelete;
+          autoDeleteOnDismiss = preference.autoDeleteOnDismiss;
+          bulkTrash = preference.bulkTrash;
+        });
+      }
     }
   }
 
@@ -218,9 +216,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       child: Switch(
                         value: darkMode,
                         onChanged: (value) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            context.read<TodoListDatabase>().setDarkMode(id);
-                          });
+                          context.read<TodoListDatabase>().setDarkMode(id);
                         }
                       ),
                     )
