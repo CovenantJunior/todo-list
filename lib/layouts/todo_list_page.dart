@@ -92,7 +92,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         labelText: 'Search Plans / $selectedCategory',
         labelStyle: const TextStyle(fontFamily: "Quicksand")
       ),
-      onChanged: (q) {
+      onEditingComplete: () {
+        var q = textController.text;
         if (q.isNotEmpty) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             setState(() {
