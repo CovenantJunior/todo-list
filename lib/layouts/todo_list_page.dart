@@ -88,6 +88,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       controller: textController,
       autofocus: true,
       autocorrect: true,
+      enableSuggestions: true,
       decoration: InputDecoration(
         labelText: 'Search Plans / $selectedCategory',
         labelStyle: const TextStyle(fontFamily: "Quicksand")
