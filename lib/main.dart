@@ -198,7 +198,7 @@ class MyApp extends StatelessWidget {
     // Initialize theme preference
     context.read<TodoListDatabase>().themePreference();
     return MaterialApp(
-      theme: context.watch<TodoListDatabase>().isDark == true
+      theme: context.watch<TodoListDatabase>().preferences.first.darkMode == true
           ? ThemeData.dark()
           : ThemeData.light(),
       debugShowCheckedModeBanner: false,

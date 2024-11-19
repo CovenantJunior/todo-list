@@ -36,7 +36,7 @@ class _ShellState extends State<Shell> {
   @override
   Widget build(BuildContext context) {
     final PersistentTabController controller = PersistentTabController(initialIndex: widget.index);
-    bool? isDark = context.watch<TodoListDatabase>().isDark;
+    bool isDark = context.watch<TodoListDatabase>().preferences.first.darkMode;
     
     return PersistentTabView(
       backgroundColor: !isDark ? Colors.white : Colors.black,

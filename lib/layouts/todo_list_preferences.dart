@@ -39,6 +39,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
 
   void setPreferences() {
     List preferences = context.watch<TodoListDatabase>().preferences;
+    // print(preferences.length);
     for (var preference in preferences) {
       if (mounted) {
         setState(() {
