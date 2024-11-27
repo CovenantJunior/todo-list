@@ -52,12 +52,9 @@ class TodoListDatabase extends ChangeNotifier{
         ..autoDeleteOnDismiss = true
         ..bulkTrash = false;
       await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
-      preferences = isar.todoPreferences.where().findAllSync();
-      notifyListeners();
-    } else {
-      preferences = isar.todoPreferences.where().findAllSync();
-      notifyListeners();
     }
+    preferences = isar.todoPreferences.where().findAllSync();
+    notifyListeners();
   }
 
   void themePreference () async {
