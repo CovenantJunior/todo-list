@@ -55,7 +55,8 @@ class TodoListDatabase extends ChangeNotifier{
       preferences = isar.todoPreferences.where().findAllSync();
       notifyListeners();
     } else {
-      initPreference();
+      preferences = isar.todoPreferences.where().findAllSync();
+      notifyListeners();
     }
   }
 
