@@ -6,7 +6,7 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:todo_list/layouts/todo_list_page.dart';
 import 'package:todo_list/layouts/todo_list_preferences.dart';
-import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:provider/provider.dart';
 // import 'package:todo_list/services/credential_service.dart';
 import 'package:todo_list/services/notification_service.dart';
@@ -189,18 +189,21 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     // Initialize theme preference
-    context.read<TodoListDatabase>().themePreference();
+    context.read<TodoListDatabase>().fetchPreferences();
     return MaterialApp(
-      theme: context.watch<TodoListDatabase>().preferences.first.darkMode == true
-          ? ThemeData.dark()
-          : ThemeData.light(),
+      theme: context.watch<TodoListDatabase>().preferences.first.darkMode ? ThemeData.dark() : ThemeData.light(),
       debugShowCheckedModeBanner: false,
       initialRoute: '/home',
       routes: {

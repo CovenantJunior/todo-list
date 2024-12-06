@@ -10,7 +10,7 @@ import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis_auth/googleapis_auth.dart' as auth show AuthClient;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/controllers/todo_list_controller.dart';
 
 
 class Sync {

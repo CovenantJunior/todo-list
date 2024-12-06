@@ -2,7 +2,7 @@ import 'dart:ffi';
 
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
@@ -42,17 +42,19 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
     // print(preferences.length);
     for (var preference in preferences) {
       if (mounted) {
-        setState(() {
-          darkMode = preference.darkMode;
-          notification = preference.notification;
-          vibration = preference.vibration;
-          stt = preference.stt;
-          backup = preference.backup;
-          autoSync = preference.autoSync;
-          accessClipboard = preference.accessClipboard;
-          autoDelete = preference.autoDelete;
-          autoDeleteOnDismiss = preference.autoDeleteOnDismiss;
-          bulkTrash = preference.bulkTrash;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          setState(() {
+            darkMode = preference.darkMode;
+            notification = preference.notification;
+            vibration = preference.vibration;
+            stt = preference.stt;
+            backup = preference.backup;
+            autoSync = preference.autoSync;
+            accessClipboard = preference.accessClipboard;
+            autoDelete = preference.autoDelete;
+            autoDeleteOnDismiss = preference.autoDeleteOnDismiss;
+            bulkTrash = preference.bulkTrash;
+          });
         });
       }
     }

@@ -8,7 +8,7 @@ import 'package:todo_list/layouts/todo_list_preferences.dart';
 import 'package:todo_list/layouts/todo_list_privacy.dart';
 import 'package:todo_list/layouts/todo_list_starred.dart';
 import 'package:todo_list/layouts/todo_trash_page.dart';
-import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/controllers/todo_list_controller.dart';
 
 class TodoListDrawer extends StatefulWidget {
   const TodoListDrawer({super.key});

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_list/models/todo_list.dart';
-import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:todo_list/services/ads/interstitial.dart';

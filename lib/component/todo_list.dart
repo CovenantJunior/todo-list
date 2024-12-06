@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:todo_list/component/todo_list_options.dart';
-import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/services/ads/interstitial.dart';

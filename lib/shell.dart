@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/component/todo_list.dart';
-import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/controllers/todo_list_controller.dart';
 class Shell extends StatefulWidget {
   final int index;
   late List nonTrashedTodolists;
@@ -36,10 +36,8 @@ class _ShellState extends State<Shell> {
   @override
   Widget build(BuildContext context) {
     final PersistentTabController controller = PersistentTabController(initialIndex: widget.index);
-    bool isDark = context.watch<TodoListDatabase>().preferences.first.darkMode;
-    
     return PersistentTabView(
-      backgroundColor: !isDark ? Colors.white : Colors.black,
+      backgroundColor: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.white : Colors.black,
       context,
       controller: controller,
       onItemSelected: (e) {
@@ -129,10 +127,10 @@ class _ShellState extends State<Shell> {
       ],
       items: [
         PersistentBottomNavBarItem(
-          activeColorPrimary: !isDark ? Colors.black87 : Colors.white,
+          activeColorPrimary: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.black87 : Colors.white,
           icon: Icon(
             Icons.home_outlined,
-            color: !isDark ? Colors.black87 : Colors.white,
+            color: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.black87 : Colors.white,
             size: 20,
           ),
           title: ("All"),
@@ -143,10 +141,10 @@ class _ShellState extends State<Shell> {
           )
         ),
         PersistentBottomNavBarItem(
-          activeColorPrimary: !isDark ? Colors.black87 : Colors.white,
+          activeColorPrimary: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.black87 : Colors.white,
           icon: Icon(
             Icons.person_2_outlined,
-            color: !isDark ? Colors.black87 : Colors.white,
+            color: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.black87 : Colors.white,
             size: 20,
           ),
           title: ("Personal"),
@@ -157,10 +155,10 @@ class _ShellState extends State<Shell> {
           )
         ),
         PersistentBottomNavBarItem(
-          activeColorPrimary: !isDark ? Colors.black87 : Colors.white,
+          activeColorPrimary: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.black87 : Colors.white,
           icon: Icon(
             Icons.work_outline_rounded,
-            color: !isDark ? Colors.black87 : Colors.white,
+            color: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.black87 : Colors.white,
             size: 20,
           ),
           title: ("Work"),
@@ -171,10 +169,10 @@ class _ShellState extends State<Shell> {
           )
         ),
         PersistentBottomNavBarItem(
-          activeColorPrimary: !isDark ? Colors.black87 : Colors.white,
+          activeColorPrimary: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.black87 : Colors.white,
           icon: Icon(
             Icons.book_outlined,
-            color: !isDark ? Colors.black87 : Colors.white,
+            color: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.black87 : Colors.white,
             size: 20,
           ),
           title: ("Study"),
@@ -185,10 +183,10 @@ class _ShellState extends State<Shell> {
           )
         ),
         PersistentBottomNavBarItem(
-          activeColorPrimary: !isDark ? Colors.black87 : Colors.white,
+          activeColorPrimary: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.black87 : Colors.white,
           icon: Icon(
             Icons.shopping_basket_outlined,
-            color: !isDark ? Colors.black87 : Colors.white,
+            color: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.black87 : Colors.white,
             size: 20,
           ),
           title: ("Shopping"),
@@ -199,10 +197,10 @@ class _ShellState extends State<Shell> {
           )
         ),
         PersistentBottomNavBarItem(
-          activeColorPrimary: !isDark ? Colors.black87 : Colors.white,
+          activeColorPrimary: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.black87 : Colors.white,
           icon: Icon(
             Icons.sports_soccer_rounded,
-            color: !isDark ? Colors.black87 : Colors.white,
+            color: !context.watch<TodoListDatabase>().preferences.first.darkMode ? Colors.black87 : Colors.white,
             size: 20,
           ),
           title: ("Sport"),

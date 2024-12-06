@@ -5,7 +5,7 @@ part 'todo_preferences.g.dart';
 
 @Collection()
 class TodoPreferences {
-  Id id = Isar.autoIncrement;
+  Id id = 1;
   bool? darkMode;
   bool? notification;
   bool? vibration;

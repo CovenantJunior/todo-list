@@ -96,7 +96,7 @@ class TodoListDatabase extends ChangeNotifier{
       isDark = existingPreference.darkMode!;
 
       // print("$isDark + ${preferences.first.darkMode}");
-      fetchPreferences();
+      notifyListeners();
     }
   }
 
@@ -108,7 +108,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.notification = existingPreference.notification;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
 
   void setVibration (id) async {
@@ -119,7 +119,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.vibration = existingPreference.vibration;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
 
   void setSTT (id) async {
@@ -130,7 +130,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.stt = existingPreference.stt;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
 
   void setBackup (id) async {
@@ -141,7 +141,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.backup = existingPreference.backup;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
   
   void setAutoSync (id) async {
@@ -152,7 +152,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.autoSync = existingPreference.autoSync;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
   
   void setAccessClipboard(id) async {
@@ -163,7 +163,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.accessClipboard = existingPreference.accessClipboard;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
   
   void setAutoDelete (id) async {
@@ -174,7 +174,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.autoDelete = existingPreference.autoDelete;
     }
     
-    fetchPreferences();
+    notifyListeners();
   }
 
   void setAutoDeleteonDismiss(id) async {
@@ -187,7 +187,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.autoDeleteOnDismiss = existingPreference.autoDeleteOnDismiss;
     }
 
-    fetchPreferences();
+    notifyListeners();
   }
 
   void setBulkTrash(id) async {
@@ -200,7 +200,7 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.bulkTrash = existingPreference.bulkTrash;
     }
 
-    fetchPreferences();
+    notifyListeners();
   }
   
   
@@ -255,7 +255,7 @@ class TodoListDatabase extends ChangeNotifier{
     fetchUntrashedTodoList();
     fetchTrashedTodoList();
     fetchStarredTodoList();
-    fetchPreferences();
+    notifyListeners();
     fetchUser();
   }
 

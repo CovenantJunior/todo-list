@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:todo_list/component/todo_actions.dart';
 import 'package:todo_list/component/todo_list_drawer.dart';
-import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:todo_list/services/ads/interstitial.dart';
 import 'package:todo_list/services/audio_service.dart';
 import 'package:todo_list/services/backup_service.dart';

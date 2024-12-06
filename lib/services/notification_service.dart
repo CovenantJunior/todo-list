@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:todo_list/main.dart';
 // import 'package:restart_app/restart_app.dart';
-import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/controllers/todo_list_controller.dart';
 // import 'package:todo_list/services/stt_service.dart';
 
 List preferences = [];

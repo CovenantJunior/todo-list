@@ -9,7 +9,7 @@ import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/component/todo_list_trash_options.dart';
-import 'package:todo_list/models/todo_list_database.dart';
+import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:vibration/vibration.dart';
 
 class TodoTrash extends StatefulWidget {
