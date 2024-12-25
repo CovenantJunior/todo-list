@@ -256,7 +256,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                       child: Switch(
                         value: notification,
                         onChanged: (value) {
-                          notification == true ? NotificationService().cancelAllnotification() : Void;
+                          notification == true ? NotificationService().cancelAllnotification() : null;
                           context.read<TodoListDatabase>().setNotification(id);
                         }
                       ),
@@ -291,7 +291,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         value: vibration,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setVibration(id);
-                          vibration == false ? Vibration.vibrate(duration: 50) : Void;
+                          vibration == false ? Vibration.vibrate(duration: 50) : null;
                         }
                       ),
                     )

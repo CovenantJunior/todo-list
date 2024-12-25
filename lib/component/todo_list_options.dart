@@ -303,7 +303,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
                     );
                   }
                 } else {
-                  context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+                  context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                     shape: RoundedRectangleBorder(
@@ -329,7 +329,7 @@ class _TodoListOptionsState extends State<TodoListOptions> {
     
     // Trash
     void trashTodoList(int id) {
-      context.read<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+      context.read<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
       showDialog(
         context: context,
         builder: (context) => AlertDialog(

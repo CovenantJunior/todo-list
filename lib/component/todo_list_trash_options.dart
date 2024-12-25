@@ -33,7 +33,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
 
       // Delete Forever
       void deleteTodoList(int id) {
-        context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+        context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
         showDialog(
           context: context,
           builder: (context) => AlertDialog(

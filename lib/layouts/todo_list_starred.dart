@@ -236,7 +236,7 @@ class _TodoStarredState extends State<TodoStarred> {
                   ),
                 );
               } else {
-                context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+                context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     shape: RoundedRectangleBorder(
@@ -306,7 +306,7 @@ class _TodoStarredState extends State<TodoStarred> {
     void swiptTrashTodoList(int id) {
       context.read<TodoListDatabase>().preferences.first.vibration == true
           ? Vibration.vibrate(duration: 50)
-          : Void;
+          : null;
       context.read<TodoListDatabase>().preferences.first.autoDeleteOnDismiss ==
         false ? showDialog(
         context: context,
@@ -571,7 +571,7 @@ class _TodoStarredState extends State<TodoStarred> {
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
-                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
                     ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                     shape: RoundedRectangleBorder(

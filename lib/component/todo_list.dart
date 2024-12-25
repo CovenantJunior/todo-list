@@ -630,7 +630,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                     } else {
                       context.watch<TodoListDatabase>().preferences.first.vibration == true
                           ? Vibration.vibrate(duration: 50)
-                          : Void;
+                          : null;
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           shape: RoundedRectangleBorder(
@@ -904,7 +904,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
     void swiptTrashTodoList(int id) {
       context.read<TodoListDatabase>().preferences.first.vibration == true
           ? Vibration.vibrate(duration: 50)
-          : Void;
+          : null;
       context.read<TodoListDatabase>().preferences.first.autoDeleteOnDismiss ==
               false
           ? showDialog(
@@ -944,7 +944,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
     /* void trashAllTodoLists() {
       context.watch<TodoListDatabase>().preferences.first.vibration == true
           ? Vibration.vibrate(duration: 50)
-          : Void;
+          : null;
       showDialog(
           context: context,
           builder: (context) => AlertDialog(

@@ -110,7 +110,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                 .vibration ==
                             true
                         ? Vibration.vibrate(duration: 50)
-                        : Void;
+                        : null;
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           shape: RoundedRectangleBorder(
@@ -166,7 +166,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                 .vibration ==
                             true
                         ? Vibration.vibrate(duration: 50)
-                        : Void;
+                        : null;
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           shape: RoundedRectangleBorder(
@@ -226,7 +226,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                   if (selectedLists.isEmpty) {
                     context.read<TodoListDatabase>().preferences.first.vibration == true
                         ? Vibration.vibrate(duration: 50)
-                        : Void;
+                        : null;
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                             shape: RoundedRectangleBorder(
@@ -275,7 +275,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                   if (selectedLists.isEmpty) {
                     context.read<TodoListDatabase>().preferences.first.vibration == true
                         ? Vibration.vibrate(duration: 50)
-                        : Void;
+                        : null;
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           shape: RoundedRectangleBorder(
@@ -287,7 +287,7 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
                                     fontFamily: "Quicksand",
                                     fontWeight: FontWeight.w500))));
                   } else {
-                    context .read<TodoListDatabase>() .preferences .first .vibration == true ? Vibration.vibrate(duration: 50) : Void;
+                    context .read<TodoListDatabase>() .preferences .first .vibration == true ? Vibration.vibrate(duration: 50) : null;
                     showDialog(
                         context: context,
                         builder: (context) => AlertDialog(

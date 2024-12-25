@@ -48,7 +48,7 @@ class _TodoTrashState extends State<TodoTrash> {
   }
 
   void restoreAll() {
-      context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+      context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
       setState(() {
         isSearch = false;
         isOfLength = false;
@@ -322,7 +322,7 @@ class _TodoTrashState extends State<TodoTrash> {
                 // color: Colors.blueGrey,
                 onPressed: () {
                   if (selectedLists.isEmpty) {
-                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
                     ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                     shape: RoundedRectangleBorder(
@@ -376,7 +376,7 @@ class _TodoTrashState extends State<TodoTrash> {
                 icon: const Icon(Icons.delete_forever_outlined),
                 // color: Colors.blueGrey,
                 onPressed: () {
-                  context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+                  context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
                   if (selectedLists.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -392,7 +392,7 @@ class _TodoTrashState extends State<TodoTrash> {
                       )
                     )));
                   } else {
-                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : Void;
+                    context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
