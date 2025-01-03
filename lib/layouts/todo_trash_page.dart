@@ -46,7 +46,7 @@ class _TodoTrashState extends State<TodoTrash> {
   }
 
   void restoreAll() {
-      context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
+      context.read<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
       setState(() {
         isSearch = false;
         isOfLength = false;

@@ -81,11 +81,15 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   List cardToRemove = [];
   bool _isListening = false;
   bool backingUp = false;
+
+  final FocusNode _focusNode = FocusNode();
+
   
   Widget searchTextField() {
     //add
     return TextField(
       controller: textController,
+      focusNode: _focusNode,
       autofocus: true,
       autocorrect: true,
       enableSuggestions: true,
@@ -93,7 +97,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         labelText: 'Search Plans / $selectedCategory',
         labelStyle: const TextStyle(fontFamily: "Quicksand")
       ),
-      onEditingComplete: () {
+      onChanged: (value) {
+        _focusNode.requestFocus();
         var q = textController.text;
         if (q.isNotEmpty) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -120,7 +125,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             });
           }
         }
-      },
+      }
     );
   }
 
@@ -582,6 +587,16 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       duration: const Duration(milliseconds: 500),
     );
     _startTimer();
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        // Code to execute when the TextField loses focus
+        print("TextField lost focus");
+        Future.delayed(const Duration(milliseconds: 100), () {
+          _focusNode.requestFocus();
+        });
+      }
+    });
+
   }
 
   @override
@@ -589,7 +604,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     _animationController.dispose(); // Dispose the animation controller
     super.dispose();
     _timer?.cancel();
-
+    _focusNode.dispose();
   }
 
   @override

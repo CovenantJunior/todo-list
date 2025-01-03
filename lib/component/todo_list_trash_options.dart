@@ -3,6 +3,7 @@ import 'package:todo_list/models/todo_list.dart';
 import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/services/ads/interstitial.dart';
+import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
 
 class TodoListTrashOptions extends StatefulWidget {
@@ -31,7 +32,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
 
       // Delete Forever
       void deleteTodoList(int id) {
-        context.watch<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
+        context.read<TodoListDatabase>().preferences.first.vibration == true ? Vibration.vibrate(duration: 50) : null;
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -47,6 +48,7 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
               IconButton(
                 onPressed: () {
                   context.read<TodoListDatabase>().deleteTodoList(id);
+                  NotificationService().cancelNotification(id);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

@@ -1303,6 +1303,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
     return GestureDetector(
       onTap: () {
         widget.closeSearch();
+        readTodoLists();
       },
       child: Scaffold(
         body: count > 0
@@ -1657,7 +1658,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
               )
             : !widget.isSearch
                 ? pattern
-                : const Center(child: Text("No result")),
+                : const Center(child: Text("No result", style: TextStyle(fontFamily: 'Quicksand', fontWeight: FontWeight.w200))),
           floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -1688,6 +1689,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                     onPressed: () {
                       if (widget.isSearch == true) {
                         widget.closeSearch();
+                        readTodoLists();
                       } else {
                         createTodoList('', context);
                       }
