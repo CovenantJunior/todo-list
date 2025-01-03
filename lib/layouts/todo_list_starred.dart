@@ -848,7 +848,7 @@ class _TodoStarredState extends State<TodoStarred> {
                                       children: [
                                         Expanded(
                                           child: SizedBox(
-                                            height: 40,
+                                            height: 20,
                                             child: Text(
                                               plan.plan,
                                               maxLines: 1,
