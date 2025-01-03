@@ -20,7 +20,7 @@ Future<void> initializeService() async {
       foregroundServiceNotificationId: 144000,
 
       initialNotificationTitle: "Stay Productive",
-      initialNotificationContent: "Take one step at a time. Complete your todos and keep moving forward.",
+      initialNotificationContent: "Take one step at a time and keep moving forward.",
 
       // auto start service
       autoStart: true,
@@ -189,18 +189,22 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     // Initialize theme preference
-    context.read<TodoListDatabase>().themePreference();
+    context.read<TodoListDatabase>().fetchPreferences();
+    bool darkMode = context.watch<TodoListDatabase>().preferences.first.darkMode;
     return MaterialApp(
-      theme: context.watch<TodoListDatabase>().isDark == true
-          ? ThemeData.dark()
-          : ThemeData.light(),
+      theme: darkMode ? ThemeData.dark() : ThemeData.light(),
       debugShowCheckedModeBanner: false,
       initialRoute: '/home',
       routes: {

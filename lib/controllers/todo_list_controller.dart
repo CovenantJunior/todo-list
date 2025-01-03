@@ -95,9 +95,9 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.darkMode = existingPreference.darkMode;
       isDark = existingPreference.darkMode!;
 
-      // print("$isDark + ${preferences.first.darkMode}");
-      notifyListeners();
     }
+    notifyListeners();
+    fetchPreferences();
   }
 
   void setNotification (id) async {
@@ -109,6 +109,7 @@ class TodoListDatabase extends ChangeNotifier{
     }
     
     notifyListeners();
+    fetchPreferences();
   }
 
   void setVibration (id) async {
@@ -120,6 +121,7 @@ class TodoListDatabase extends ChangeNotifier{
     }
     
     notifyListeners();
+    fetchPreferences();
   }
 
   void setSTT (id) async {
@@ -131,6 +133,7 @@ class TodoListDatabase extends ChangeNotifier{
     }
     
     notifyListeners();
+    fetchPreferences();
   }
 
   void setBackup (id) async {
@@ -142,6 +145,7 @@ class TodoListDatabase extends ChangeNotifier{
     }
     
     notifyListeners();
+    fetchPreferences();
   }
   
   void setAutoSync (id) async {
@@ -153,6 +157,7 @@ class TodoListDatabase extends ChangeNotifier{
     }
     
     notifyListeners();
+    fetchPreferences();
   }
   
   void setAccessClipboard(id) async {
@@ -164,6 +169,7 @@ class TodoListDatabase extends ChangeNotifier{
     }
     
     notifyListeners();
+    fetchPreferences();
   }
   
   void setAutoDelete (id) async {
@@ -175,6 +181,7 @@ class TodoListDatabase extends ChangeNotifier{
     }
     
     notifyListeners();
+    fetchPreferences();
   }
 
   void setAutoDeleteonDismiss(id) async {
@@ -188,6 +195,7 @@ class TodoListDatabase extends ChangeNotifier{
     }
 
     notifyListeners();
+    fetchPreferences();
   }
 
   void setBulkTrash(id) async {
@@ -201,6 +209,7 @@ class TodoListDatabase extends ChangeNotifier{
     }
 
     notifyListeners();
+    fetchPreferences();
   }
   
   
