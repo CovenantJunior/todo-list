@@ -589,9 +589,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     _startTimer();
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
-        // Code to execute when the TextField loses focus
-        print("TextField lost focus");
-        Future.delayed(const Duration(milliseconds: 100), () {
+        Future.delayed(const Duration(milliseconds: 1), () {
           _focusNode.requestFocus();
         });
       }
@@ -601,7 +599,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 
   @override
   void dispose() {
-    _animationController.dispose(); // Dispose the animation controller
+    _animationController.dispose(); 
     super.dispose();
     _timer?.cancel();
     _focusNode.dispose();
