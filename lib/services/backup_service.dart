@@ -291,8 +291,8 @@ class Backup {
     // Call backup function
     backup();
     } catch (e) {
-      print(e.toString());
-      // backup();zz
+      // print(e.toString());
+      // backup();
       
       // Show backup error message
       ScaffoldMessenger.of(context).removeCurrentMaterialBanner();

@@ -358,6 +358,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           IconButton(
             icon: const Icon(Icons.add_task_rounded),
             onPressed: () async {
+              AudioService().play('pings/start.mp3');
               setState(() {
                 animate = true;
               });
@@ -366,7 +367,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                   animate = false;
                 });
               });
-              AudioService().play('pings/start.mp3');
               String text = textController.text.trim();
               String due = dateController.text;
               String category = selectedCategory;

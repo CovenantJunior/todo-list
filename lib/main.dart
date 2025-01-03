@@ -202,8 +202,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     // Initialize theme preference
     context.read<TodoListDatabase>().fetchPreferences();
+    bool darkMode = context.watch<TodoListDatabase>().preferences.first.darkMode;
     return MaterialApp(
-      theme: context.watch<TodoListDatabase>().preferences.first.darkMode ? ThemeData.dark() : ThemeData.light(),
+      theme: darkMode ? ThemeData.dark() : ThemeData.light(),
       debugShowCheckedModeBanner: false,
       initialRoute: '/home',
       routes: {

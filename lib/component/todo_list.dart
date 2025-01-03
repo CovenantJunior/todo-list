@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'dart:ffi';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -592,9 +591,9 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                         );
                         Navigator.pop(context);
                       } else {
-                        if ((Plan.interval != interval) || (Plan.plan != text)) {
-                          Navigator.pop(context);
+                        if ((Plan.interval != interval) || (Plan.plan != text) || (Plan.category != widget.category)) {
                           AudioService().play('pings/pop.mp3');
+                          Navigator.pop(context);
                           context.read<TodoListDatabase>().updateTodoList(Plan.id, text, widget.category, due, interval);
                           NotificationService().cancelNotification(Plan.id);
                           NotificationService().scheduleNotification(
@@ -608,6 +607,22 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                             }),
                           );
                         } else {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7)
+                            ),
+                            duration: const Duration(seconds: 1),
+                            content: const Text(
+                              'No major changes made',
+                              style: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        );
                         }
                         Navigator.pop(context);
                         textController.clear();
@@ -618,7 +633,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                             ),
                             duration: const Duration(seconds: 1),
                             content: const Text(
-                              'Plan saved',
+                              'Plan updated',
                               style: TextStyle(
                                 fontFamily: "Quicksand",
                                 fontWeight: FontWeight.w500,
@@ -1264,8 +1279,8 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
           }),
         );
       } else {
-        NotificationService().cancelNotification(plan.id);
         AudioService().play('pings/completed.mp3');
+        NotificationService().cancelNotification(plan.id);
         context.read<TodoListDatabase>().completed(plan.id);
         _completedController.play();
         Future.delayed(const Duration(seconds: 5), () {

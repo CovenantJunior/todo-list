@@ -42,19 +42,17 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
     // print(preferences.length);
     for (var preference in preferences) {
       if (mounted) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          setState(() {
-            darkMode = preference.darkMode;
-            notification = preference.notification;
-            vibration = preference.vibration;
-            stt = preference.stt;
-            backup = preference.backup;
-            autoSync = preference.autoSync;
-            accessClipboard = preference.accessClipboard;
-            autoDelete = preference.autoDelete;
-            autoDeleteOnDismiss = preference.autoDeleteOnDismiss;
-            bulkTrash = preference.bulkTrash;
-          });
+        setState(() {
+          darkMode = preference.darkMode;
+          notification = preference.notification;
+          vibration = preference.vibration;
+          stt = preference.stt;
+          backup = preference.backup;
+          autoSync = preference.autoSync;
+          accessClipboard = preference.accessClipboard;
+          autoDelete = preference.autoDelete;
+          autoDeleteOnDismiss = preference.autoDeleteOnDismiss;
+          bulkTrash = preference.bulkTrash;
         });
       }
     }
