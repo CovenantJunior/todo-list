@@ -41,7 +41,7 @@ class InterstitialAds {
       return false;
     }
 
-    _interstitialAd!.show();
+    // _interstitialAd!.show();
 
     // Dispose of the ad after it is shown.
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(

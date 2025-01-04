@@ -133,7 +133,6 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
       textController.text = data;
     }
     dateController.text == '' ? dateController.text = date : dateController.text= dateController.text;
-    widget.category == 'All' ? widget.category = 'Personal' : widget.category = widget.category;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -195,7 +194,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                                 fontWeight: FontWeight.w500),
                             border: InputBorder.none),
                         child: DropdownButtonFormField<String>(
-                          value: widget.category,
+                          value: widget.category == 'All' ? 'Personal' : widget.category,
                           onChanged: (value) {
                             setState(() {
                               widget.category = value!;
@@ -451,7 +450,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                                       fontWeight: FontWeight.w500),
                                   border: InputBorder.none),
                               child: DropdownButtonFormField<String>(
-                                value: Plan.category,
+                                value: Plan.category == 'All' ? 'Personal' : Plan.category,
                                 onChanged: (value) {
                                   widget.category = value!;
                                 },

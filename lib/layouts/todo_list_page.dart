@@ -11,6 +11,7 @@ import 'package:popover/popover.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:todo_list/component/todo_actions.dart';
+import 'package:todo_list/component/todo_list.dart';
 import 'package:todo_list/component/todo_list_drawer.dart';
 import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:todo_list/services/ads/interstitial.dart';
@@ -87,45 +88,42 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
   
   Widget searchTextField() {
     //add
-    return TextField(
-      controller: textController,
-      focusNode: _focusNode,
-      autofocus: true,
-      autocorrect: true,
-      enableSuggestions: true,
-      decoration: InputDecoration(
-        labelText: 'Search Plans / $selectedCategory',
-        labelStyle: const TextStyle(fontFamily: "Quicksand")
-      ),
-      onChanged: (value) {
-        _focusNode.requestFocus();
-        var q = textController.text;
-        if (q.isNotEmpty) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            setState(() {
-              isOfLength = true;
-              searchResults = [];
+    return FocusScope(
+      child: TextField(
+        controller: textController,
+        decoration: InputDecoration(
+          labelText: 'Search Plans / $selectedCategory',
+          labelStyle: const TextStyle(fontFamily: "Quicksand")
+        ),
+        onChanged: (value) {
+          var q = textController.text;
+          if (q.isNotEmpty) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              setState(() {
+                isOfLength = true;
+                searchResults = [];
+              });
             });
-          });
-          context.read<TodoListDatabase>().search(q.toLowerCase());
-        } else {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            setState(() {
-              isOfLength = false;
-              searchResults = [];
+            context.read<TodoListDatabase>().search(q.toLowerCase());
+          } else {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              setState(() {
+                isOfLength = false;
+                searchResults = [];
+              });
             });
-          });
-          readTodoLists();
-        }
-        for (var plans in nonTrashedTodolists) {
-          if (plans.plan.toLowerCase().contains(q.toLowerCase())) {
-            searchResults.add(plans);
-            setState(() {
-              searchResults = searchResults;
-            });
+            readTodoLists();
+          }
+          for (var plans in nonTrashedTodolists) {
+            if (plans.plan.toLowerCase().contains(q.toLowerCase())) {
+              searchResults.add(plans);
+              setState(() {
+                searchResults = searchResults;
+              });
+            }
           }
         }
-      }
+      ),
     );
   }
 
@@ -177,7 +175,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       textController.text = data;
     }
     dateController.text == '' ? dateController.text = date : dateController.text= dateController.text;
-    selectedCategory == 'All' ? selectedCategory = 'Personal' : selectedCategory = selectedCategory;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -239,7 +236,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                                 fontWeight: FontWeight.w500),
                             border: InputBorder.none),
                         child: DropdownButtonFormField<String>(
-                          value: selectedCategory,
+                          value: selectedCategory == 'All' ? 'Personal' : selectedCategory,
                           onChanged: (value) {
                             setState(() {
                               selectedCategory = value!;
@@ -578,6 +575,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 
   @override
   void initState() {
+    print('change');
     super.initState();
     requestPermissions();
     readTodoLists();
@@ -587,12 +585,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
       duration: const Duration(milliseconds: 500),
     );
     _startTimer();
-    _focusNode.addListener(() {
-      if (!_focusNode.hasFocus && isSearch) {
-        _focusNode.requestFocus();
-      }
-    });
-
   }
 
   @override
@@ -774,7 +766,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           ],
         ),
         drawer: const TodoListDrawer(),
-        body: ClipRRect(
+        body: !isSearch ? ClipRRect(
           child: Shell(
             index: 0,
             nonTrashedTodolists: nonTrashedTodolists,
@@ -795,7 +787,16 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               });
             }
           ),
-        ),
+        ) : Todo(
+              list: nonTrashedTodolists,
+              category: 'All',
+              cardToRemove: cardToRemove,
+              animate: animate,
+              isSearch: isSearch,
+              isOfLength: isOfLength,
+              selectedCategory: selectedCategory,
+              closeSearch: closeSearch
+            ),
       ),
     );
   }
