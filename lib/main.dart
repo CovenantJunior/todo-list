@@ -197,19 +197,24 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // Initialize theme preference
-    context.read<TodoListDatabase>().fetchPreferences();
-    bool darkMode = context.watch<TodoListDatabase>().preferences.first.darkMode;
-    return MaterialApp(
-      theme: darkMode ? ThemeData.dark() : ThemeData.light(),
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
-      routes: {
-        '/home': (context) => const TodoListPage(),
-        '/preferences': (context) => const TodoListPreferences(),
+    return Consumer<TodoListDatabase>(
+      builder: (context, todoListDatabase, child) {
+        // Initialize theme preference
+        todoListDatabase.fetchPreferences();
+
+        return MaterialApp(
+          theme: todoListDatabase.preferences.first.darkMode
+              ? ThemeData.dark()
+              : ThemeData.light(),
+          debugShowCheckedModeBanner: false,
+          initialRoute: '/home',
+          routes: {
+            '/home': (context) => const TodoListPage(),
+            '/preferences': (context) => const TodoListPreferences(),
+          },
+        );
       },
     );
   }

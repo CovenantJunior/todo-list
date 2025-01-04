@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:isar/isar.dart';
 import 'package:todo_list/models/todo_list.dart';
 import 'package:path_provider/path_provider.dart';
@@ -54,7 +54,9 @@ class TodoListDatabase extends ChangeNotifier{
       await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
     }
     preferences = isar.todoPreferences.where().findAllSync();
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 
   void themePreference () async {
@@ -77,7 +79,9 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.addAll(currentPreferences);
       isDark = preferences.first.darkMode;
       // print(currentPreferences.length);
-      notifyListeners();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+          notifyListeners();
+      });
     }
   }
 
@@ -96,7 +100,9 @@ class TodoListDatabase extends ChangeNotifier{
       isDark = existingPreference.darkMode!;
 
     }
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
     fetchPreferences();
   }
 
@@ -108,8 +114,9 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.notification = existingPreference.notification;
     }
     
-    notifyListeners();
-    fetchPreferences();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
 
   void setVibration (id) async {
@@ -120,8 +127,9 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.vibration = existingPreference.vibration;
     }
     
-    notifyListeners();
-    fetchPreferences();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
 
   void setSTT (id) async {
@@ -132,8 +140,9 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.stt = existingPreference.stt;
     }
     
-    notifyListeners();
-    fetchPreferences();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
 
   void setBackup (id) async {
@@ -144,8 +153,9 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.backup = existingPreference.backup;
     }
     
-    notifyListeners();
-    fetchPreferences();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
   
   void setAutoSync (id) async {
@@ -156,8 +166,9 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.autoSync = existingPreference.autoSync;
     }
     
-    notifyListeners();
-    fetchPreferences();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
   
   void setAccessClipboard(id) async {
@@ -168,8 +179,9 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.accessClipboard = existingPreference.accessClipboard;
     }
     
-    notifyListeners();
-    fetchPreferences();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
   
   void setAutoDelete (id) async {
@@ -180,8 +192,9 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.autoDelete = existingPreference.autoDelete;
     }
     
-    notifyListeners();
-    fetchPreferences();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
 
   void setAutoDeleteonDismiss(id) async {
@@ -194,8 +207,9 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.autoDeleteOnDismiss = existingPreference.autoDeleteOnDismiss;
     }
 
-    notifyListeners();
-    fetchPreferences();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
 
   void setBulkTrash(id) async {
@@ -208,8 +222,9 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.bulkTrash = existingPreference.bulkTrash;
     }
 
-    notifyListeners();
-    fetchPreferences();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
   
   
@@ -264,7 +279,9 @@ class TodoListDatabase extends ChangeNotifier{
     fetchUntrashedTodoList();
     fetchTrashedTodoList();
     fetchStarredTodoList();
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
     fetchUser();
   }
 
@@ -275,7 +292,9 @@ class TodoListDatabase extends ChangeNotifier{
     todolists.clear();
     todolists.addAll(currentTodoLists);
 
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
   
   void fetchUntrashedTodoList() async {
@@ -285,7 +304,9 @@ class TodoListDatabase extends ChangeNotifier{
     nonTrashedTodolists.clear();
     nonTrashedTodolists.addAll(currentNonTrashedTodoLists);
 
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
 
   // READ
@@ -295,7 +316,9 @@ class TodoListDatabase extends ChangeNotifier{
     trashedTodoLists.clear();
     trashedTodoLists.addAll(currentTrashedTodoLists);
 
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
   
   // READ STARRED
@@ -305,7 +328,9 @@ class TodoListDatabase extends ChangeNotifier{
     starredTodoLists.clear();
     starredTodoLists.addAll(currentStarredTodoLists);
 
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
   }
 
   // UPDATE
@@ -502,7 +527,9 @@ class TodoListDatabase extends ChangeNotifier{
     } else {
       user.clear();
       user.addAll(currentUser);
-      notifyListeners();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+          notifyListeners();
+      });
     }
   }
 

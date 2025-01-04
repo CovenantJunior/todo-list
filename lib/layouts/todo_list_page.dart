@@ -588,10 +588,8 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     );
     _startTimer();
     _focusNode.addListener(() {
-      if (!_focusNode.hasFocus) {
-        Future.delayed(const Duration(milliseconds: 1), () {
-          _focusNode.requestFocus();
-        });
+      if (!_focusNode.hasFocus && isSearch) {
+        _focusNode.requestFocus();
       }
     });
 
