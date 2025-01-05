@@ -155,6 +155,15 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoPrivacy()));
               }
             ),
+
+            TodoListDrawerTile(
+              title: "Remove Ads",
+              leading: const Icon(Icons.movie_filter_outlined),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoPrivacy()));
+              }
+            ),
           ],
         ),
       ),
