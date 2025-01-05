@@ -91,6 +91,9 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
     return FocusScope(
       child: TextField(
         controller: textController,
+        autofocus: true,
+        autocorrect: true,
+        enableSuggestions: true,
         decoration: InputDecoration(
           labelText: 'Search Plans / $selectedCategory',
           labelStyle: const TextStyle(fontFamily: "Quicksand")
@@ -575,7 +578,6 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 
   @override
   void initState() {
-    print('change');
     super.initState();
     requestPermissions();
     readTodoLists();
@@ -597,6 +599,28 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    int index;
+    switch (selectedCategory) {
+      case 'Personal':
+        index = 1;
+        break;
+      case 'Work':
+        index = 2;
+        break;
+      case 'Study':
+        index = 3;
+        break;
+      case 'Shopping':
+        index = 4;
+        break;
+      case 'Sport':
+        index = 5;
+        break;
+      default:
+        index = 0;
+        break; // default to 'All'
+    }
+
     List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
     List trashedTodolists = context.read<TodoListDatabase>().trashedTodoLists;
 
@@ -751,6 +775,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
                           isSearch: () {
                             setState(() {
                               isSearch = true;
+                              textController.clear();
                             });
                           },
                           category: selectedCategory,
@@ -768,7 +793,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
         drawer: const TodoListDrawer(),
         body: !isSearch ? ClipRRect(
           child: Shell(
-            index: 0,
+            index: index,
             nonTrashedTodolists: nonTrashedTodolists,
             cardToRemove: cardToRemove,
             animate: animate,
@@ -789,7 +814,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
           ),
         ) : Todo(
               list: nonTrashedTodolists,
-              category: 'All',
+              category: selectedCategory,
               cardToRemove: cardToRemove,
               animate: animate,
               isSearch: isSearch,
