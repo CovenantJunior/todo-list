@@ -77,9 +77,6 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    setState(() {
-      widget.selectedCategory = widget.category;
-    });
   }
 
   @override
@@ -194,10 +191,10 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                                 fontWeight: FontWeight.w500),
                             border: InputBorder.none),
                         child: DropdownButtonFormField<String>(
-                          value: widget.category == 'All' ? 'Personal' : widget.category,
+                          value: widget.selectedCategory,
                           onChanged: (value) {
                             setState(() {
-                              widget.category = value!;
+                              widget.selectedCategory = value!;
                             });
                           },
                           items: [
@@ -328,7 +325,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
               });
               String text = textController.text.trim();
               String due = dateController.text;
-              String category = widget.category;
+              String category = widget.selectedCategory;
               String intvl = interval;
               if (text.isNotEmpty) {
                 AudioService().play('pings/start.mp3');
@@ -391,6 +388,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
 
   // ignore: non_constant_identifier_names
   void editTodoList(int id, Plan) {
+    String? selectedCategory;
     textController.text = Plan.plan;
     dateController.text =
         Plan.due != null ? DateFormat('yyyy-MM-dd').format(Plan.due) : date;
@@ -450,9 +448,9 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                                       fontWeight: FontWeight.w500),
                                   border: InputBorder.none),
                               child: DropdownButtonFormField<String>(
-                                value: Plan.category == 'All' ? 'Personal' : Plan.category,
+                                value: Plan.category,
                                 onChanged: (value) {
-                                  widget.category = value!;
+                                  selectedCategory = value!;
                                 },
                                 items: [
                                   'Personal',
@@ -590,10 +588,10 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                         );
                         Navigator.pop(context);
                       } else {
-                        if ((Plan.interval != interval) || (Plan.plan != text) || (Plan.category != widget.category)) {
+                        if (Plan.interval != interval || Plan.plan != text || Plan.category != selectedCategory) {
                           AudioService().play('pings/pop.mp3');
                           Navigator.pop(context);
-                          context.read<TodoListDatabase>().updateTodoList(Plan.id, text, widget.category, due, interval);
+                          context.read<TodoListDatabase>().updateTodoList(Plan.id, text, selectedCategory, due, interval);
                           NotificationService().cancelNotification(Plan.id);
                           NotificationService().scheduleNotification(
                             id: Plan.id,
@@ -605,41 +603,41 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                               'interval': Plan.interval
                             }),
                           );
-                        } else {
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7)
-                            ),
-                            duration: const Duration(seconds: 1),
-                            content: const Text(
-                              'No major changes made',
-                              style: TextStyle(
-                                fontFamily: "Quicksand",
-                                fontWeight: FontWeight.w500,
+                            SnackBar(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)
+                              ),
+                              duration: const Duration(seconds: 1),
+                              content: const Text(
+                                'Plan updated',
+                                style: TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
-                          ),
-                        );
+                          );
+                        } else {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7)
+                              ),
+                              duration: const Duration(seconds: 1),
+                              content: const Text(
+                                'No major changes made',
+                                style: TextStyle(
+                                  fontFamily: "Quicksand",
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          );
                         }
-                        Navigator.pop(context);
-                        textController.clear();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7)
-                            ),
-                            duration: const Duration(seconds: 1),
-                            content: const Text(
-                              'Plan updated',
-                              style: TextStyle(
-                                fontFamily: "Quicksand",
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        );
                       }
                     } else {
                       context.watch<TodoListDatabase>().preferences.first.vibration == true
@@ -1323,7 +1321,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                             _controller.repeat();
                             _controller.forward();
                           }
-                          return plan.category == widget.category || widget.category == 'All' ? GestureDetector(
+                          return plan.category == widget.selectedCategory || widget.category == 'All' ? GestureDetector(
                             onDoubleTap: () {
                               mark(plan);
                             },
@@ -1419,7 +1417,8 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                                                                     FontWeight.w500,
                                                                 // fontSize: 16,
                                                                 decoration: decorate(
-                                                                    plan.completed),
+                                                                    plan.completed
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
@@ -1665,6 +1664,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                   ? Tooltip(
                       message: "Move plans to trash",
                       child: FloatingActionButton(
+                        heroTag: null,
                         onPressed: () {
                           trashAllTodoLists(nonTrashedTodolists);
                         },
@@ -1685,6 +1685,7 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
                   turns: Tween(begin: 0.0, end: widget.isSearch ? 0.25 : 0.0)
                       .animate(_controller),
                   child: FloatingActionButton(
+                    heroTag: null,
                     onPressed: () {
                       if (widget.isSearch == true) {
                         widget.closeSearch();

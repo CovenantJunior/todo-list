@@ -28,7 +28,7 @@ class TodoListPage extends StatefulWidget {
   State<TodoListPage> createState() => _TodoListPageState();
 }
 
-class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderStateMixin {
+class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMixin {
   
   Future<void> requestPermissions() async {
     // Request the necessary permissions
@@ -374,7 +374,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
               });
               String text = textController.text.trim();
               String due = dateController.text;
-              String category = selectedCategory;
+              String category = selectedCategory == 'All' ? 'Personal' : selectedCategory;
               String intvl = interval;
               if (text.isNotEmpty) {
                 context.read<TodoListDatabase>().addTodoList(text, category, due, intvl);
@@ -599,26 +599,28 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    int index;
-    switch (selectedCategory) {
-      case 'Personal':
-        index = 1;
-        break;
-      case 'Work':
-        index = 2;
-        break;
-      case 'Study':
-        index = 3;
-        break;
-      case 'Shopping':
-        index = 4;
-        break;
-      case 'Sport':
-        index = 5;
-        break;
-      default:
-        index = 0;
-        break; // default to 'All'
+    int index = 0;
+    if (isSearch) {
+      switch (selectedCategory) {
+        case 'Personal':
+          index = 1;
+          break;
+        case 'Work':
+          index = 2;
+          break;
+        case 'Study':
+          index = 3;
+          break;
+        case 'Shopping':
+          index = 4;
+          break;
+        case 'Sport':
+          index = 5;
+          break;
+        default:
+          index = 0;
+          break; // default to 'All'
+      }
     }
 
     List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
@@ -808,7 +810,7 @@ class _TodoListPageState extends State<TodoListPage> with SingleTickerProviderSt
             },
             toggle: (c) {
               setState(() {
-                selectedCategory = c;
+                selectedCategory = c == 'All' ? 'Personal' : c;
               });
             }
           ),

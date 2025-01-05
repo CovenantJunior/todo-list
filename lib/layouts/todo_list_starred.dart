@@ -533,7 +533,7 @@ class _TodoStarredState extends State<TodoStarred> {
                 ),
               ),
               buttonIcon: const Icon(
-                Icons.waving_hand_rounded
+                Icons.waving_hand_outlined
               ),
               cancelText: const Text("Leave"),
               confirmText: const Text("Done"),
