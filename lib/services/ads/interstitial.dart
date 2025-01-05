@@ -15,6 +15,9 @@ class InterstitialAds {
   /// Interstitial ad instance.
   InterstitialAd? _interstitialAd;
 
+  int retryCount = 0;
+  int retry = 3;
+
   /// Loads an interstitial ad.
   Future<void> loadInterstitialAd(context) async {
     InterstitialAd.load(
@@ -26,8 +29,14 @@ class InterstitialAds {
           showInterstitialAd(context);
         },
         onAdFailedToLoad: (LoadAdError error) {
-          loadInterstitialAd(context); // Retry loading the ad
-          debugPrint('InterstitialAd failed to load: $error');
+          debugPrint('InterstitialAd failed to load after $retryCount retries: $error');
+          if (retry != 0) {
+            retry--;
+            retryCount++;
+            Future.delayed(const Duration(seconds: 30), () => {
+              loadInterstitialAd(context) // Retry loading the ad
+            });
+          }
         },
       ),
     );
@@ -59,7 +68,7 @@ class InterstitialAds {
           textColor: Colors.white,
           fontSize: 16.0,
         );
-        debugPrint('Failed to show interstitial ad: $error');
+        debugPrint('Failed to show interstitial ad after $retryCount retries: $error');
         ad.dispose();
       },
     );
