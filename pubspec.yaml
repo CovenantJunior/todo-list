@@ -73,6 +73,7 @@ dependencies:
   win32: ^5.8.0
   persistent_bottom_nav_bar: ^6.2.1
   google_mobile_ads: ^5.2.0
+  cloud_firestore: ^5.6.0
 
 dev_dependencies:
   flutter_test:
