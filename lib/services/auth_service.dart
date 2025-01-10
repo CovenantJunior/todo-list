@@ -28,29 +28,48 @@ class AuthService {
       if (googleUser == null) {
         // If user is not authenticated, prompt for authorization
         await _googleSignIn.signInSilently();
-        final googleUser = await _googleSignIn.signIn();
-        final auth.AuthClient? client = await _googleSignIn.authenticatedClient();
-        if (googleUser == null) {
-          // Show backup error message
-          ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-            duration: const Duration(seconds: 1),
-            content: const Row(children: [
-              Icon(Icons.error_outline_rounded, color: Colors.red),
-              SizedBox(width: 10),
-              Text('Something went wrong',
-                  style: TextStyle(
-                      fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
-            ]),
-          ));
-        } else {
-          var currentUser = context.read<TodoListDatabase>().user;
-          int id = currentUser.first.id;
-          context.read<TodoListDatabase>().setGoogleUser(id, googleUser.email, googleUser.id, googleUser.photoUrl, googleUser.displayName);
-          BackupService().backupUserData(context, backup: true);
-        }
       }
+
+      final googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        // Show error message if sign-in fails
+        ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+          duration: const Duration(seconds: 1),
+          content: const Row(children: [
+            Icon(Icons.error_outline_rounded, color: Colors.red),
+            SizedBox(width: 10),
+            Text('Something went wrong',
+                style: TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+          ]),
+        ));
+        return;
+      }
+
+      final auth.AuthClient? client = await _googleSignIn.authenticatedClient();
+      if (client == null) {
+        // Show error message if client is null
+        ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+          duration: const Duration(seconds: 1),
+          content: const Row(children: [
+            Icon(Icons.error_outline_rounded, color: Colors.red),
+            SizedBox(width: 10),
+            Text('Something went wrong',
+                style: TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+          ]),
+        ));
+        return;
+      }
+
+      var currentUser = context.read<TodoListDatabase>().user;
+      int id = currentUser.first.id;
+      context.read<TodoListDatabase>().setGoogleUser(id, googleUser.email, googleUser.id, googleUser.photoUrl, googleUser.displayName);
+      BackupService().backupUserData(context, backup: true);
     } catch (e) {
       print('Error signing in with Google: $e');
     }
