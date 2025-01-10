@@ -23,7 +23,7 @@ class BackupService {
 
     try {
       // Backup user data
-      await _firestore.collection('users').doc(user.first.id.toString()).set({
+      await _firestore.collection('users').doc(user.first.googleUserId.toString()).set({
         'username': user.first.username,
         'email': user.first.email,
         'pro': user.first.pro,
@@ -35,7 +35,7 @@ class BackupService {
 
       // Backup todo lists
       for (var todo in todoLists) {
-        await _firestore.collection('users').doc(user.first.id.toString()).collection('todoLists').doc(todo.id.toString()).set({
+        await _firestore.collection('users').doc(user.first.googleUserId.toString()).collection('todoLists').doc(todo.id.toString()).set({
           'plan': todo.plan,
           'category': todo.category,
           'completed': todo.completed,
@@ -51,7 +51,7 @@ class BackupService {
       }
 
       // Backup preferences
-      await _firestore.collection('users').doc(user.first.id.toString()).collection('preferences').doc(preferences.first.id.toString()).set({
+      await _firestore.collection('users').doc(user.first.googleUserId.toString()).collection('preferences').doc(preferences.first.id.toString()).set({
         'darkMode': preferences.first.darkMode,
         'notification': preferences.first.notification,
         'vibration': preferences.first.vibration,
