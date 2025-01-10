@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 // import 'package:todo_list/services/credential_service.dart';
 import 'package:todo_list/services/notification_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
@@ -173,6 +174,7 @@ void main() async {
   await TodoListDatabase.initialize();
   NotificationService().initNotifications();
   initializeService();
+  await Firebase.initializeApp();
   // JsonReader jsonReader = JsonReader();
   // Credential credential = await jsonReader.readCredentials();
   await dotenv.load(fileName: "assets/.env");

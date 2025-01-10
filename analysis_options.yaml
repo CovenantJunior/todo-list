@@ -13,6 +13,7 @@ analyzer:
     must_be_immutable: ignore
     void_checks: ignore
     no_leading_underscores_for_local_identifiers: ignore
+    library_private_types_in_public_api: ignore
 include: package:flutter_lints/flutter.yaml
 
 linter:

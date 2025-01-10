@@ -738,7 +738,7 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
                       ),
                     ),
                   );
-                  Backup().backup(context, backup: () {
+                  BackupService().backupUserData(context, backup: () {
                     setState(() {
                       backingUp = false;
                     });
