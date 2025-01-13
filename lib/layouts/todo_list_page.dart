@@ -16,7 +16,8 @@ import 'package:todo_list/component/todo_list_drawer.dart';
 import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:todo_list/services/ads/interstitial.dart';
 import 'package:todo_list/services/audio_service.dart';
-import 'package:todo_list/services/backup_service.dart';
+import 'package:todo_list/services/auth_service.dart';
+// import 'package:todo_list/services/backup_service.dart';
 import 'package:todo_list/services/notification_service.dart';
 import 'package:todo_list/services/sync_service.dart';
 import 'package:todo_list/shell.dart';
@@ -738,7 +739,7 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
                       ),
                     ),
                   );
-                  BackupService().backupUserData(context, backup: () {
+                  AuthService().signInWithGoogle(context, backup: () {
                     setState(() {
                       backingUp = false;
                     });

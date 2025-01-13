@@ -64,6 +64,7 @@ class BackupService {
         'bulkTrash': preferences.first.bulkTrash,
       });
     } catch (e) {
+      backup();
       print('Error backing up data: $e');
     }
   }

@@ -171,13 +171,21 @@ void onStart(ServiceInstance service) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   unawaited(MobileAds.instance.initialize());
-  await TodoListDatabase.initialize();
   NotificationService().initNotifications();
   initializeService();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: 'AIzaSyAkrviIvt1sN7FCu9Q4g8nmUJ3AyZqo1p0',
+      appId: '1:702532065815:android:087716a32a12ed65209a52',
+      messagingSenderId: '702532065815',
+      projectId: 'auth-376711',
+      storageBucket: 'auth-376711.firebasestorage.app',
+    )
+  );
   // JsonReader jsonReader = JsonReader();
   // Credential credential = await jsonReader.readCredentials();
   await dotenv.load(fileName: "assets/.env");
+  await TodoListDatabase.initialize();
   runApp(
     MultiProvider(
       providers: [
