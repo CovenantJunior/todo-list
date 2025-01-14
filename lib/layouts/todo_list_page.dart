@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:popover/popover.dart';
@@ -19,7 +20,6 @@ import 'package:todo_list/services/audio_service.dart';
 import 'package:todo_list/services/auth_service.dart';
 // import 'package:todo_list/services/backup_service.dart';
 import 'package:todo_list/services/notification_service.dart';
-import 'package:todo_list/services/sync_service.dart';
 import 'package:todo_list/shell.dart';
 import 'package:vibration/vibration.dart';
 
@@ -79,7 +79,6 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
   List searchResults = [];
   List nonTrashedTodolists = [];
   List nonTrashedTodolistsState = [];
-  List preference = [];
   List cardToRemove = [];
   bool _isListening = false;
   bool backingUp = false;
@@ -625,7 +624,8 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
     }
 
     List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
-    List trashedTodolists = context.read<TodoListDatabase>().trashedTodoLists;
+    List trashedTodolists = context.watch<TodoListDatabase>().trashedTodoLists;
+    List todoLists = context.watch<TodoListDatabase>().todolists;
 
     for (var plan in trashedTodolists) {
       // Get the current time
@@ -657,31 +657,19 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
     context.read<TodoListDatabase>().fetchUser();
     List user = context.watch<TodoListDatabase>().user;
 
+
     if (context.read<TodoListDatabase>().preferences.first.backup == true && context.read<TodoListDatabase>().preferences.first.autoSync == true && user.isNotEmpty) {
-      Timer.periodic(const Duration(minutes: 10), (timer) {
-        setState(() {
-          backingUp = true;
-        });
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(7)
-            ),
-            duration: const Duration(seconds: 1),
-            behavior: SnackBarBehavior.fixed,
-            content: const Text('Synchronizing your data',
-              style: TextStyle(
-                fontFamily: "Quicksand", fontWeight: FontWeight.w500
-              )
-            ),
-          ),
-        );
-        Sync().sync(context, backup: () {
+      Timer.periodic(const Duration(minutes: 10), (timer) async {
+        if(await InternetConnectionChecker().hasConnection == true) {
           setState(() {
-            backingUp = false;
+            backingUp = true;
           });
-        });
+          AuthService().signInWithGoogle(context, todoLists, context.read<TodoListDatabase>().preferences.first, backup: () {
+            setState(() {
+              backingUp = false;
+            });
+          });
+        }
       });
     } else {
       // Do nothing
@@ -724,22 +712,7 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
                   setState(() {
                     backingUp = true;
                   });
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7)
-                      ),
-                      duration: const Duration(seconds: 1),
-                      behavior: SnackBarBehavior.fixed,
-                      content: const Text('Backing up',
-                        style: TextStyle(
-                          fontFamily: "Quicksand", fontWeight: FontWeight.w500
-                        )
-                      ),
-                    ),
-                  );
-                  AuthService().signInWithGoogle(context, backup: () {
+                  AuthService().signInWithGoogle(context, todoLists, context.read<TodoListDatabase>().preferences.first, backup: () {
                     setState(() {
                       backingUp = false;
                     });
@@ -794,27 +767,33 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
           ],
         ),
         drawer: const TodoListDrawer(),
-        body: !isSearch ? ClipRRect(
-          child: Shell(
-            index: index,
-            nonTrashedTodolists: nonTrashedTodolists,
-            cardToRemove: cardToRemove,
-            animate: animate,
-            isSearch: isSearch,
-            isOfLength: isOfLength,
-            selectedCategory: selectedCategory,
-            closeSearch: () {
-              setState(() {
-                isSearch = false;
-                isOfLength = false;
-              });
-            },
-            toggle: (c) {
-              setState(() {
-                selectedCategory = c == 'All' ? 'Personal' : c;
-              });
-            }
-          ),
+        body: !isSearch ? Stack(
+          children: [
+            ClipRRect(
+              child: Shell(
+                index: index,
+                nonTrashedTodolists: nonTrashedTodolists,
+                cardToRemove: cardToRemove,
+                animate: animate,
+                isSearch: isSearch,
+                isOfLength: isOfLength,
+                selectedCategory: selectedCategory,
+                closeSearch: () {
+                  setState(() {
+                    isSearch = false;
+                    isOfLength = false;
+                  });
+                },
+                toggle: (c) {
+                  setState(() {
+                    selectedCategory = c == 'All' ? 'Personal' : c;
+                  });
+                }
+              ),
+            ),
+            if(backingUp)
+            const LinearProgressIndicator()
+          ],
         ) : Todo(
               list: nonTrashedTodolists,
               category: selectedCategory,

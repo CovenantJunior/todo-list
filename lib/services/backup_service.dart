@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
-import 'package:todo_list/controllers/todo_list_controller.dart';
+// import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:todo_list/models/todo_list.dart';
 import 'package:todo_list/models/todo_preferences.dart';
 import 'package:todo_list/models/todo_user.dart';
@@ -11,61 +12,112 @@ class BackupService {
 
 
   /* BACKUP USER DATA AFTER AUTHENTICATION*/
-  Future<void> backupUserData(context, {required backup}) async {
+  Future<void> backupUserData(context, user, todoLists, preferences, {required backup}) async {
+    print('Backing up...');
+    print(user.email);
 
-    // Fetch User
-    context.read<TodoListDatabase>().fetchUser();
-
-    // Assign all the variables from the context.read<TodoListDatabase>() to the variables user, todoLists, and preferences.
-    List user = context.read<TodoListDatabase>().user;
-    List<TodoList> todoLists = context.read<TodoListDatabase>().todolists;
-    List preferences = context.read<TodoListDatabase>().preferences;
+    if (user.googleUserId == null || user.googleUserId.isEmpty) {
+      print('Error: googleUserId is null or empty');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+        duration: const Duration(seconds: 1),
+        content: const Row(children: [
+          Icon(Icons.error_outline_rounded, color: Colors.red),
+          SizedBox(width: 10),
+          Text('Backup failed: Invalid user ID',
+              style: TextStyle(
+                  fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+        ]),
+      ));
+      backup();
+      return;
+    }
 
     try {
       // Backup user data
-      await _firestore.collection('users').doc(user.first.googleUserId.toString()).set({
-        'username': user.first.username,
-        'email': user.first.email,
-        'pro': user.first.pro,
-        'createdAt': user.first.createdAt?.toIso8601String(),
-        'googleUserId': user.first.googleUserId,
-        'googleUserPhotoUrl': user.first.googleUserPhotoUrl,
-        'lastBackup': user.first.lastBackup?.toIso8601String(),
+      print('Backup user profile...');
+      await _firestore.collection('users').doc(user.googleUserId.toString()).set({
+        'username': user.username,
+        'email': user.email,
+        'pro': user.pro,
+        'createdAt': user.createdAt?.toIso8601String(),
+        'googleUserId': user.googleUserId,
+        'googleUserPhotoUrl': user.googleUserPhotoUrl,
+        'lastBackup': user.lastBackup?.toIso8601String(),
       });
 
-      // Backup todo lists
-      for (var todo in todoLists) {
-        await _firestore.collection('users').doc(user.first.googleUserId.toString()).collection('todoLists').doc(todo.id.toString()).set({
-          'plan': todo.plan,
-          'category': todo.category,
-          'completed': todo.completed,
-          'created': todo.created?.toIso8601String(),
-          'modified': todo.modified?.toIso8601String(),
-          'due': todo.due?.toIso8601String(),
-          'achieved': todo.achieved?.toIso8601String(),
-          'starred': todo.starred,
-          'trashed': todo.trashed,
-          'trashedDate': todo.trashedDate?.toIso8601String(),
-          'interval': todo.interval,
-        });
-      }
 
       // Backup preferences
-      await _firestore.collection('users').doc(user.first.googleUserId.toString()).collection('preferences').doc(preferences.first.id.toString()).set({
-        'darkMode': preferences.first.darkMode,
-        'notification': preferences.first.notification,
-        'vibration': preferences.first.vibration,
-        'stt': preferences.first.stt,
-        'backup': preferences.first.backup,
-        'autoSync': preferences.first.autoSync,
-        'accessClipboard': preferences.first.accessClipboard,
-        'autoDelete': preferences.first.autoDelete,
-        'autoDeleteOnDismiss': preferences.first.autoDeleteOnDismiss,
-        'bulkTrash': preferences.first.bulkTrash,
+      print('Backup user preferences...');
+      await _firestore.collection('users').doc(user.googleUserId.toString()).collection('preferences').doc(preferences.id.toString()).set({
+        'darkMode': preferences.darkMode,
+        'notification': preferences.notification,
+        'vibration': preferences.vibration,
+        'stt': preferences.stt,
+        'backup': preferences.backup,
+        'autoSync': preferences.autoSync,
+        'accessClipboard': preferences.accessClipboard,
+        'autoDelete': preferences.autoDelete,
+        'autoDeleteOnDismiss': preferences.autoDeleteOnDismiss,
+        'bulkTrash': preferences.bulkTrash,
       });
+
+      
+      if(todoLists.isEmpty) {
+        print('No todo lists to backup');
+      } else {
+        // Backup todo lists
+        print('Backup user todolists...');
+        for (var todo in todoLists) {
+          await _firestore.collection('users').doc(user.googleUserId.toString()).collection('todoLists').doc(todo.id.toString()).set({
+            'plan': todo.plan,
+            'category': todo.category,
+            'completed': todo.completed,
+            'created': todo.created?.toIso8601String(),
+            'modified': todo.modified?.toIso8601String(),
+            'due': todo.due?.toIso8601String(),
+            'achieved': todo.achieved?.toIso8601String(),
+            'starred': todo.starred,
+            'trashed': todo.trashed,
+            'trashedDate': todo.trashedDate?.toIso8601String(),
+            'interval': todo.interval,
+          });
+        }
+      }
+      
+      
+      print('Backup successful');
+      // Show success message if sign-in works
+      ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+        duration: const Duration(seconds: 5),
+        content: const Row(children: [
+          Icon(Icons.check_circle_outline_rounded, color: Colors.green),
+          SizedBox(width: 10),
+          Text('Data synced',
+              style: TextStyle(
+                  fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+        ]),
+      ));
     } catch (e) {
-      backup();
+      // Show error message if sign-in fails
+      ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+        duration: const Duration(seconds: 5),
+        content: const Row(children: [
+          Icon(Icons.error_outline_rounded, color: Colors.red),
+          SizedBox(width: 10),
+          Text('Backup failed',
+              style: TextStyle(
+                  fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+        ]),
+      ));
       print('Error backing up data: $e');
+    } finally {
+      // Call backup() to update the parent widget's state
+      backup();
     }
   }
 
@@ -124,6 +176,7 @@ class BackupService {
         await isar.todoLists.putAll(todoLists);
         await isar.todoPreferences.put(preferences);
       });
+      
     } catch (e) {
       print('Error importing data: $e');
     }

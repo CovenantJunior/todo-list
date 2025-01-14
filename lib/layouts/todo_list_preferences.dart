@@ -340,10 +340,10 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                   children: [
                     const Row(
                       children: [
-                        Icon(Icons.add_to_drive),
+                        Icon(Icons.backup_outlined),
                         SizedBox(width: 20),
                         Text(
-                          'Backup to Drive',
+                          'Backup data',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 12,

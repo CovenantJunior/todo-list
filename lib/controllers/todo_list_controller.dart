@@ -533,7 +533,7 @@ class TodoListDatabase extends ChangeNotifier{
     }
   }
 
-  void setGoogleUser(id, email, googleUserId, image, username) async {
+  Future<void> setGoogleUser(id, email, googleUserId, image, username) async {
     var existingUser = await isar.todoUsers.get(id);
     if (existingUser != null) {
       existingUser.email = email;
@@ -547,4 +547,12 @@ class TodoListDatabase extends ChangeNotifier{
     fetchUser();
   }
   
+
+  // Clear User after sign-out
+  void clearUser() async {
+    await isar.writeTxn(() => isar.todoUsers.clear());
+
+    // Update User List
+    fetchUser();
+  }
 }

@@ -9,6 +9,7 @@ import 'package:todo_list/layouts/todo_list_privacy.dart';
 import 'package:todo_list/layouts/todo_list_starred.dart';
 import 'package:todo_list/layouts/todo_trash_page.dart';
 import 'package:todo_list/controllers/todo_list_controller.dart';
+import 'package:todo_list/services/auth_service.dart';
 
 class TodoListDrawer extends StatefulWidget {
   const TodoListDrawer({super.key});
@@ -162,6 +163,18 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoPrivacy()));
+              }
+            ),
+
+            if (user.isNotEmpty && user.first.googleUserId != '')
+            const Divider(),
+            
+            if (user.isNotEmpty && user.first.googleUserId != '')
+            TodoListDrawerTile(
+              title: "Sign Out",
+              leading: const Icon(Icons.logout),
+              onTap: () {
+                AuthService().signOut(context);
               }
             ),
           ],
