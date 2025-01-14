@@ -659,12 +659,17 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
 
 
     if (context.read<TodoListDatabase>().preferences.first.backup == true && context.read<TodoListDatabase>().preferences.first.autoSync == true && user.isNotEmpty) {
+      AuthService().signInWithGoogleAndBackup(context, todoLists, context.read<TodoListDatabase>().preferences.first, backup: () {
+        setState(() {
+          backingUp = false;
+        });
+      });
       Timer.periodic(const Duration(minutes: 10), (timer) async {
-        if(await InternetConnectionChecker().hasConnection == true) {
+        if (await InternetConnectionChecker().hasConnection == true) {
           setState(() {
             backingUp = true;
           });
-          AuthService().signInWithGoogle(context, todoLists, context.read<TodoListDatabase>().preferences.first, backup: () {
+          AuthService().signInWithGoogleAndBackup(context, todoLists, context.read<TodoListDatabase>().preferences.first, backup: () {
             setState(() {
               backingUp = false;
             });
@@ -708,15 +713,30 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
             !isSearch && context.watch<TodoListDatabase>().preferences.first.backup == true ? Tooltip(
               message: "Backup Tasks and Preferences",
               child: IconButton(
-                onPressed: () { 
-                  setState(() {
-                    backingUp = true;
-                  });
-                  AuthService().signInWithGoogle(context, todoLists, context.read<TodoListDatabase>().preferences.first, backup: () {
+                onPressed: () async { 
+                  if (await InternetConnectionChecker().hasConnection == true) {
                     setState(() {
-                      backingUp = false;
+                      backingUp = true;
                     });
-                  });
+                    AuthService().signInWithGoogleAndBackup(context, todoLists, context.read<TodoListDatabase>().preferences.first, backup: () {
+                      setState(() {
+                        backingUp = false;
+                      });
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                      duration: const Duration(seconds: 5),
+                      content: const Row(children: [
+                        Icon(Icons.error_outline_rounded, color: Colors.red),
+                        SizedBox(width: 10),
+                        Text('No internet connection',
+                            style: TextStyle(
+                                fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+                      ]),
+                    ));
+                  }
                 },
                 icon: backingUp == false ? const Icon(Icons.backup_outlined) : const Icon(Icons.backup_rounded),
                 ),

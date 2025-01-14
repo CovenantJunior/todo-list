@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:todo_list/component/todo_list_drawer_tile.dart';
@@ -166,17 +167,56 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
               }
             ),
 
-            if (user.isNotEmpty && user.first.googleUserId != '')
             const Divider(),
             
-            if (user.isNotEmpty && user.first.googleUserId != '')
+            (user.isNotEmpty && user.first.googleUserId != '') ?
             TodoListDrawerTile(
               title: "Sign Out",
-              leading: const Icon(Icons.logout),
-              onTap: () {
-                AuthService().signOut(context);
+              leading: const Icon(Icons.logout_rounded),
+              onTap: () async {
+                if (await InternetConnectionChecker().hasConnection == false) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                    duration: const Duration(seconds: 5),
+                    content: const Row(children: [
+                      Icon(Icons.error_outline_rounded, color: Colors.red),
+                      SizedBox(width: 10),
+                      Text('No internet connection',
+                          style: TextStyle(
+                              fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+                    ]),
+                  ));
+                  return;
+                } else {
+                  AuthService().signOut(context);
+                }
               }
-            ),
+            ) : TodoListDrawerTile(
+              title: "Sign In",
+              leading: const Icon(Icons.login_rounded),
+              onTap: () async {
+                if (await InternetConnectionChecker().hasConnection == false) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+                    duration: const Duration(seconds: 5),
+                    content: const Row(children: [
+                      Icon(Icons.error_outline_rounded, color: Colors.red),
+                      SizedBox(width: 10),
+                      Text('No internet connection',
+                          style: TextStyle(
+                              fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+                    ]),
+                  ));
+                  return;
+                } else {
+                  AuthService().signInWithGoogle(context);
+                }
+              }
+            )
           ],
         ),
       ),

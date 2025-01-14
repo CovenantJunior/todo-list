@@ -1,35 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 // import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:todo_list/models/todo_list.dart';
 import 'package:todo_list/models/todo_preferences.dart';
 import 'package:todo_list/models/todo_user.dart';
 
-class BackupService {
+class SilentBackupService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static late Isar isar;
 
 
   /* BACKUP USER DATA AFTER AUTHENTICATION*/
-  Future<void> backupUserData(context, user, todoLists, preferences, {required backup}) async {
+  Future<void> backupUserData(user, todoLists, preferences) async {
     // print('Backing up...');
     // print(user.email);
 
     if (user.googleUserId == null || user.googleUserId.isEmpty) {
       // print('Error: googleUserId is null or empty');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-        duration: const Duration(seconds: 1),
-        content: const Row(children: [
-          Icon(Icons.error_outline_rounded, color: Colors.red),
-          SizedBox(width: 10),
-          Text('Backup failed: Invalid user ID',
-              style: TextStyle(
-                  fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
-        ]),
-      ));
-      backup();
       return;
     }
 
@@ -87,37 +74,9 @@ class BackupService {
       
       
       // print('Backup successful');
-      // Show success message if sign-in works
-      ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-        duration: const Duration(seconds: 5),
-        content: const Row(children: [
-          Icon(Icons.check_circle_outline_rounded, color: Colors.green),
-          SizedBox(width: 10),
-          Text('Data synced',
-              style: TextStyle(
-                  fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
-        ]),
-      ));
     } catch (e) {
-      // Show error message if sign-in fails
-      ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
-        duration: const Duration(seconds: 5),
-        content: const Row(children: [
-          Icon(Icons.error_outline_rounded, color: Colors.red),
-          SizedBox(width: 10),
-          Text('Backup failed',
-              style: TextStyle(
-                  fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
-        ]),
-      ));
       // print('Error backing up data: $e');
     } finally {
-      // Call backup() to update the parent widget's state
-      backup();
     }
   }
 

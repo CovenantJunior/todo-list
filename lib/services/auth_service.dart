@@ -18,9 +18,9 @@ class AuthService {
     ],
   );
 
-  // Sign in with Google
-  Future<void> signInWithGoogle(BuildContext context, todoLists, preferences, {required backup}) async {
-    print('Signing in with Google...');
+  // Sign in with Google and Backup
+  Future<void> signInWithGoogle(BuildContext context) async {
+    // print('Signing in with Google...');
     try {
       // Authenticate Google user
       GoogleSignInAccount? googleUser = await _googleSignIn.signInSilently();
@@ -49,12 +49,90 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
 
-      print('Authenticating...');
+      // print('Authenticating...');
       UserCredential result = await _auth.signInWithCredential(credential);
       User? authUser = result.user;
 
       if (authUser != null) {
-        print('Authenticated as ${authUser.displayName}');
+        // print('Authenticated as ${authUser.displayName}');
+        var currentUser = context.read<TodoListDatabase>().user;
+        int id = currentUser.first.id;
+        context.read<TodoListDatabase>().setGoogleUser(id, googleUser.email, googleUser.id, googleUser.photoUrl, googleUser.displayName);
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+          duration: const Duration(seconds: 5),
+          content: const Row(children: [
+            Icon(Icons.check_circle_outline_rounded, color: Colors.green),
+            SizedBox(width: 10),
+            Text('Signed in',
+                style: TextStyle(
+                    fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+          ]),
+        ));
+      }
+    } catch (e) {
+      // Show error message if sign-in fails
+      ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+        duration: const Duration(seconds: 5),
+        content: const Row(children: [
+          Icon(Icons.error_outline_rounded, color: Colors.red),
+          SizedBox(width: 10),
+          Text('Sign in failed',
+              style: TextStyle(
+                  fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+        ]),
+      ));
+      // print('Error signing in with Google: $e');
+    }
+  }
+
+  // Sign in with Google and Backup
+  Future<void> signInWithGoogleAndBackup(BuildContext context, todoLists, preferences, {required backup}) async {
+    // print('Signing in with Google...');
+    try {
+      // Authenticate Google user
+      GoogleSignInAccount? googleUser = await _googleSignIn.signInSilently();
+      googleUser ??= await _googleSignIn.signIn();
+
+      if (googleUser == null) {
+        // Show error message if sign-in fails
+        ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+            duration: const Duration(seconds: 5),
+            content: const Row(
+              children: [
+                Icon(Icons.error_outline_rounded, color: Colors.red),
+                SizedBox(width: 10),
+                Text('Sign in error',
+                style: TextStyle(
+                  fontFamily: "Quicksand", fontWeight: FontWeight.w500
+                )
+               ),
+              ]
+            ),
+          )
+        );
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // print('Authenticating...');
+      UserCredential result = await _auth.signInWithCredential(credential);
+      User? authUser = result.user;
+
+      if (authUser != null) {
+        // print('Authenticated as ${authUser.displayName}');
         var currentUser = context.read<TodoListDatabase>().user;
         int id = currentUser.first.id;
         context.read<TodoListDatabase>().setGoogleUser(id, googleUser.email, googleUser.id, googleUser.photoUrl, googleUser.displayName);
@@ -79,7 +157,7 @@ class AuthService {
                     fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
           ]),
         ));
-      print('Error signing in with Google: $e');
+      // print('Error signing in with Google: $e');
     }
   }
 
@@ -88,7 +166,7 @@ class AuthService {
     try {
       await _auth.signOut();
       await _googleSignIn.signOut();
-      print('Signed out');
+      // print('Signed out');
       // context.read<TodoListDatabase>().clearUser();
       Provider.of<TodoListDatabase>(context, listen: false).clearUser();
       Navigator.pop(context);
@@ -106,7 +184,7 @@ class AuthService {
         ]),
       ));
     } catch (e) {
-      print('Error signing out: $e');
+      // print('Error signing out: $e');
     }
   }
 
