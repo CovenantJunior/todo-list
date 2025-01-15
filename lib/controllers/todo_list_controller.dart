@@ -516,9 +516,9 @@ class TodoListDatabase extends ChangeNotifier{
   void setNeedBackup(val) {
     needBackup = val;
     if (needBackup) {
-      setbackingUp(true);
-      if (preferences.first.autoSync) {
-        Future.delayed(const Duration(seconds: 10), () async {
+      if (preferences.first.backup && preferences.first.autoSync) {
+        Future.delayed(const Duration(seconds: 20), () async {
+          setbackingUp(true);
           await SilentBackupService().backupUserData(user.first, todolists, preferences.first);
           setbackingUp(false);
           setNeedBackup(false);

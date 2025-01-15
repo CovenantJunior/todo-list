@@ -58,7 +58,7 @@ class AuthService {
         var currentUser = context.read<TodoListDatabase>().user;
         int id = currentUser.first.id;
         context.read<TodoListDatabase>().setGoogleUser(id, googleUser.email, googleUser.id, googleUser.photoUrl, googleUser.displayName);
-        Navigator.pop(context);
+        // Navigator.pop(context);
         ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),

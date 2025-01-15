@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_list/services/auth_service.dart';
 import 'package:todo_list/services/notification_service.dart';
 import 'package:vibration/vibration.dart';
 
@@ -172,7 +173,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
   @override
   Widget build(BuildContext context) {
     setPreferences();
-
+    List user = context.watch<TodoListDatabase>().user;
     return Scaffold(
       appBar: AppBar(
         // Used AppBar just for the back icon
@@ -358,6 +359,7 @@ class _TodoListPreferencesState extends State<TodoListPreferences> {
                         value: backup,
                         onChanged: (value) {
                           context.read<TodoListDatabase>().setBackup(id);
+                          (backup == false && user.first.googleUserId == '') ? AuthService().signInWithGoogle(context) : null;
                           setState(() {});
                         }
                       ),
