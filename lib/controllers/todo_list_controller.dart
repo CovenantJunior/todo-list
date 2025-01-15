@@ -497,6 +497,7 @@ class TodoListDatabase extends ChangeNotifier{
 
     // Update User List
     fetchUser();
+    setNeedBackup(true);
   }
   
 
