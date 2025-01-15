@@ -64,6 +64,7 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
   int count = 0;
   bool animate = false;
   Timer? _timer;
+  double _spin = 0.0;
 
 
   TextEditingController textController = TextEditingController();
@@ -81,7 +82,6 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
   List nonTrashedTodolistsState = [];
   List cardToRemove = [];
   bool _isListening = false;
-  bool backingUp = false;
 
   final FocusNode _focusNode = FocusNode();
 
@@ -570,8 +570,16 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(minutes: 10), (timer) {
+    _timer = Timer.periodic(const Duration(minutes: 5), (timer) {
       InterstitialAds().loadInterstitialAd(context);
+    });
+  }
+
+  void startSpin() {
+    Timer.periodic(const Duration(milliseconds: 16), (timer) {
+      setState(() {
+        _spin = (_spin + 0.1) % 360;
+      });
     });
   }
 
@@ -587,6 +595,7 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
       duration: const Duration(milliseconds: 500),
     );
     _startTimer();
+    startSpin();
   }
 
   @override
@@ -626,6 +635,8 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
     List nonTrashedTodolists = context.watch<TodoListDatabase>().nonTrashedTodolists;
     List trashedTodolists = context.watch<TodoListDatabase>().trashedTodoLists;
     List todoLists = context.watch<TodoListDatabase>().todolists;
+    bool needBackup = context.watch<TodoListDatabase>().needBackup;
+    bool backingUp = context.watch<TodoListDatabase>().backingUp;
 
     for (var plan in trashedTodolists) {
       // Get the current time
@@ -657,28 +668,6 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
     context.read<TodoListDatabase>().fetchUser();
     List user = context.watch<TodoListDatabase>().user;
 
-
-    if (context.read<TodoListDatabase>().preferences.first.backup == true && context.read<TodoListDatabase>().preferences.first.autoSync == true && user.isNotEmpty) {
-      AuthService().signInWithGoogleAndBackup(context, todoLists, context.read<TodoListDatabase>().preferences.first, backup: () {
-        setState(() {
-          backingUp = false;
-        });
-      });
-      Timer.periodic(const Duration(minutes: 1), (timer) async {
-        if (await InternetConnectionChecker().hasConnection == true) {
-          setState(() {
-            backingUp = true;
-          });
-          AuthService().signInWithGoogleAndBackup(context, todoLists, context.read<TodoListDatabase>().preferences.first, backup: () {
-            setState(() {
-              backingUp = false;
-            });
-          });
-        }
-      });
-    } else {
-      // Do nothing
-    }
 
     return GestureDetector(
       onTap: () {
@@ -714,14 +703,14 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
               message: "Backup Tasks and Preferences",
               child: IconButton(
                 onPressed: () async { 
+                  if (backingUp == false && user.isNotEmpty && user.first.googleUserId != '' && needBackup == false) {
+                    return;
+                  }
                   if (await InternetConnectionChecker().hasConnection == true) {
-                    setState(() {
-                      backingUp = true;
-                    });
+                    context.read<TodoListDatabase>().setbackingUp(true);
                     AuthService().signInWithGoogleAndBackup(context, todoLists, context.read<TodoListDatabase>().preferences.first, backup: () {
-                      setState(() {
-                        backingUp = false;
-                      });
+                      context.read<TodoListDatabase>().setbackingUp(false);
+                      context.read<TodoListDatabase>().setNeedBackup(false);
                     });
                   } else {
                     ScaffoldMessenger.of(context).removeCurrentMaterialBanner();
@@ -738,9 +727,12 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
                     ));
                   }
                 },
-                icon: (backingUp == true && user.isNotEmpty && user.first.googleUserId != '') ?
+                icon: (backingUp == false && user.isNotEmpty && user.first.googleUserId != '' && needBackup == false) ?
                   const Icon(Icons.check_circle_outline, color: Colors.green) :
-                    const Icon(Icons.sync_rounded),
+                    Transform.rotate(
+                      angle: backingUp ? _spin : 0.0,
+                      child: const Icon(Icons.sync_rounded)
+                    ),
                 ),
             ) : const SizedBox(),
             !isSearch ? Tooltip(

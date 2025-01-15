@@ -12,7 +12,7 @@ class BackupService {
 
 
   /* BACKUP USER DATA AFTER AUTHENTICATION*/
-  Future<void> backupUserData(context, user, todoLists, preferences, {required backup}) async {
+  Future<void> backupUserData(context, user, todoLists, preferences, backup) async {
     // print('Backing up...');
     // print(user.email);
 

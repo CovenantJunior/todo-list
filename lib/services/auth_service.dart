@@ -139,7 +139,7 @@ class AuthService {
         List user = context.read<TodoListDatabase>().user;
         // Delay for 3 seconds before backing up user data
         Future.delayed(const Duration(seconds: 3), () {
-          BackupService().backupUserData(context, user.first, todoLists, preferences, backup: backup);
+          BackupService().backupUserData(context, user.first, todoLists, preferences, backup);
         });
       }
     } catch (e) {

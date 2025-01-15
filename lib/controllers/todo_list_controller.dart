@@ -4,6 +4,7 @@ import 'package:todo_list/models/todo_list.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:todo_list/models/todo_preferences.dart';
 import 'package:todo_list/models/todo_user.dart';
+import 'package:todo_list/services/silent_backup_service.dart';
 
 class TodoListDatabase extends ChangeNotifier{
   static late Isar isar;
@@ -33,6 +34,10 @@ class TodoListDatabase extends ChangeNotifier{
   bool isDark = false;
 
   List user = [];
+
+  bool needBackup = false;
+
+  bool backingUp = false;
 
 
   /* PREFERENCES METHODS */
@@ -229,36 +234,8 @@ class TodoListDatabase extends ChangeNotifier{
   
   
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   
+
   /* TODOLIST METHODS */
 
   // CREATE
@@ -283,6 +260,7 @@ class TodoListDatabase extends ChangeNotifier{
         notifyListeners();
     });
     fetchUser();
+    setNeedBackup(true);
   }
 
   void fetchAllTodoList() async {
@@ -483,32 +461,6 @@ class TodoListDatabase extends ChangeNotifier{
   
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   
   /* USERS' MODEL */
   void fetchUser() async {
@@ -554,5 +506,30 @@ class TodoListDatabase extends ChangeNotifier{
 
     // Update User List
     fetchUser();
+  }
+
+
+
+
+
+/* BACKUP */
+  void setNeedBackup(val) {
+    needBackup = val;
+    if (needBackup) {
+      setbackingUp(true);
+      if (preferences.first.autoSync) {
+        Future.delayed(const Duration(seconds: 10), () async {
+          await SilentBackupService().backupUserData(user.first, todolists, preferences.first);
+          setbackingUp(false);
+          setNeedBackup(false);
+        });
+      }
+    }
+    notifyListeners();
+  }
+
+  void setbackingUp(val) {
+    backingUp = val;
+    notifyListeners();
   }
 }
