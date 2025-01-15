@@ -570,7 +570,7 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(minutes: 5), (timer) {
+    _timer = Timer.periodic(const Duration(minutes: 10), (timer) {
       InterstitialAds().loadInterstitialAd(context);
     });
   }
@@ -664,7 +664,7 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
           backingUp = false;
         });
       });
-      Timer.periodic(const Duration(minutes: 10), (timer) async {
+      Timer.periodic(const Duration(minutes: 1), (timer) async {
         if (await InternetConnectionChecker().hasConnection == true) {
           setState(() {
             backingUp = true;
@@ -738,7 +738,9 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
                     ));
                   }
                 },
-                icon: backingUp == false ? const Icon(Icons.backup_outlined) : const Icon(Icons.backup_rounded),
+                icon: (backingUp == true && user.isNotEmpty && user.first.googleUserId != '') ?
+                  const Icon(Icons.check_circle_outline, color: Colors.green) :
+                    const Icon(Icons.sync_rounded),
                 ),
             ) : const SizedBox(),
             !isSearch ? Tooltip(
