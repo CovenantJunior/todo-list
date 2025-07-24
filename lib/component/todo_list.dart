@@ -1260,9 +1260,13 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
               borderRadius: BorderRadius.circular(7)
           ),
           duration: const Duration(seconds: 1),
-          content: const Text('Plan reactivated!',
-          style: TextStyle(
-          fontFamily: "Quicksand", fontWeight: FontWeight.w500))
+          content: const Text(
+            'Plan reactivated!',
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.w500
+            )
+          )
         ));
         NotificationService().scheduleNotification(
           id: plan.id,
@@ -1288,9 +1292,11 @@ class _TodoState extends State<Todo> with SingleTickerProviderStateMixin {
               borderRadius: BorderRadius.circular(7)
           ),
           duration: const Duration(seconds: 1),
-          content: const Text('Plan accomplished. You inspire!',
-          style: TextStyle(
-            fontFamily: "Quicksand", fontWeight: FontWeight.w500)
+          content: const Text(
+            'Plan accomplished. You inspire!',
+            style: TextStyle(
+              fontFamily: "Quicksand", fontWeight: FontWeight.w500
+            )
           )
         ));
         InterstitialAds().loadInterstitialAd(context);

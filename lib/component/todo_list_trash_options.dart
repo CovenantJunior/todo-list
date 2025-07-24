@@ -51,19 +51,20 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
                   NotificationService().cancelNotification(id);
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                    shape: RoundedRectangleBorder(
+                    SnackBar(
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(7)
-                    ),
-                        duration: const Duration(seconds: 2),
-                        content: const Text(
-                        'Poof! Gone like the wind',
-                        style: TextStyle(
-                          fontFamily: "Quicksand",
-                          fontWeight: FontWeight.w500
-                        )
-                      )));
-                  InterstitialAds().showInterstitialAd(context);
+                      ),
+                    duration: const Duration(seconds: 2),
+                    content: const Text(
+                      'Poof! Gone like the wind',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.w500
+                      )
+                    )
+                  ));
+                  InterstitialAds().loadInterstitialAd(context);
                 },
                 icon: const Icon(
                   Icons.done,
@@ -86,18 +87,20 @@ class _TodoListTrashOptionsState extends State<TodoListTrashOptions> {
         context.read<TodoListDatabase>().restoreTodoLists(id);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7)
-                    ),
-              duration: const Duration(seconds: 2),
-              content: const Text(
+          SnackBar(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7)
+            ),
+            duration: const Duration(seconds: 2),
+            content: const Text(
               'Restored back on track',
               style: TextStyle(
                 fontFamily: "Quicksand",
                 fontWeight: FontWeight.w500
               )
-            )));
+            )
+          )
+        );
       }
 
       return Row(

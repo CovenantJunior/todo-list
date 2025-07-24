@@ -38,7 +38,7 @@
     <application
         android:label="Minimalist Todo List"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-2287242922703560~3894446386"/>

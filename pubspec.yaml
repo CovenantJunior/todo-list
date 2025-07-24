@@ -76,6 +76,7 @@ dependencies:
   cloud_firestore: ^5.6.0
   firebase_core: ^3.9.0
   firebase_auth: ^5.4.0
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -105,15 +106,12 @@ flutter:
   assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
-    - assets/images/note.png
-    - assets/images/pointer.gif
-    - assets/images/star.gif
-    - assets/images/trash.gif
+    - assets/
+    - assets/images/
+    - assets/images/ic_launcher.png
 
   # Pings
-    - assets/pings/start.mp3
-    - assets/pings/pop.mp3
-    - assets/pings/completed.mp3
+    - assets/pings/
 
   # Google Auth Credentials
     - assets/credentials.json
