@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_list/component/todo_list.dart';
@@ -34,6 +35,7 @@ class Shell extends StatefulWidget {
 class _ShellState extends State<Shell> {
 
   int index = 0;
+  late bool exit;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +71,29 @@ class _ShellState extends State<Shell> {
           setState(() {
             index = e;
           });
+        },
+        onWillPop: (p0) {
+          if (exit) {
+            FlutterExitApp.exitApp();
+          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Press back again to exit',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Quicksand',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              duration: Duration(seconds: 3)
+            ),
+          );
+          exit = true;
+          Future.delayed(const Duration(seconds: 3), (){
+            exit = false;
+          });
+          return Future.value(false);
         },
         screens: [
           Todo(
