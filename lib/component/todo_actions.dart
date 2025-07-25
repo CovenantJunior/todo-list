@@ -361,47 +361,50 @@ class _TodoActionsState extends State<TodoActions> with TickerProviderStateMixin
   }
 
 
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Tooltip(
-                message: "Search Plans",
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    search();
-                  },
-                  child: const Text(
-                    'Search',
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      fontWeight: FontWeight.w500,
+    return Container(
+      color: context.read<TodoListDatabase>().preferences.first.darkMode
+          ? Colors.black87
+          : Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Tooltip(
+                  message: "Search Plans",
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      search();
+                    },
+                    child: const Text(
+                      'Search',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.w500,
+                      )
                     )
                   )
-                )
-            ),
-            const SizedBox(height: 20),
-            Tooltip(
-                message: "Edit Plans",
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    multiEdit(nonTrashedTodolists);
-                  },
-                  child: const Text(
-                    'Edit Plans',
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      fontWeight: FontWeight.w500,
+              ),
+              const SizedBox(height: 20),
+              Tooltip(
+                  message: "Edit Plans",
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                      multiEdit(nonTrashedTodolists);
+                    },
+                    child: const Text(
+                      'Edit Plans',
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontWeight: FontWeight.w500,
+                      )
                     )
                   )
-                )
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
       ),
     );
   }

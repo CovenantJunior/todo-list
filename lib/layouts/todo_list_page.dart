@@ -720,9 +720,13 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
                       content: const Row(children: [
                         Icon(Icons.error_outline_rounded, color: Colors.red),
                         SizedBox(width: 10),
-                        Text('No internet connection',
-                            style: TextStyle(
-                                fontFamily: "Quicksand", fontWeight: FontWeight.w500)),
+                        Text(
+                          'No internet connection',
+                          style: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontWeight: FontWeight.w500
+                          )
+                        ),
                       ]),
                     ));
                   }

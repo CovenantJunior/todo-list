@@ -16,4 +16,5 @@ class TodoPreferences {
   bool? autoDelete;
   bool? autoDeleteOnDismiss;
   bool? bulkTrash;
+  bool? ads;
 }

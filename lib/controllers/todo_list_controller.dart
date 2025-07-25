@@ -55,7 +55,8 @@ class TodoListDatabase extends ChangeNotifier{
         ..accessClipboard = false
         ..autoDelete = false
         ..autoDeleteOnDismiss = true
-        ..bulkTrash = false;
+        ..bulkTrash = false
+        ..ads = true;
       await isar.writeTxn(() => isar.todoPreferences.put(newPreference));
     }
     preferences = isar.todoPreferences.where().findAllSync();
@@ -227,6 +228,19 @@ class TodoListDatabase extends ChangeNotifier{
       preferences.first.bulkTrash = existingPreference.bulkTrash;
     }
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        notifyListeners();
+    });
+  }
+
+  void turnOffAds(id) async {
+    var existingPreference = await isar.todoPreferences.get(id);
+    if (existingPreference != null) {
+      existingPreference.ads = false;
+      await isar.writeTxn(() => isar.todoPreferences.put(existingPreference));
+      preferences.first.ads = existingPreference.ads;
+    }
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
         notifyListeners();
     });
@@ -521,6 +535,7 @@ class TodoListDatabase extends ChangeNotifier{
         Future.delayed(const Duration(seconds: 20), () async {
           setbackingUp(true);
           await SilentBackupService().backupUserData(user.first, todolists, preferences.first);
+          await SilentBackupService().importUserData(user.first.googleUserId.toString());
           setbackingUp(false);
           setNeedBackup(false);
         });

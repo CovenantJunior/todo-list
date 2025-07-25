@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:todo_list/controllers/todo_list_controller.dart';
 
 class InterstitialAds {
   /// The AdMob ad unit to show for interstitial ads.
@@ -20,6 +21,10 @@ class InterstitialAds {
 
   /// Loads an interstitial ad.
   Future<void> loadInterstitialAd(context) async {
+    bool ads = await context.read<TodoListDatabase>().preferences.first.ads;
+    if (ads == false) {
+      return;
+    }
     InterstitialAd.load(
       adUnitId: interstitialAdUnitId,
       request: const AdRequest(),

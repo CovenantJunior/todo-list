@@ -95,14 +95,6 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
               }
             ),
         
-            /* if (todolists.isNotEmpty && nonTrashedTodolists.isNotEmpty)
-              TodoListDrawerTile(
-                title: "Move all to Trash",
-                leading: const Icon(Icons.delete_sweep_outlined),
-                onTap: () {
-                  trashAllTodoLists();
-                },
-              ), */
 
             TodoListDrawerTile(
               title: "Trash",
@@ -112,25 +104,7 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoTrash()));
               }
             ),
-
-            /* Provider.of<TodoListDatabase>(context).preferences.first.autoSync == false ? TodoListDrawerTile(
-              title: "Backup",
-              leading: const Icon(Icons.backup_outlined),
-              onTap: () {
-                Navigator.pop(context);
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoTrash()));
-              }
-            ) : const SizedBox(), */
             
-            TodoListDrawerTile(
-              title: "Rate",
-              leading: const Icon(Icons.rate_review_outlined),
-              onTap: () {
-                Navigator.pop(context);
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoTrash()));
-              }
-            ),
-
             TodoListDrawerTile(
               title: "Invite Friends",
               leading: const Icon(Icons.people_outline_rounded),
@@ -163,7 +137,7 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
               leading: const Icon(Icons.movie_filter_outlined),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoPrivacy()));
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoPrivacy()));
               }
             ),
 
