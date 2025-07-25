@@ -10,7 +10,7 @@ import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:provider/provider.dart';
 // import 'package:todo_list/services/credential_service.dart';
 import 'package:todo_list/services/notification_service.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> initializeService() async {
