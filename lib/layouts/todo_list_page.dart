@@ -570,7 +570,7 @@ class _TodoListPageState extends State<TodoListPage> with TickerProviderStateMix
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(minutes: 5), (timer) {
+    _timer = Timer.periodic(const Duration(minutes: 10), (timer) {
       InterstitialAds().loadInterstitialAd(context);
     });
   }
