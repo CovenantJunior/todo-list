@@ -11,6 +11,7 @@ import 'package:todo_list/layouts/todo_list_starred.dart';
 import 'package:todo_list/layouts/todo_trash_page.dart';
 import 'package:todo_list/controllers/todo_list_controller.dart';
 import 'package:todo_list/services/auth_service.dart';
+import 'package:todo_list/services/payment/flutterwave/payment.dart';
 
 class TodoListDrawer extends StatefulWidget {
   const TodoListDrawer({super.key});
@@ -137,7 +138,7 @@ class _TodoListDrawerState extends State<TodoListDrawer> {
               leading: const Icon(Icons.movie_filter_outlined),
               onTap: () {
                 Navigator.pop(context);
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => const TodoPrivacy()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const FlutterwavePayment()));
               }
             ),
 
