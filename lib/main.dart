@@ -184,7 +184,7 @@ void main() async {
   );
   // JsonReader jsonReader = JsonReader();
   // Credential credential = await jsonReader.readCredentials();
-  await dotenv.load(fileName: "assets/.env");
+  // await dotenv.load(fileName: "assets/.env");
   await TodoListDatabase.initialize();
   runApp(
     MultiProvider(
